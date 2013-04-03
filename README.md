@@ -1,4 +1,4 @@
-glue-brms
+SgsSalud
 =========
 
-Glue, Adhesive Software
+Software de gestion de servicios de salud
