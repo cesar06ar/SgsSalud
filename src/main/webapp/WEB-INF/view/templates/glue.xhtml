@@ -41,8 +41,8 @@
         <ui:param name="sitename" value="#{applicationConfig.siteName}" />
 
         <ui:define name="head">
-            <link rel="icon" href="#{resource['favicon.ico']}" />
-            <link rel="shortcut icon" type="image/x-icon" href="#{resource['favicon.ico']}" />
+            <link rel="icon" href="#{resource['sgsSalud_16x16.ico']}" />
+            <link rel="shortcut icon" type="image/x-icon" href="#{resource['sgsSalud_16x16.ico']}" />
         </ui:define>
 
         <ui:define name="topnav-title">
@@ -51,9 +51,9 @@
 
         <ui:define name="topnav-left">
 
-            <h:panelGroup rendered="#{!identity.loggedIn}">					
+            <!--<h:panelGroup rendered="#{!identity.loggedIn}">					
                 <li><h:link outcome="/pages/signup" value="#{messages['common.join']}" /></li>
-            </h:panelGroup>
+            </h:panelGroup>-->
 
             <ui:insert name="topnav-post-template"/>
         </ui:define>
@@ -128,8 +128,7 @@
             <h:link value="#{messages['common.privacy']}" outcome="/pages/privacy"/> |
             <a href="#{applicationConfig.blogUrl}"> blog</a> | 
             <h:link value="#{messages['common.about']}" outcome="/pages/about"/> | 
-            <h:link value="#{messages['common.terms']}" outcome="/pages/terms"/> | 	
-            <a href="http://eqaula.org"> [&copy; eqaula.org]</a>
+            <h:link value="#{messages['common.terms']}" outcome="/pages/terms"/>             
         </ui:define>
 
     </ui:composition>

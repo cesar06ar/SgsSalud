@@ -78,42 +78,7 @@
       <pattern value="/admin/bussinesentitytype/property"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/property.xhtml"></view-id>       
    </url-mapping>
-   <!-- Administracion Management -->
-   <url-mapping id="organization">
-      <pattern value="/admin/management/organization"></pattern>
-      <view-id value="/pages/management/organization/organization.xhtml"></view-id>       
-   </url-mapping>
-   <url-mapping id="organizationList">
-      <pattern value="/admin/management/list"></pattern>
-      <view-id value="/pages/management/organization/list.xhtml"></view-id>       
-   </url-mapping>
-   <url-mapping id="OrganizationView">
-      <pattern value="/admin/managament/view"></pattern>
-      <view-id value="/pages/management/organization/view.xhtml"></view-id>       
-   </url-mapping>
-   
-   <!-- Administracion contabilidad -->
-   <url-mapping id="list">
-      <pattern value="/admin/accounting/list"></pattern>
-      <view-id value="/pages/accounting/list.xhtml"></view-id>       
-   </url-mapping>   
-   <url-mapping id="view">
-      <pattern value="/admin/accounting/view"></pattern>
-      <view-id value="/pages/accounting/view.xhtml"></view-id>       
-   </url-mapping>
-   <url-mapping id="account">
-      <pattern value="/admin/accounting/account"></pattern>
-      <view-id value="/pages/accounting/account.xhtml"></view-id>
-      <query-param name="accountId" decode="false">#{accountHome.accountId}</query-param>
-      <query-param name="parentId" decode="false">#{accountHome.parentId}</query-param>
-   </url-mapping>
-   
-   
-    <url-mapping id="voucher">
-      <pattern value="/voucher"></pattern>
-      <view-id value="/pages/accounting/voucher.xhtml"></view-id>
-    </url-mapping>
-   
+  
    
    <!--Security-->
    <url-mapping id="securityGroup">
@@ -131,71 +96,7 @@
       <view-id value="/pages/admin/security/authorization.xhtml"></view-id>       
    </url-mapping>
    
-    <url-mapping id="warehouse">
-      <pattern value="/warehouse"></pattern>
-      <view-id value="/pages/stocklist/warehouse/warehouse.xhtml"></view-id>
-    </url-mapping>
-    
-    
-   <url-mapping id="warehouse-list">
-      <pattern value="/warehouse/list"></pattern>
-      <view-id value="/pages/stocklist/warehouse/list.xhtml"></view-id>       
-   </url-mapping>  
    
-   
-    <url-mapping id="warehouse-view">
-      <pattern value="/warehouse/view"></pattern>
-      <view-id value="/pages/stocklist/warehouse/view.xhtml"></view-id>       
-   </url-mapping>  
-   
-   
-    <url-mapping id="item">
-      <pattern value="/item"></pattern>
-      <view-id value="/pages/stocklist/item/item.xhtml"></view-id>
-    </url-mapping>
-    
-    
-   <url-mapping id="item-list">
-      <pattern value="/item/list"></pattern>
-      <view-id value="/pages/stocklist/item/list.xhtml"></view-id>       
-   </url-mapping> 
-   
-   
-    <url-mapping id="stock">
-      <pattern value="/stock"></pattern>
-      <view-id value="/pages/stocklist/stock/stock.xhtml"></view-id>
-    </url-mapping>
-   
-    <url-mapping id="setting">
-      <pattern value="/setting"></pattern>
-      <view-id value="/pages/admin/setting/setting.xhtml"></view-id>
-    </url-mapping>
-    
-    
-   <url-mapping id="setting-list">
-      <pattern value="/setting/list"></pattern>
-      <view-id value="/pages/admin/setting/list.xhtml"></view-id>       
-   </url-mapping> 
-   
-    
-   
-   
-   
-   
-   <!--
-   <url-mapping id="project-view">
-      <pattern value="/p/#{projects.current.name}"></pattern>
-      <view-id value="/pages/project/view.xhtml"></view-id>
-      <action>#{projects.loadCurrent}</action>
-   </url-mapping>
-   
-        <url-mapping id="project-create">
-           <pattern value="/new-project"></pattern>
-           <view-id value="/pages/project/create.xhtml"></view-id>
-        </url-mapping>
-    -->    
-   
-
     <!-- Begin Exception Mappings -->
     <url-mapping id="404">
         <pattern value="/404" />

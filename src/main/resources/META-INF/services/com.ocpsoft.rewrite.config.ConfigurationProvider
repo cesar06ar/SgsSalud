@@ -1,5 +1,5 @@
-org.eqaula.glue.rewrite.AccessRewriteConfiguration
-org.eqaula.glue.rewrite.CatchallRewriteConfiguration
-org.eqaula.glue.rewrite.AccountVerificationInterceptor
-org.eqaula.glue.rewrite.MessageInterceptor
-org.eqaula.glue.rewrite.AuthenticationStatusInterceptor
+edu.sgssalud.rewrite.AccessRewriteConfiguration
+edu.sgssalud.glue.rewrite.CatchallRewriteConfiguration
+edu.sgssalud.glue.rewrite.AccountVerificationInterceptor
+edu.sgssalud.glue.rewrite.MessageInterceptor
+edu.sgssalud.glue.rewrite.AuthenticationStatusInterceptor

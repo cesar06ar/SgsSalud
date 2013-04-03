@@ -12,14 +12,14 @@
 
     <plidm:JpaIdentityStoreConfiguration>
         <s:replaces />
-        <plidm:identityClass>org.eqaula.glue.model.security.IdentityObject</plidm:identityClass>
-        <plidm:identityClass>org.eqaula.glue.model.security.IdentityObjectType</plidm:identityClass>
-        <plidm:attributeClass>org.eqaula.glue.model.security.IdentityObjectAttribute</plidm:attributeClass>
-        <plidm:credentialClass>org.eqaula.glue.model.security.IdentityObjectCredential</plidm:credentialClass>
-        <plidm:credentialClass>org.eqaula.glue.model.security.IdentityObjectCredentialType</plidm:credentialClass>
-        <plidm:relationshipClass>org.eqaula.glue.model.security.IdentityObjectRelationship</plidm:relationshipClass>
-        <plidm:relationshipClass>org.eqaula.glue.model.security.IdentityObjectRelationshipType</plidm:relationshipClass>
-        <plidm:roleTypeClass>org.eqaula.glue.model.security.IdentityRoleName</plidm:roleTypeClass>
+        <plidm:identityClass>edu.sgssalud.model.security.IdentityObject</plidm:identityClass>
+        <plidm:identityClass>edu.sgssalud.model.security.IdentityObjectType</plidm:identityClass>
+        <plidm:attributeClass>edu.sgssalud.model.security.IdentityObjectAttribute</plidm:attributeClass>
+        <plidm:credentialClass>edu.sgssalud.model.security.IdentityObjectCredential</plidm:credentialClass>
+        <plidm:credentialClass>edu.sgssalud.model.security.IdentityObjectCredentialType</plidm:credentialClass>
+        <plidm:relationshipClass>edu.sgssalud.model.security.IdentityObjectRelationship</plidm:relationshipClass>
+        <plidm:relationshipClass>edu.sgssalud.model.security.IdentityObjectRelationshipType</plidm:relationshipClass>
+        <plidm:roleTypeClass>edu.sgssalud.model.security.IdentityRoleName</plidm:roleTypeClass>
         
         
     </plidm:JpaIdentityStoreConfiguration>

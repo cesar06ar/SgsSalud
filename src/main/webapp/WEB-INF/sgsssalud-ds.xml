@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <datasource jndi-name="java:/datasources/sgssalud-ds" enabled="true" use-java-context="true" 
+        pool-name="sgssalud-ds-pool">
+    <connection-url>jdbc:postgresql:sgssalud</connection-url>
+    <driver>postgresql-driver</driver>
+    <security>
+      <user-name>sgssalud</user-name>
+      <password>sgssalud</password>
+    </security>
+  </datasource>
+</datasources>
+ 

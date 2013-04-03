@@ -45,14 +45,7 @@ limitations under the License.
             </h:link>
             <br />
         </p:panel>
-        <p:panel header="#{messages['panel.admin.organizations']}" toggleable="true" toggleOrientation="vertical">
-              <h:link value="#{messages['module.organization']}" rendered="#{true}" 
-                    outcome="/pages/management/organization/list">
-                <f:param name="result"></f:param>
-                <f:param name="typeName" value="org.eqaula.glue.model.management.Organization"></f:param>
-            </h:link>
-            <br />
-        </p:panel>
+        
         
         <p:panel header="#{messages['panel.admin.settings']}" toggleable="true" toggleOrientation="vertical">
             <h:link value="#{messages['module.setting']}" rendered="#{true}" 
@@ -76,38 +69,7 @@ limitations under the License.
             </h:link>
         </p:panel>
         
-        <p:panel header="#{messages['panel.admin.accounting']}" toggleable="true" toggleOrientation="vertical">
-           <h:link value="#{messages['module.accounting']}" rendered="#{true}" 
-                    outcome="/pages/accounting/list">
-                <f:param name="result"></f:param>
-                <f:param name="typeName" value="org.eqaula.glue.model.accounting.Account"></f:param>
-            </h:link>
-            
-             <br />
-            
-            
-             <h:link value="Voucher" rendered="#{true}" 
-                    outcome="/pages/accounting/voucher">
-                <f:param name="result"></f:param>
-                <f:param name="typeName" value="org.eqaula.glue.model.accounting.Posting"></f:param>
-            </h:link>
-            
-            <br />
-            <h:link value="#{messages['module.stocklist']}" rendered="#{true}" 
-                    outcome="/pages/stocklist/warehouse/list">
-                <f:param name="result"></f:param>
-                <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Warehouse"></f:param>
-            </h:link>
-            
-            
-            <br />
-            <h:link value="#{messages['module.stocklist.item']}" rendered="#{true}" 
-                    outcome="/pages/stocklist/item/list">
-                <f:param name="result"></f:param>
-                <f:param name="typeName" value="org.eqaula.glue.model.stocklist.Item"></f:param>
-            </h:link>
-            <br />
-        </p:panel>
+       
     </ui:define>
 </ui:composition>
 
