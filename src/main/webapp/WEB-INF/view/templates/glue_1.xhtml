@@ -36,7 +36,7 @@
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <ui:composition template="templateC.xhtml">
+    <ui:composition template="template_1.xhtml">
 
         <ui:param name="sitename" value="#{applicationConfig.siteName}" />
 
@@ -118,13 +118,13 @@
                     </h:outputLink>
                 </li>
             </h:panelGroup>
-        </ui:define>
+        </ui:define>        
 
         <ui:define name="messages">
             <ocp:messages id="messages" />
-        </ui:define>
+        </ui:define>        
 
-        <ui:define name="footer" >
+        <ui:define name="footer">
             <h:link value="#{messages['common.privacy']}" outcome="/pages/privacy"/> |
             <a href="#{applicationConfig.blogUrl}"> blog</a> | 
             <h:link value="#{messages['common.about']}" outcome="/pages/about"/> | 

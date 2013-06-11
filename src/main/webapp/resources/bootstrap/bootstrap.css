@@ -2049,10 +2049,10 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 }
 .alert-message.block-message {
     background-image: none;
-    background-color: #fdf5d9;
+    background-color: #CCFFCC;
     filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
     padding: 14px;
-    border-color: #fceec1;
+    border-color: #66FF99;
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
     box-shadow: none;
@@ -2346,7 +2346,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 .popover .inner {
     background-color: #000000;
     background-color: rgba(0, 0, 0, 0.8);
-    padding: 3px;
+    padding: 2px;
     overflow: hidden;
     width: 280px;
     -webkit-border-radius: 6px;

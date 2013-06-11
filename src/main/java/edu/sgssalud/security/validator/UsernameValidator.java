@@ -56,12 +56,12 @@ public class UsernameValidator implements Validator
          if (username.length() > 30)
             throw new ValidatorException(
                      new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                              "Demasido larog (máximo 30 caracteres), sólo estan permitidos " +
+                              "Demasido largo (máximo 30 caracteres), sólo estan permitidos " +
                                        "caracteres alfanúmericos.", null));
 
          if (!StringValidations.isAlphanumericDash(username))
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                     "Soló estna permitidos caracteres alfanuméricos", null));
+                     "Soló estan permitidos caracteres alfanuméricos", null));
 
          if (username.startsWith("-"))
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "No puede empezar con un guión",

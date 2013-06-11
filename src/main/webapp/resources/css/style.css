@@ -963,8 +963,9 @@ blockquote[cite]:after {
 	float: left;
 	width: 100%; /* width of page */
 	position: relative;
-	background-color: #d9e8eb;
-	height: 66px;
+	/*background-color: #d9e8eb;*/
+        background-color: #00FFCC;
+	height: 150px;
 	background-attachment: fixed;
 	background-position: top left;
 	padding: 0 0 0 0;

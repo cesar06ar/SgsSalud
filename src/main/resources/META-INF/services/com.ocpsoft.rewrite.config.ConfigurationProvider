@@ -1,5 +1,5 @@
 edu.sgssalud.rewrite.AccessRewriteConfiguration
-edu.sgssalud.glue.rewrite.CatchallRewriteConfiguration
-edu.sgssalud.glue.rewrite.AccountVerificationInterceptor
-edu.sgssalud.glue.rewrite.MessageInterceptor
-edu.sgssalud.glue.rewrite.AuthenticationStatusInterceptor
+edu.sgssalud.rewrite.CatchallRewriteConfiguration
+edu.sgssalud.rewrite.AccountVerificationInterceptor
+edu.sgssalud.rewrite.MessageInterceptor
+edu.sgssalud.rewrite.AuthenticationStatusInterceptor

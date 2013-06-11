@@ -33,7 +33,7 @@ import edu.sgssalud.service.SettingService;
  */
 @Named 
 @ViewScoped
-public class Glue implements Serializable {
+public class Sgssalud implements Serializable {
     private static final long serialVersionUID = 7673935874688660972L;
     
     @Inject

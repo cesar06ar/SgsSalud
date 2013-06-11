@@ -197,63 +197,7 @@ public class InitializeDatabase {
             entityManager.flush();
             admin = p;
             
-        }
-        
-        if (session.getPersistenceManager().findUser("jlgranda") == null) {
-            User u = session.getPersistenceManager().createUser("jlgranda");
-            session.getAttributesManager().updatePassword(u, "password");
-            session.getAttributesManager().addAttribute(u, "email", "jlgranda81@gmail.com");
-            
-            p = new Profile();
-            p.setEmail("jlgranda81@gmail.com");
-            p.setUsername("jlgranda");
-            p.setPassword("password");
-            p.getIdentityKeys().add(u.getKey());
-            p.setUsernameConfirmed(true);
-            p.setShowBootcamp(true);
-            
-            p.setName("José Luis");
-            p.setFirstname("José Luis");
-            p.setSurname("Granda");
-            p.setCreatedOn(now);
-            p.setLastUpdate(now);
-            p.setActivationTime(now);
-            p.setExpirationTime(Dates.addDays(now, 364));
-            p.setAuthor(admin); //Establecer al usuario actual
-            p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
-            p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
-            entityManager.persist(p);
-            entityManager.flush();
-            
-        }
-        
-        if (session.getPersistenceManager().findUser("lflores") == null) {
-            User u = session.getPersistenceManager().createUser("lflores");
-            session.getAttributesManager().updatePassword(u, "password");
-            session.getAttributesManager().addAttribute(u, "email", "luchitoflores84@gmail.com");
-            
-            p = new Profile();
-            p.setEmail("luchitoflores84@gmail.com");
-            p.setUsername("lflores");
-            p.setPassword("password");
-            p.getIdentityKeys().add(u.getKey());
-            p.setUsernameConfirmed(true);
-            p.setShowBootcamp(true);
-            
-            p.setName("Luis Alberto");
-            p.setFirstname("Luis Alberto");
-            p.setSurname("Flores");
-            p.setCreatedOn(now);
-            p.setLastUpdate(now);
-            p.setActivationTime(now);
-            p.setExpirationTime(Dates.addDays(now, 364));
-            p.setAuthor(admin); //Establecer al usuario actual
-            p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
-            p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
-            entityManager.persist(p);
-            entityManager.flush();
-        }
-        
+        }     
     }
     
     private void validateStructure() {
