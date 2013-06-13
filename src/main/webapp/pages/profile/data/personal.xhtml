@@ -15,7 +15,7 @@
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="id" value="#{profileHome.profileId}" />
-            <f:viewParam name="structureName" value="#{profileHome.structureName}" />
+            <s:viewAction action="#{profileHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
         <ui:define name="header-replace">

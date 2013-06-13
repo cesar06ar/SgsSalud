@@ -94,7 +94,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
         group.setLastUpdate(now);
         group.setActivationTime(now);
         group.setExpirationTime(Dates.addDays(now, 364));
-        group.setAuthor(null); //Establecer al usuario actual
+        group.setResponsable(null); //Establecer al usuario actual
         group.buildAttributes(bussinesEntityService);
         return group;
     }
@@ -174,7 +174,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             entity.setLastUpdate(now);
             entity.setActivationTime(now);
             entity.setExpirationTime(Dates.addDays(now, 364));
-            entity.setAuthor(null); //Establecer al usuario actual
+            entity.setResponsable(null); //Establecer al usuario actual
             entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
             return entity;
     }

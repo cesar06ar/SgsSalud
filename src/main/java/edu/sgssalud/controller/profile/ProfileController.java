@@ -60,7 +60,7 @@ public class ProfileController {
         profile.setCreatedOn(now);
         profile.setActivationTime(now);
         profile.setExpirationTime(Dates.addDays(now, 364));
-        profile.setAuthor(null); //Establecer al usuario actual
+        profile.setResponsable(null); //Establecer al usuario actual
 
         profileService.create(profile);
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration profile successful"));

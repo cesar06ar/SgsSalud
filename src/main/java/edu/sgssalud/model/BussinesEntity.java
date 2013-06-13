@@ -58,7 +58,7 @@ import edu.sgssalud.util.Lists;
 
 /**
  *
- * @author jlgranda
+ * @responsable jlgranda
  */
 @Entity
 @Table(name = "BussinesEntity")
@@ -73,7 +73,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntity.class);
     @ManyToOne(optional = true)
     @JoinColumn(name = "author", nullable = true)
-    private Profile author;
+    private Profile responsable;
    /* @ManyToOne
     @JoinColumn(name = "parent")
     public BussinesEntity parent;*/
@@ -181,12 +181,12 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         return false;
     }
 
-    public Profile getAuthor() {
-        return author;
+    public Profile getResponsable() {
+        return responsable;
     }
 
-    public void setAuthor(Profile author) {
-        this.author = author;
+    public void setResponsable(Profile responsable) {
+        this.responsable = responsable;
     }
 
     public BussinesEntityType getType() {
@@ -352,7 +352,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             g.setLastUpdate(now);
             g.setActivationTime(now);
             g.setExpirationTime(Dates.addDays(now, 364));
-            g.setAuthor(null); //TODO Establecer al usuario actual
+            g.setResponsable(null); //TODO Establecer al usuario actual
             g.setProperty(attr); //almacenar en memoria para dibujar GUI
             g.buildAttributes(bes);
             this.add(g);

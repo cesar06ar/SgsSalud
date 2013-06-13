@@ -109,7 +109,23 @@ public class Paciente extends BussinesEntity implements Serializable {
     private boolean confirmed;
     @Column
     private boolean showBootcamp;
-    
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    } 
+        
     public String getCedula() {
         return cedula;
     }

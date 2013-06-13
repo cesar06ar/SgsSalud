@@ -126,7 +126,7 @@ public class UI {
         entity.setLastUpdate(now);
         entity.setActivationTime(now);
         entity.setExpirationTime(Dates.addDays(now, 364));
-        entity.setAuthor(null); //Establecer al usuario actual
+        entity.setResponsable(null); //Establecer al usuario actual
         entity.buildAttributes(g.getName(), bussinesEntityService); //Construir atributos de grupos
         return entity;
     }

@@ -57,7 +57,11 @@
 -------------------------------------------------- */
 html,body {
     height: 100%;
-    background-color: #fff;
+    background-color: #e2e2e2;
+    /*background-image: url('captura.PNG');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: top center;*/
 }
 
 a,a:hover,a:focus,a:active {
@@ -88,7 +92,7 @@ section>.row {
 }
 
 #masthead,#footer {
-     background-color: #000000;
+    background-color: #000000;
     background-repeat: no-repeat;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#004D9F),
         to(#049cd9) );
@@ -115,7 +119,7 @@ section>.row {
 }
 
 #masthead p a,#footer p a {
-    color: #fff;
+    color: #2727c5;
 }
 
 #masthead {
@@ -218,7 +222,7 @@ div.quickstart form textarea {
     color: #777777;
     font-size: 12px;
     line-height: 1.5;
-    margin: 40px 0 0;
+    margin: 50px 0 0;    
     padding: 20px 0;
     position: relative;
     text-shadow: 0 1px 0 #049cd9;
@@ -431,6 +435,12 @@ h1.header span {
     font-size: 70%;
     font-weight: normal;
     text-shadow: none;
+}
+
+.header-replace{
+    width: 100%; 
+    background-color: #66FF99;      
+    margin-bottom: 12px;
 }
 
 .body {

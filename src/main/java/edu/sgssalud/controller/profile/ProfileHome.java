@@ -1,11 +1,4 @@
 /*
- * Copyright 2012 jlgranda.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -128,7 +121,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         profile.setLastUpdate(now);
         profile.setActivationTime(now);
         profile.setExpirationTime(Dates.addDays(now, 364));
-        profile.setAuthor(null); //Establecer al usuario actual
+        profile.setResponsable(null); //Establecer al usuario actual
         //profile.buildAttributes(bussinesEntityService);
         return profile;
     }
@@ -240,6 +233,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         attributesManager.updatePassword(user, getPassword());
         getInstance().setPassword(getPassword());
         save(getInstance());
+        
         em.flush();
         credentials.setUsername(getInstance().getUsername());
         credentials.setCredential(new PasswordCredential(getPassword()));
@@ -307,10 +301,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         } else {
             try {
                 register();
-
-
-
-
             } catch (IdentityException ex) {
                 Logger.getLogger(ProfileHome.class
                         .getName()).log(Level.SEVERE, null, ex);
@@ -353,7 +343,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         entity.setLastUpdate(now);
         entity.setActivationTime(now);
         entity.setExpirationTime(Dates.addDays(now, 364));
-        entity.setAuthor(null); //Establecer al usuario actual
+        entity.setResponsable(null); //Establecer al usuario actual
         entity.buildAttributes(bussinesEntityService);
         //Set default values into dinamycs properties
         //TODO idear un mecanismo generico de inicialización de variables dinamicas

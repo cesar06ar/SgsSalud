@@ -119,7 +119,11 @@
                 </li>
             </h:panelGroup>
         </ui:define>
-
+        
+        <ui:insert id="sid" name="sidebar">
+            <ui:include src="/pages/sidebar.html"/>
+        </ui:insert>
+            
         <ui:define name="messages">
             <ocp:messages id="messages" />
         </ui:define>

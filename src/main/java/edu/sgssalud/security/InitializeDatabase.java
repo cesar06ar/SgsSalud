@@ -51,6 +51,7 @@ import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.config.Setting;
+import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.model.security.IdentityObjectCredentialType;
 import edu.sgssalud.model.security.IdentityObjectType;
@@ -170,13 +171,13 @@ public class InitializeDatabase {
         if (session.getPersistenceManager().findUser("admin") == null) {
             User u = session.getPersistenceManager().createUser("admin");
             session.getAttributesManager().updatePassword(u, "4dm1nglue3");
-            session.getAttributesManager().addAttribute(u, "email", "glue@eqaula.org");
+            session.getAttributesManager().addAttribute(u, "email", "cesar06ar@hotmail.com");
             members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
             //session.getRelationshipManager().associateUser(g, u);             
 
             p = new Profile();
-            p.setEmail("glue@eqaula.org");
+            p.setEmail("cesar06ar@hotmail.com");
             p.setUsername("admin");
             p.setPassword("4dm1nglue3");
             p.getIdentityKeys().add(u.getKey());
@@ -184,13 +185,13 @@ public class InitializeDatabase {
             p.setShowBootcamp(true);
             
             p.setName("Administrador");
-            p.setFirstname("Glue");
-            p.setSurname("Adhesive Software");
+            p.setFirstname("SgsSalud");
+            p.setSurname("Software Clinico");
             p.setCreatedOn(now);
             p.setLastUpdate(now);
             p.setActivationTime(now);
             p.setExpirationTime(Dates.addDays(now, 364));
-            p.setAuthor(null); //Establecer al usuario actual
+            p.setResponsable(null); //Establecer al usuario actual
             p.setType(bussinesEntityType); //Relacionar con un tipo de entidad de negocio y su estructura
             p.buildAttributes(bussinesEntityService); //Crear la estructura de datos glue
             entityManager.persist(p);
@@ -201,19 +202,20 @@ public class InitializeDatabase {
     }
     
     private void validateStructure() {
-        validateStructureForProfile();
-        validateStructureForPersonalData();
-        validateStructureForSpouse();
-        validateStructureForChildrens();
-        validateStructureForStrategic();
-        validateStructureForEducation();
-        validateStructureForRole();
-        validateStructureForTasks();
-        validateStructureForCapacitacion();
-        validateStructureForTrayectoriaLaboral();                
+        validarEstructuraParaPerfilDeUsuario();
+        validarEstructuraDatosPersonalesDelPerfilDeUsuario();
+        //validateStructureForSpouse();
+        //validateStructureForChildrens();
+        //validateStructureForStrategic();
+        validarEstructuraEducacionDelPerfilDeUsuarios();
+        //validateStructureForRole();
+        //validateStructureForTasks();
+        //validateStructureForCapacitacion();
+        validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios();  
+        //validarStructura();  
     }
     
-    private void validateStructureForProfile() {
+    private void validarEstructuraParaPerfilDeUsuario() {
         BussinesEntityType bussinesEntityType = null;
         
         try {
@@ -241,14 +243,8 @@ public class InitializeDatabase {
             attributes.add(buildStructureTypeProperty("PersonalData", "Datos personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
             attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, 1L, "Datos de su conyugue", 2L));
             attributes.add(buildGroupTypeProperty("Childrens", "Hijos", false, null, 1L, 0L, "Datos de sus hijos", 3L));
-            attributes.add(buildGroupTypeProperty("Education", "Educación", false, null, 1L, 0L, "Detalle sus logros académicos", 4L));
-            attributes.add(buildStructureTypeProperty("Role", "Detalle del cargo que desempeña", "Detalle del cargo que desempeña", null, 5L));
-            attributes.add(buildStructureTypeProperty("Strategic", "Datos estratégicos", "Custionario para recolectar información estratégica", null, 6L));
-            attributes.add(buildGroupTypeProperty("Tasks", "Tareas a su cargo", false, null, 1L, 0L, "Detalle las tareas que corresponden a su cargo dentro de la institución", 7L));
-            attributes.add(buildGroupTypeProperty("Capacitacion", "Eventos de Capacitación", false, null, 0L, 0L, "Detalle de capacitaciones con  respaldo fisico notarizado desde el año 2000 en adelante", 8L));
-            attributes.add(buildGroupTypeProperty("TrayectoriaLaboral", "Trayectoria Laboral", false, null, 1L, 0L, "Detalle de la trayectoria laboral desde el año 2000 en adelante", 9L));
-
-
+            attributes.add(buildGroupTypeProperty("Education", "Educación", false, null, 1L, 0L, "Detalle sus logros académicos", 4L));            
+            attributes.add(buildGroupTypeProperty("TrayectoriaLaboral", "Trayectoria Laboral", false, null, 1L, 0L, "Detalle de la trayectoria laboral desde el año 2000 en adelante", 5L));
             //Agregar atributos
             structure.setProperties(attributes);
             
@@ -263,7 +259,7 @@ public class InitializeDatabase {
        
    
     
-    private void validateStructureForPersonalData() {
+    private void validarEstructuraDatosPersonalesDelPerfilDeUsuario(){
         BussinesEntityType bussinesEntityType = null;
         String name = "PersonalData";
         try {
@@ -327,93 +323,7 @@ public class InitializeDatabase {
         
     }
     
-    private void validateStructureForSpouse() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "Spouse";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-
-            //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
-            attributes.add(buildProperty("tipoRelacion", "java.lang.String[]", "Casado,Unión libre", true, "Tipo de Relacion", "Indique que relacion tiene", false, 1L));
-            attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 2L));
-            attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 3L));
-            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Digite su número de cédula o pasaporte sin guiones", true, "ciValidator", 4L));
-            attributes.add(buildProperty("empresaTrabajo", String.class.getName(), null, false, "Empresa en la que Trabaja", "Indique la empresa que trabaja", false, 5L));
-            attributes.add(buildProperty("funcionCargo", String.class.getName(), null, false, "Actividad / Función o Cargo", "Que cargo o funcion tiene", false, 6L));
-
-            //Agregar atributos
-            structure.setProperties(attributes);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-        
-    }
-    
-    private void validateStructureForChildrens() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "Childrens";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-            
-            attributes.add(buildProperty("apellidos", String.class.getName(), null, true, "Apellidos", "Escriba sus Apellidos", true, 1L));
-            attributes.add(buildProperty("nombres", String.class.getName(), null, true, "Nombres", "Escriba sus nombre", true, 2L));
-            attributes.add(buildProperty("cedula", String.class.getName(), null, true, "Cédula / Pasaporte", "Diguite su número de cédula o pasaporte sin guiones", true, "ciValidator", 3L));
-            attributes.add(buildProperty("birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", 4L));
-            attributes.add(buildProperty("tipoInstruccion", "java.lang.String[]", "Pre-Basica,Basica,Bachillerato,Egresado,Superior,4 Nivel,Ninguno", false, "Tipo de Instrucción", "Indique el tipo de instrucción", 5L));
-
-            //Agregar atributos
-            structure.setProperties(attributes);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-        
-    }
-    
-    private void validateStructureForEducation() {
+    private void validarEstructuraEducacionDelPerfilDeUsuarios() {
         BussinesEntityType bussinesEntityType = null;
         String name = "Education";
         try {
@@ -455,189 +365,7 @@ public class InitializeDatabase {
         }
     }
     
-    private void validateStructureForRole() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "Role";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-            
-            attributes.add(buildProperty("role", String.class.getName(), "", true, "Cargo actual", "El cargo actual que desempeña", 1L));
-            attributes.add(buildProperty("remuneracion", Double.class.getName(), 0.0, true, "Remuneración unificada", "Monto de remuneración unificada del cargo", 2L));
-            attributes.add(buildProperty("jefe", String.class.getName(), "", true, "Jefe inmediato", "El nombre de su jefe inmediato", 3L));
-            attributes.add(buildProperty("tipoContratacion", String.class.getName(), "", true, "Tipo de contrato", "La modalidad de contratación", 4L));
-            attributes.add(buildProperty("tituloProfesional1", String.class.getName(), "", true, "Título profesional", "Indique el título profesional que posee", 5L));
-            attributes.add(buildProperty("tituloProfesional2", String.class.getName(), "", false, "Otro título profesional", "Indique el título profesional que posee", 6L));
-            attributes.add(buildProperty("tituloCuartoNivel1", String.class.getName(), "", false, "Título de cuarto nivel", "Indique el título de cuarto nivel que posee", 7L));
-            attributes.add(buildProperty("tituloCuartoNivel2", String.class.getName(), "", false, "Otro título de cuarto nivel", "Indique el título de cuarto nivel que posee", 8L));
-            attributes.add(buildProperty("aniosServicio", Long.class.getName(), 0, true, "Años de servicio", "Indique el tiempo en años que va laborando", 9L));
-            attributes.add(buildProperty("historiaLaboral", String.class.getName(), "", true, "Historia laboral", "Indique el código de historia laboral", 10L));
-            attributes.add(buildProperty("logrosPersonales", String.class.getName(), "", false, "Logros personales relevantes", "Indique los logros personales relavantes en relación a la institución", 11L));
-            attributes.add(buildProperty("comentario", "java.lang.MultiLineString", "", false, "Comentario", "Haganos conocer sus ideas y/o comentarios acerca de este proceso", 12L));
-
-            //Agregar atributos
-            structure.setProperties(attributes);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-    }
-    
-    private void validateStructureForStrategic() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "Strategic";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-            
-            attributes.add(buildPropertyAsSurvey("mision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la misión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 1L));
-            attributes.add(buildPropertyAsSurvey("vision", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser la visión de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 2L));
-            attributes.add(buildPropertyAsSurvey("objetivos", "java.lang.MultiLineString", null, true, "Cuál cree usted que debería ser los objetivos estratégicos de la empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 3L));
-            attributes.add(buildPropertyAsSurvey("fortalezas", "java.lang.MultiLineString", null, true, "Identifique fortalezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 4L));
-            attributes.add(buildPropertyAsSurvey("oportunidades", "java.lang.MultiLineString", null, true, "Identifique oportunidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 5L));
-            attributes.add(buildPropertyAsSurvey("debilidades", "java.lang.MultiLineString", null, true, "Identifique debilidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 6L));
-            attributes.add(buildPropertyAsSurvey("amenazas", "java.lang.MultiLineString", null, true, "Identifique amanezas para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 7L));
-            attributes.add(buildPropertyAsSurvey("empresavsunidad", "java.lang.MultiLineString", null, true, "Identifique oportunidades para la nueva empresa?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 8L));
-            attributes.add(buildPropertyAsSurvey("ventajas", "java.lang.MultiLineString", null, true, "Menciones ventajas de la empresa en relación a una unidad?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 9L));
-            attributes.add(buildPropertyAsSurvey("desventajas", "java.lang.MultiLineString", null, true, "Menciones desventajas de la empresa en relación a una unidad?", "Analise la pregunta y conteste en el espacio correspondiente. Utilice comas para separar varias.", 10L));
-            attributes.add(buildPropertyAsSurvey("calidad", "java.lang.MultiLineString", null, true, "Ha evidenciado control de calidad en el ejercicio de su gestión?", "Analise la pregunta y conteste en el espacio correspondiente", 11L));
-            attributes.add(buildPropertyAsSurvey("aporte", "java.lang.MultiLineString", null, true, "Cómo aportaría ud para la construcción de la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 12L));
-            attributes.add(buildPropertyAsSurvey("compromiso", "java.lang.MultiLineString", null, true, "Cuál sería su comprimiso personal para con la nueva empresa pública?", "Analise la pregunta y conteste en el espacio correspondiente", 13L));
-            attributes.add(buildPropertyAsSurvey("valoracionservicio", "java.lang.MultiLineString", null, true, "Cómo cree ud que los usuarios valoran el servicio de la UMAPAL?", "Analise la pregunta y conteste en el espacio correspondiente", 14L));
-            
-            structure.setProperties(attributes);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-    }
-    
-    private void validateStructureForTasks() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "Tasks";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> properties = new ArrayList<Property>();
-            
-            properties.add(buildProperty("taskName", String.class.getName(), null, true, "Tarea", "Resuma la tarea que realiza, use un verbo de acción. Ej.: Elaborar, Controlar, Notificar, etc", true, 1L));
-            properties.add(buildProperty("taskSummary", String.class.getName(), null, true, "Descripción", "Describa en detalle la tarea que realiza, sea generoso.", true, 2L));
-            properties.add(buildProperty("taskTime", Float.class.getName(), null, true, "Tiempo", "Tiempo promedio que le toma la tarea", true, 3L));
-            properties.add(buildProperty("taskReportTo", String.class.getName(), null, true, "Responsable", "A quién reporta el cumplimiento de la tarea", true, 4L));
-            //TODO agregar prpiedades para tareas
-
-            //Agregar atributos
-            structure.setProperties(properties);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-    }
-    
-    private void validateStructureForCapacitacion() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "Capacitacion";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-
-            //attributes.add(buildAttribute("birthday", Date.class.getName(), ago.getTime(), true, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños"));
-            attributes.add(buildProperty("nameEvent", String.class.getName(), null, true, "Nombre del Evento", "Indique el evento que se realizo", true, 1L));
-            attributes.add(buildProperty("typeEvent", "java.lang.String[]", "Curso,Seminario,Taller,Conferencia,Diplomado", true, "Tipo de Evento", "Indique que tipo de evento se realizó", true, 2L));
-            attributes.add(buildProperty("auspiciante", String.class.getName(), null, false, "Auspiciante", "Indique el Auspiciante ya sea Empresa o Institución", 3L));
-            attributes.add(buildProperty("duracionHoras", Long.class.getName(), null, true, "Duración en Horas", "Indique cuantas horas duro el Evento", true, 4L));
-            attributes.add(buildProperty("country", String.class.getName(), null, false, "País", "País donde se realizo el evento", true, 5L));
-            attributes.add(buildProperty("dateBegin", Date.class.getName(), ago.getTime(), false, "Fecha de Inicio", "Fecha que inicio el evento", 6L));
-            attributes.add(buildProperty("dateEnd", Date.class.getName(), ago.getTime(), false, "Fecha de Finalización", "Fecha de Culminación", 7L));
-
-            //Agregar atributos
-            structure.setProperties(attributes);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-    }
-    
-    private void validateStructureForTrayectoriaLaboral() {
+    private void validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios() {
         BussinesEntityType bussinesEntityType = null;
         String name = "TrayectoriaLaboral";
         try {
@@ -680,6 +408,125 @@ public class InitializeDatabase {
         }
     }
     
+    private void validarEstructuraDelPaciente() {
+        BussinesEntityType bussinesEntityType = null;
+        
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", Paciente.class.getName());
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(Paciente.class.getName());
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + Paciente.class.getName());
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de Tipos de entidades de negocio
+            List<Property> attributes = new ArrayList<Property>();            
+            attributes.add(buildStructureTypeProperty("datosPersonales", "Datos Personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
+            attributes.add(buildStructureTypeProperty("datosAcademicos", "Datos Academicos", "Información Academica del ", "/pages/profile/data/personal", 2L));
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+            
+            bussinesEntityType.addStructure(structure);
+            
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+        
+        System.out.println("Estructura de Paciente [" + bussinesEntityType + "]");
+    }
+    
+    private void validarEstructuraDatosPersonalesDelPaciente(){
+       BussinesEntityType bussinesEntityType = null;
+        String name = "datosPersonales";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+           
+            attributes.add(buildProperty("Personal", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique el estado civil", false, 1L));
+            attributes.add(buildProperty("Personal", "sectorProcedencia", "java.lang.String[]", "Urbano*,Rural", false, "Sector de Procedencia", "Indique el sector del cual procede", false, 2L));
+            attributes.add(buildProperty("Personal", "etnia", "java.lang.String[]", "Blanco*,Mestizo,Indígena,Afro-Ecuatoriano,Montubio,Negro", false, "Etnia", "Seleccione su etnia a la cual pertenece", false, 3L));
+            attributes.add(buildProperty("Personal", "discapacidad", String.class.getName(), "Ninguna", false, "Tipo de Discapacidad", "Indique el tipo de discapacidad en caso de padecerla", false, 4L));
+            attributes.add(buildProperty("Personal", "lugarTrabajo", String.class.getName(), "Ninguno", false, "Lugar de Trabajo", "Indique el lugar de trabajo si tiene alguno", false, 4L));
+                        
+            //Agregar atributos
+            structure.setProperties(attributes);
+            
+            bussinesEntityType.addStructure(structure);
+            
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+        
+    }
+    
+    private void validarEstructuraDatosAcademicosDelPaciente(){
+       BussinesEntityType bussinesEntityType = null;
+        String name = "datosAcademicos";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName("Data for " + name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+           
+            attributes.add(buildProperty("Academico", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique el estado civil", false, 1L));
+            
+                        
+            //Agregar atributos
+            structure.setProperties(attributes);
+            
+            bussinesEntityType.addStructure(structure);
+            
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+        
+    }
     
     private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {
         Property property = new Property();

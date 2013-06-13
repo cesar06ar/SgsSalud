@@ -120,7 +120,7 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
 
     public List<BussinesEntity> find(int maxresults, int firstresult, BussinesEntity author) {
         Map<String, Object> filters = new HashMap<String, Object>();
-        filters.put(BussinesEntity_.author.getName(), author);
+        filters.put(BussinesEntity_.responsable.getName(), author);
         QueryData<BussinesEntity> qData = find(firstresult, maxresults, BussinesEntity_.name.getName(), QuerySortOrder.ASC, filters);
 
         return qData.getResult();
