@@ -79,7 +79,7 @@
       <view-id value="/pages/admin/bussinesentitytype/property.xhtml"></view-id>       
    </url-mapping>   
    
-   <!--Security-->
+   <!--vistas de Seguridad-->
    <url-mapping id="securityGroup">
       <pattern value="/admin/security/group"></pattern>
       <view-id value="/pages/admin/security/group.xhtml"></view-id>       
@@ -99,6 +99,7 @@
    <url-mapping id="pacienteLista">
       <pattern value="/paciente/lista"></pattern>
       <view-id value="/pages/paciente/lista.xhtml"></view-id>       
+       <query-param name="result" decode="false">#{pacienteListaServicio.firstResult}</query-param>
    </url-mapping>
    <url-mapping id="paciente">
       <pattern value="/paciente/paciente"></pattern>

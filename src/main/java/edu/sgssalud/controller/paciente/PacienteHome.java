@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.international.status.Messages;
-import edu.sgssalud.service.PacienteService;
+import edu.sgssalud.service.PacienteServicio;
 import edu.sgssalud.util.Dates;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,7 +60,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @Web
     private EntityManager em;
     @Inject
-    private PacienteService pcs;
+    private PacienteServicio pcs;
     /*<==....*/
     /*Atributos para autenticación y manejo de usuarios con seam 3 */
     private Messages msg;

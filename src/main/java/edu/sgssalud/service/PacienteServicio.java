@@ -38,15 +38,15 @@ import javax.persistence.criteria.Root;
  *
  * @author cesar
  */
-public class PacienteService extends PersistenceUtil<Paciente> implements Serializable {
+public class PacienteServicio extends PersistenceUtil<Paciente> implements Serializable {
     
     private static final long serialVersionUID = -4022772083704382039L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PacienteService.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PacienteServicio.class);
     
     @Inject
     private BussinesEntityService bussinesEntityService;
     
-    public PacienteService(){
+    public PacienteServicio(){
         super(Paciente.class);
     }
 
@@ -154,7 +154,7 @@ public class PacienteService extends PersistenceUtil<Paciente> implements Serial
         }
     }
     
-    public Paciente findPorNombres(final String nombres) {
+    public Paciente buscarPorNombres(final String nombres) {
 
         log.info("Buscar paciente por nombres " + nombres);
 
@@ -163,6 +163,8 @@ public class PacienteService extends PersistenceUtil<Paciente> implements Serial
         Root<Paciente> bussinesEntityType = query.from(Paciente.class);
         query.where(builder.equal(bussinesEntityType.get(Paciente_.nombres), nombres));
         return getSingleResult(query);
-    }
+    }  
+    
+    
 }
 
