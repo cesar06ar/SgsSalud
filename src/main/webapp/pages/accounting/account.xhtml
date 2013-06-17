@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:s="http://jboss.org/seam/faces"
+                xmlns:glue="http://eqaula.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/view/templates/glue.xhtml">
+    <f:metadata>
+        <f:viewParam name="accountId" value="#{accountHome.accountId}" />            
+        <f:viewParam name="outcome" value="#{accountHome.outcome}" />            
+        <s:viewAction action="#{accountHome.load}" if="#{conversation.transient}"/>
+    </f:metadata>
+
+    <ui:define name="header-replace">
+        <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+            <div class="container">
+                <div class="row-fluid" style="margin-top: 5px;">
+                    <div class="span10">   
+                        <div class="row-fluid" style="margin-top: 5px;">
+                            <h3>#{accountHome.managed?messages['common.edit'] : messages['common.add']} 
+                                #{accountHome.instance.persistent ? accountHome.instance.name : ""}</h3>   
+                            <p><span style=""><b>#{accountHome.instance.accountType}</b></span>
+                                <br/>
+                                <h:outputText escape="false" value="#{accountHome.instance.description}"/>                                
+                            </p>
+                        </div>                        
+                    </div>
+                    <div class="span2">
+                        <h:form id="control" class="form-horizontal">  
+                            <!--TODO realizar accion para que los botones de add y edit se abran el panel de dialogo-->                            
+                            <p:commandButton value="#{messages['common.edit']}" ajax="true" type="button"
+                                             process="@this, :edit-dialog" onclick="editDlg.show();"
+                                             icon="ui-icon-plus" update=":edit-dialog" styleClass="btn btn-primary"
+                                             rendered="#{accountHome.instance.persistent}" />
+
+                            <br/>
+                            <!--TODO:  falta accion de borrar -->
+                            <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();"  immediate="true"
+                                             update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{accountHome.instance.persistent}"/>
+                        </h:form>
+                    </div>
+                </div>     
+            </div>
+        </div>
+    </ui:define>
+    <ui:define name="content">
+        <!--Dialog for edit Account-->
+        <h:panelGroup layout="block" class="control-group">
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" 
+                      modal="true" resizable="true" dynamic="true" width="650">
+                <h:form id="form-dialog" class="form-horizontal">                    
+                    <h:panelGroup layout="block" class="control-group" rendered="true">
+                        <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{accountHome.instance.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save" render="code"/> 
+                        <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{accountHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                        <h:panelGroup layout="block" class="control-group">
+                            <label for="accounttype_" class="control-label">#{messages['Account.type']}</label>
+                            <div class="controls">
+                                <p:selectOneMenu id="accounttype_" value="#{accountHome.instance.accountType}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                                 rendered="true" label="#{messages['Account.type']}">
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                    <f:selectItems value="#{accountHome.accountTypes}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
+                                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                </p:selectOneMenu>                        
+                            </div>
+                        </h:panelGroup>
+                        <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{accountHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
+                        <h:panelGroup layout="block" class="control-group">
+                            <label for="parent_" class="control-label">#{messages['common.change']}</label>
+                            <div class="controls">
+                                <p:selectOneMenu id="parent_" value="#{accountHome.instance.parent}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false"  var="p"
+                                                 rendered="true" label="#{messages['Account']}" filter="true" filterMatchMode="contains">
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                    <f:selectItems value="#{accountHome.accounts}" var="parentItem" itemLabel="#{parentItem.code} #{parentItem.name}" itemValue="#{parentItem}"/>                          
+                                    <p:column>  
+                                        #{p.code}
+                                    </p:column> 
+                                    <p:column >  
+                                        #{p.name}
+                                    </p:column> 
+                                    <f:converter converterId="org.eqaula.glue.faces.converter.AccountConverter"/>
+                                    <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                </p:selectOneMenu>                        
+                            </div>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <div class="actions">
+                        <p:commandButton id="save" value="#{messages['common.save']}" rendered="true"
+                                         action="#{accountHome.saveAccount()}" 
+                                         update=":edit-dialog :form-dialog"
+                                         ajax="true" process="@this" styleClass="btn primary"
+                                         style="margin-top:10px;" icon="ui-icon-disk">  
+                        </p:commandButton>
+                        #{' '}                     
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
+                                         rendered="true" onclick="editDlg.hide();"                                      
+                                         styleClass="btn"/>  
+                    </div> 
+                </h:form>
+            </p:dialog> 
+        </h:panelGroup>
+        <h:form id="form" acceptcharset="UTF-8" class="form-horizontal">
+            <!--Code for create new Account-->
+            <h:panelGroup layout="block" class="control-group" rendered="#{!accountHome.instance.persistent}">                
+                <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" /> 
+                <glue:input id="code" name="code" type="text" label="#{messages['common.code']}" value="#{accountHome.instance.code}" required="false" inlinehelp="#{messages['common.code.inlinehelp']}" execute="@this save" render="code"/> 
+                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{accountHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                <h:panelGroup layout="block" class="control-group">
+                    <label for="accounttype_" class="control-label">#{messages['Account.type']}</label>
+                    <div class="controls">
+                        <p:selectOneMenu id="accounttype_" value="#{accountHome.instance.accountType}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                         rendered="true" label="#{messages['Account.type']}">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                            <f:selectItems value="#{accountHome.accountTypes}" var="accountType1" itemLabel="#{accountType1}" itemValue="#{accountType1}"/>                          
+                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                        </p:selectOneMenu>                        
+                    </div>
+                </h:panelGroup>
+                <glue:input id="des" name="description" type="textarea" label="#{messages['common.description']}" value="#{accountHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" execute="@this saveNew" render="des"/> 
+
+                <div class="controls">                                                                                                                                          
+                    <p:commandButton id="saveNew" action="#{accountHome.saveAccount()}" value="#{messages['common.save']}" styleClass="btn btn-primary" rendered="#{accountHome.hasParent() or !accountHome.instance.persistent}" />
+                    #{' '}                    
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
+                                     update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{accountHome.accountId != null}">
+                        <p:ajax process="@this" update=":delete-dialog" />
+                    </p:commandButton>
+                    #{' '}                    
+                    <h:link outcome="#{accountHome.previousView()}" onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    </h:link>
+                </div>
+            </h:panelGroup>
+
+            <!--Panel of SubAccounts-->
+            <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{accountHome.instance.persistent or accountHome.hasParent()}">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                <div class="actions">                    
+                    <h:link value="#{messages['common.add']} #{messages['Account.subAcount']}" rendered="#{accountHome.managed != null}" outcome="account" styleClass="btn btn-primary">
+                        <f:param name="parentId" value="#{accountHome.accountId}" ></f:param>
+                        <f:param name="accountId"></f:param>
+                        <f:param name="outcome" value="account"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" outcome="account" styleClass="btn" disabled="#{empty accountHome.accountSelected}">
+                        <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
+                        <f:param name="parentId" value="#{accountHome.accountId}"></f:param>
+                        <f:param name="outcome" value="account"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="view" styleClass="btn" 
+                            disabled="#{empty accountHome.accountSelected}">
+                        <f:param name="accountId" value="#{accountHome.accountSelected.id}"></f:param>
+                        <f:param name="outcome" value="account"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link outcome="#{accountHome.previousView()}" onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
+                    </h:link>
+                </div>
+                <br/>
+                <h:panelGroup layout="block" class="control-group" rendered="#{accountHome.instance.persistent}">                                
+                    <p:treeTable value="#{accountHome.treeAccount}" var="_account"  
+                                 selection="#{accountHome.selectedNode}" selectionMode="single">  
+
+                        <p:ajax event="select" listener="#{accountHome.onNodeSelect}"   
+                                update=":form:button-edit :form:button-view :form:messages"/>                 
+                        <p:ajax event="unselect" listener="#{accountHome.onNodeUnselect}" update=":form:button-edit :form:button-view :form:messages"/>
+
+
+                        <p:column style="width:150px">  
+                            <f:facet name="header">  
+                                #{messages['account.code']} 
+                            </f:facet>  
+                            <h:outputText value="#{_account.code}" />  
+                        </p:column>  
+                        <p:column style="width:150px">  
+                            <f:facet name="header">  
+                                #{messages['account.name']} 
+                            </f:facet>  
+                            <h:outputText value="#{_account.name}" />  
+                        </p:column>  
+                        <p:column style="width:100px">  
+                            <f:facet name="header">  
+                                #{messages['account.type']}  
+                            </f:facet>  
+                            <h:outputText value="#{_account.accountType}" />  
+                        </p:column>  
+                    </p:treeTable>  
+                </h:panelGroup>            
+            </p:panel>             
+        </h:form>
+        <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+            <h:form id="form-dialog-confirm-delete">
+                <h:panelGroup layout="block" style="padding:5px;">  
+                    <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                </h:panelGroup>  
+                <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                 action="#{accountHome.deleteAccount()}"                                         
+                                 ajax="true" process="@this"  
+                                 style="margin-top:10px;">  
+                </p:commandButton>  
+                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                 style="margin-top:10px;"/>  
+            </h:form>
+        </p:dialog>
+    </ui:define>    
+</ui:composition>

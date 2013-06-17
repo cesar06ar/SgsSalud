@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2013 dianita.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<!DOCTYPE html>
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="themeId" value="#{themeHome.themeId}" />
+        </f:metadata>
+        <ui:param name="title" value="#{themeHome.instance.name}" />
+        <ui:define name="header-replace">
+            <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+                <div class="container">
+                    <div class="row fluid" style="margin-top: 5px;">
+                        <div class="span9 ">
+                            <h2>#{themeHome.managed ? themeHome.instance.name : ""}</h2>
+                            <p><span style="">#{messages['common.description']}:  #{themeHome.instance.description}</span>                                
+
+                            </p>
+                        </div>
+
+                        <div class="span3 ">
+                            <h:form id="control">  
+                                <br/>
+                                <h:link outcome="/pages/management/theme/list" styleClass="link" value="#{messages['common.cancel']}">
+                                    <f:param  name="organizationId" value="#{themeHome.instance.organization.id}"></f:param>   
+                                </h:link>
+                                <br/>
+                                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="link">                                
+                                </h:link>
+                            </h:form>
+                        </div>
+
+                    </div>
+                </div></div>             
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="view">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                <p:contextMenu for="themeTree" >  
+                    <p:menuitem value="#{messages['common.add']}" update=":messages" actionListener="#{themeHome.redirecToAdd}" icon="ui-icon-plus" /> 
+                    <p:menuitem value="#{messages['common.edit']}" update=":messages" actionListener="#{themeHome.redirecToEdit}" icon="ui-icon-plus" /> 
+                </p:contextMenu>  
+                <p:panel id="explorer-panel" header="#{messages['common.overview']}" toggleable="true">
+                    <p:tree id="themeTree" value="#{themeHome.themeNode}" var="node" orientation="horizontal" 
+                            selectionMode="single" selection="#{themeHome.selectedNode}"  dynamic="true">  
+
+                        <p:ajax event="select" update=":messages" listener="#{themeHome.onNodeSelect}" /> 
+                        <p:treeNode expandedIcon="ui-icon-folder-open"  
+                                    collapsedIcon="ui-icon-folder-collapsed">  
+                        </p:treeNode>  
+                        <p:treeNode  type="theme" icon="ui-icon-home">    
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>  
+                        <p:treeNode  type="macroprocess" icon="ui-icon-screenshot">    
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>  
+                        <p:treeNode  type="process" icon="icon-asterisk">    
+                            <h:outputText value="#{node.name}" />  
+                        </p:treeNode>  
+
+                    </p:tree>
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
+

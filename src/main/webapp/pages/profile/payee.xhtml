@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+
+
+        <f:metadata>
+            <f:viewParam name="organizationId" value="#{customizeProfileHome.organizationId}"/>
+            <f:viewParam name="postingId" value="#{customizeProfileHome.postingId}"/>
+        </f:metadata>
+
+
+
+        <ui:define name="header-replace">
+            <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+                <div class="container">
+                    <div class="row-fluid" style="margin-top: 5px;">
+                        <h3>Agregar Beneficiario</h3>
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
+
+
+        <ui:define name="content">    
+            <h:form id="profile" class="form-horizontal">
+                <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{customizeProfileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save"/>
+                <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{customizeProfileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>               
+
+                <h:panelGroup id="cod" layout="block" class="control-group" rendered="true">
+                    <label for="dni" class="control-label">#{messages['profile.dni']}*</label>
+                    <div class="controls">
+                        <h:inputText id="dni" value="#{customizeProfileHome.instance.code}" required="true" label="#{messages['profile.dni']}">
+                            <f:validator validatorId="ciValidator" />
+                            <f:validator validatorId="ciAvailabilityValidator" />
+                            <f:ajax execute="@this" render="cod"  />
+                        </h:inputText>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{customizeProfileHome.instance.code != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>"#{messages['profile.dni.inlinehelp']}"<ocp:message forId="dni" /></span>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="eml" layout="block" class="control-group">
+                    <label for="email" class="control-label">#{messages['common.email']}</label>
+                    <div class="controls">
+
+                        <div class="input-prepend">
+                            <span class="add-on"><i class="icon-envelope"></i></span>
+                            <h:inputText id="email" value="#{customizeProfileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                                <f:validator validatorId="emailValidator" />
+                                <f:validator validatorId="signupEmailAvailabilityValidator" />
+                                <f:ajax execute="@this" render="eml"  />
+                            </h:inputText>
+                        </div>
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{customizeProfileHome.instance.email != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-block"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
+                    </div>
+                </h:panelGroup>
+                <glue:input id="showBootcamp" name="showBootcamp" type="checkbox" value="#{customizeProfileHome.instance.showBootcamp}" required="true" inlinehelp="#{messages['common.bootcamp.inlinehelp']}" execute="@this save"/>
+                <div class="form-actions">
+                    <h:commandButton id="save" action="#{customizeProfileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn btn-primary"/>
+                    &nbsp;
+                    <h:commandButton action="/pages/profile/list.xhtml?faces-redirect=true"
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{not empty backView}"/>
+                    <h:link outcome="/pages/accounting/ledger/voucher?faces-redirect=true" includeViewParams="true"
+                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{empty backView}">
+                        <f:param name="organizationId" value="${customizeProfileHome.organizationId}"/>
+                    </h:link>
+                </div>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+</html>

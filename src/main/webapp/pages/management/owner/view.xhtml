@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:glue ="http://eqaula.org/jsf/facelets">
+
+    <ui:composition template="/WEB-INF/view/templates/glue-tree.xhtml">
+        <f:metadata>
+            <f:viewParam name="result" value="#{ownerListService.firstResult}" />
+            <f:viewParam name="organizationId" value="#{ownerListService.organizationId}"/>
+            <f:viewParam name="organizationId" value="#{ownerHome.organizationId}"/>
+        </f:metadata>
+        <ui:param name="title" value="#{ownerListService.organization.name} - #{messages['module.owners']}" />
+        <ui:define name="subnav">
+        </ui:define>
+        <ui:define name="topnav-post-template">
+            <li>
+                <h:link outcome="/pages/profile/profile"
+                        value="#{profile.username}"
+                        rendered="false">
+                    <f:param name="profileId" value="#{profile.id}" />
+                </h:link>
+            </li>
+            <ui:insert name="topnav-post-profile"/>
+        </ui:define>
+        <ui:define name="header-replace">
+            <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">            
+                <div class="container">
+
+                    <div class="row-fluid" style="margin-top: 5px;">
+                        <div class="span9">
+                            <h2>#{ownerListService.organization.name} - #{messages['module.owners']}</h2>   
+                        </div>    
+
+                        <div class="span3">
+                            <h:link value="#{messages['common.edit']} " rendered="#{true}" 
+                                    outcome="/pages/management/organization/organization.xhtml" styleClass="btn btn-link">
+                                <f:param name="organizationId" value="#{ownerListService.organization.id}"/>
+                                <f:param name="outcome" value="owners"/>
+                            </h:link>
+                            #{' '}
+                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                    outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn btn-link">                                
+                            </h:link> 
+                        </div>
+                    </div> 
+
+                </div>         
+            </div>             
+        </ui:define>
+
+        <ui:define name="content" >
+            <div class="row">
+                <div class="span12">
+                    <div class="well bs-docs-sidebar" style="padding-top: 7px; padding-bottom: 10px;">
+                        <br/>
+                        <h:form>
+                            <p:commandLink id="owner-add-button" value="#{messages['common.add']}" action="#{ownerHome.createNewOwner()}" oncomplete="ownerEditDlg.show();"
+                                           styleClass="btn btn-primary"
+                                           update=":owner-edit-dialog">
+                            </p:commandLink>
+                        </h:form>
+                        <h3>#{messages['module.owners']}</h3>
+                        <ul class="nav nav-tabs nav-stacked">
+                            <ui:repeat var="_owner" value="#{ownerListService.firstResult}" varStatus="i">
+                                <li>
+                                    <div class="box" style="margin-bottom: 8px;">
+                                        <div class="row">
+                                            <h:form>
+                                                <div class="span11 columns">
+
+                                                    <h5>#{_owner.name}
+                                                        <p:commandLink id="owner-edit-button"  value="#{messages['common.edit']}"
+                                                                       oncomplete="ownerEditDlg.show();"  
+                                                                       action="#{ownerHome.editOwner(_owner.id)}" 
+                                                                       styleClass="btn btn-secondary"
+                                                                       update=":owner-edit-dialog"
+                                                                       disabled="#{empty ownerListService.selectedOwner.id}" 
+                                                                       > 
+                                                        </p:commandLink>
+                                                        #{' '}
+                                                    </h5>
+
+                                                    <div class="form-actions" style="padding-left: 20px">
+                                                        <p:dataTable var="_diagnostic" value="#{_owner.diagnostic}"
+                                                                     paginator="true" rows="10"
+                                                                     paginatorAlwaysVisible="false"
+                                                                     paginatorPosition="top"
+                                                                     paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                                                                     rowsPerPageTemplate="5,10,15"
+                                                                     id="diagnosticTable" lazy="true"
+                                                                     rendered="true"
+                                                                     selectionMode="single">
+                                                            <p:column headerText="#{messages['common.name']}" sortBy="#{_diagnostic.name}">
+                                                                <h:outputText value="#{_diagnostic.name}" />
+                                                            </p:column>
+                                                            <p:column headerText="#{messages['common.description']}" sortBy="#{_diagnostic.description}">
+                                                                <h:outputText value="#{_diagnostic.description}" />
+                                                            </p:column>                
+                                                            <p:column headerText="#{messages['common.applicationDate']}" sortBy="#{_diagnostic.applicationDate}">
+                                                                <h:outputText value="#{_diagnostic.applicationDate}" />
+                                                            </p:column>                
+                                                        </p:dataTable>
+                                                    </div>
+                                                </div>
+                                            </h:form>
+                                        </div>       
+                                    </div> 
+                                </li>
+                            </ui:repeat> 
+                        </ul>
+                        <p:dialog id="owner-edit-dialog" header="#{messages['common.add']} #{messages['module.owner']}" styleClass="atf-header" widgetVar="ownerEditDlg" appendToBody="true" closeOnEscape="true">
+                            <h:form  id="form-owner" acceptcharset="UTF-8" class="form-horizontal" >
+                                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+                                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{ownerHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name"/>
+                                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{ownerHome.instance.description}" required="false" inlinehelp="#{messages['common.description.help']}" render="description" execute="@this save" />
+
+                                <div class="form-actions">
+                                    <p:commandButton id="save" value="#{messages['common.done']}" 
+                                                     action="#{ownerHome.saveOwnerDialog()}"
+                                                     oncomplete="ownerEditDlg.hide();" 
+                                                     update="@form"
+                                                     styleClass="btn btn-primary"/>
+                                    <!-- &nbsp;-->
+                                    #{'  '}
+                                    <p:commandButton type="button" value="#{messages['common.delete']}" 
+                                                     styleClass="btn-danger"
+                                                     onclick="deletedDlg.show()"
+                                                     immediate="true"
+                                                     update=":cancel-dialog"
+                                                     rendered="#{ownerHome.managed}"
+                                                     />
+                                    #{'  '}
+                                    <p:commandButton id="cancel" value="#{messages['common.cancel']}" 
+                                                     oncomplete="ownerEditDlg.hide();"  
+                                                     ajax="true" process="@this" styleClass="btn"/>
+
+                                </div>  
+                            </h:form>
+                            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false">   
+                                <h:form id="form-dialog-confirm-delete">
+                                    <h:panelGroup layout="block" style="padding:5px;">  
+                                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                                    </h:panelGroup>  
+                                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                                     action="#{ownerHome.deleteOwner()}"                                         
+                                                     ajax="true" process="@this"  
+                                                     style="margin-top:10px;"
+                                                     update="@form">  
+                                    </p:commandButton>  
+                                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                                     style="margin-top:10px;"/>  
+                                </h:form>
+                            </p:dialog> 
+                        </p:dialog>
+                    </div>          
+                </div> 
+            </div>
+        </ui:define>
+        <ui:define name="sidebar">
+            <ui:include src="/pages/management/navigator.xhtml" />
+        </ui:define>
+    </ui:composition>
+</html>
