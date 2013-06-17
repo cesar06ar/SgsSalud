@@ -2,5 +2,5 @@
 <Scene Scope="Project" version="2">
     <Scope Scope="Faces Configuration Only"/>
     <Scope Scope="Project"/>
-    <Scope Scope="All Faces Configurations"/>
+    <Scope Scope="Todas las caras de configuración"/>
 </Scene>
