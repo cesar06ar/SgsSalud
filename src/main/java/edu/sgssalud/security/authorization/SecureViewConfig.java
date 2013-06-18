@@ -47,22 +47,25 @@ import org.jboss.seam.faces.view.config.ViewPattern;
 public interface SecureViewConfig {
 
     static enum Pages {
-
         @FacesRedirect
-        @ViewPattern("/pages/profile/*")
+        @ViewPattern("/pages/profile/*")                
         @Owner
-        USER,
+        USER,        
         @ViewPattern("/pages/admin/*")
         @Admin
         ADMIN,
-        @ViewPattern("/pages/accounting/*")
+        @ViewPattern("/pages/paciente/*")
         @Accountant
         ACCOUNTANT,
+        @ViewPattern("/pages/farmacia/*")
+        @farmaceutica
+        FARMACEUTICA,
+        
         @FacesRedirect
-        @ViewPattern("/*")
+        @ViewPattern("/pages/*")        
         @AccessDeniedView("/pages/denied.xhtml")
         @LoginView("/pages/login.xhtml")
-        ALL;
+        ALL;        
 
     }
 }

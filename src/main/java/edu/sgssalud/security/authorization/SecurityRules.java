@@ -43,6 +43,7 @@ public class SecurityRules {
     private static Logger log = Logger.getLogger(SecurityRules.class);
     public static String ADMIN = "Admin";
     private static String ACCOUNTANT = "Accountant";
+    private static String FARMACEUTICA = "Farmaceutica";
 
     /*public @Secures
      @Admin
@@ -66,9 +67,9 @@ public class SecurityRules {
     @Secures
     @Admin
     public boolean isAdmin(Identity identity) {
-        if (identity.getUser() == null) {            
+        if (identity.getUser() == null) {
             return false;
-            
+
         } else {
             return "admin".contains(getUsername(identity))
                     || identity.hasRole("admin", "USERS", "GROUP")
@@ -83,9 +84,22 @@ public class SecurityRules {
             return false;
         } else {
             return identity.hasRole(ACCOUNTANT, "USERS", "GROUP")
-                || identity.inGroup(ACCOUNTANT, "GROUP")
-                || identity.inGroup(SecurityRules.ADMIN, "GROUP")
-                || "admin".contains(getUsername(identity));
+                    || identity.inGroup(ACCOUNTANT, "GROUP")
+                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+                    || "admin".contains(getUsername(identity));
+        }
+    }
+
+    @Secures
+    @farmaceutica
+    public boolean isFarmaceutica(Identity identity) {
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(FARMACEUTICA, "USERS", "GROUP")
+                    || identity.inGroup(FARMACEUTICA, "GROUP")
+                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+                    || "admin".contains(getUsername(identity));
         }
     }
 

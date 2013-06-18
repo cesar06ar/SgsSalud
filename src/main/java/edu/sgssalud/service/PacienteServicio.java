@@ -15,10 +15,8 @@
  */
 package edu.sgssalud.service;
 
-import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.paciente.Paciente_;
-import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.Strings;
 import java.io.Serializable;
@@ -38,9 +36,9 @@ import javax.persistence.criteria.Root;
  *
  * @author cesar
  */
-public class PacienteServicio extends PersistenceUtil<Paciente> implements Serializable {
+public class PacienteServicio extends PersistenceUtil<Paciente> implements Serializable{
     
-    private static final long serialVersionUID = -4022772083704382039L;
+    private static final long serialVersionUID = 234L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PacienteServicio.class);
     
     @Inject
@@ -155,7 +153,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
     }
     
     public Paciente buscarPorNombres(final String nombres) {
-
+   
         log.info("Buscar paciente por nombres " + nombres);
 
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -163,6 +161,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         Root<Paciente> bussinesEntityType = query.from(Paciente.class);
         query.where(builder.equal(bussinesEntityType.get(Paciente_.nombres), nombres));
         return getSingleResult(query);
+        //return  null;
     }  
     
     

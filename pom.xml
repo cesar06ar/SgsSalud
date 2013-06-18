@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Sgssalud software</name>
-    <description>Software de gestion de servicios de salud</description>
+    <description>Software clinico de gestion de servicios de salud</description>
 
     <properties>
         <!-- Explicitly declaring the source encoding eliminates the following 
@@ -462,8 +462,7 @@
                     <groupId>bouncycastle</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
+        </dependency>     
     </dependencies>
 
     <build>

@@ -23,11 +23,14 @@ import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Index;
@@ -40,6 +43,9 @@ import org.jboss.solder.logging.Logger;
  * @author cesar
  */
 @Entity
+@Table(name = "Paciente")
+@DiscriminatorValue(value = "PR")
+@PrimaryKeyJoinColumn(name = "id")
 public class Paciente extends BussinesEntity implements Serializable {
 
     
