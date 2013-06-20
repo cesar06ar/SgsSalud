@@ -16,9 +16,21 @@
 package edu.sgssalud.service;
 
 import edu.sgssalud.model.farmacia.Medicamento;
+import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.paciente.Paciente_;
 import edu.sgssalud.util.PersistenceUtil;
+import edu.sgssalud.util.Strings;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Random;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -36,7 +48,59 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
    
     @Override
     public void setEntityManager(EntityManager em) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.em = em;        
     }
+    
+    //metodo count
+    public long count() {
+        return count(Medicamento.class);
+    }
+
+    
+
+    public Medicamento buscarMedicamentosProId(final Long id) {
+        return (Medicamento) findById(Medicamento.class, id);
+    }
+    /*public Medicamento buscarPorNombreMedicamento(final String name) {
+        log.info("buscar medicamento por nombre " + name);
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Medicamento> query = builder.createQuery(Medicamento.class);
+        Root<Medicamento> bussinesEntityType = query.from(Medicamento.class);
+        query.where(builder.equal(bussinesEntityType.get(Medicamento_.name), name));
+        return getSingleResult(query);    
+    }*/
+            
+    /*@TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void crear(final Medicamento medicamento) {
+        medicamento.setShowBootcamp(true);
+        super.create(medicamento);
+    }*/
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void guardar(final Medicamento medicamento) {
+        super.save(medicamento);
+        em.flush();
+    }
+    
+    /*Metodo se utilizá en los Bean de las tablas de pacientes*/
+    public long getMedicamentoCount() {
+        return count(Medicamento.class);
+    }
+    
+    /*Metodo se utilizá en los Bean de las tablas de pacientes*/
+    public List<Medicamento> buscarMedicamentos(final int limit, final int offset) {
+        return findAll(Medicamento.class);
+    }
+    /*Metodo se utilizá en los Bean de las tablas de pacientes*/
+    public List<Medicamento> getMedicamentos() {
+        List list = this.findAll(Medicamento.class);
+        return list;
+    }
+    
+    
+    
+     
+   
+    
     
 }
