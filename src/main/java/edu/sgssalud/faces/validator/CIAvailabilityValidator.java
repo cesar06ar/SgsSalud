@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.LoggedIn;
+import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.util.UI;
@@ -39,6 +40,7 @@ import edu.sgssalud.util.UI;
 public class CIAvailabilityValidator implements Validator {
 
     @Inject
+    @Web
     private EntityManager em;
     @Inject
     private ProfileService ps;
@@ -51,12 +53,15 @@ public class CIAvailabilityValidator implements Validator {
             throws ValidatorException {
         ps.setEntityManager(em);
         String currentDni = "";
+        System.out.println("Perfil de usuario es: "+profile.toString());
         if (profile.isPersistent()) {
             currentDni = ps.find(profile.getId()).getCode();
+            System.out.println("el dni es: " + currentDni);
         }
         if (!currentDni.equals(value)) {
-            if (value instanceof String ) {
+            if (value instanceof String) {
                 ps.setEntityManager(em);
+                System.out.println("dni ingresada diferente al valor en la base de datos: ");
                 if (!ps.isDniAviable((String) value)) {
                     throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
                 }

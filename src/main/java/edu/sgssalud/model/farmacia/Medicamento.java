@@ -38,7 +38,7 @@ public class Medicamento extends BussinesEntity implements Serializable{
     private Date fechaIngreso;
     private String casaComercialProveedora;
     private int numeroFactura;
-    private String direccioncasaComercial;    
+    private String dirCasaComercial;    
     private String nombreComercial;
     private String nombreGenerico;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -70,14 +70,14 @@ public class Medicamento extends BussinesEntity implements Serializable{
         this.numeroFactura = numeroFactura;
     }
 
-    public String getDireccioncasaComercial() {
-        return direccioncasaComercial;
+    public String getDirCasaComercial() {
+        return dirCasaComercial;
     }
 
-    public void setDireccioncasaComercial(String direccioncasaComercial) {
-        this.direccioncasaComercial = direccioncasaComercial;
+    public void setDirCasaComercial(String dirCasaComercial) {
+        this.dirCasaComercial = dirCasaComercial;
     }
-
+        
     public String getNombreComercial() {
         return nombreComercial;
     }
@@ -113,7 +113,7 @@ public class Medicamento extends BussinesEntity implements Serializable{
           
      @Override
     public String toString() {
-        return Medicamento.class.getName()
+        return "edu.sgssalud.model.farmacia.Medicamento[ "
                 + "id=" + getId() + ","
                 + "nombreComercial=" + getNombreComercial() + ","
                 + "nombreGenerico" + getNombreGenerico() + ","
