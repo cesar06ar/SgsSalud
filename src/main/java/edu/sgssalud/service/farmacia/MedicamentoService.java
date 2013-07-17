@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.sgssalud.service;
+package edu.sgssalud.service.farmacia;
 
 import edu.sgssalud.model.farmacia.Medicamento;
+import edu.sgssalud.model.farmacia.Medicamento_;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.paciente.Paciente_;
+import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.Strings;
 import java.io.Serializable;
@@ -38,7 +40,7 @@ import javax.persistence.criteria.Root;
  */
 public class MedicamentoService extends PersistenceUtil<Medicamento> implements Serializable{
     
-    private static final long serialVersionUID = 6569835981443699931L;
+    private static final long serialVersionUID = 4L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
 
     public MedicamentoService() {
@@ -51,56 +53,46 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
         this.em = em;        
     }
     
-    //metodo count
-    public long count() {
-        return count(Medicamento.class);
-    }
-
-    
-
     public Medicamento buscarMedicamentosProId(final Long id) {
         return (Medicamento) findById(Medicamento.class, id);
     }
-    /*public Medicamento buscarPorNombreMedicamento(final String name) {
-        log.info("buscar medicamento por nombre " + name);
+    
+    public List<Medicamento> obtenerMedicamentos(final int limite, final int offset){
+        return findAll(Medicamento.class);
+    }
+    
+     
+    public Medicamento buscarPorNombreMedicamento(final String nombreComercial) {
+        log.info("buscar medicamento por nombre " + nombreComercial);
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Medicamento> query = builder.createQuery(Medicamento.class);
         Root<Medicamento> bussinesEntityType = query.from(Medicamento.class);
-        query.where(builder.equal(bussinesEntityType.get(Medicamento_.name), name));
+        query.where(builder.equal(bussinesEntityType.get(Medicamento_.nombreComercial), nombreComercial));
         return getSingleResult(query);    
-    }*/
+    }
+         
+    
+    public Medicamento buscarPorNombreMed (final String nombre) throws NoResultException{
+        TypedQuery<Medicamento> query = em.createQuery("SELECT m FROM Medicamento m WHERE m.nombreComercial = :nombre", Medicamento.class);
+        query.setParameter("nombreComercial", nombre);
+        Medicamento result = query.getSingleResult();
+        return result;                
+    }
+    
             
-    /*@TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void crear(final Medicamento medicamento) {
-        medicamento.setShowBootcamp(true);
-        super.create(medicamento);
-    }*/
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void guardar(final Medicamento medicamento) {
-        super.save(medicamento);
-        em.flush();
+    public boolean esNombreDisponible(String nombre){
+        try {
+            Medicamento med = buscarPorNombreMed(nombre);
+            if (med!=null){
+                return false;                
+            }else{
+                return true;
+            }
+        }catch (NoResultException e){
+        return true;
+        }
+        
     }
     
-    /*Metodo se utilizá en los Bean de las tablas de pacientes*/
-    public long getMedicamentoCount() {
-        return count(Medicamento.class);
-    }
-    
-    /*Metodo se utilizá en los Bean de las tablas de pacientes*/
-    public List<Medicamento> buscarMedicamentos(final int limit, final int offset) {
-        return findAll(Medicamento.class);
-    }
-    /*Metodo se utilizá en los Bean de las tablas de pacientes*/
-    public List<Medicamento> getMedicamentos() {
-        List list = this.findAll(Medicamento.class);
-        return list;
-    }
-    
-    
-    
-     
-   
-    
-    
+        
 }

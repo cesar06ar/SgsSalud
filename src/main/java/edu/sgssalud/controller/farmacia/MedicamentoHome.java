@@ -21,14 +21,20 @@ import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.controller.paciente.PacienteHome;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.service.MedicamentoService;
+import edu.sgssalud.service.farmacia.MedicamentoService;
+import edu.sgssalud.util.Dates;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  *
@@ -77,4 +83,39 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
     }
+    
+    protected Medicamento createInstance() {
+        //prellenado estable para cualquier clase 
+        Date now = Calendar.getInstance().getTime();
+        Medicamento med = new Medicamento();
+        med.setCreatedOn(now);
+        med.setLastUpdate(now);
+        med.setActivationTime(now);
+        med.setExpirationTime(Dates.addDays(now, 364));
+        med.setResponsable(null);    //cambiar atributo a 
+        med.buildAttributes(bussinesEntityService);  //
+        return med;
+    }
+    
+    public Class<Medicamento> getEntityClass() {
+        return Medicamento.class;
+    }
+    
+//    @TransactionAttribute
+//    public String guardarMedicamento() {
+//        Date now = Calendar.getInstance().getTime();
+//        getInstance().setLastUpdate(now);
+//        if (getInstance().isPersistent()) {
+//            save(getInstance());
+//        } else {
+//            try {
+//                register();
+//            } catch (IdentityException ex) {
+//                Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        return null;
+//    }
+    
+    
 }
