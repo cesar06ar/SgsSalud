@@ -203,16 +203,12 @@ public class InitializeDatabase {
     
     private void validateStructure() {
         validarEstructuraParaPerfilDeUsuario();
-        validarEstructuraDatosPersonalesDelPerfilDeUsuario();
-        //validateStructureForSpouse();
-        //validateStructureForChildrens();
-        //validateStructureForStrategic();
-        validarEstructuraEducacionDelPerfilDeUsuarios();
-        //validateStructureForRole();
-        //validateStructureForTasks();
-        //validateStructureForCapacitacion();
-        validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios();  
-        //validarStructura();  
+        validarEstructuraDatosPersonalesDelPerfilDeUsuario();       
+        validarEstructuraEducacionDelPerfilDeUsuarios();        
+        //validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios();  
+        validarEstructuraDelPaciente();  
+        validarEstructuraDatosPersonalesDelPaciente();
+        validarEstructuraDatosAcademicosDelPaciente();
     }
     
     private void validarEstructuraParaPerfilDeUsuario() {
@@ -244,7 +240,7 @@ public class InitializeDatabase {
             attributes.add(buildGroupTypeProperty("Spouse", "Esposa/o", false, null, 1L, 1L, "Datos de su conyugue", 2L));
             attributes.add(buildGroupTypeProperty("Childrens", "Hijos", false, null, 1L, 0L, "Datos de sus hijos", 3L));
             attributes.add(buildGroupTypeProperty("Education", "Educación", false, null, 1L, 0L, "Detalle sus logros académicos", 4L));            
-            attributes.add(buildGroupTypeProperty("TrayectoriaLaboral", "Trayectoria Laboral", false, null, 1L, 0L, "Detalle de la trayectoria laboral desde el año 2000 en adelante", 5L));
+            //attributes.add(buildGroupTypeProperty("TrayectoriaLaboral", "Trayectoria Laboral", false, null, 1L, 0L, "Detalle de la trayectoria laboral desde el año 2000 en adelante", 5L));
             //Agregar atributos
             structure.setProperties(attributes);
             
@@ -256,8 +252,6 @@ public class InitializeDatabase {
         
         System.out.println("Structure for Profile [" + bussinesEntityType + "]");
     }
-       
-   
     
     private void validarEstructuraDatosPersonalesDelPerfilDeUsuario(){
         BussinesEntityType bussinesEntityType = null;
@@ -310,7 +304,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("Dirección permanente", "address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", false, 9L));
             attributes.add(buildProperty("Dirección permanente", "phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", false, 10L));
             attributes.add(buildProperty("Contacto en emergencia", "emergencyContact", String.class.getName(), null, false, "Contacta en caso de emergencia", "Sí se presenta alguna emergencia, a quién debemos llamar?", false, 11L));
-            attributes.add(buildProperty("Personal", "hobies", "java.lang.MultiLineString", null, false, "Hobies", "Las cosas que disfruta en su tiempo libre (separe con comas)", false, 12L));
+            //attributes.add(buildProperty("Personal", "hobies", "java.lang.MultiLineString", null, false, "Hobies", "Las cosas que disfruta en su tiempo libre (separe con comas)", false, 12L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -364,7 +358,7 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    
+    /*
     private void validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios() {
         BussinesEntityType bussinesEntityType = null;
         String name = "TrayectoriaLaboral";
@@ -406,7 +400,7 @@ public class InitializeDatabase {
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-    }
+    }*/
     
     private void validarEstructuraDelPaciente() {
         BussinesEntityType bussinesEntityType = null;
@@ -476,7 +470,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("Personal", "sectorProcedencia", "java.lang.String[]", "Urbano*,Rural", false, "Sector de Procedencia", "Indique el sector del cual procede", false, 2L));
             attributes.add(buildProperty("Personal", "etnia", "java.lang.String[]", "Blanco*,Mestizo,Indígena,Afro-Ecuatoriano,Montubio,Negro", false, "Etnia", "Seleccione su etnia a la cual pertenece", false, 3L));
             attributes.add(buildProperty("Personal", "discapacidad", String.class.getName(), "Ninguna", false, "Tipo de Discapacidad", "Indique el tipo de discapacidad en caso de padecerla", false, 4L));
-            attributes.add(buildProperty("Personal", "lugarTrabajo", String.class.getName(), "Ninguno", false, "Lugar de Trabajo", "Indique el lugar de trabajo si tiene alguno", false, 4L));
+            attributes.add(buildProperty("Personal", "lugarTrabajo", String.class.getName(), "Ninguno", false, "Lugar de Trabajo", "Indique el lugar de trabajo si tiene alguno", false, 5L));
                         
             //Agregar atributos
             structure.setProperties(attributes);
@@ -514,9 +508,9 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
            
-            attributes.add(buildProperty("Academico", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique el estado civil", false, 1L));
-            
-                        
+            attributes.add(buildProperty("academico", "establecimiento", String.class.getName(), "Ninguno", false, "Establecimiento", "Indique el nombre del establecimiento en el que estudia", false, 1L));            
+            attributes.add(buildProperty("academico", "area", "java.lang.String[]", "Agropecuaria*,Educativa,Energía,Jurídica,Salud", false, "Área", "Indique el área de su carrera", false, 2L));
+            attributes.add(buildProperty("academico", "carrera", String.class.getName(), "Ninguno", false, "Carrera", "Indique el nombre de su carrera", false, 1L));            
             //Agregar atributos
             structure.setProperties(attributes);
             

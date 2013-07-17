@@ -18,7 +18,7 @@
 
         <ui:param name="title" value="#{messages['common.profile']} - #{profileHome.instance.username}" />
         <ui:define name="header-replace">
-            <div style="width: 100%; background-color: #FFF5E3; margin-bottom: 10px; ">
+            <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
                         <div class="span2 columns">
@@ -51,57 +51,31 @@
                                 </h:link>
                             </h:form>
                         </div>
-
                     </div>
-                </div></div>             
+                </div>
+            </div>             
         </ui:define>
 
         <ui:define name="content">
-            <h:form id="summary">
-
-                <h:panelGroup  layout="block" class="clearfix" rendered="false">
-                    <label for="fullname"><b>#{messages['common.fullName']}</b></label>
-                    <div class="output">
-                        <h:outputText id="fullname" value="#{profileHome.instance.fullName}"/>
-                    </div>
-                </h:panelGroup>
-                <h:panelGroup  layout="block" class="clearfix" rendered="false">
-                    <label for="dni"><b>#{messages['profile.dni']}</b></label>
-                    <div class="output">
-                        <h:outputText id="dni" value="#{profileHome.instance.code}" styleClass="span4" />
-                    </div>
-                </h:panelGroup>
-                <h:panelGroup layout="block" class="clearfix" rendered="false">
-                    <label for="email"><b>#{messages['common.email']}</b></label>
-                    <div class="output">
-                        <h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/>
-                        <h:outputText value="#{messages['common.emailprivate']}" rendered="#{profileHome.instance.emailSecret}" />
-                    </div>
-                </h:panelGroup> 
-                <h:panelGroup  layout="block" class="clearfix" rendered="false">
-                    <label for="bio"><b>#{messages['common.bio']}</b></label>
-                    <div class="output">
-                        <h:outputText id="bioIn" value="#{profileHome.instance.bio}" styleClass="span4" />
-                    </div>
-                </h:panelGroup>
+            <h:form id="summary">                
                 <c:forEach items="#{ui.getProperties(profileHome.instance)}" var="p" >
                     <p:panel header="#{p.label}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{p.name}">
                         <f:facet name="header">
                             <strong>#{p.label}</strong>#{' '}
                             <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}" styleClass="btn" value="#{messages['common.edit']}" 
-                                    rendered="#{profileHome.editionEnabled and p.type == 'org.eqaula.glue.model.Structure'}"
+                                    rendered="#{profileHome.editionEnabled and p.type == 'edu.sgssalud.model.Structure'}"
                                     icon="ui-icon-disk">
                                 <f:param name="profileId" value="#{profileHome.instance.id}"/>
                                 <f:param name="structureName" value="#{p.name}"/>
                             </h:link>
                             <h:link outcome="/pages/profile/data/group" styleClass="btn" value="#{messages['common.edit']}" 
-                                    rendered="#{profileHome.editionEnabled and p.type == 'org.eqaula.glue.model.Group'}">
+                                    rendered="#{profileHome.editionEnabled and p.type == 'edu.sgssalud.model.Group'}">
                                 <f:param name="profileId" value="#{profileHome.instance.id}"/>
                                 <f:param name="groupId" value="#{ui.getGroup(profileHome.instance, p).getId()}"/>
                             </h:link>
                         </f:facet>
                         <c:choose>                        
-                            <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
+                            <c:when test="#{p.type == 'edu.sgssalud.model.Structure'}">
                                 <!-- Mostrar los datos de estructure-->
                                 <h:panelGroup id="attributes" layout="block" class="clearfix">
                                     <ui:repeat value="#{profileHome.instance.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">
@@ -120,7 +94,7 @@
                                     </ui:repeat>
                                 </h:panelGroup>
                             </c:when>
-                            <c:when test="#{p.type == 'org.eqaula.glue.model.Group'}">
+                            <c:when test="#{p.type == 'edu.sgssalud.model.Group'}">
                                 <p:dataTable id="groups" var="m" value="#{ui.getGroup(profileHome.instance, p).findOtherMembers(profileHome.instance)}" 
                                              editable="false" 
                                              emptyMessage="#{messages['common.emptyList']}">  

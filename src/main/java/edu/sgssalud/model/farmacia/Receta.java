@@ -20,6 +20,7 @@ import edu.sgssalud.model.paciente.Paciente;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Temporal;
 import org.jboss.solder.logging.Logger;
 /**
@@ -28,7 +29,9 @@ import org.jboss.solder.logging.Logger;
  */
 
 @Entity
-public class Receta extends BussinesEntity implements Serializable{
+public class Receta implements Serializable{
+    @Id
+    private Long id;
     
     private static Logger log = Logger.getLogger(Receta.class);
     private static final long serialVersionUID = 3L;
@@ -37,5 +40,13 @@ public class Receta extends BussinesEntity implements Serializable{
     private Date fecha;
     private String medicacion;
     private String indicaciones;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     
 }

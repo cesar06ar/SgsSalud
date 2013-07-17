@@ -55,14 +55,14 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     private static final long serialVersionUID = 7632987414391869389L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PacienteHome.class);
-    /*Atributos importantes para acceso a la BD ==>*/
+    /*<== Atributos importantes para acceso a la BD */
     @Inject
     @Web
     private EntityManager em;
     @Inject
     private PacienteServicio pcs;
-    /*<==....*/
-    /*Atributos para autenticación y manejo de usuarios con seam 3 */
+    /*....==>*/
+    /*<== Atributos para autenticación y manejo de usuarios con seam 3 */
     private Messages msg;
     @Inject
     private Identity identity;
@@ -72,14 +72,14 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private IdentitySession security;    
     @Inject
     private IdmAuthenticator idmAuth;
-    /*<==....*/
-    /*Atributos propios para interaccion con la vista*/
+    /*....==>*/
+    /*<== Atributos propios para interaccion con la vista*/
     private String password;
     private String passwordConfirm;
     private String nombreEstructura;
-    /*<==....*/
+    /*....==>*/
 
-    /*Métodos get y set para obtener el Id de la clase*/
+    /*<== Métodos get y set para obtener el Id de la clase*/
     public Long getPacienteId() {
         return (Long) getId();
     }
@@ -89,7 +89,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
     /*<==....*/
 
-    /*Métodos get y set del Bean PacienteHome*/
+    /*<== Métodos get y set del Bean PacienteHome*/
     public String getPassword() {
         return password;
     }
@@ -115,7 +115,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
     /*<==....*/
 
-    /*Método para  cargar una instancia de paciente==>*/
+    /*<== Método para  cargar una instancia de paciente */
     @Produces
     @Named("paciente")
     @Current
@@ -135,24 +135,26 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         log.info("sgssalud --> cargar instance " + getInstance());
         return getInstance();
     }
-    /*<==....*/
+    /*....==>*/
 
-    /*Metodo que retorna una instancia de la clase (Paciente) cuando ya esta creada==>*/
+    /*<== Metodo que retorna una instancia de la clase (Paciente) cuando ya esta creada*/
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-    /*<==....*/
+    /*....==>*/
 
-    /*Metodo importante para actualizar EntityManager y tener acceso a la DB==>*/
+    /*<== Metodo importante para actualizar EntityManager y tener acceso a la DB*/
     @PostConstruct
     public void init() {
         setEntityManager(em);
+        pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        
     }
-    /*<==....*/
+    /*....==>*/
 
-    /*Método que me permite crear una intancia (un nuevo Paciente)==>*/
+    /*<== Método que me permite crear una intancia (un nuevo Paciente)==>*/
     @Override
     protected Paciente createInstance() {
         //prellenado estable para cualquier clase 
@@ -165,17 +167,16 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         paciente.setResponsable(null);    //cambiar atributo a 
         paciente.buildAttributes(bussinesEntityService);  //
         return paciente;
-    }
-    /*<==....*/
-    /*==>*/
+    }    
+    /*....==>*/
 
     @Override
     public Class<Paciente> getEntityClass() {
         return Paciente.class;
     }
-    /*<==....*/
+    /*....==>*/
 
-    /*Método que me permite guardar o actualizar un paciente este método
+    /*<== Método que me permite guardar o actualizar un paciente este método
      * interactua con la vista en el boton guardar...==>*/
     @TransactionAttribute
     public String guardarPaciente() {
@@ -192,9 +193,9 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         }
         return null;
     }
-    /*<==....*/
+    /*....==>*/
     
-     /*Sección de métodos agrupados para crear o actulizar una cuenta de usuario para el paciente==>*/    
+     /*<== Sección de métodos agrupados para crear o actulizar una cuenta de usuario para el paciente*/    
     @TransactionAttribute
     public String register() throws IdentityException {
         createUser();
@@ -227,7 +228,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         // TODO figure out a good pattern for this...
         //setInstance(createInstance());
         //getInstance().setEmail(email);
-        getInstance().setPassword(getPassword());
+        getInstance().setClave(getPassword());
         getInstance().getIdentityKeys().add(user.getKey());
         getInstance().setConfirmed(true);
         getInstance().setShowBootcamp(true);
@@ -242,6 +243,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         save(getInstance()); //Actualizar estructura de datos
 
     }
-    /*==>*/
+    /*...==>*/
     /*<==....*/
 }

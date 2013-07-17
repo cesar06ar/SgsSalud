@@ -348,12 +348,12 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         //Set default values into dinamycs properties
         //TODO idear un mecanismo generico de inicialización de variables dinamicas
         //entity.getBussinessEntityAttribute("title").setValue(name);
-
+        
         group.add(entity);
 
         setBussinesEntity(entity); //Establecer para edición
     }
-
+    
     @Transactional
     public void saveBussinesEntity() {
 
@@ -374,4 +374,5 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
     }
+    
 }
