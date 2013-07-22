@@ -18,6 +18,7 @@ package edu.sgssalud.service;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.EntityManager;
 
 /**
@@ -36,7 +37,23 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
    
     @Override
     public void setEntityManager(EntityManager em) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.em = em;
     }
+    
+    public Medicamento buscarPorId(final Long id){
+        //return find(id);
+        log.info("temporal");
+        return  (Medicamento)findById(Medicamento.class, id);
+    }
+    
+    public List<Medicamento> buscarTodos(){
+        return findAll(Medicamento.class);
+    }
+    
+    public Medicamento buscarPorNombre(){
+        return null;
+    }
+    
+    
     
 }
