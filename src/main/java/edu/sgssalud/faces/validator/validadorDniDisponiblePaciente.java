@@ -27,8 +27,8 @@ import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.LoggedIn;
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.profile.ProfileService;
+import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.service.PacienteServicio;
 import edu.sgssalud.util.UI;
 
 /**
@@ -36,42 +36,37 @@ import edu.sgssalud.util.UI;
  * @author cesar
  */
 @RequestScoped
-@FacesValidator("ciAvailabilityValidator")
-public class CIAvailabilityValidator implements Validator {
+@FacesValidator("dniDisponiblePaciente")
+public class validadorDniDisponiblePaciente implements Validator {
 
     @Inject
     @Web
     private EntityManager em;
     @Inject
-    private ProfileService ps;
+    private PacienteServicio ps;
     @Inject
     @Current
-    private Profile profile;
+    private Paciente paciente;
 
     @Override
     public void validate(FacesContext fc, UIComponent uic, Object value)
             throws ValidatorException {
         ps.setEntityManager(em);
         String currentDni = "";
-        System.out.println("Perfil de usuario es: " + profile.toString());
-        if (profile.isPersistent()) {
-            currentDni = ps.find(profile.getId()).getCode();
-            System.out.println("el dni es: " + currentDni);
+        //System.out.println("Perfil de usuario es: "+paciente.toString());
+        if (paciente.isPersistent()) {
+            currentDni = ps.find(paciente.getId()).getCedula(); 
+            //System.out.println("el dni es: " + currentDni);
         }
-        if (currentDni != null) {
-            if (!currentDni.equals(value)) {
-
-                if (value instanceof String) {
-                    ps.setEntityManager(em);
-                    System.out.println("dni ingresada diferente al valor en la base de datos: ");
-
-                    if (!ps.isDniAviable((String) value)) {
-                        throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
-                    }
+        if (!currentDni.equals(value)) {
+            if (value instanceof String) {
+                ps.setEntityManager(em);
+                //System.out.println("dni ingresada diferente al valor en la base de datos: ");
+                if (!ps.isDniDisponible((String) value)) {
+                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
                 }
             }
         }
-
 
     }
 }

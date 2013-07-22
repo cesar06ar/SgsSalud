@@ -49,7 +49,7 @@
                 </h:link>                
                 #{' '}
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="setting" 
-                        styleClass="btn" disabled="#{settingListService.selectedSetting.id==null}">
+                        styleClass="btn" disabled="#{empty settingListService.selectedSetting.id}">
                     <f:param name="settingId" value="#{settingListService.selectedSetting.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link> 
@@ -68,9 +68,9 @@
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{settingListService.onRowSelect}"   
-                        update=":form:button-edit :form:messages"/>                 
+                        update=":form:button-edit :form:messages" rendered=":form:button-edit"/>                 
                 <p:ajax event="rowUnselect" listener="#{settingListService.onRowUnselect}" 
-                        update=":form:button-edit :form:messages"/>
+                        update=":form:button-edit :form:messages" rendered=":form:button-edit"/>
 
                 <p:column headerText="#{messages['common.name']}" sortBy="#{setting.name}">
                     <h:outputText value="#{setting.name}" />

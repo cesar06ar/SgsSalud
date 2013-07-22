@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"            
+      xmlns:p="http://primefaces.org/ui"          
+      xmlns:glue="http://eqaula.org/jsf/facelets"      
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h3>Test web Service</h3>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="form" acceptcharset="UTF-8">
+                <div class="admin">
+                    <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary" >
+                        <f:ajax event="change" execute="@this" render="result" />
+                    </p:commandButton>                    
+                </div>
+
+                <br/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                <h:panelGroup id="dnip" layout="block" class="clearfix">
+                    <label for="fdni">#{messages['profile.dni']}</label>
+                    <div class="input" >
+                        <h:inputText id="dni" value="#{testWebService.cedula}" styleClass="xLarge" required="true" label="#{messages['profile.dni']}">
+                            <f:validator validatorId="ciValidator" />                            
+                            <f:ajax execute="@this" render="dnip"  />
+                        </h:inputText>
+                        <br/> 
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{testWebService.cedula != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>#{messages['profile.dni.inlinehelp']}<ocp:message forId="fdni" /></span>
+                    </div>
+                </h:panelGroup>               
+
+                <glue:input id="result" name="resultado" type="textarea" label="#{'Resultado'}" value="#{testWebService.result}" required="false" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="result" />
+
+
+            </h:form>
+        </ui:define>             
+    </ui:composition>
+</html>
+

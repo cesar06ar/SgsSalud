@@ -36,7 +36,7 @@
         <drools.version>5.5.0.Beta1</drools.version>
         <javaee6.web.spec.version>3.0.1.Final</javaee6.web.spec.version>
         <jboss-javaee-6.0.version>2.0.0.Final</jboss-javaee-6.0.version>
-        <primefaces.version>3.4.2</primefaces.version>
+        <primefaces.version>3.5</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
         <seam.mail.version>3.1.1.Final</seam.mail.version>
         <seam-reports-version>3.1.0.Final</seam-reports-version>  
@@ -107,7 +107,7 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-
+        
         <!-- Import the Common Annotations API (JSR-250), we use provided 
         scope as the API is included in JBoss AS 7 -->
         <dependency>
@@ -176,8 +176,34 @@
         </dependency>
 
 
-        <!-- Now we declare any tools needed -->
-
+        <!-- Dependencia para Ws  -->       
+        
+        <!--<dependency>
+            <groupId>com.sun.xml</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.0EA3</version>
+        </dependency> -->  
+        
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+            <version>2.1.7</version>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>com.github.fge</groupId>
+            <artifactId>json-schema-validator</artifactId>
+            <version>your-version-here</version>
+        </dependency>-->
+        
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+            <scope>compile</scope>
+        </dependency>
+    
+        
         <!-- Annotation processor to generate the JPA 2.0 metamodel classes 
         for typesafe criteria queries -->
         <dependency>

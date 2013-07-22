@@ -104,6 +104,10 @@
    <url-mapping id="paciente">
       <pattern value="/paciente/paciente"></pattern>
       <view-id value="/pages/paciente/paciente.xhtml"></view-id>       
+   </url-mapping>   
+   <url-mapping id="pacienteTest">
+      <pattern value="/paciente/test"></pattern>
+      <view-id value="/pages/paciente/test.xhtml"></view-id>       
    </url-mapping>
    
     <!-- Begin Exception Mappings -->

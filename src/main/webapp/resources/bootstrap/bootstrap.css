@@ -1968,10 +1968,27 @@ footer {
     -moz-border-radius: 6px;
     border-radius: 6px;
 }
-.btn.small {
+.btn.small {    
     padding: 7px 9px 7px;
     font-size: 11px;
 }
+
+.btn.btn-short {        
+    background-color: #0064cd;        
+    margin-top: -28px; 
+    margin-right: 18px; 
+    float: right; 
+    width: 70px;
+    height: 25px;
+    font-size: 11px;
+    text-align: left;
+    line-height: normal;
+    padding: 0px 5px 25px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 5px;       
+}
+
 :root .alert-message, :root .btn {
     border-radius: 0 \0;
 }
@@ -2439,7 +2456,7 @@ button.btn::-moz-focus-inner, input[type=submit].btn::-moz-focus-inner {
 .survey-help-text{
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
-     border-radius: 3px;
+    border-radius: 3px;
     font-family: inherit;
     font-size: 11px;
     line-height: 18px;

@@ -179,7 +179,7 @@ public class InitializeDatabase {
             p = new Profile();
             p.setEmail("cesar06ar@hotmail.com");
             p.setUsername("admin");
-            p.setPassword("4dm1nglue3");
+            p.setPassword("adminadmin");
             p.getIdentityKeys().add(u.getKey());
             p.setUsernameConfirmed(true);
             p.setShowBootcamp(true);

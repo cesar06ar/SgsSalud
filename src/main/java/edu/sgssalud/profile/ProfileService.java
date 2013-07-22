@@ -171,7 +171,7 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
                 return true;
             }
         } catch (NoResultException e) {
-            return true;
+            return false;
         }
     }
 
