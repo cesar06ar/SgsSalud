@@ -17,6 +17,8 @@
             <f:viewParam name="id" value="#{pacienteHome.pacienteId}" />
             <f:viewParam name="backView" value="#{pacienteHome.backView}" />
         </f:metadata>
+
+
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container">
@@ -78,6 +80,7 @@
                         <s:validateForm id="signupValidator" validatorId="signupValidator" />
                     </div>
                 </p:panel>
+
 
 
                 <p:panel id="datapersonal" header="#{messages['module.profile.data.personal']}">                    

@@ -121,6 +121,17 @@
       <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
    </url-mapping>
    
+   <!-- Vistas de Medicamento-->
+   <url-mapping id="MedicamentoLista">
+      <pattern value="/medicamento/lista"></pattern>
+      <view-id value="/pages/farmacia/medicamento/lista.xhtml"></view-id>       
+       <query-param name="result" decode="false">#{medicamentoListServicio.firstResult}</query-param>
+   </url-mapping>
+   <url-mapping id="medicamento">
+      <pattern value="/medicamento/medicamento"></pattern>
+      <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
+   </url-mapping>
+   
     <!-- Begin Exception Mappings -->
     <url-mapping id="404">
         <pattern value="/404" />
