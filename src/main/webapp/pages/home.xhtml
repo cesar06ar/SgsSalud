@@ -71,11 +71,50 @@
         </ui:define>
 
         <ui:define name="content-pre">
-            
+
         </ui:define>
 
         <ui:define name="content">
             Bienvenidos al Softare Clínico de Gestión de Servicios de Salud 
+
+            <p:panel header="Módulo de Administración del Sistema" toggleable="true" toggleOrientation="vertical">
+                <h:link value="#{messages['module.BussinesEntity']}" rendered="#{true}" 
+                        outcome="/pages/admin/bussinesentitytype/list">
+                    <f:param name="result"></f:param>
+                    <f:param name="typeName" value="org.eqaula.glue.model.BussinesEntityType"></f:param>
+                </h:link>
+                <br />
+                <h:link value="#{messages['module.setting']}" rendered="#{true}" 
+                        outcome="/pages/admin/setting/list">
+                    <f:param name="result"></f:param>
+                    <f:param name="typeName" value="org.eqaula.glue.model.config.Setting"></f:param>
+                </h:link>
+                <br />               
+                <p:panel header="Administrar Perfiles de Usuario" toggleable="true" toggleOrientation="vertical">
+                    <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
+                        outcome="/pages/profile/list">
+                    <f:param name="result"></f:param>
+                    <f:param name="typeName" value="org.eqaula.glue.model.profile.Profile"></f:param>
+                </h:link>
+                <br />
+                <h:link value="#{messages['security.group']}" rendered="#{true}" 
+                        outcome="/pages/admin/security/list">
+                    <f:param name="result"></f:param>                
+                </h:link>
+                </p:panel>
+            </p:panel>
+
+            <p:panel header="#{messages['panel.admin.secretaria']}" toggleable="true" toggleOrientation="vertical">
+                <h:link value="#{messages['paciente.admin']}" rendered="#{true}" 
+                        outcome="/pages/paciente/lista">                    
+                </h:link>
+                <br />                
+            </p:panel>
+            <p:panel header="#{messages['panel.admin.farmacia']}" toggleable="true" toggleOrientation="vertical">
+                <h:link value="#{messages['modulo.medicamento']}" rendered="#{true}" 
+                        outcome="/pages/farmacia/medicamento/lista">                    
+                </h:link>                
+            </p:panel>
         </ui:define>       
 
     </ui:composition>

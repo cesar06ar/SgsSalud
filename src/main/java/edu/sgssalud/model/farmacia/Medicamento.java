@@ -41,10 +41,15 @@ public class Medicamento extends BussinesEntity implements Serializable{
     private String dirCasaComercial;    
     private String nombreComercial;
     private String nombreGenerico;
+    private String referencia;
+    private int unidades;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCaducidad;
+   
+    
+    
 
     public Date getFechaIngreso() {
         return fechaIngreso;
@@ -92,6 +97,22 @@ public class Medicamento extends BussinesEntity implements Serializable{
 
     public void setNombreGenerico(String nombreGenerico) {
         this.nombreGenerico = nombreGenerico;
+    }
+
+    public String getReferencia() {
+        return referencia;
+    }
+
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
+    }
+
+    public int getUnidades() {
+        return unidades;
+    }
+
+    public void setUnidades(int unidades) {
+        this.unidades = unidades;
     }
 
     public Date getFechaElaboracion() {

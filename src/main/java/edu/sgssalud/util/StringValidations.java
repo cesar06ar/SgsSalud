@@ -77,7 +77,7 @@ public class StringValidations {
 
     public static boolean isPunctuatedTextUTF8(final String text) {
         if (text != null) {
-            return text.matches("^[\\p{L}+a-zA-Z/\\d\\s._?!,;':\"~`$%&()+=\\[\\]-]*$");
+            return text.matches("^[\\p{L}+a-zA-Z/\\d\\s._?!,;':\"~`$%&()+=\\[\\]-]*$"); //* 
         }
 
         return false;
@@ -190,13 +190,16 @@ public class StringValidations {
     }
 
     public static void main(String args[]) {
-        String text = "JosÃ© Luis";
-        if (!StringValidations.isPunctuatedTextUTF8(text)) {
+        String field = "*Luis,";
+        if (field.contains("*")) {
+            field = field.replace("*", "");
+        }
+        if (!StringValidations.isPunctuatedText(field)) {
 
-            System.out.print("Este texto " + text + " no anda bien, evite usar caracteres extraños...");
+            System.out.print("Este texto " + field + " no anda bien, evite usar caracteres extraños...");
 
         } else {
-                        System.out.print("Este texto " + text + " esta bién ;)...");
+                        System.out.print("Este texto " + field + " esta bién ;)...");
         }
     }
 }

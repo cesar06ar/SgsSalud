@@ -55,7 +55,7 @@ public class Paciente extends BussinesEntity implements Serializable {
     public enum Genero {
 
         MASCULINO(0), 
-        FEMENINO(0);        
+        FEMENINO(1);        
         private int genero;
 
         private Genero(int genero) {
@@ -97,7 +97,7 @@ public class Paciente extends BussinesEntity implements Serializable {
     @Index(name = "userEmailIndex")   //investigar
     @Column(nullable = false, length = 128, unique = false)
     private String email;
-    @Enumerated(EnumType.STRING) //tipos de datos enumerados 
+    @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
     @Column(nullable = false)  
     private Paciente.Genero genero;
     @Column(length = 50)
@@ -105,7 +105,13 @@ public class Paciente extends BussinesEntity implements Serializable {
     @Column(length = 50)
     private String profesion;
     @Column(length = 50)
-    private String ocupacion;
+    private String ocupacion;    
+    
+    //Datos Academicos de Paciente Universitario
+    private String area;
+    private String carrera;
+    private String Modulo;
+    private String paralelo;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_paciente_keys")
@@ -115,6 +121,12 @@ public class Paciente extends BussinesEntity implements Serializable {
     private boolean confirmed;
     @Column
     private boolean showBootcamp;
+    
+    private String tipoEstudiante;
+
+    public Paciente() {
+        tipoEstudiante = "datosAcademicosEstudiante"+"Universitario";
+    }
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -247,6 +259,46 @@ public class Paciente extends BussinesEntity implements Serializable {
         this.ocupacion = ocupacion;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(String carrera) {
+        this.carrera = carrera;
+    }
+
+    public String getModulo() {
+        return Modulo;
+    }
+
+    public void setModulo(String Modulo) {
+        this.Modulo = Modulo;
+    }
+
+    public String getParalelo() {
+        return paralelo;
+    }
+
+    public void setParalelo(String paralelo) {
+        this.paralelo = paralelo;
+    }
+
+    public String getTipoEstudiante() {
+        return tipoEstudiante;
+    }
+
+    public void setTipoEstudiante(String tipoEstudiante) {
+        this.tipoEstudiante = tipoEstudiante;
+    }
+    
     public Set<String> getIdentityKeys() {
         return identityKeys;
     }

@@ -19,6 +19,7 @@ import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.*;
 import java.io.Serializable;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
@@ -27,8 +28,11 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.international.status.Messages;
 import edu.sgssalud.service.PacienteServicio;
 import edu.sgssalud.util.Dates;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -69,7 +73,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @Inject
     private Credentials credentials;
     @Inject
-    private IdentitySession security;    
+    private IdentitySession security;
     @Inject
     private IdmAuthenticator idmAuth;
     /*....==>*/
@@ -150,7 +154,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         setEntityManager(em);
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
-        
     }
     /*....==>*/
 
@@ -158,6 +161,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @Override
     protected Paciente createInstance() {
         //prellenado estable para cualquier clase 
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Paciente.class.getName());
         Date now = Calendar.getInstance().getTime();
         Paciente paciente = new Paciente();
         paciente.setCreatedOn(now);
@@ -165,9 +169,10 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         paciente.setActivationTime(now);
         paciente.setExpirationTime(Dates.addDays(now, 364));
         paciente.setResponsable(null);    //cambiar atributo a 
+        paciente.setType(_type);
         paciente.buildAttributes(bussinesEntityService);  //
         return paciente;
-    }    
+    }
     /*....==>*/
 
     @Override
@@ -194,13 +199,13 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         return null;
     }
     /*....==>*/
-    
-     /*<== Sección de métodos agrupados para crear o actulizar una cuenta de usuario para el paciente*/    
+
+    /*<== Sección de métodos agrupados para crear o actulizar una cuenta de usuario para el paciente*/
     @TransactionAttribute
     public String register() throws IdentityException {
         createUser();
         credentials.setUsername(getInstance().getNombreUsuario());
-        credentials.setCredential(new PasswordCredential(getPassword()));     
+        credentials.setCredential(new PasswordCredential(getPassword()));
         identity.setAuthenticatorClass(IdmAuthenticator.class);
 
         /*
@@ -213,7 +218,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         }
         return result;
     }
-    
+
     @TransactionAttribute
     private void createUser() throws IdentityException {
         // TODO validate username, email address, and user existence
@@ -243,6 +248,54 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         save(getInstance()); //Actualizar estructura de datos
 
     }
+
+    /*<== método que retorna la lista de tipos de datos enumerados ...*/
+    public List<Paciente.Genero> getListaGeneros() {
+        wire();
+        List<Paciente.Genero> list = Arrays.asList(getInstance().getGenero().values());
+        return list;
+    }
+
+    public List<String> tiposEstudiante() {
+        List<String> list = new ArrayList<String>();
+        list.add("Universitario");
+        list.add("Colegio");
+        list.add("Escuela");
+        return list;
+    }
+
+    public boolean isTipoEstudianteSeleccionado() {
+
+        if (getInstance().getTipoEstudiante() != null) {
+            if ("Universitario".equals(getInstance().getTipoEstudiante())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private String nombreEstructura(String nombre) {
+        if ("Universitario".equals(nombre)) {
+            return "datosAcademicosEstudiante" + "Universitario";
+        } else if ("Colegio".equals(nombre)) {
+            return "datosAcademicosEstudiante" + "Colegio";
+        } else if ("Escuela".equals(nombre)) {
+            return "datosAcademicosEstudiante" + "Escuela";
+        }
+        return "";
+    }
+
+    public List<String> listaAreas() {
+        List<String> list = new ArrayList<String>();
+        list.add("EDUCATIVA");
+        list.add("JURÍDICA");
+        list.add("AGROPECUARIA");
+        list.add("ENERGÍA");
+        list.add("SALUD");
+        return list;
+    }
+    /*...==>*/
     /*...==>*/
     /*<==....*/
 }

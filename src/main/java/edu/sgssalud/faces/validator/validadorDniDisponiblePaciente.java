@@ -55,15 +55,18 @@ public class validadorDniDisponiblePaciente implements Validator {
         String currentDni = "";
         //System.out.println("Perfil de usuario es: "+paciente.toString());
         if (paciente.isPersistent()) {
-            currentDni = ps.find(paciente.getId()).getCedula(); 
+            currentDni = ps.find(paciente.getId()).getCedula();
             //System.out.println("el dni es: " + currentDni);
         }
         if (!currentDni.equals(value)) {
-            if (value instanceof String) {
-                ps.setEntityManager(em);
-                //System.out.println("dni ingresada diferente al valor en la base de datos: ");
-                if (!ps.isDniDisponible((String) value)) {
-                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
+            if (!currentDni.equals(value)) {
+                if (value instanceof String) {
+
+                    ps.setEntityManager(em);
+                    //System.out.println("dni ingresada diferente al valor en la base de datos: ");
+                    if (!ps.isDniDisponible((String) value)) {
+                        throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
+                    }
                 }
             }
         }

@@ -6,7 +6,9 @@
       template="/WEB-INF/view/templates/glue.xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:s="http://jboss.org/seam/faces"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:glue="http://eqaula.org/jsf/facelets"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
@@ -19,7 +21,7 @@
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacineteHome.instance.nombres}</h2>   
+                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
                     </div>
                 </div>
             </div>
@@ -73,7 +75,7 @@
                                 <span class="help-inline"><ocp:message forId="passwordConfirm" /></span>
                             </h:panelGroup>
                         </div>                   
-                        
+
                     </div>
                     <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
                     <s:validateForm id="signupValidator" validatorId="signupValidator" />
@@ -88,7 +90,7 @@
                                     <div class="input" >                                        
                                         <h:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">
                                             <f:validator validatorId="ciValidator" />
-                                            <f:validator validatorId="dniDisponiblePaciente" />
+                                            <!--<f:validator validatorId="dniDisponiblePaciente" />-->
                                             <f:ajax execute="@this" render="dni" />                                
                                         </h:inputText>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.cedula != null}"
@@ -100,18 +102,18 @@
                                         </p:commandButton>
                                     </div>
                                 </h:panelGroup>
-                                <glue:input id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pacienteHome.instance.nombres}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
+                                <glue:input id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pacienteHome.instance.nombres}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn" styleClass="xLarge"/>
                                 <glue:input id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pacienteHome.instance.apellidos}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>                                      
                                 <h:panelGroup id="fnp" layout="block" class="clearfix">
                                     <label for="fnacim">#{messages['common.fecha.nacimiento']}</label>
                                     <div class="input" >
                                         <p:calendar  id="fnacim" value="#{pacienteHome.instance.fechaNacimiento}" styleClass="xLarge" required="false" label="edad" 
-                                                     rendered="true" pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true" >
+                                                     rendered="true" pattern="dd-MMM-yyyy" navigator="true" showButtonPanel="true" >
                                             <p:ajax event="dateSelect" rendered="fnp edadp:edad" update="@parent fnp edadp" />  
                                         </p:calendar>                             
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.fechaNacimiento != null}"
                                                         styleClass="validation-status" />
-                                        <span class="help-inline"><br/>#{messages['common.module.setting.dateformat.inlinehelp']}<ocp:message forId="fnacim" /></span>
+                                        <span class="help-inline"><br/>#{messages['common.fecha.nacimiento.lineaAyuda']}<ocp:message forId="fnacim" /></span>
                                     </div>
                                 </h:panelGroup>
                                 <h:panelGroup id="edadp" layout="block" class="clearfix">
@@ -127,27 +129,112 @@
                                     </div>
                                 </h:panelGroup>
                                 <glue:input id="dir" name="direccion" type="text" label="#{messages['common.dir']}" value="#{pacienteHome.instance.direccion}" required="false" inlinehelp="#{messages['common.dir.inlinehelp']}" execute="@this save" render="dir" />
-
-                            </div>
-                            <div class="span7" align="left">                                
                                 <glue:input id="telf" name="telefono" type="text" label="#{messages['common.telefono']}" value="#{pacienteHome.instance.telefono}" required="false" inlinehelp="#{messages['common.telefono.inlinehelp']}" execute="@this save" render="telf"/>
                                 <glue:input id="cel" name="celular" type="text" label="#{messages['common.cel']}" value="#{pacienteHome.instance.celular}" required="false" inlinehelp="#{messages['common.cel.inlinehelp']}" execute="@this save" render="cel"/>
+                                <h:panelGroup id="eml" layout="block" class="clearfix">
+                                    <label for="email">#{messages['common.email']}</label>
+                                    <div class="input">
+                                        <h:inputText id="email" value="#{pacienteHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                                            <f:validator validatorId="emailValidator" />                                            
+                                            <f:ajax execute="@this" render="eml"  />
+                                        </h:inputText>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.email != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-inline"><br/>Dirección de <b>Email</b> valido. <ocp:message forId="email" /></span>
+                                    </div>
+                                </h:panelGroup>                                
+                                <glue:input id="nac_" name="nacionalidad" type="text" label="#{messages['comun.nacionalidad']}" value="#{pacienteHome.instance.nacionalidad}" required="false" inlinehelp="#{messages['comun.nacionalidad.lineaAyuda']}" execute="@this save" render="nac_" />
+                            </div>
+                            <div class="span7" align="left">
+                                <h:panelGroup layout="block" class="clearfix">
+                                    <label for="genero_" class="control-label">#{messages['comun.genero']}</label>
+                                    <div class="input">
+                                        <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                                         rendered="true" label="#{messages['comun.genero']}">
+                                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                            <f:selectItems value="#{pacienteHome.listaGeneros}" var="genero" itemLabel="#{genero}" itemValue="#{genero}"/>                          
+                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                        </p:selectOneMenu>  
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.genero != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-inline"><br/>#{messages['comun.genero.lineaAyuda']} <ocp:message forId="genero_" /></span>
+                                    </div>
+                                </h:panelGroup>
+                                <!-- Attributos personalizados del tipo de entidad de negocio-->
+                                <h:panelGroup id="attributes" layout="block" class="clearfix">
+                                    <ui:repeat value="#{pacienteHome.instance.findBussinesEntityAttribute('datosPersonalesPaciente')}" var="a" varStatus="status">
+                                        <h:panelGroup layout="block" class="clearfix">
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                            <div class="input">
+                                                <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+                                                              rendered="#{a.property.type eq 'java.lang.String'}">
+                                                    <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                                </p:inputText>
+                                                <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                            rendered="#{a.property.type eq 'java.util.Date'}">
+                                                    <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                                </p:calendar>  
+                                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                                                rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
+                                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                </pe:inputNumber>  
+                                                <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                                    <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                                    <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                </p:selectOneMenu> 
+                                                <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                                 rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
+                                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                </p:inputTextarea>
+                                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
+                                                                styleClass="validation-status" />
+                                                <span class="help-inline"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
+                                            </div>
+                                        </h:panelGroup>  
+                                    </ui:repeat>
+                                </h:panelGroup>
+                                <glue:input id="ocupac" name="ocupacion" type="text" label="#{messages['modulo.paciente.ocupacion']}" value="#{pacienteHome.instance.profesion}" required="false" inlinehelp="#{messages['modulo.paciente.ocupacion.inlinehelp']}" execute="@this save" render="ocupac"/>                                                   
+                                <glue:input id="profe" name="profesion" type="text" label="#{messages['modulo.paciente.profesion']}" value="#{pacienteHome.instance.ocupacion}" required="false" inlinehelp="#{messages['modulo.paciente.profesion.inlinehelp']}" execute="@this save" render="cel"/>                                    
                             </div>
                         </div>
                     </div>
                 </p:panel>
                 <p:panel id="dataAcademic" header="#{messages['modulo.estudiante.datosAcademicos']}" >
-                    <div class="container-fluid">   
-                        <div class="row-fluid">
-                            <div class="span7">
-                                <glue:input id="ocupac" name="ocupacion" type="text" label="#{messages['modulo.paciente.ocupacion']}" value="#{pacienteHome.instance.profesion}" required="false" inlinehelp="#{messages['modulo.paciente.ocupacion.inlinehelp']}" execute="@this save" render="ocupac"/>                                                   
-                                
-                            </div>
-                            <div class="span7">
-                                <glue:input id="profe" name="profesion" type="text" label="#{messages['modulo.paciente.profesion']}" value="#{pacienteHome.instance.ocupacion}" required="false" inlinehelp="#{messages['modulo.paciente.profesion.inlinehelp']}" execute="@this save" render="cel"/>                                    
-                            </div>
+                    <h:panelGroup layout="block" class="clearfix">
+                        <label for="tipoEst_" class="control-label">#{messages['comun.tipoEstudiante']}</label>
+                        <div class="input">
+                            <p:selectOneMenu id="tipoEst_" value="#{pacienteHome.instance.tipoEstudiante}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false" requiredMessage="false" 
+                                             rendered="true" label="#{messages['comun.tipoEstudiante']}">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                <f:selectItems value="#{pacienteHome.tiposEstudiante()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
+                                <p:ajax event="change" update="@parent :form:area_ " partialSubmit="true"/>
+                            </p:selectOneMenu>  
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.tipoEstudiante != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>#{messages['comun.genero.lineaAyuda']} <ocp:message forId="tipoEst_" /></span>
                         </div>
-                    </div>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="datosAcadEstUniv" layout="block" class="clearfix" rendered="#{true}">
+                        <h:panelGroup layout="block" class="clearfix">
+                            <label for="area_" class="control-label" >#{messages['comun.area']}</label>
+                            <div class="input">
+                                <p:selectOneMenu id="area_" value="#{pacienteHome.instance.area}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false" requiredMessage="false" 
+                                                 label="#{messages['comun.area']}" rendered="#{pacienteHome.tipoEstudianteSeleccionado()}">
+                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                    <f:selectItems value="#{pacienteHome.listaAreas()}" var="_area" itemLabel="#{_area}" itemValue="#{_area}"/>                          
+                                    <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                </p:selectOneMenu>  
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.area != null}"
+                                                styleClass="validation-status" />
+                                <span class="help-inline"><br/>#{messages['comun.area.lineaAyuda']} <ocp:message forId="area_" /></span>
+                            </div>
+                        </h:panelGroup>
+                        <glue:input id="carrera_" name="carrera" type="text" label="#{messages['comun.carrera']}" value="#{pacienteHome.instance.carrera}" required="false" inlinehelp="#{messages['comun.carrera.lineaAyuda']}" execute="@this save" render="carrera_" />                                    
+                        <glue:input id="modulo_" name="modulo" type="decimal" label="#{messages['comun.modulo']}" value="#{pacienteHome.instance.modulo}" required="false" inlinehelp="#{messages['comun.modulo.lineaAyuda']}" execute="@this save" render="modulo_" />                                    
+                        <glue:input id="paralelo_" name="paralelo" type="text" label="#{messages['comun.paralelo']}" value="#{pacienteHome.instance.paralelo}" required="false" inlinehelp="#{messages['comun.paralelo.lineaAyuda']}" execute="@this save" render="paralelo_" />                                    
+                    </h:panelGroup>
                 </p:panel>                    
             </h:form>
         </ui:define>

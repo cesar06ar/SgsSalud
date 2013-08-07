@@ -36,15 +36,14 @@ import javax.persistence.criteria.Root;
  *
  * @author cesar
  */
-public class PacienteServicio extends PersistenceUtil<Paciente> implements Serializable{
-    
+public class PacienteServicio extends PersistenceUtil<Paciente> implements Serializable {
+
     private static final long serialVersionUID = 234L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(PacienteServicio.class);
-    
     @Inject
     private BussinesEntityService bussinesEntityService;
-    
-    public PacienteServicio(){
+
+    public PacienteServicio() {
         super(Paciente.class);
     }
 
@@ -53,7 +52,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         this.em = em;
         bussinesEntityService.setEntityManager(em);
     }
-    
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void crear(final Paciente paciente) {
         paciente.setShowBootcamp(true);
@@ -65,7 +64,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         super.save(user);
         em.flush();
     }
-    
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public String getNombreUsuarioAleatorio(String seed) {
         String username = Strings.canonicalize(seed);
@@ -74,23 +73,24 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         }
         return username;
     }
-    
-    
+
     /*Metodo se utilizá en los Bean de las tablas de pacientes*/
     public long getPacienteCount() {
         return count(Paciente.class);
     }
-    
+
     /*Metodo se utilizá en los Bean de las tablas de pacientes*/
     public List<Paciente> getPacientes(final int limit, final int offset) {
         return findAll(Paciente.class);
     }
     /*Metodo se utilizá en los Bean de las tablas de pacientes*/
+
     public List<Paciente> getPacientes() {
         List list = this.findAll(Paciente.class);
         return list;
     }
     /*Metodo para verificar si el nombreUsuario del Paciente esta disponible*/
+
     public boolean isNombreUsuarioDisponible(String nombreUsuario) {
         try {
             getPacientePorNombreUsuario(nombreUsuario);
@@ -99,15 +99,15 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
             return true;
         }
     }
-    
+
     /*Metodo para buscar paciente por nombre de usuario*/
     public Paciente getPacientePorNombreUsuario(final String nombreUsuario) throws NoResultException {
-        TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.nombreUsuario = :nombreUsuario", Paciente.class);        
+        TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.nombreUsuario = :nombreUsuario", Paciente.class);
         query.setParameter("nombreUsuario", nombreUsuario);
         Paciente result = query.getSingleResult();
         return result;
     }
-    
+
     public Paciente getPacientePorEmail(final String email) throws NoResultException {
         TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.email = :email", Paciente.class);
         query.setParameter("email", email);
@@ -131,16 +131,31 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         Paciente result = query.getResultList().isEmpty() ? null : query.getResultList().get(0);
         return result;
     }
-   
+
     public Paciente getPacientePorId(final Long id) {
         return (Paciente) findById(Paciente.class, id);
     }
     /*Método para validar cedula o pasaporte*/
-   public boolean isDniDisponible(String cedula) {
+
+    public boolean isDniDisponible(String cedula) {
+        try {
+            Paciente p = buscarPorCedula(cedula);
+            if (p != null) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (NoResultException e) {
+            return false;
+        }
+
+    }
+
+    public Paciente buscarPorCedula(String cedula) {
         TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.cedula = :cedula", Paciente.class);
         query.setParameter("cedula", cedula);
         Paciente result = query.getSingleResult();
-        return result!=null;        
+        return result;
     }
 
     public boolean isDireccionEmailDisponoble(String email) {
@@ -151,9 +166,9 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
             return true;
         }
     }
-    
+
     public Paciente buscarPorNombres(final String nombres) {
-   
+
         log.info("Buscar paciente por nombres " + nombres);
 
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -162,8 +177,5 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         query.where(builder.equal(bussinesEntityType.get(Paciente_.nombres), nombres));
         return getSingleResult(query);
         //return  null;
-    }  
-    
-    
+    }
 }
-

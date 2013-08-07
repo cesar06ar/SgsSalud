@@ -74,6 +74,7 @@ import org.picketlink.idm.common.exception.IdentityException;
  *
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
  * @adapter <a href="mailto:jlgranda81@gmail.com">José Luis Granda</a>
+ * @adapter <a href="mailto:cesar06ar@gmail.com">César Abad Ramos</a>
  */
 @Transactional(TransactionPropagation.REQUIRED)
 public class InitializeDatabase {
@@ -208,7 +209,8 @@ public class InitializeDatabase {
         //validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios();  
         validarEstructuraDelPaciente();  
         validarEstructuraDatosPersonalesDelPaciente();
-        validarEstructuraDatosAcademicosDelPaciente();
+        validarEstructuraDatosAcademicosColegioDelPaciente();
+        validarEstructuraDatosAcademicosEscuelaDelPaciente();
     }
     
     private void validarEstructuraParaPerfilDeUsuario() {
@@ -278,21 +280,7 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            /*
-             * Personal
-             ESTADO CIVIL	FECHA DE NACIMIENTO (en números) día/mes/año	GENERO	NACIONALIDAD	MODALIDAD: CONTRATO O NOMBRAMIENTO	LIBRETA  MILITAR           (sin guión)	TIPO DE SANGRE	
-             * Discapacidad
-             * Discapacidad     SI   /   NO	N° CONADIS (sin guión)       / SIN  TIENE CARNET	TIPO FÍSICA/MENTAL	% PORCENTAJE	
-             * Dirección permanente
-             * CALLE PRINCIPAL	No.	CALLE SECUNDARIA	REFERENCIA (SECTOR)	PROVINCIA	PARROQUIA	CANTON	TELÉFONO DOMICILIO SIN GUIÓN 	TELÉFONO CELULAR  SIN GUIÓN 	TELÉFONO DE TRABAJO  SIN GUIÓN     	CORREO ELECTRÓNICO  (INSTITUCIONAL/ LABORAL)	CORREO ELECTRÓNICO (PERSONAL)	
-             * Contacto en emergencia
-             * APELLIDOS	NOMBRES	TELÉFONO LOCAL      SIN GUIÓN 	TELEFONO CELULAR  SIN GUIÓN 	
-             * DEclaración de bienes
-             * No. DE NOTARIA DE DECLARACIÓN DE BIENES	LUGAR DE NOTARIA DE DECLARACION DE BIENES      (CIUDAD - CANTÓN)	FECHA DE DECLARACION DE BIENES            (en números) día/mes/año
-             * AUTOIDENTIFICACION ETNICA	
-             * AFROECUATORIANO/AFRODESCENDIENTE - BLANCO - INDIGENA - MESTIZO - MONTUBIO - MULATO - NEGRO - OTRA	
-             * EN CASO DE SELECCIONAR INDIGENA:   ACHUAR - ANDOA - AWA - CHACHI - COFAN - EPERA - KICHWA - SECOYA - SHIWIAR - SHUAR - SIONA - TSACHILA - WAORANI - ZAPARA
-             */
+          
             attributes.add(buildProperty("Personal", "maritalstatus", "java.lang.String[]", "Casado*,Soltero,Divorciado,Unión libre", false, "Estado civil", "Indique su estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", false, 2L));
             attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));
@@ -358,50 +346,7 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    /*
-    private void validarEstructuraTrayectoriaLaboralDelPerfilDeUsuarios() {
-        BussinesEntityType bussinesEntityType = null;
-        String name = "TrayectoriaLaboral";
-        try {
-            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
-                    BussinesEntityType.class);
-            query.setParameter("name", name);
-            bussinesEntityType = query.getSingleResult();
-        } catch (NoResultException e) {
-            bussinesEntityType = new BussinesEntityType();
-            bussinesEntityType.setName(name);
-
-            //Agrupaciones de propiedades
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
-            structure.setName("Data for " + name);
-            structure.setCreatedOn(now);
-            structure.setLastUpdate(now);
-
-            //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("tipoInstitucion", "java.lang.String[]", "Pública, Privada, Mixta, Otra", true, "Tipo de Institución", "Indique que tipo de institución", true, 1L));
-            attributes.add(buildProperty("nombreInstitucion", String.class.getName(), null, true, "Nombre de la Institución", "Indique el nombre de la institución u organización", true, 2L));
-            attributes.add(buildProperty("unidadAdministrativa", "java.lang.String[]", "Departamento,Área,Dirección", true, "Unidad Administrativa", "Indique que tipo de unidad administrativa", 3L));
-            attributes.add(buildProperty("denominacionPuesto", String.class.getName(), null, false, "Denominación del Puesto", "Indique la denominación del puesto", true, 4L));
-            attributes.add(buildProperty("fechaInicio", Date.class.getName(), ago.getTime(), false, "Fecha de Ingreso", "¿Cuándo ingreso?", 5L));
-            attributes.add(buildProperty("fechaFin", Date.class.getName(), ago.getTime(), false, "Fecha de Salida", "¿Cuándo salió?", 6L));
-            attributes.add(buildProperty("responsabilidades", "java.lang.MultiLineString", null, false, "Principales Responsabilidades", "Indique que responsabilidades tenia", 7L));
-            attributes.add(buildProperty("motivoSalida", "java.lang.MultiLineString", null, false, "Motivo de Salida", "¿Por qué motivo salio?", 8L));
-
-            //Agregar atributos
-            structure.setProperties(attributes);
-            
-            bussinesEntityType.addStructure(structure);
-            
-            entityManager.persist(bussinesEntityType);
-            entityManager.flush();
-        }
-    }*/
-    
+        
     private void validarEstructuraDelPaciente() {
         BussinesEntityType bussinesEntityType = null;
         
@@ -426,9 +371,10 @@ public class InitializeDatabase {
 
             //Lista de atributos de Tipos de entidades de negocio
             List<Property> attributes = new ArrayList<Property>();            
-            attributes.add(buildStructureTypeProperty("datosPersonales", "Datos Personales", "Información personal relevante", "/pages/profile/data/personal", 1L));
-            attributes.add(buildStructureTypeProperty("datosAcademicos", "Datos Academicos", "Información Academica del ", "/pages/profile/data/personal", 2L));
-            
+            attributes.add(buildStructureTypeProperty("datosPersonales", "Datos Personales", "Información personal relevante", "/pages/paciente/paciente", 1L));
+            //attributes.add(buildStructureTypeProperty("datosAcademicosUniversitario", "Datos Academicos Estudiante Universitario", "Información Academica del Estudiante", "/pages/paciente/paciente", 2L));
+            attributes.add(buildStructureTypeProperty("datosAcademicosEstudianteColegio", "Datos Academicos Estudiante de Colegio", "Información Academica del Estudiante", "/pages/paciente/paciente", 2L));
+            attributes.add(buildStructureTypeProperty("datosAcademicosEstudianteEscuela", "Datos Academicos Estudiante de Escuela", "Información Academica del Estudiante", "/pages/paciente/paciente", 3L));
             //Agregar atributos
             structure.setProperties(attributes);
             
@@ -443,7 +389,7 @@ public class InitializeDatabase {
     
     private void validarEstructuraDatosPersonalesDelPaciente(){
        BussinesEntityType bussinesEntityType = null;
-        String name = "datosPersonales";
+        String name = "datosPersonalesPaciente";
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
                     BussinesEntityType.class);
@@ -459,7 +405,7 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName("Data for " + name);
+            structure.setName(name);
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
@@ -469,8 +415,8 @@ public class InitializeDatabase {
             attributes.add(buildProperty("Personal", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique el estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "sectorProcedencia", "java.lang.String[]", "Urbano*,Rural", false, "Sector de Procedencia", "Indique el sector del cual procede", false, 2L));
             attributes.add(buildProperty("Personal", "etnia", "java.lang.String[]", "Blanco*,Mestizo,Indígena,Afro-Ecuatoriano,Montubio,Negro", false, "Etnia", "Seleccione su etnia a la cual pertenece", false, 3L));
-            attributes.add(buildProperty("Personal", "discapacidad", String.class.getName(), "Ninguna", false, "Tipo de Discapacidad", "Indique el tipo de discapacidad en caso de padecerla", false, 4L));
-            attributes.add(buildProperty("Personal", "lugarTrabajo", String.class.getName(), "Ninguno", false, "Lugar de Trabajo", "Indique el lugar de trabajo si tiene alguno", false, 5L));
+            attributes.add(buildProperty("Personal", "discapacidad", String.class.getName(), "", false, "Tipo de Discapacidad", "Indique el tipo de discapacidad en caso de padecerla", false, 4L));
+            attributes.add(buildProperty("Personal", "lugarTrabajo", String.class.getName(), "", false, "Lugar de Trabajo", "Indique el lugar de trabajo si tiene alguno", false, 5L));
                         
             //Agregar atributos
             structure.setProperties(attributes);
@@ -483,9 +429,9 @@ public class InitializeDatabase {
         
     }
     
-    private void validarEstructuraDatosAcademicosDelPaciente(){
-       BussinesEntityType bussinesEntityType = null;
-        String name = "datosAcademicos";
+    private void validarEstructuraDatosAcademicosColegioDelPaciente(){
+        BussinesEntityType bussinesEntityType = null;
+        String name = "datosAcademicosEstudianteColegio";
         try {
             TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
                     BussinesEntityType.class);
@@ -501,25 +447,63 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName("Data for " + name);
+            structure.setName(name);
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-           
-            attributes.add(buildProperty("academico", "establecimiento", String.class.getName(), "Ninguno", false, "Establecimiento", "Indique el nombre del establecimiento en el que estudia", false, 1L));            
-            attributes.add(buildProperty("academico", "area", "java.lang.String[]", "Agropecuaria*,Educativa,Energía,Jurídica,Salud", false, "Área", "Indique el área de su carrera", false, 2L));
-            attributes.add(buildProperty("academico", "carrera", String.class.getName(), "Ninguno", false, "Carrera", "Indique el nombre de su carrera", false, 1L));            
+
+            attributes.add(buildProperty("academicoColegio", "especialidad", String.class.getName(), "", false, "Especialidad", "Indique que especialidad sigue", false, 1L));
+            attributes.add(buildProperty("academicoColiegio", "curso", String.class.getName(), "", false, "Curso", "Indique el nombre en que está", false, 3L));
+            attributes.add(buildProperty("academicoColegio", "paralelo", java.lang.Long.class.getName(), "", false, "Paralelo", "Indique en que paralelo está", false, 3L));
             //Agregar atributos
             structure.setProperties(attributes);
-            
+
             bussinesEntityType.addStructure(structure);
-            
+
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
         
+    }
+    
+    private void validarEstructuraDatosAcademicosEscuelaDelPaciente(){
+        BussinesEntityType bussinesEntityType = null;
+        String name = "datosAcademicosEstudianteEscuela";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName(name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+
+            attributes.add(buildProperty("academicoEscuela", "anioBasica", String.class.getName(), "", false, "Año de Básica", "Indique en que año de básica está", false, 1L));
+            attributes.add(buildProperty("academicoEscuela", "paralelo", String.class.getName(), "", false, "Paralelo", "Indique en que paralelo está", false, 2L));
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+
+            bussinesEntityType.addStructure(structure);
+
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
     }
     
     private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {

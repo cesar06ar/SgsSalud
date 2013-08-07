@@ -1,23 +1,6 @@
 /**
- * This file is part of Glue: Adhesive BRMS
- * 
-* Copyright (c)2012 José Luis Granda <jlgranda@eqaula.org> (Eqaula Tecnologías
- * Cia Ltda) Copyright (c)2012 Eqaula Tecnologías Cia Ltda (http://eqaula.org)
- * 
-* If you are developing and distributing open source applications under the GNU
- * General Public License (GPL), then you are free to re-distribute Glue under
- * the terms of the GPL, as follows:
- * 
-* GLue is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- * 
-* Glue is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- * 
-* You should have received a copy of the GNU General Public License along with
+ * *
+ * You should have received a copy of the GNU General Public License along with
  * Glue. If not, see <http://www.gnu.org/licenses/>.
  * 
 * For individuals or entities who wish to use Glue privately, or internally,
@@ -41,14 +24,18 @@ import javax.faces.validator.ValidatorException;
 import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.UI;
 
-@FacesValidator("safeTextUTF8Validator")
+@FacesValidator("valueTextPropertyValidator")
 @RequestScoped
-public class SafeTextUTF8Validator implements Validator {
+public class ValueTextPropertyValidator implements Validator {
 
     @Override
     public void validate(final FacesContext context, final UIComponent component, final Object value)
             throws ValidatorException {
-        String field = value.toString();        
+        
+        String field = value.toString();
+        if (field.contains("*")) {
+            field = field.replace("*", "");
+        }
         if (!StringValidations.isPunctuatedTextUTF8(field)) {
             FacesMessage msg = new FacesMessage(UI.getMessages("validation.badUTF8Input"), UI.getMessages("validation.badUTF8Input.detail"));
             throw new ValidatorException(msg);

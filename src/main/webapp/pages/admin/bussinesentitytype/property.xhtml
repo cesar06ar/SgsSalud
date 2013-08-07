@@ -36,8 +36,10 @@
                                 value="#{propertyHome.instance.name}" required="true" inlinehelp="#{messages['common.property.name.help']}" execute="@this save" render="name"/>                     
                     <glue:input id="typ" name="type" type="text" label="#{messages['common.property.type']}"                      
                                 value="#{propertyHome.instance.type}" required="true" inlinehelp="#{messages['common.property.type.help']}" execute="@this save" />                                          
-                    <glue:input id="valuep" name="valuep" type="text" label="#{messages['common.property.value']}" 
-                                value="#{propertyHome.propertyStringValue}" required="false" inlinehelp="#{messages['common.property.value.help']}" execute="@this save" />
+
+                    <glue:input id="valuep" name="valuep" type="text" label="#{messages['common.property.value']}"  validator="#{propertyHome.cargarValidador()}"
+                                value="#{propertyHome.propertyStringValue}" required="false" inlinehelp="#{messages['common.property.value.help']}" execute="@this save" />                        
+
                     <glue:input id="label" name="label" type="text" label="#{messages['common.property.label']}" 
                                 value="#{propertyHome.instance.label}" required="true" inlinehelp="#{messages['common.property.label.help']}" execute="@this save" />
 
