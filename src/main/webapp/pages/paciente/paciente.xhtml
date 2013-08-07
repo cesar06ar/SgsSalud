@@ -58,7 +58,6 @@
                                 <span class="help-inline"><ocp:message id="pm"  forId="password" /></span>
                             </h:panelGroup>
                         </div>
-
                     </div>
 
                     <div class="clearfix">
@@ -75,11 +74,11 @@
                                 <span class="help-inline"><ocp:message forId="passwordConfirm" /></span>
                             </h:panelGroup>
                         </div>                   
-
+                        <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                        <s:validateForm id="signupValidator" validatorId="signupValidator" />
                     </div>
-                    <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
-                    <s:validateForm id="signupValidator" validatorId="signupValidator" />
                 </p:panel>
+
 
                 <p:panel id="datapersonal" header="#{messages['module.profile.data.personal']}">                    
                     <div class="container-fluid">   

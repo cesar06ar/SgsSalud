@@ -2,12 +2,105 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      >
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-    </h:body>
+
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <ui:define name="header-replace" >
+            <div class="header-replace">            
+                <div class="container">
+                    <div class="span9 columns">
+                        <div class="row fl" style="margin-top: 5px;">
+                            <h2>#{messages['medicamento.admin']}</h2>   
+                        </div>                    
+                    </div> 
+                    <!--Div para boton de regreso a inicio-->
+                    <div class="span4 columns offset3">
+                        <h:form id="control">  
+                            <br/>
+                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                    outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
+                            </h:link>  
+                            <br/>                                             
+                        </h:form>
+                    </div>
+                </div> 
+            </div>   
+
+        </ui:define>
+
+        <ui:define name="content">           
+            <!--Metadato que se realiza antes de renderizarse la vista-->
+            <f:metadata>
+                <f:viewParam name="result" value="#{medicamentoListServicio.primerResul}" />
+            </f:metadata>
+            <!--Formulario dentro de un contenedor-->
+            <h:form id="form">            
+                <!--Opción de mensaje, cuando se realiza una acción-->
+                <!--para mostrar mensaje de componentes seleccionados y errores si fuera el caso-->
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+                <!--Botones de admin-->
+                <div class="admin-actions">
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="medicamento" styleClass="btn primary">
+                        <f:param name="pacienteId"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
+                            disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
+                        <f:param name="pacienteId" value="#{medicamentoListaService.medicamentoSelecionado.id}"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                </div>
+
+
+
+                <p:dataTable id="tablaMedicamentos"  var="paciente_" value="#{medicamentoListaServicio}"
+                             paginator="true" rows="10"
+                             paginatorAlwaysVisible="false"
+                             paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                             rowsPerPageTemplate="5,10,15"
+                             lazy="true"
+                             selection="#{medicamentoListaServicio.medicamnetoSelecionado}"
+                             rendered="true"
+                             selectionMode="single">
+                    <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
+                    <p:ajax event="rowSelect" listener="#{medicamentoListServicio.onRowSelect}"
+                            update=":form:button-edit :form:messages "/>   
+                    <p:ajax event="rowUnselect" listener="#{medicamentoListServicio.onRowUnselect}" update=":form:button-edit :form:messages"/>
+                    <!--Columnas para mostrar en la tabla-->
+                    <p:column sortBy="#{medicamento_.nombreComercial}">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['common.nombre.comercial']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.nombreComercial}" />
+                    </p:column>
+
+                    <p:column sortBy="#{medicamento_.nombreGenerico}">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['common.nombre.generico']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.nombreGenerico}" />
+                    </p:column>
+
+                    <p:column sortBy="#{medicamento_.referencia}">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['common.referencia.medicamento']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.referencia}" />
+                    </p:column>
+
+
+                </p:dataTable>
+
+
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
 </html>
 
