@@ -47,9 +47,12 @@ public class Medicamento extends BussinesEntity implements Serializable{
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCaducidad;
-   
-    
-    
+
+    public Medicamento() {
+        this.fechaIngreso = new Date();
+        
+    }
+      
 
     public Date getFechaIngreso() {
         return fechaIngreso;
