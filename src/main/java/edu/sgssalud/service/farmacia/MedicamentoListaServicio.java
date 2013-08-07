@@ -49,7 +49,7 @@ import org.primefaces.model.SortOrder;
 @Named(value = "medicamentoListServicio")
 @ViewScoped
 
-public class MedicamentoListServicio extends LazyDataModel<Medicamento> implements Serializable{
+public class MedicamentoListaServicio extends LazyDataModel<Medicamento> implements Serializable{
 
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
@@ -66,7 +66,7 @@ public class MedicamentoListServicio extends LazyDataModel<Medicamento> implemen
     private Medicamento[] medicamentosSeleccionados;
     private String medicamentoSeleccionado;
 
-    public MedicamentoListServicio() {
+    public MedicamentoListaServicio() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<Medicamento>();
     }

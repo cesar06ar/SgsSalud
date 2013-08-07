@@ -51,6 +51,8 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     @Inject
     private MedicamentoService ms;
     
+    
+    
     /*Métodos get y set para obtener el Id de la clase*/
     public Long getMedicamentoId() {
         return (Long) getId();
@@ -82,6 +84,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        ms.setEntityManager(em);
     }
     
     protected Medicamento createInstance() {
@@ -101,21 +104,26 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         return Medicamento.class;
     }
     
-//    @TransactionAttribute
-//    public String guardarMedicamento() {
-//        Date now = Calendar.getInstance().getTime();
-//        getInstance().setLastUpdate(now);
-//        if (getInstance().isPersistent()) {
-//            save(getInstance());
-//        } else {
-//            try {
-//                register();
-//            } catch (IdentityException ex) {
-//                Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        return null;
-//    }
+    @TransactionAttribute
+    public String guardarMedicamento() {
+        Date now = Calendar.getInstance().getTime();
+        getInstance().setLastUpdate(now);
+        String outcome = null;
+        if (getInstance().isPersistent()) {
+            save(getInstance());
+            outcome = "/pages/farmacia/medicamento/list";
+        } else {
+            create(getInstance());
+            outcome = "/pages/farmacia/medicamento/list";
+        }
+        return outcome;
+        
+              
+    }
     
+    
+    public boolean isPersistente(){
+        return getInstance().getId() != null;
+    }
     
 }

@@ -15,6 +15,8 @@
             <f:viewParam name="id" value="#{pacienteHome.pacienteId}" />
             <f:viewParam name="backView" value="#{pacienteHome.backView}" />
         </f:metadata>
+
+
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container">
@@ -24,6 +26,8 @@
                 </div>
             </div>
         </ui:define>
+
+
         <ui:define name="content">
             <h:form id="form">
                 <!-- Attributos para usuario -->
@@ -75,12 +79,15 @@
                         </div>                   
                         <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
                         <s:validateForm id="signupValidator" validatorId="signupValidator" />
+                    </div>
                 </p:panel>
+
 
                 <p:panel id="datapersonal" header="#{messages['module.profile.data.personal']}">
                     <glue:input id="dni" name="dni" type="text" label="#{messages['profile.dni']}" value="#{pacienteHome.instance.cedula}" required="true" inlinehelp="#{messages['profile.dni.inlinehelp']}" execute="@this save" render="dni"/>
                     <glue:input id="surn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pacienteHome.instance.nombres}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
                     <glue:input id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pacienteHome.instance.apellidos}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>                                      
+
                     <h:panelGroup id="fnp" layout="block" class="clearfix">
                         <label for="fnct">#{messages['common.edad']}</label>
                         <div class="input" >
