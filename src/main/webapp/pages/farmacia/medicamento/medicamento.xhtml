@@ -3,14 +3,32 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets" 
-                template="/WEB-INF/view/templates/glue.xhtml">
+                template="/WEB-INF/view/templates/glue.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core">
+    
+    <f:metadata>
+        <f:viewParam name="id" value="#{medicamentoHome.medicamentoId}"/>
+    </f:metadata>
+    
     
     <ui:define name="header-replace">
+        <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h2>#{medicamentoHome.managed? messages['common.edit'] : messages['common.add']} #{medicamentoHome.instance.nombres}</h2>   
+                    </div>
+                </div>
+            </div>
 
     </ui:define>
+    
+    
+    
     <ui:define name="pre-content">
 
     </ui:define>
+    
+    
     <ui:define name="content">
         <h:form id="form">
             <!--Botones de administración -->
