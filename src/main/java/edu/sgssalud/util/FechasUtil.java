@@ -28,14 +28,14 @@ public class FechasUtil {
 //    }
 
     public static Integer calcularEdad(Date fecha) {
-        SimpleDateFormat formateador = new SimpleDateFormat("dd-MMM-yyyy");
+        SimpleDateFormat formateador = new SimpleDateFormat("dd-mm-yyyy");
         String fechaS = formateador.format(fecha);
         Date fechaNac = null;
         try {
             /*Se puede cambiar la mascara por el formato de la fecha que se
              //quiera recibir, por ejemplo año mes día "yyyy-MM-dd"
              en este caso es día mes año*/
-            fechaNac = new SimpleDateFormat("dd-MMM-yyyy").parse(fechaS);
+            fechaNac = new SimpleDateFormat("dd-mm-yyyy").parse(fechaS);
         } catch (Exception ex) {
             System.out.println("Error:" + ex);
         }

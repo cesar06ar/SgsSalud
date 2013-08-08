@@ -17,6 +17,7 @@ package edu.sgssalud;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.RequestScoped;
@@ -31,7 +32,12 @@ import javax.inject.Named;
 public class galleryController implements Serializable {
 
     private List<String> images;
-
+    private Integer entero;
+    private double real;
+    private String cadena;
+    private Date fecha;
+    private Long enteroL;
+    
     @PostConstruct
     public void init() {
         images = new ArrayList<String>();
@@ -47,6 +53,46 @@ public class galleryController implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
-    }    
+    }  
+
+    public Integer getEntero() {
+        return entero;
+    }
+
+    public void setEntero(Integer entero) {
+        this.entero = entero;
+    }
+
+    public double getReal() {
+        return real;
+    }
+
+    public void setReal(double real) {
+        this.real = real;
+    }
+
+    public String getCadena() {
+        return cadena;
+    }
+
+    public void setCadena(String cadena) {
+        this.cadena = cadena;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Long getEnteroL() {
+        return enteroL;
+    }
+
+    public void setEnteroL(Long enteroL) {
+        this.enteroL = enteroL;
+    } 
     
 }

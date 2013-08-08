@@ -266,7 +266,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
     
     public String cargarValidador(){
         log.info("ingreso a validador value");
-        if("java.lang.String[]".equals(getInstance().getType())){
+        if("java.lang.String[]".equals(getInstance().getType().toString())){
             log.info("ingreso a validador value valueTextPropertyValidator");
             return "valueTextPropertyValidator";
         }

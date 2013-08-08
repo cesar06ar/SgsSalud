@@ -110,7 +110,7 @@
                                     <label for="fnacim">#{messages['common.fecha.nacimiento']}</label>
                                     <div class="input" >
                                         <p:calendar  id="fnacim" value="#{pacienteHome.instance.fechaNacimiento}" styleClass="xLarge" required="false" label="edad" 
-                                                     rendered="true" pattern="dd-MMM-yyyy" navigator="true" showButtonPanel="true" >
+                                                     rendered="true" pattern="dd-MM-yyyy" navigator="true" showButtonPanel="true" >
                                             <p:ajax event="dateSelect" rendered="fnp edadp:edad" update="@parent fnp edadp" />  
                                         </p:calendar>                             
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.fechaNacimiento != null}"
