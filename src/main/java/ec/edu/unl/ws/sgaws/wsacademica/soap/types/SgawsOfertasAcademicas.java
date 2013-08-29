@@ -1,5 +1,5 @@
 
-package ec.edu.unl.ws.sgaws.wspersonal.soap.types;
+package ec.edu.unl.ws.sgaws.wsacademica.soap.types;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cedula" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="id_periodo" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "cedula"
+    "idPeriodo"
 })
-@XmlRootElement(name = "sgaws_datos_estudiante")
-public class SgawsDatosEstudiante {
+@XmlRootElement(name = "sgaws_ofertas_academicas")
+public class SgawsOfertasAcademicas {
 
-    @XmlElement(required = true)
-    protected String cedula;
+    @XmlElement(name = "id_periodo", required = true)
+    protected String idPeriodo;
 
     /**
-     * Gets the value of the cedula property.
+     * Gets the value of the idPeriodo property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCedula() {
-        return cedula;
+    public String getIdPeriodo() {
+        return idPeriodo;
     }
 
     /**
-     * Sets the value of the cedula property.
+     * Sets the value of the idPeriodo property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCedula(String value) {
-        this.cedula = value;
+    public void setIdPeriodo(String value) {
+        this.idPeriodo = value;
     }
 
 }

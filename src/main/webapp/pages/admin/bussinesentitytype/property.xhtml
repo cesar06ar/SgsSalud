@@ -9,7 +9,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:glue="http://eqaula.org/jsf/facelets"       
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:ocp="http://ocpsoft.com/prettyfaces">     
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>                                 
             <f:viewParam name="propertyId" value="#{propertyHome.propertyId}" />
@@ -36,10 +36,21 @@
                                 value="#{propertyHome.instance.name}" required="true" inlinehelp="#{messages['common.property.name.help']}" execute="@this save" render="name"/>                     
                     <glue:input id="typ" name="type" type="text" label="#{messages['common.property.type']}"                      
                                 value="#{propertyHome.instance.type}" required="true" inlinehelp="#{messages['common.property.type.help']}" execute="@this save" />                                          
-
+                    <h:panelGroup id="pvaluep" layout="block" class="clearfix">
+                        <label for="valuep">#{messages['common.property.value']}</label>
+                        <div class="input" >
+                            <h:inputText id="valuep" value="#{propertyHome.propertyStringValue}" styleClass="xLarge" required="true" label="#{messages['common.property.value']}">                            
+                                <f:ajax execute="@this" render="save"  />
+                            </h:inputText>                            
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{propertyHome.propertyStringValue != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>#{messages['common.property.value.help']}<ocp:message forId="valuep" /></span>
+                        </div>
+                    </h:panelGroup> 
+                    <!--
                     <glue:input id="valuep" name="valuep" type="text" label="#{messages['common.property.value']}"  validator="#{propertyHome.cargarValidador()}"
                                 value="#{propertyHome.propertyStringValue}" required="false" inlinehelp="#{messages['common.property.value.help']}" execute="@this save" />                        
-
+                    -->
                     <glue:input id="label" name="label" type="text" label="#{messages['common.property.label']}" 
                                 value="#{propertyHome.instance.label}" required="true" inlinehelp="#{messages['common.property.label.help']}" execute="@this save" />
 

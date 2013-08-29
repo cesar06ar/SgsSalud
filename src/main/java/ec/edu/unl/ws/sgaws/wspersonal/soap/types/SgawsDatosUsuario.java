@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para anonymous complex type.
+ * <p>Java class for anonymous complex type.
  * 
- * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
+ * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
  * &lt;complexType>
@@ -38,7 +38,7 @@ public class SgawsDatosUsuario {
     protected String cedula;
 
     /**
-     * Obtiene el valor de la propiedad cedula.
+     * Gets the value of the cedula property.
      * 
      * @return
      *     possible object is
@@ -50,7 +50,7 @@ public class SgawsDatosUsuario {
     }
 
     /**
-     * Define el valor de la propiedad cedula.
+     * Sets the value of the cedula property.
      * 
      * @param value
      *     allowed object is

@@ -1,5 +1,5 @@
 
-package ec.edu.unl.ws.sgaws.wspersonal.soap.types;
+package ec.edu.unl.ws.sgaws.wsacademica.soap.types;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,8 +31,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "cedula"
 })
-@XmlRootElement(name = "sgaws_datos_estudiante")
-public class SgawsDatosEstudiante {
+@XmlRootElement(name = "sgaws_carreras_estudiante")
+public class SgawsCarrerasEstudiante {
 
     @XmlElement(required = true)
     protected String cedula;

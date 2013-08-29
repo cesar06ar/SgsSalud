@@ -19,7 +19,7 @@
             </div>             
         </ui:define>
         <ui:define name="content">
-            <h:form id="form" acceptcharset="UTF-8">
+            <h:form id="form" >
                 <div class="admin">
                     <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary" >
                         <f:ajax event="change" execute="@this" render="result" />
@@ -40,7 +40,17 @@
                                         styleClass="validation-status" />
                         <span class="help-inline"><br/>#{messages['profile.dni.inlinehelp']}<ocp:message forId="fdni" /></span>
                     </div>
-                </h:panelGroup>               
+                </h:panelGroup> 
+                <!--
+                <h:panelGroup id="pasw" layout="block" class="clearfix">
+                    <label for="clave">#{'contraseña'}</label>
+                    <div class="input" >
+                        <p:password id="dni" value="#{testWebService.clave}" styleClass="xLarge" required="false" label="#{'contraseña'}">                                                     
+                            <f:ajax execute="@this" render="pasw"  />
+                        </p:password>
+                        <br/>                                                 
+                    </div>
+                </h:panelGroup>     -->          
 
                 <glue:input id="result" name="resultado" type="textarea" label="#{'Resultado'}" value="#{testWebService.result}" required="false" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="result" />
 

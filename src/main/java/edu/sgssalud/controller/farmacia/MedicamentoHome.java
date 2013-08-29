@@ -31,6 +31,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.enterprise.inject.Produces;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -40,6 +41,8 @@ import org.picketlink.idm.common.exception.IdentityException;
  *
  * @author tania
  */
+@Named("medicamentoHome")
+@ViewScoped
 public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements Serializable{
     
     private static final long serialVersionUID = 7L;
@@ -62,12 +65,16 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     
     /*Método para  cargar una instancia de medicamento==>*/
     
-    @TransactionAttribute   //
+//    @Produces
+//    //@Named("med")
+//    @Current    
+    @TransactionAttribute   //    
     public Medicamento load() {
         if (isIdDefined()) {
             wire();
         }
         log.info("sgssalud --> cargar instance " + getInstance());
+        //getInstance().setFechaIngreso(new Date());
         return getInstance();
     }
     
@@ -82,21 +89,25 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        //getInstance().setFechaIngreso(new Date());
     }
     
+    @Override
     protected Medicamento createInstance() {
         //prellenado estable para cualquier clase 
         Date now = Calendar.getInstance().getTime();
-        Medicamento med = new Medicamento();
-        med.setCreatedOn(now);
-        med.setLastUpdate(now);
-        med.setActivationTime(now);
-        med.setExpirationTime(Dates.addDays(now, 364));
-        med.setResponsable(null);    //cambiar atributo a 
-        med.buildAttributes(bussinesEntityService);  //
-        return med;
+        Medicamento medicament = new Medicamento();
+        medicament.setCreatedOn(now);
+        medicament.setLastUpdate(now);
+        medicament.setActivationTime(now);
+        //med.setExpirationTime(Dates.addDays(now, 364));        
+        medicament.setResponsable(null);    //cambiar atributo a 
+        medicament.setFechaIngreso(now);
+        medicament.buildAttributes(bussinesEntityService);  //
+        return medicament;
     }
     
+    @Override
     public Class<Medicamento> getEntityClass() {
         return Medicamento.class;
     }
@@ -116,6 +127,8 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
 //        }
 //        return null;
 //    }
-    
+   public void validarFC(){
+       
+   }    
     
 }

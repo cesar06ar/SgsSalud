@@ -1,5 +1,5 @@
 
-package ec.edu.unl.ws.sgaws.wspersonal.soap.types;
+package ec.edu.unl.ws.sgaws.wsacademica.soap.types;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cedula" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="mid" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +29,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "cedula"
+    "mid"
 })
-@XmlRootElement(name = "sgaws_datos_estudiante")
-public class SgawsDatosEstudiante {
+@XmlRootElement(name = "sgaws_info_matricula")
+public class SgawsInfoMatricula {
 
     @XmlElement(required = true)
-    protected String cedula;
+    protected String mid;
 
     /**
-     * Gets the value of the cedula property.
+     * Gets the value of the mid property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCedula() {
-        return cedula;
+    public String getMid() {
+        return mid;
     }
 
     /**
-     * Sets the value of the cedula property.
+     * Sets the value of the mid property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCedula(String value) {
-        this.cedula = value;
+    public void setMid(String value) {
+        this.mid = value;
     }
 
 }

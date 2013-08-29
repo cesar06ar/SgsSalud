@@ -30,51 +30,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SgawsDatosUsuarioResponse }
+     * Create an instance of {@link SgawsDatosDocenteResponse }
      * 
      */
-    public SgawsDatosUsuarioResponse createSgawsDatosUsuarioResponse() {
-        return new SgawsDatosUsuarioResponse();
-    }
-
-    /**
-     * Create an instance of {@link SgawsDatosPersonales }
-     * 
-     */
-    public SgawsDatosPersonales createSgawsDatosPersonales() {
-        return new SgawsDatosPersonales();
-    }
-
-    /**
-     * Create an instance of {@link SgawsDatosPersonalesResponse }
-     * 
-     */
-    public SgawsDatosPersonalesResponse createSgawsDatosPersonalesResponse() {
-        return new SgawsDatosPersonalesResponse();
-    }
-
-    /**
-     * Create an instance of {@link SgawsDatosDocente }
-     * 
-     */
-    public SgawsDatosDocente createSgawsDatosDocente() {
-        return new SgawsDatosDocente();
-    }
-
-    /**
-     * Create an instance of {@link SgawsDatosEstudianteResponse }
-     * 
-     */
-    public SgawsDatosEstudianteResponse createSgawsDatosEstudianteResponse() {
-        return new SgawsDatosEstudianteResponse();
-    }
-
-    /**
-     * Create an instance of {@link SgawsDatosEstudiante }
-     * 
-     */
-    public SgawsDatosEstudiante createSgawsDatosEstudiante() {
-        return new SgawsDatosEstudiante();
+    public SgawsDatosDocenteResponse createSgawsDatosDocenteResponse() {
+        return new SgawsDatosDocenteResponse();
     }
 
     /**
@@ -86,11 +46,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link SgawsDatosDocenteResponse }
+     * Create an instance of {@link SgawsDatosPersonalesResponse }
      * 
      */
-    public SgawsDatosDocenteResponse createSgawsDatosDocenteResponse() {
-        return new SgawsDatosDocenteResponse();
+    public SgawsDatosPersonalesResponse createSgawsDatosPersonalesResponse() {
+        return new SgawsDatosPersonalesResponse();
+    }
+
+    /**
+     * Create an instance of {@link SgawsDatosEstudiante }
+     * 
+     */
+    public SgawsDatosEstudiante createSgawsDatosEstudiante() {
+        return new SgawsDatosEstudiante();
+    }
+
+    /**
+     * Create an instance of {@link SgawsDatosDocente }
+     * 
+     */
+    public SgawsDatosDocente createSgawsDatosDocente() {
+        return new SgawsDatosDocente();
+    }
+
+    /**
+     * Create an instance of {@link SgawsDatosUsuarioResponse }
+     * 
+     */
+    public SgawsDatosUsuarioResponse createSgawsDatosUsuarioResponse() {
+        return new SgawsDatosUsuarioResponse();
+    }
+
+    /**
+     * Create an instance of {@link SgawsDatosEstudianteResponse }
+     * 
+     */
+    public SgawsDatosEstudianteResponse createSgawsDatosEstudianteResponse() {
+        return new SgawsDatosEstudianteResponse();
+    }
+
+    /**
+     * Create an instance of {@link SgawsDatosPersonales }
+     * 
+     */
+    public SgawsDatosPersonales createSgawsDatosPersonales() {
+        return new SgawsDatosPersonales();
     }
 
 }

@@ -1,9 +1,8 @@
 
-package ec.edu.unl.ws.sgaws.wspersonal.soap.types;
+package ec.edu.unl.ws.sgaws.wsacademica.soap.types;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -18,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="cedula" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="fecha" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -29,36 +28,35 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "cedula"
+    "fecha"
 })
-@XmlRootElement(name = "sgaws_datos_estudiante")
-public class SgawsDatosEstudiante {
+@XmlRootElement(name = "sgaws_egresados")
+public class SgawsEgresados {
 
-    @XmlElement(required = true)
-    protected String cedula;
+    protected String fecha;
 
     /**
-     * Gets the value of the cedula property.
+     * Gets the value of the fecha property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getCedula() {
-        return cedula;
+    public String getFecha() {
+        return fecha;
     }
 
     /**
-     * Sets the value of the cedula property.
+     * Sets the value of the fecha property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setCedula(String value) {
-        this.cedula = value;
+    public void setFecha(String value) {
+        this.fecha = value;
     }
 
 }

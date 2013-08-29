@@ -49,10 +49,9 @@ public class Medicamento extends BussinesEntity implements Serializable{
     private Date fechaCaducidad;
 
     public Medicamento() {
-        this.fechaIngreso = new Date();
+        //this.fechaIngreso = new Date();
         
-    }
-      
+    }      
 
     public Date getFechaIngreso() {
         return fechaIngreso;

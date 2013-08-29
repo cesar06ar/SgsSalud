@@ -412,7 +412,7 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
            
-            attributes.add(buildProperty("Personal", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique el estado civil", false, 1L));
+            attributes.add(buildProperty("Personal", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique su estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "sectorProcedencia", "java.lang.String[]", "Urbano*,Rural", false, "Sector de Procedencia", "Indique el sector del cual procede", false, 2L));
             attributes.add(buildProperty("Personal", "etnia", "java.lang.String[]", "Blanco*,Mestizo,Indígena,Afro-Ecuatoriano,Montubio,Negro", false, "Etnia", "Seleccione su etnia a la cual pertenece", false, 3L));
             attributes.add(buildProperty("Personal", "discapacidad", String.class.getName(), "", false, "Tipo de Discapacidad", "Indique el tipo de discapacidad en caso de padecerla", false, 4L));

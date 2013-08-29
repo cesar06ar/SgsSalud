@@ -15,17 +15,36 @@
  */
 package edu.sgssalud.web.service;
 
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 import com.sun.xml.ws.client.BindingProviderProperties;
+import com.sun.xml.ws.encoding.StreamSOAPCodec;
+import com.sun.xml.ws.streaming.MtomStreamWriter;
 import ec.edu.unl.ws.sgaws.wspersonal.soap.SGAWebServicesPersonal;
 import ec.edu.unl.ws.sgaws.wspersonal.soap.SGAWebServicesPersonalPortType;
+
+
 import java.io.Serializable;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Dispatch;
+import javax.xml.ws.Service;
+import javax.xml.ws.soap.SOAPBinding;
+import org.primefaces.json.JSONArray;
+
+import org.primefaces.json.JSONException;
 
 /**
  *
@@ -37,6 +56,7 @@ public class TestWebService implements Serializable {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(TestWebService.class);
     private String cedula;
+    private String clave;
     private String result;
 
     public String getResult() {
@@ -55,15 +75,68 @@ public class TestWebService implements Serializable {
         this.cedula = cedula;
     }
 
+    public String getClave() {
+        return clave;
+    }
+
+    public void setClave(String clave) {
+        this.clave = clave;
+    }
+
+//    public void validar(){
+//        SGAWebServicesValidacion wsvalidacion = new SGAWebServicesValidacion();
+//        SGAWebServicesValidacionPortType port = wsvalidacion.getSGAWebServicesValidacionPortType();
+//        
+//        if(!cedula.isEmpty()  && !clave.isEmpty()){
+//            TestWebService.autenticacion_Servidor((BindingProvider)port);
+//            String result = port.sgawsValidarEstudiante(cedula, clave);
+//            log.info("la autenticacion es: "+result);
+//        }
+//    }
     @TransactionAttribute
     public void cargar() {
-        
+
         SGAWebServicesPersonal wscpersonal = new SGAWebServicesPersonal();
         SGAWebServicesPersonalPortType port = wscpersonal.getSGAWebServicesPersonalPortType();
-        
-        if (!cedula.isEmpty()) {            
-            TestWebService.autenticacion_Servidor((BindingProvider) port);            
-            log.info("resultado:--->  "+port.sgawsDatosEstudiante(cedula));
+
+        if (!cedula.isEmpty()) {
+            TestWebService.autenticacion_Servidor((BindingProvider) port);
+            Service svc = Service.create(wscpersonal.getServiceName());
+            
+
+            //JAXBContext jbc;
+            try {
+//                jbc = JAXBContext.newInstance("org.apache.axis2.jaxws.sample.mtom");
+//                Dispatch<Object> dispatch = svc.createDispatch(wscpersonal.getServiceName(), jbc, Service.Mode.PAYLOAD);
+                
+                
+                //MtomStreamWriter proxy = svc.getPort();
+                BindingProvider bp = (BindingProvider) port;
+                SOAPBinding binding = (SOAPBinding) bp.getBinding();
+                binding.setMTOMEnabled(true);
+                //URL url = svc.getWSDLDocumentLocation();
+                //svc.addPort(wscpersonal.getServiceName(),SOAPBinding.SOAP11HTTP_MTOM_BINDING, url.toString());
+                
+                log.info("Ingreso a cargar datos ");
+                JsonParser parser = new JsonParser();
+                log.info("cedula valor 1" + cedula);
+                String r = port.sgawsDatosEstudiante(cedula);
+
+                log.info("cedula valor " + cedula);
+                JsonElement elem = parser.parse(r);
+                JsonArray elemArr = elem.getAsJsonArray();
+                log.info("Resultado " + elemArr.toString());
+                
+            } catch (Exception ex) {
+                Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                
+            } catch (JsonSyntaxException e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Error de conversión!", ""));
+            }
+            //System.out.println("Resultado:--->  "+port.sgawsDatosEstudiante(cedula));
             //setResult(port.sgawsDatosEstudiante(cedula));
             log.info("Ingreso a cargar datos");
         } else {
@@ -76,13 +149,23 @@ public class TestWebService implements Serializable {
         try {
 
             Map<String, Object> requestContext = provide.getRequestContext();
-            //requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 17000);
-            //requestContext.put("org.jboss.webservice.client.timeout", 1 * 60 * 1000);
+            requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 17000);
+            requestContext.put("org.jboss.webservice.client.timeout", 1 * 60 * 1000);
             requestContext.put(BindingProvider.USERNAME_PROPERTY, "sgssalud");
             requestContext.put(BindingProvider.PASSWORD_PROPERTY, "catv3856");
         } catch (Exception e) {
             // TODO: handle exception
             System.out.print(e);
         }
+    }
+
+    public List<String> convertirJsonArrayAString(String jsonArraylist) throws JSONException {
+
+        JSONArray jsonArray = new JSONArray(jsonArraylist);
+        List<String> ls = new ArrayList<String>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            ls.add(jsonArray.getString(i));
+        }
+        return ls;
     }
 }
