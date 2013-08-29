@@ -196,8 +196,8 @@
                                         </h:panelGroup>  
                                     </ui:repeat>
                                 </h:panelGroup>
-                                <glue:input id="ocupac" name="ocupacion" type="text" label="#{messages['comun.ocupacion']}" value="#{pacienteHome.instance.profesion}" required="false" inlinehelp="#{messages['comun.ocupacion.inlinehelp']}" execute="@this save" render="ocupac"/>                                                   
-                                <glue:input id="profe" name="profesion" type="text" label="#{messages['comun.profesion']}" value="#{pacienteHome.instance.ocupacion}" required="false" inlinehelp="#{messages['comun.profesion.inlinehelp']}" execute="@this save" render="cel"/>                                    
+                                <glue:input id="ocupac" name="ocupacion" type="text" label="#{messages['modulo.paciente.ocupacion']}" value="#{pacienteHome.instance.profesion}" required="false" inlinehelp="#{messages['modulo.paciente.ocupacion.inlinehelp']}" execute="@this save" render="ocupac"/>                                                   
+                                <glue:input id="profe" name="profesion" type="text" label="#{messages['modulo.paciente.profesion']}" value="#{pacienteHome.instance.ocupacion}" required="false" inlinehelp="#{messages['modulo.paciente.profesion.inlinehelp']}" execute="@this save" render="cel"/>                                    
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                             </p:selectOneMenu>  
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.tipoEstudiante != null}"
                                             styleClass="validation-status" />
-                            <span class="help-inline"><br/>#{messages['comun.tipoEstudiante.lineaAyuda']} <ocp:message forId="tipoEst_" /></span>
+                            <span class="help-inline"><br/>#{messages['comun.genero.lineaAyuda']} <ocp:message forId="tipoEst_" /></span>
                         </div>
                     </h:panelGroup>
 
