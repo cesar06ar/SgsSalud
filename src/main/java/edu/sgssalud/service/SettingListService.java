@@ -128,13 +128,13 @@ public class SettingListService extends LazyDataModel<Setting> implements Serial
 
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("module.setting") + " " + UI.getMessages("common.selected"), ((Setting) event.getObject()).getName());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("module.setting") + " " + UI.getMessages("common.unselected"), ((Setting) event.getObject()).getName());
 
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
         this.setSelectedSetting(null);
     }
 

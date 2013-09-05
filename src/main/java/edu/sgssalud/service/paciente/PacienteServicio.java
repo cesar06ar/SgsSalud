@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.sgssalud.service;
+package edu.sgssalud.service.paciente;
 
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.paciente.Paciente_;
+import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.Strings;
 import java.io.Serializable;

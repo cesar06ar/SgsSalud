@@ -178,7 +178,7 @@ limitations under the License.
                         <h:link outcome="/pages/admin/bussinesentitytype/list.xhtml?faces-redirect=true"                                                                                                                                                        
                                 value="#{messages['common.cancel']}" styleClass="btn" immediate="true"/>                         
                     </div>                     
-                    <p:dataTable var="property" value="#{e.properties}" style="width:100%"
+                    <p:dataTable var="property" value="#{e.properties}" style="width:100%" 
                                  editable="false" 
                                  id="properties"
                                  rowKey="#{property.id}"
@@ -198,15 +198,15 @@ limitations under the License.
                         <p:column headerText="#{messages['common.property.type']}" sortBy="#{property.type}">
                             <h:outputText value="#{property.type}" />
                         </p:column>                                 
-                        <p:column headerText="#{messages['common.property.value']}" sortBy="#{property.value}">
-                            <h:outputText value="#{property.value}" />
+                        <p:column headerText="#{messages['common.property.value']}" sortBy="#{property.value}" >
+                            <h:outputText value="#{property.value}" styleClass="span3"/>
                         </p:column>                                 
                         <p:column headerText="#{messages['common.property.required']}" sortBy="#{property.required}">
-                            <h:selectBooleanCheckbox value="#{property.required}"  styleClass="xLarge" disabled="true" >                                
+                            <h:selectBooleanCheckbox value="#{property.required}"  styleClass="span3" disabled="true" >                                
                             </h:selectBooleanCheckbox>
                         </p:column>
                         <p:column headerText="#{messages['common.property.sequence']}" sortBy="#{property.sequence}" >
-                            <h:outputText value="#{property.sequence}" />
+                            <h:outputText value="#{property.sequence}" styleClass="span3"/>
                         </p:column>     
                     </p:dataTable>
                 </p:panel>                 

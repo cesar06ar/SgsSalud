@@ -136,29 +136,28 @@ public class Test {
 //                }
 //            }
 
-//            //r = new JsonReader();
-//            JsonParser parser = new JsonParser();
-//            //JsonElement elem = parser.parse(r);
-//            JsonElement elem = parser.parse("[\"1722404041\", \"c\u00e9sar antonio\", \"abad ramos\", \"1989-06-24\", \"2688501\", \"086768023\", \"Cdla. Julio Ordo\u00f1ez\", \"Ecuador\", \"loja\", \"cesar06ar@gmail.com\", \"masculino\"]");
-//            JsonArray elemArr = elem.getAsJsonArray();
-//            String c = "";//elemArr.getAsString();
-//            List<String> ls = new ArrayList<String>();
-//            //ls.addAll(elemArr.);
-//            for (int i = 0; i < elemArr.size(); i++) {
-//                ls.add(elemArr.get(i).getAsString());
-//                System.out.println(elemArr.get(i).getAsString());
-//            }
-//            System.out.println("JSON ARRAY" + elem.toString());
-//            System.out.println("LISTA JAVA " + ls.toString());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+            //r = new JsonReader();
         
-        Date fIngreso = new Date(); //Date(2013, 02, 2);
-        Date felaboracion = new Date();//Date(2014, 02, 5);
-        //boolean c = FechasUtil.getFechasIguales(fIngreso, felaboracion);
-        boolean c = fIngreso.before(felaboracion);
-        //int c = FechasUtil.getFechaLimite(fIngreso, felaboracion);
-        System.out.println("dias: " + c);
+            JsonParser parser = new JsonParser();
+            //JsonElement elem = parser.parse(r);
+            JsonElement elem = parser.parse("[\"1722404041\", \"c\u00e9sar antonio\", \"abad ramos\", \"1989-06-24\", \"2688501\", \"086768023\", \"Cdla. Julio Ordo\u00f1ez\", \"Ecuador\", \"loja\", \"cesar06ar@gmail.com\", \"masculino\"]");
+            JsonArray elemArr = elem.getAsJsonArray();
+            String c = "";//elemArr.getAsString();
+            List<String> ls = new ArrayList<String>();
+            //ls.addAll(elemArr.);
+            for (int i = 0; i < elemArr.size(); i++) {
+                ls.add(elemArr.get(i).getAsString());
+                System.out.println(elemArr.get(i).getAsString());
+            }
+            System.out.println("JSON ARRAY" + elem.toString());
+            System.out.println("LISTA JAVA " + ls.toString());
+        
+//        
+//        Date fIngreso = new Date(); //Date(2013, 02, 2);
+//        Date felaboracion = new Date();//Date(2014, 02, 5);
+//        //boolean c = FechasUtil.getFechasIguales(fIngreso, felaboracion);
+//        boolean c = fIngreso.before(felaboracion);
+//        //int c = FechasUtil.getFechaLimite(fIngreso, felaboracion);
+//        System.out.println("dias: " + c);
     }
 }

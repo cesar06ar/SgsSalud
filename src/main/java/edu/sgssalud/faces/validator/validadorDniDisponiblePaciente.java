@@ -28,7 +28,7 @@ import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.LoggedIn;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.service.PacienteServicio;
+import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.UI;
 
 /**

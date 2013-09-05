@@ -56,9 +56,10 @@
 /* Body and structure
 -------------------------------------------------- */
 html,body {
-    height: 100%;
+    height: 100%;        
     background-color: #e2e2e2;
     /*background-image: url('captura.PNG');
+    margin-left: 5%;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: top center;*/

@@ -37,8 +37,8 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
 
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SettingListService.class);
-    
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(MedicamentoListaServicio.class);
+   
     @Inject
     @Web
     private EntityManager em;    
@@ -102,9 +102,9 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
     public List<Medicamento> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> map) {
         int end = first + pageSize;
 
-        QuerySortOrder order = QuerySortOrder.ASC;
-        if (sortOrder == SortOrder.DESCENDING) {
-            order = QuerySortOrder.DESC;
+        QuerySortOrder order = QuerySortOrder.DESC;
+        if (sortOrder == SortOrder.ASCENDING) {
+            order = QuerySortOrder.ASC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
         /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
@@ -131,14 +131,13 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
     }
     
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("medicamento") + " " + UI.getMessages("common.selected"), ((Setting) event.getObject()).getName());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.selected"), ((Medicamento) event.getObject()).getNombreComercial());
+        FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("medicamento") + " " + UI.getMessages("common.unselected"), ((Setting) event.getObject()).getName());
-
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.unselected"), ((Medicamento) event.getObject()).getNombreComercial());
+        FacesContext.getCurrentInstance().addMessage("", msg);
         this.setMedicamentoSeleccionado(null);
     }
 }

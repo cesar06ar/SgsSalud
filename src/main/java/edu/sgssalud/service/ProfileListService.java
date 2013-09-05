@@ -153,13 +153,13 @@ public class ProfileListService extends LazyDataModel<Profile> {
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.selected"), ((Profile) event.getObject()).getName());
 
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.unselected"), ((Profile) event.getObject()).getName());
 
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
         this.setSelectedProfile(null);
     }
 }

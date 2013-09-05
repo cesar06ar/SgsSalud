@@ -15,8 +15,8 @@
         <ui:define name="subnav">
         </ui:define>
 
-        <ui:define name="topnav-post-template">
-            <h:panelGroup rendered="#{profile.persistent}">
+        <!--<ui:define name="topnav-post-template">
+           <h:panelGroup rendered="#{profile.persistent}">
                 <li>
                     <div class="linkball">◗</div>
                     <h:link outcome="/pages/profile/profile"
@@ -28,7 +28,7 @@
             </h:panelGroup>
 
             <ui:insert name="topnav-post-profile"/>
-        </ui:define>
+        </ui:define>-->
 
         <ui:define name="header-replace">
             <h:panelGroup layout="block" rendered="#{identity.loggedIn}">
@@ -49,9 +49,9 @@
                                     </h:link>
                                 </h4>
                             </div>
-                            <div class="span6 columns offset4">
+                            <!--<div class="span6 columns offset4">
                                 <h4 class="fr">#{messages['common.none']}</h4>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="row fl" style="margin-top: 5px; width: 100%">
                             <!--<ul class="tabs">

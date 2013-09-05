@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.sgssalud.service;
+package edu.sgssalud.service.paciente;
 
 import edu.sgssalud.cdi.Web;
 import org.primefaces.model.LazyDataModel;
@@ -103,12 +103,12 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Paciente") + " " + UI.getMessages("common.selected"), ((Paciente) event.getObject()).getNombres());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Paciente") + " " + UI.getMessages("common.unselected"), ((Paciente) event.getObject()).getNombres());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
         this.setPacienteSelecionado(null);
     }
     /*.............*/

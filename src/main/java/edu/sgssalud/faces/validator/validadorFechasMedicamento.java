@@ -36,7 +36,7 @@ import org.jboss.seam.faces.validation.InputElement;
  * @author cesar
  */
 @RequestScoped
-@FacesValidator("fachasMedicamento")
+@FacesValidator("validadorFechasMedicamento")
 public class validadorFechasMedicamento implements Validator {
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(validadorFechasMedicamento.class);
     @Inject
@@ -55,7 +55,7 @@ public class validadorFechasMedicamento implements Validator {
         Date fCaducidad = fechaCaducidad.getValue();        
         log.info("fechaIng:"+fIngreso+" fechaElab:"+fElaboracion+"  fechaCad: "+fCaducidad);
         if (fIngreso != null && fElaboracion != null && fCaducidad != null) {
-            if (!fIngreso.before(fCaducidad)) {  //metodo que compara si una fecha es anterior a la otra
+            if (!fElaboracion.before(fCaducidad)) {  //metodo que compara si una fecha es anterior a la otra
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("La Fecha de Caducidad debe ser mayor a la Fecha de Elaboración"), ""));
             }
             if (FechasUtil.getFechaLimite(fIngreso, fCaducidad) < 15) {

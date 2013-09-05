@@ -13,7 +13,7 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
 
         <f:metadata>
-            <f:viewParam name="id" value="#{medicamentoHome.medicamentoId}"/>
+            <f:viewParam name="medicamentoId" value="#{medicamentoHome.medicamentoId}"/>
         </f:metadata>
 
 
@@ -48,11 +48,11 @@
 
                 <glue:input id="numFactura" name="numFactura" type="long" label="#{messages['common.numfactura']}" value="#{medicamentoHome.instance.numeroFactura}" required="true" inlinehelp="#{messages['common.numfactura']}" execute ="@this save" render="numFactura"/>
                 <glue:input id="nombreComercial" name="nombreComercial" type="text" label="#{messages['common.nombrecomercial']}" value="#{medicamentoHome.instance.nombreComercial}" required="true" inlinehelp="#{messages['common.nombrecomercial']}" execute="@this save" render="nombreComercial"/>
-                <glue:input id="nombreGenerico" name="nombreGenerico" type="text" label="#{messages['common.nombregenerico']}" value="#{medicamentoHome.instance.nombreGenerico}" required="false" inlinehelp="#{messages['common.nombregenerico']}" execute="@this save" render="nombreGenerico"/>
+                <glue:input id="nombreGenerico" name="nombreGenerico" type="text" label="#{messages['common.nombregenerico']}" value="#{medicamentoHome.instance.nombreGenerico}" required="true" inlinehelp="#{messages['common.nombregenerico']}" execute="@this save" render="nombreGenerico"/>
                 <glue:input id="unidades" name="unidadadesMedicamento" type="long" label="#{messages['common.unidadadesmedicamento']}" value="#{medicamentoHome.instance.unidades}" required="false" inlinehelp="#{messages['common.unidadadesmedicamento']}" execute="@this save" render="unidades"/>
                 <glue:input id="casaComercial" name="casaComercial" type="text" label="#{messages['common.casaComercialProveedora']}" value="#{medicamentoHome.instance.casaComercialProveedora}" required="true" inlinehelp="#{messages['common.casacaomercial.inlinehelp']}" execute="@this save" render="casaComercial"/>
                 <glue:input id="dirCasaComercial" name="dirCasaComercial" type="text" label="#{messages['common.dircasacomercial']}" value="#{medicamentoHome.instance.dirCasaComercial}" required="false" inlinehelp="#{messages['common.dircasacomercial']}" execute="@this save" render="dirCasaComercial"/>
-                
+
                 <h:panelGroup id="fnp1" layout="block" class="clearfix">
                     <label for="fechaElaboracion">#{messages['common.fechaelaboracionmedicamento']}</label>
                     <div class="input" >
@@ -77,13 +77,17 @@
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{medicamentoHome.instance.fechaCaducidad != null}"
                                         styleClass="validation-status" />
                         <span class="help-inline"><br/>#{messages['common.fechacaducidadmedicamento.lineaAyuda']}<ocp:message forId="fechaCaducidad" /></span>
-                        <s:validateForm id="validadorFechas" validatorId="fachasMedicamento" />
+                        <s:validateForm id="validadorFechas" validatorId="validadorFechasMedicamento" />
                     </div>                    
                 </h:panelGroup>  
                 <glue:input id="referencia" name="referencia" type="textarea" label="#{messages['common.referenciaMedicamento']}" value="#{medicamentoHome.instance.referencia}" required="false" inlinehelp="#{messages['common.referenciaMedicamento']}" execute="@this save" render="referencia"/>
-
-                <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary"/>
-
+                <div class="admin-actions span9">
+                    <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary offset2"/>
+                    #{' '}
+                    <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn primary" inmediate="true">                         
+                    </h:link>
+                </div>
             </h:form>
         </ui:define>
 

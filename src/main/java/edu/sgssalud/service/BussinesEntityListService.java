@@ -179,13 +179,13 @@ public class BussinesEntityListService extends LazyDataModel<BussinesEntity> {
     public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("BussinesEntity") + " " + UI.getMessages("common.selected"), ((BussinesEntity) event.getObject()).getName());
 
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("BussinesEntity") + " " + UI.getMessages("common.unselected"), ((BussinesEntity) event.getObject()).getName());
 
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        FacesContext.getCurrentInstance().addMessage("", msg);
         this.setSelectedBussinesEntity(null);
     }
 }

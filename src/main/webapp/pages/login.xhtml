@@ -8,13 +8,19 @@
     <ui:composition template="/WEB-INF/view/templates/glue_1.xhtml">
         <ui:param name="title" value="Sign up" />
 
-        <ui:define name="header">
-            <h1>#{messages['common.join']}</h1>
+        <ui:define name="header-replace">
+            <div class="header-replace" >
+                <div class="container">
+                    <div class="row fl" style="margin-top: 15px; margin-left: 0%">
+                        <h1>#{messages['common.join']}</h1>
+                    </div>
+                </div>
+            </div>            
         </ui:define>
 
-        <ui:define name="header-right">
+        <!--<ui:define name="header-right">
             <h:button value="#{messages['common.noaccount']}" outcome="/pages/signup" class="btn"/>
-        </ui:define>
+        </ui:define>-->
 
         <ui:define name="content">
             <style type="text/css">
@@ -33,14 +39,14 @@
                             <ui:include src="/WEB-INF/view/elements/openIdForm.xhtml" />
                         </div>
                     </p:panel>
-                    
-                    
-                    
+
+
+
                     <center><h4>#{messages['common.login.title']}</h4></center>
                     <br/>
-                    
-                    
-                    
+
+
+
                     <h:form id="signin">
 
                         <script type="text/javascript">
@@ -74,11 +80,12 @@
                             </div>
                         </div>
 
-                        <div class="actions">
+                        <div class="admin-actions">
                             <h:commandButton action="#{authentication.login}" value="#{messages['common.login']}"
-                                             styleClass="btn primary" />
+                                             styleClass="btn primary large offset2" />
                         </div>
                         <center><h:link outcome="/pages/recover" value="#{messages['common.forgotpassword']}" /></center>
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
                     </h:form>
                 </div>
             </div>

@@ -20,14 +20,16 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.*;
+import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.international.status.Messages;
-import edu.sgssalud.service.PacienteServicio;
+import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.Dates;
+import edu.sgssalud.util.UI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -38,6 +40,8 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
@@ -49,6 +53,8 @@ import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.PasswordCredential;
 
+/*...==>*/
+/*...==>*/
 /**
  *
  * @author cesar
@@ -81,6 +87,10 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private String password;
     private String passwordConfirm;
     private String nombreEstructura;
+    private boolean rendPanelEstUni;
+    private boolean rendPanelEstCol;
+    private boolean rendPanelEstEsc;
+    private String tipoEstudiante;
     /*....==>*/
 
     /*<== Métodos get y set para obtener el Id de la clase*/
@@ -117,6 +127,31 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     public void setNombreEstructura(String nombreEstructura) {
         this.nombreEstructura = nombreEstructura;
     }
+
+    public boolean isRendPanelEstCol() {
+        return rendPanelEstCol;
+    }
+
+    public void setRendPanelEstCol(boolean rendPanelEstCol) {
+        this.rendPanelEstCol = rendPanelEstCol;
+    }
+
+    public boolean isRendPanelEstEsc() {
+        return rendPanelEstEsc;
+    }
+
+    public void setRendPanelEstEsc(boolean rendPanelEstEsc) {
+        this.rendPanelEstEsc = rendPanelEstEsc;
+    }
+
+    public boolean isRendPanelEstUni() {
+        return rendPanelEstUni;
+    }
+
+    public void setRendPanelEstUni(boolean rendPanelEstUni) {
+        this.rendPanelEstUni = rendPanelEstUni;
+    }
+
     /*<==....*/
 
     /*<== Método para  cargar una instancia de paciente */
@@ -154,6 +189,9 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         setEntityManager(em);
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        this.rendPanelEstUni = false;
+        this.rendPanelEstCol = false;
+        this.rendPanelEstEsc = false;
     }
     /*....==>*/
 
@@ -191,12 +229,19 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             save(getInstance());
         } else {
             try {
-                register();
-            } catch (IdentityException ex) {
+                getInstance().setNombreUsuario(getInstance().getCedula());
+                getInstance().setClave(getInstance().getCedula());
+                //register();
+                create(getInstance());
+                save(getInstance());
+                FacesMessage msg = new FacesMessage("Se creo nuevo paciente: " + getInstance().getNombres() + " con éxito");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            } catch (Exception ex) {
                 Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return null;
+
+        return "/pages/paciente/lista?faces-redirect=true";
     }
     /*....==>*/
 
@@ -205,7 +250,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     public String register() throws IdentityException {
         createUser();
         credentials.setUsername(getInstance().getNombreUsuario());
-        credentials.setCredential(new PasswordCredential(getPassword()));
+        credentials.setCredential(new PasswordCredential(getInstance().getClave()));
         identity.setAuthenticatorClass(IdmAuthenticator.class);
 
         /*
@@ -221,31 +266,41 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     @TransactionAttribute
     private void createUser() throws IdentityException {
+        Profile p = new Profile();
+        p.setCode(getInstance().getCedula());
+        p.setFirstname(getInstance().getNombres());
+        p.setSurname(getInstance().getApellidos());
+        p.setEmail(getInstance().getApellidos());
+        setPacienteId(getInstance().getId());
+        p.setConfirmed(true);
+        p.setShowBootcamp(true);
+        create(p);
+        //this.cargarDatosPerfil(p);  //método para copiar datos del paciente al perfil de usuario
+
+        wire();
         // TODO validate username, email address, and user existence
         PersistenceManager identityManager = security.getPersistenceManager();
-        User user = identityManager.createUser(getInstance().getNombreUsuario());
+        User user = identityManager.createUser(getInstance().getCedula());
 
         AttributesManager attributesManager = security.getAttributesManager();
-        attributesManager.updatePassword(user, getPassword());
+        attributesManager.updatePassword(user, getInstance().getCedula());
         attributesManager.addAttribute(user, "email", getInstance().getEmail());  //me permite agregar un atributo de cualquier tipo a un usuario 
         em.flush();
 
+        p.getIdentityKeys().add(user.getKey());
         // TODO figure out a good pattern for this...
         //setInstance(createInstance());
         //getInstance().setEmail(email);
-        getInstance().setClave(getPassword());
-        getInstance().getIdentityKeys().add(user.getKey());
-        getInstance().setConfirmed(true);
-        getInstance().setShowBootcamp(true);
-        create(getInstance()); //
-        setPacienteId(getInstance().getId());
-        wire();
-        getInstance().setName(getInstance().getNombreUsuario()); //Para referencia
-        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
-                Paciente.class.getName()));
-        getInstance()
-                .buildAttributes(bussinesEntityService);
-        save(getInstance()); //Actualizar estructura de datos
+        //getInstance().setClave(getInstance().getCedula());
+
+        //getInstance().setNarme(getInstance().getNombreUsuario()); //Para referencia
+        //getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
+        //      Paciente.class.getName()));
+        //getInstance()
+        //      .buildAttributes(bussinesEntityService);
+        //Actualizar estructura de datos
+        save(p);
+        save(getInstance());
 
     }
 
@@ -255,6 +310,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         List<Paciente.Genero> list = Arrays.asList(getInstance().getGenero().values());
         return list;
     }
+    /*....==>*/
 
     public List<String> tiposEstudiante() {
         List<String> list = new ArrayList<String>();
@@ -262,28 +318,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         list.add("Colegio");
         list.add("Escuela");
         return list;
-    }
-
-    public boolean isTipoEstudianteSeleccionado() {
-
-        if (getInstance().getTipoEstudiante() != null) {
-            if ("Universitario".equals(getInstance().getTipoEstudiante())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private String nombreEstructura(String nombre) {
-        if ("Universitario".equals(nombre)) {
-            return "datosAcademicosEstudiante" + "Universitario";
-        } else if ("Colegio".equals(nombre)) {
-            return "datosAcademicosEstudiante" + "Colegio";
-        } else if ("Escuela".equals(nombre)) {
-            return "datosAcademicosEstudiante" + "Escuela";
-        }
-        return "";
     }
 
     public List<String> listaAreas() {
@@ -295,7 +329,45 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         list.add("SALUD");
         return list;
     }
-    /*...==>*/
-    /*...==>*/
+
+    public String getTipoEstudiante() {
+        return tipoEstudiante;
+    }
+
+    public void setTipoEstudiante(String tipoEstudiante) {
+        log.info("setTipoEstudiante");
+        this.tipoEstudiante = tipoEstudiante;
+        getInstance().setTipoEstudiante(tipoEstudiante);
+
+        log.info("fijar tipo estudiante : " + getInstance().getTipoEstudiante());
+        if (!getInstance().getTipoEstudiante().isEmpty()) {
+            if (getInstance().getTipoEstudiante().equals("Universitario")) {
+                this.setRendPanelEstCol(false);
+                this.setRendPanelEstEsc(false);
+                this.setRendPanelEstUni(true);
+                log.info("TES---  Uniersitario " + rendPanelEstUni);
+            } else if ("Colegio".equals(getInstance().getTipoEstudiante())) {
+                this.setRendPanelEstUni(false);
+                this.setRendPanelEstCol(true);
+                this.setRendPanelEstEsc(false);
+            } else if ("Escuela".equals(getInstance().getTipoEstudiante())) {
+                this.setRendPanelEstUni(false);
+                this.setRendPanelEstCol(false);
+                this.setRendPanelEstEsc(true);
+            }
+        } else {
+            this.setRendPanelEstUni(false);
+            this.setRendPanelEstCol(false);
+            this.setRendPanelEstEsc(false);
+        }
+
+    }
+
+    public void cargarDatosPerfil(Profile p) {
+        p.setCode(getInstance().getCedula());
+        p.setFirstname(getInstance().getNombres());
+        p.setSurname(getInstance().getApellidos());
+        p.setEmail(getInstance().getApellidos());
+    }
     /*<==....*/
 }

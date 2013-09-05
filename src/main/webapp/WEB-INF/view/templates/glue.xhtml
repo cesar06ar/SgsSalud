@@ -12,7 +12,7 @@
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <ui:composition template="templateC.xhtml">
+    <ui:composition template="template.xhtml">
 
         <ui:param name="sitename" value="#{applicationConfig.siteName}" />
 
@@ -29,17 +29,17 @@
 
             <!--<h:panelGroup rendered="#{!identity.loggedIn}">					
                 <li><h:link outcome="/pages/signup" value="#{messages['common.join']}" /></li>
-            </h:panelGroup>-->
+            </h:panelGroup>
 
-            <ui:insert name="topnav-post-template"/>
+            <ui:insert name="topnav-post-template"/>-->
         </ui:define>
 
         <ui:define name="topnav-right">
-            <h:panelGroup rendered="#{!identity.loggedIn}">
+            <!--<h:panelGroup rendered="#{!identity.loggedIn}">
                 <li>
                     <h:link outcome="/pages/login" value="#{messages['common.signupopenid']}" rendered="false"/>
                 </li>
-            </h:panelGroup>
+            </h:panelGroup>-->
 
             <h:panelGroup rendered="#{!identity.loggedIn}">
                 <script type="text/javascript">
@@ -66,7 +66,7 @@
             <h:panelGroup rendered="#{identity.loggedIn}">
                 <li>
                     <h:link outcome="/pages/profile/profile" style="margin: 0px; padding: 0px;">
-                        <ocp:gravatar email="#{userProfile.email}" size="30" style="position: relative; top: 1px;"/>
+                        <!--<ocp:gravatar email="#{userProfile.email}" size="30" style="position: relative; top: 1px;"/>-->
                         <f:param name="profileId" value="#{userProfile.id}"/>
                     </h:link>
                 </li>
@@ -88,18 +88,16 @@
                     -->
 
                 </li>
-                <li>
-                    <h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}
-                        <span class="mini-icon mini-icon-logout"></span>
-                    </h:outputLink>
-                </li>
+                <li class="divider"></li>
+                <li><h:outputLink value="${request.contextPath}/logout" rendered="#{identity.loggedIn}">#{messages['common.logout']}</h:outputLink></li>
+                
             </h:panelGroup>
         </ui:define>
-        
+        <!--
         <ui:insert id="sid" name="sidebar">
             <ui:include src="/pages/sidebar.html"/>
-        </ui:insert>
-            
+        </ui:insert>-->
+
         <ui:define name="messages">
             <ocp:messages id="messages" />
         </ui:define>

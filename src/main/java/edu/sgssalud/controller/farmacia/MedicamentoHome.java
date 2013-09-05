@@ -31,7 +31,9 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -43,8 +45,8 @@ import org.picketlink.idm.common.exception.IdentityException;
  */
 @Named("medicamentoHome")
 @ViewScoped
-public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements Serializable{
-    
+public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements Serializable {
+
     private static final long serialVersionUID = 7L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(MedicamentoHome.class);
     /*Atributos importantes para acceso a la BD ==>*/
@@ -53,7 +55,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     private EntityManager em;
     @Inject
     private MedicamentoService ms;
-    
+
     /*Métodos get y set para obtener el Id de la clase*/
     public Long getMedicamentoId() {
         return (Long) getId();
@@ -62,9 +64,8 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public void setMedicamentoId(Long medicamentoId) {
         setId(medicamentoId);
     }
-    
+
     /*Método para  cargar una instancia de medicamento==>*/
-    
 //    @Produces
 //    //@Named("med")
 //    @Current    
@@ -77,21 +78,21 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         //getInstance().setFechaIngreso(new Date());
         return getInstance();
     }
-    
-   /*Metodo que retorna una instancia de la clase (Medicamento) cuando ya esta creada==>*/
+
+    /*Metodo que retorna una instancia de la clase (Medicamento) cuando ya esta creada==>*/
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-    
-     /*Metodo importante para actualizar EntityManager y tener acceso a la DB==>*/
+
+    /*Metodo importante para actualizar EntityManager y tener acceso a la DB==>*/
     @PostConstruct
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         //getInstance().setFechaIngreso(new Date());
     }
-    
+
     @Override
     protected Medicamento createInstance() {
         //prellenado estable para cualquier clase 
@@ -102,33 +103,31 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         medicament.setActivationTime(now);
         //med.setExpirationTime(Dates.addDays(now, 364));        
         medicament.setResponsable(null);    //cambiar atributo a 
-        medicament.setFechaIngreso(now);
+        medicament.setFechaIngreso(now);  //Fecha actual de ingreso 
         medicament.buildAttributes(bussinesEntityService);  //
         return medicament;
     }
-    
+
     @Override
     public Class<Medicamento> getEntityClass() {
         return Medicamento.class;
     }
-    
-//    @TransactionAttribute
-//    public String guardarMedicamento() {
-//        Date now = Calendar.getInstance().getTime();
-//        getInstance().setLastUpdate(now);
-//        if (getInstance().isPersistent()) {
-//            save(getInstance());
-//        } else {
-//            try {
-//                register();
-//            } catch (IdentityException ex) {
-//                Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//        return null;
-//    }
-   public void validarFC(){
-       
-   }    
-    
+
+    @TransactionAttribute
+    public String guardarMedicamento() {
+        Date now = Calendar.getInstance().getTime();
+        getInstance().setLastUpdate(now);
+        if (getInstance().isPersistent()) {
+            save(getInstance());
+        } else {
+            create(getInstance());
+            save(getInstance());
+            FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+        return "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
+    }
+
+    public void validarFC() {
+    }
 }

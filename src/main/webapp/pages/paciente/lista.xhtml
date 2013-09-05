@@ -55,20 +55,21 @@
                 </h:link>
             </div>
             <!--tabla de datos-->
-            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacientesListaServicio}"
+            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio}"
                          paginator="true" rows="10"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
                          rowsPerPageTemplate="5,10,15"
                          lazy="true"
+                         rowKey="#{paciente_.id}"
                          selection="#{pacienteListaServicio.pacienteSelecionado}"
                          rendered="true"
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
-                 <p:ajax event="rowSelect" listener="#{profileListService.onRowSelect}"   
+                 <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   
                         update=":form:button-edit :form:messages "/>                 
-                <p:ajax event="rowUnselect" listener="#{profileListService.onRowUnselect}" update=":form:button-edit :form:messages"/>
+                <p:ajax event="rowUnselect" listener="#{pacienteListaServicio.onRowUnselect}" update=":form:button-edit :form:messages"/>
                 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{paciente_.nombres}">
