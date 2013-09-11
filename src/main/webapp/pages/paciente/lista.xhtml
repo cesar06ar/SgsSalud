@@ -40,23 +40,34 @@
         <h:form id="form">            
             <!--Opción de mensaje, cuando se realiza una acción-->
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-            
+
             <!--Botones de admin-->
-            <div class="admin-actions">
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="paciente" styleClass="btn success">
-                    <f:param name="pacienteId"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
-                </h:link>
-                #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="paciente" styleClass="btn" 
-                        disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
-                    <f:param name="pacienteId" value="#{profileListService.pacienteSelecionado.id}"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
-                </h:link>
+            <div class="admin-actions span17">
+                <div class="span6 ">
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="paciente" styleClass="btn success">
+                        <f:param name="pacienteId"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="paciente" styleClass="btn" 
+                            disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
+                        <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                </div>
+                <div class="span6 offset5" >
+                    <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
+                        <p:ajax event="keyup" update="tablaPacientes" listener="#{pacienteListaServicio.buscarPorParametroAutoComplete()}"/>
+                    </p:inputText>
+                    &nbsp;
+                    <p:commandButton value="Buscar" action="#{pacienteListaServicio.buscarPorParametro()}" update="tablaPacientes" styleClass="btn info"/>                    
+                    <br/>
+                </div>             
             </div>
+
             <!--tabla de datos-->
-            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio}"
-                         paginator="true" rows="10"
+            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio.resultList}"
+                         paginator="true" rows="10" styleClass="span18"
                          paginatorAlwaysVisible="false"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
@@ -67,24 +78,36 @@
                          rendered="true"
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
-                 <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   
+                <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   
                         update=":form:button-edit :form:messages "/>                 
                 <p:ajax event="rowUnselect" listener="#{pacienteListaServicio.onRowUnselect}" update=":form:button-edit :form:messages"/>
-                
+
                 <!--Columnas para mostrar en la tabla-->
-                <p:column sortBy="#{paciente_.nombres}">
+                <p:column sortBy="#{paciente_.cedula}" style="width: 15%; text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['profile.dni']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.cedula}" />
+                </p:column>
+                <p:column sortBy="#{paciente_.nombres}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  
                     </f:facet> 
                     <h:outputText value="#{paciente_.nombres}" />
                 </p:column>
-                <p:column sortBy="#{paciente_.apellidos}">
+                <p:column sortBy="#{paciente_.apellidos}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.surname']}" />  
                     </f:facet> 
                     <h:outputText value="#{paciente_.apellidos}" />
                 </p:column>
-                <p:column sortBy="#{paciente_.email}">
+                <p:column sortBy="#{paciente_.edad}" style="text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.edad']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.edad}" />
+                </p:column>
+                <p:column sortBy="#{paciente_.email}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.email']}" />  
                     </f:facet> 

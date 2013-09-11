@@ -307,7 +307,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             }
         }
         if ("list".equalsIgnoreCase(getBackView())) {
-            return "/pages/profile/list?typeName=org.eqaula.glue.model.Profile";
+            return "/pages/admin/listProfile?typeName=org.eqaula.glue.model.Profile";
         } else {
             return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
         }

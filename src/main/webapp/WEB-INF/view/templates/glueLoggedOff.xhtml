@@ -80,38 +80,30 @@
                         <h:outputText value=" " />
                         <h:inputSecret id="password" value="#{credentials.password}" style="width: 100px;"/>
                         <h:outputText value=" " />
-                        <h:commandButton action="#{authentication.login}" value="#{messages['common.login']}">
-                        </h:commandButton>
+                        <h:commandButton action="#{authentication.login}" value="#{messages['common.login']}" />
+
                     </h:form>
                 </li>
             </h:panelGroup>
 
 
-            <h:panelGroup rendered="#{identity.loggedIn}">
-                <li>
-                    <h:link outcome="/pages/profile/profile" style="margin: 0px; padding: 0px;">
-                        <ocp:gravatar email="#{userProfile.email}" size="30" style="position: relative; top: 1px;"/>
-                        <f:param name="profileId" value="#{userProfile.id}"/>
-                    </h:link>
-                </li>
-                <li>
-                    <h:link outcome="/pages/profile/profile" value="#{userProfile.username}">
-                        <f:param name="profileId" value="#{userProfile.id}"/>
-                    </h:link>
-                    <!--
-
-    <ul class="menu-dropdown">
-        <li>
-            <h:link outcome="/pages/profile/profile" value="#{messages['common.setting']}">
-                <f:param name="profileId" value="#{userProfile.id}"/>
-            </h:link>
-        </li>
-        <li class="divider"></li>
-        <li><h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}</h:outputLink></li>
-    </ul>
-                    -->
-
-                </li>
+            <h:panelGroup rendered="#{identity.loggedIn}">          
+                <c:choose>
+                    <c:when test="#{account.isUserPaciente()}">
+                        <li>
+                            <h:link outcome="/pages/paciente/view" value="#{credentials.username}">
+                                <f:param name="pacienteId" value="#{account.loggedId}"/>
+                            </h:link>
+                        </li>
+                    </c:when>
+                    <c:when test="#{account.isUserProfile()}">                       
+                        <li>
+                            <h:link outcome="/pages/profile/profile" value="#{credentials.username}">
+                                <f:param name="profileId" value="#{account.loggedId}"/>
+                            </h:link>
+                        </li> 
+                    </c:when>
+                </c:choose>
                 <li>
                     <h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}
                         <span class="mini-icon mini-icon-logout"></span>

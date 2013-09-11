@@ -5,20 +5,18 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://http://java.sun.com/jsf/composite/components/property"
-                template="/WEB-INF/view/templates/glue_1.xhtml">
+                template="/WEB-INF/view/templates/glue.xhtml">
 
     <ui:define name="content">
-
         <div class="section">
-            <h1>Access Denied</h1>
+            <h1>Acceso Denegado</h1>
         </div>
 
         <div class="section">
-            <p>You are not authorized to perform the requested action.</p>
+            <p>Usted no tiene autorización para realizar la acción solicitada.</p>
 
             <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
         </div>
-
     </ui:define>
 
 </ui:composition>

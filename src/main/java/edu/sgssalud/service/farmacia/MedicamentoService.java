@@ -33,13 +33,14 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import edu.sgssalud.util.*;
 
 /**
  *
  * @author tania
  */
-public class MedicamentoService extends PersistenceUtil<Medicamento> implements Serializable{
-    
+public class MedicamentoService extends PersistenceUtil<Medicamento> implements Serializable {
+
     private static final long serialVersionUID = 4L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
 
@@ -47,52 +48,73 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
         super(Medicamento.class);
     }
 
-   
     @Override
     public void setEntityManager(EntityManager em) {
-        this.em = em;        
+        this.em = em;
     }
-    
+
     public Medicamento buscarMedicamentosProId(final Long id) {
         return (Medicamento) findById(Medicamento.class, id);
     }
-    
-    public List<Medicamento> obtenerMedicamentos(final int limite, final int offset){
+
+    public List<Medicamento> obtenerMedicamentos(final int limite, final int offset) {
         return findAll(Medicamento.class);
     }
-    
-     
+
     public Medicamento buscarPorNombreMedicamento(final String nombreComercial) {
         log.info("buscar medicamento por nombre " + nombreComercial);
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Medicamento> query = builder.createQuery(Medicamento.class);
         Root<Medicamento> bussinesEntityType = query.from(Medicamento.class);
         query.where(builder.equal(bussinesEntityType.get(Medicamento_.nombreComercial), nombreComercial));
-        return getSingleResult(query);    
+        return getSingleResult(query);
     }
-         
-    
-    public Medicamento buscarPorNombreMed (final String nombre) throws NoResultException{
+
+    public Medicamento buscarPorNombreMed(final String nombre) throws NoResultException {
         TypedQuery<Medicamento> query = em.createQuery("SELECT m FROM Medicamento m WHERE m.nombreComercial = :nombre", Medicamento.class);
         query.setParameter("nombreComercial", nombre);
         Medicamento result = query.getSingleResult();
-        return result;                
+        return result;
     }
-    
-            
-    public boolean esNombreDisponible(String nombre){
+
+    public List<Medicamento> BuscarMedicamentosPorParametro(String parametro) {
+        TypedQuery<Medicamento> query = null;
+        if (StringValidations.isDecimal(parametro)) {
+            query = em.createNamedQuery("Medicamento.buscarPorNumero", Medicamento.class);
+            query.setParameter("clave", Integer.parseInt(parametro));
+        } else {
+            query = em.createNamedQuery("Medicamento.buscarPorParametro", Medicamento.class);
+            query.setParameter("clave", parametro);
+        }
+        return query.getResultList();
+    }
+
+    public List<Medicamento> BuscarMedicamentosPorParametro1(String parametro) {
+        TypedQuery<Medicamento> query = null;
+        if (StringValidations.isDecimal(parametro)) {
+            query = em.createNamedQuery("Medicamento.buscarPorNumero", Medicamento.class);
+            query.setParameter("clave", Integer.parseInt(parametro));
+        } else if (Dates.getFormatoFecha(parametro) != null) {
+            query = em.createNamedQuery("Medicamento.buscarPorFecha", Medicamento.class);
+            query.setParameter("clave", Dates.getFormatoFecha(parametro));
+        } else {
+            query = em.createNamedQuery("Medicamento.buscarPorParametro", Medicamento.class);
+            query.setParameter("clave", parametro);
+        }
+        return query.getResultList();
+    }
+
+    public boolean esNombreDisponible(String nombre) {
         try {
             Medicamento med = buscarPorNombreMed(nombre);
-            if (med!=null){
-                return false;                
-            }else{
+            if (med != null) {
+                return false;
+            } else {
                 return true;
             }
-        }catch (NoResultException e){
-        return true;
+        } catch (NoResultException e) {
+            return true;
         }
-        
+
     }
-    
-        
 }

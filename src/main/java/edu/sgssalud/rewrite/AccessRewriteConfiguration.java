@@ -56,6 +56,7 @@ public class AccessRewriteConfiguration extends HttpConfigurationProvider implem
     public Configuration getConfiguration(final ServletContext context) {
         return ConfigurationBuilder.begin()
                 .addRule(Join.path("/").to("/pages/home.xhtml"))
+                .addRule(Join.path("/").to("/pages/homePaciente.xhtml"))
                 .addRule(Join.path("/signup").to("/pages/signup.xhtml"))
                 .addRule(Join.path("/login").to("/pages/login.xhtml"))
                 // 404 and Error

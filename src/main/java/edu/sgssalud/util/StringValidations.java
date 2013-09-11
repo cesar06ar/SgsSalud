@@ -201,5 +201,8 @@ public class StringValidations {
         } else {
                         System.out.print("Este texto " + field + " esta bién ;)...");
         }
+        
+        //System.out.println("Validar numero :"+StringValidations.isDecimal("53a"));
+        System.out.println("Validar fecha :"+Dates.getFormatoFecha("05/12/2013"));
     }
 }

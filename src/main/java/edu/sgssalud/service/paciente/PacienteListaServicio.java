@@ -59,7 +59,7 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     private int firstResult = 0;
     private Paciente[] pacientesSeleccionados;
     private Paciente pacienteSelecionado;
-
+    private String parametroBusqueda;
     /*Método para inicializar tabla*/
     public PacienteListaServicio() {
         setPageSize(MAX_RESULTS);
@@ -149,5 +149,23 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     public void setPacienteSelecionado(Paciente pacienteSelecionado) {
         this.pacienteSelecionado = pacienteSelecionado;
     }
-    /*.............*/
+
+    public String getParametroBusqueda() {
+        return parametroBusqueda;
+    }
+
+    public void setParametroBusqueda(String parametroBusqueda) {
+        this.parametroBusqueda = parametroBusqueda;
+    }    
+    
+    /*..
+     * Busca de la base de datos pacientes segun el parametro ingresado
+     */
+    public void buscarPorParametroAutoComplete() {
+        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
+    }
+
+    public void buscarPorParametro() {
+        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro1(parametroBusqueda));
+    }
 }

@@ -12,12 +12,11 @@
       xmlns:glue="http://eqaula.org/jsf/facelets"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
-    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:composition template="/WEB-INF/view/templates/gluePaciente.xhtml">
         <f:metadata>
             <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
             <f:viewParam name="backView" value="#{pacienteHome.backView}" />
         </f:metadata>
-
 
         <ui:define name="header-replace">
             <div class="header-replace">
@@ -154,11 +153,12 @@
                         <label for="tipoEst_" class="control-label">#{messages['comun.tipoEstudiante']}</label>
                         <div class="input">
                             <p:selectOneMenu id="tipoEst_" value="#{pacienteHome.tipoEstudiante}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false"  
-                                             rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" disabled="#{pacienteHome.instance.tipoEstudiante != null}">
+                                             rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" >
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
                                 <f:selectItems value="#{pacienteHome.tiposEstudiante()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
                                 <p:ajax event="change" update="@parent :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc" partialSubmit="true" rendered=":form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc"/>  
-                                
+                                <!--<f:ajax execute=":form:panelDatosAcadEstUniv" render=":form:panelDatosAcadEstUniv"/>
+                                        process=":form:panelDatosAcadEstUniv" rendered=":form:panelDatosAcadEstUniv" -->
                             </p:selectOneMenu>  
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.tipoEstudiante != null}"
                                             styleClass="validation-status" />
@@ -263,7 +263,7 @@
                 <div class="admin-actions ">
                     <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/home.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
                     </h:link>
                 </div>

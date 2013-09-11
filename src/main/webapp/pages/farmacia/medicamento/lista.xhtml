@@ -42,19 +42,28 @@
 
                 <!--Botones de admin-->
                 <div class="admin-actions span17">
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="medicamento" styleClass="btn primary">
-                        <f:param name="pacienteId"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link>
-                    #{' '}
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
-                            disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
-                        <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link>
+                    <div class="span6 ">
+                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="medicamento" styleClass="btn primary">
+                            <f:param name="pacienteId"></f:param>
+                            <f:param name="backView" value="lista"></f:param>
+                        </h:link>
+                        #{' '}
+                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
+                                disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
+                            <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
+                            <f:param name="backView" value="lista"></f:param>
+                        </h:link>
+                    </div>
+                    <div class="span6 offset5" >
+                        <p:inputText id="criterioBuscar" size ="25" value="#{medicamentoListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
+                            <p:ajax event="keyup" update="tablaMedicamentos"/>
+                        </p:inputText>
+                        &nbsp;
+                        <p:commandButton value="Buscar" action="#{medicamentoListaServicio.buscarPorParametro()}" update="tablaMedicamentos" styleClass="btn info"/>                    
+                    </div>
                 </div>
 
-                <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio}"
+                <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
                              paginator="true" rows="10" styleClass="span18" style=""
                              paginatorAlwaysVisible="false"
                              paginatorPosition="top"
@@ -98,7 +107,23 @@
                         <h:outputText value="#{medicamento_.unidades}" />
                     </p:column>
 
-                    <p:column sortBy="#{medicamento_.fechaCaducidad}" style="text-align: center;">
+                    <p:column style="width: 15%; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{'Fecha de Ingreso'}" />  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.fechaIngreso}" >
+                            <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                        </h:outputText>  
+                    </p:column>
+                    <p:column style="width: 15%; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{'Fecha de Elaboración'}" />  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.fechaElaboracion}" >
+                            <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                        </h:outputText>  
+                    </p:column>
+                    <p:column style="width: 15%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{'Fecha de Caducidad'}" />  
                         </f:facet> 

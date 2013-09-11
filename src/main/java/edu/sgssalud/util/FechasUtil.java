@@ -105,7 +105,7 @@ public class FechasUtil {
                 if (mes > 0) {
                     dias += (mes * 30);
                     dias += dia;
-                }else{
+                } else {
                     dias += dia;
                 }
             } else if (mes > 0) {
@@ -118,5 +118,24 @@ public class FechasUtil {
             return dias;
         }
         return 0;
+    }
+
+    public static boolean getFormatoFecha(String fecha) {
+         //metodo para validar si la fecha es correcta
+    
+        try {
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMM-yyyy");
+            SimpleDateFormat formatoFecha1 = new SimpleDateFormat("dd-MM-yyyy");        
+            SimpleDateFormat formatoFecha2 = new SimpleDateFormat("dd/MM/yyyy");        
+            Date date = formatoFecha.parse(fecha);
+            date = formatoFecha1.parse(fecha);
+            date = formatoFecha2.parse(fecha);            
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    
+
+        
     }
 }

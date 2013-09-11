@@ -25,7 +25,7 @@
                         </div>
                         <div class="span4 columns offset3">
                             <h:form id="control">                                                         
-                                <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']} " rendered="#{true}" outcome="/pages/profile/list.xhtml?faces-redirect=true" styleClass="btn secondary">
+                                <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']} " rendered="#{true}" outcome="/pages/admin/listProfile.xhtml?faces-redirect=true" styleClass="btn secondary">
                                 </h:link>                            
                             </h:form>
                         </div>
@@ -47,9 +47,10 @@
                             <f:selectItems value="#{securityHome.findAllGroups}" var="g" itemValue="#{g}" itemLabel="#{g.name}"/>
                         </p:selectOneMenu>  
                         #{' '}
-                        <p:commandButton id="add" value="#{messages['common.assignto']} #{messages['common.group']}" actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
-                                         icon="ui-icon-disk" 
-                                         rendered="true" update="groupTable"/>
+                        <p:commandButton id="add" value="#{messages['common.assignto']} #{messages['common.group']}" 
+                                         actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
+                                         icon="ui-icon-disk" rendered="true" update="groupTable"/>
+                        <br/>
                         <p:commandButton id="management" value="#{messages['common.admin']} #{messages['security.group']}" styleClass="btn"
                                          icon="ui-icon-plusthick" 
                                          rendered="true" action="list"/>

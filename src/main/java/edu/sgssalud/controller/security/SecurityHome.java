@@ -94,6 +94,7 @@ public class SecurityHome implements Serializable {
 
     public void setGroup(Group group) {
         this.group = group;
+        log.info("Grupo Asignado: "+group);
     }
 
     private User getUser() throws IdentityException {
@@ -133,13 +134,14 @@ public class SecurityHome implements Serializable {
         try {
             if (getGroup() != null && getUser() != null) {
                 if (!securityGroupService.isAssociated(group, user)) {
+                    log.info("Asociar : "+group + " usuario: " + user);
                     securityGroupService.associate(getGroup(), getUser());
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully!", "Add " + getUser().getKey() + " into " + getGroup().getName() ));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization exists!", "User " + getUser().getKey() + " was assig into " + getGroup().getName() ));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(), null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(),null));
             }
 
         } catch (IdentityException ex) {

@@ -20,6 +20,8 @@ import edu.sgssalud.model.paciente.Paciente;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import org.jboss.solder.logging.Logger;
 
@@ -28,17 +30,29 @@ import org.jboss.solder.logging.Logger;
  * @author tania
  */
 @Entity
-public class Medicamento extends BussinesEntity implements Serializable{
-    
+@NamedQueries(value = {
+    @NamedQuery(name = "Medicamento.buscarPorParametro",
+    query = "select e from Medicamento e where"
+    + " LOWER(e.nombreComercial) like lower(concat('%',:clave,'%')) OR"
+    + " LOWER(e.nombreGenerico) like lower(concat('%',:clave,'%')) OR"
+    + " LOWER(e.casaComercialProveedora) like lower(concat('%',:clave,'%'))"
+    + " ORDER BY e.nombreComercial"),
+    @NamedQuery(name = "Medicamento.buscarPorNumero",
+    query = "select e from Medicamento e where"
+    + " e.numeroFactura = :clave"),
+    @NamedQuery(name = "Medicamento.buscarPorFecha",
+    query = "select e from Medicamento e where"
+    + " e.fechaIngreso=:clave  OR"
+    + " e.fechaElaboracion=:clave")})
+public class Medicamento extends BussinesEntity implements Serializable {
+
     private static Logger log = Logger.getLogger(Medicamento.class);
     private static final long serialVersionUID = 2L;
-    
-    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaIngreso;
     private String casaComercialProveedora;
     private int numeroFactura;
-    private String dirCasaComercial;    
+    private String dirCasaComercial;
     private String nombreComercial;
     private String nombreGenerico;
     private String referencia;
@@ -50,8 +64,7 @@ public class Medicamento extends BussinesEntity implements Serializable{
 
     public Medicamento() {
         //this.fechaIngreso = new Date();
-        
-    }      
+    }
 
     public Date getFechaIngreso() {
         return fechaIngreso;
@@ -84,7 +97,7 @@ public class Medicamento extends BussinesEntity implements Serializable{
     public void setDirCasaComercial(String dirCasaComercial) {
         this.dirCasaComercial = dirCasaComercial;
     }
-        
+
     public String getNombreComercial() {
         return nombreComercial;
     }
@@ -132,9 +145,8 @@ public class Medicamento extends BussinesEntity implements Serializable{
     public void setFechaCaducidad(Date fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
-    
-          
-     @Override
+
+    @Override
     public String toString() {
         return "edu.sgssalud.model.farmacia.Medicamento[ "
                 + "id=" + getId() + ","
@@ -142,7 +154,4 @@ public class Medicamento extends BussinesEntity implements Serializable{
                 + "nombreGenerico" + getNombreGenerico() + ","
                 + " ]";
     }
-           
-    
-    
 }

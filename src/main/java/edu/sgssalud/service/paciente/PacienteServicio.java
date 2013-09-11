@@ -136,8 +136,20 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
     public Paciente getPacientePorId(final Long id) {
         return (Paciente) findById(Paciente.class, id);
     }
-    /*Método para validar cedula o pasaporte*/
 
+    public List<Paciente> getPacientesPorParametros(String parametro) {
+        TypedQuery<Paciente> query = em.createQuery(
+                "select e from Paciente e where"
+                + " lower(e.nombres) like lower(concat('%',:clave,'%')) or"
+                + " lower(e.apellidos) like lower(concat('%',:clave,'%')) or"
+                + " lower(e.cedula) like lower(concat('%',:clave,'%')) or" 
+                + " lower(e.edad) like lower(concat('%',:clave,'%')) "
+                + "order by e.nombres", Paciente.class);
+        query.setParameter("clave", parametro);
+        return query.getResultList();
+    }
+
+    /*Método para validar cedula o pasaporte*/
     public boolean isDniDisponible(String cedula) {
         try {
             Paciente p = buscarPorCedula(cedula);
@@ -153,10 +165,15 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
     }
 
     public Paciente buscarPorCedula(String cedula) {
-        TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.cedula = :cedula", Paciente.class);
-        query.setParameter("cedula", cedula);
-        Paciente result = query.getSingleResult();
-        return result;
+//        TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.cedula = :cedula", Paciente.class);
+//        query.setParameter("cedula", cedula);
+//        Paciente result = query.getSingleResult();
+//        return result;
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Paciente> query = builder.createQuery(Paciente.class);
+        Root<Paciente> paciente = query.from(Paciente.class);
+        query.where(builder.equal(paciente.get(Paciente_.cedula), cedula));
+        return getSingleResult(query);
     }
 
     public boolean isDireccionEmailDisponoble(String email) {

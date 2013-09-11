@@ -51,12 +51,13 @@ public interface SecureViewConfig {
         @ViewPattern("/pages/profile/*")                
         @Owner
         USER,        
+        @FacesRedirect
         @ViewPattern("/pages/admin/*")
         @Admin
         ADMIN,
-        @ViewPattern("/pages/paciente/*")
-        @Accountant
-        ACCOUNTANT,
+        @ViewPattern("/pages/paciente/*")        
+        @Paciente                
+        PACIENTE,
         @ViewPattern("/pages/farmacia/*")
         @farmaceutica
         FARMACEUTICA,

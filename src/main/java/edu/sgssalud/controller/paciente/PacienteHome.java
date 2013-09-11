@@ -189,9 +189,16 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         setEntityManager(em);
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
-        this.rendPanelEstUni = false;
-        this.rendPanelEstCol = false;
-        this.rendPanelEstEsc = false;
+        if (getInstance().getTipoEstudiante() != null) {            
+            String t = getInstance().getTipoEstudiante();
+            log.info("ingreso a fijar tipo: "+t);
+            this.setTipoEstudiante(t);
+        } else {
+            log.info("ingreso a fijar tipo Nuevo");
+            this.rendPanelEstUni = false;
+            this.rendPanelEstCol = false;
+            this.rendPanelEstEsc = false;
+        }
     }
     /*....==>*/
 
@@ -229,14 +236,10 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             save(getInstance());
         } else {
             try {
-                getInstance().setNombreUsuario(getInstance().getCedula());
-                getInstance().setClave(getInstance().getCedula());
-                //register();
-                create(getInstance());
-                save(getInstance());
+                register();
                 FacesMessage msg = new FacesMessage("Se creo nuevo paciente: " + getInstance().getNombres() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-            } catch (Exception ex) {
+            } catch (IdentityException ex) {
                 Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -266,19 +269,10 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     @TransactionAttribute
     private void createUser() throws IdentityException {
-        Profile p = new Profile();
-        p.setCode(getInstance().getCedula());
-        p.setFirstname(getInstance().getNombres());
-        p.setSurname(getInstance().getApellidos());
-        p.setEmail(getInstance().getApellidos());
-        setPacienteId(getInstance().getId());
-        p.setConfirmed(true);
-        p.setShowBootcamp(true);
-        create(p);
-        //this.cargarDatosPerfil(p);  //método para copiar datos del paciente al perfil de usuario
 
-        wire();
         // TODO validate username, email address, and user existence
+        getInstance().setNombreUsuario(getInstance().getCedula());
+        getInstance().setClave(getInstance().getCedula());
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.createUser(getInstance().getCedula());
 
@@ -287,21 +281,18 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         attributesManager.addAttribute(user, "email", getInstance().getEmail());  //me permite agregar un atributo de cualquier tipo a un usuario 
         em.flush();
 
-        p.getIdentityKeys().add(user.getKey());
         // TODO figure out a good pattern for this...
-        //setInstance(createInstance());
-        //getInstance().setEmail(email);
-        //getInstance().setClave(getInstance().getCedula());
 
-        //getInstance().setNarme(getInstance().getNombreUsuario()); //Para referencia
-        //getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
-        //      Paciente.class.getName()));
-        //getInstance()
-        //      .buildAttributes(bussinesEntityService);
-        //Actualizar estructura de datos
-        save(p);
-        save(getInstance());
-
+        getInstance().getIdentityKeys().add(user.getKey());
+        getInstance().setShowBootcamp(true);
+        create(getInstance());
+        setPacienteId(getInstance().getId());
+        wire();
+//        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
+//                Paciente.class.getName()));
+//        getInstance()
+//                .buildAttributes(bussinesEntityService);
+        save(getInstance()); //Actualizar estructura de datos  
     }
 
     /*<== método que retorna la lista de tipos de datos enumerados ...*/

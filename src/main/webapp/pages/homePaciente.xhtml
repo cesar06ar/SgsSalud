@@ -9,33 +9,18 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:composition template="/WEB-INF/view/templates/gluePaciente.xhtml">
         <ui:param name="title" value="Inicio" />
 
         <ui:define name="subnav">
         </ui:define>
 
-        <!--<ui:define name="topnav-post-template">
-           <h:panelGroup rendered="#{profile.persistent}">
-                <li>
-                    <div class="linkball">◗</div>
-                    <h:link outcome="/pages/profile/profile"
-                            style="padding-left: 15px;"
-                            value="#{profile.username}">
-                        <f:param name="profileId" value="#{profile.id}" />
-                    </h:link>
-                </li>
-            </h:panelGroup>
-
-            <ui:insert name="topnav-post-profile"/>
-        </ui:define>-->
-
         <ui:define name="header-replace">
             <h:panelGroup layout="block" rendered="#{identity.loggedIn}">
                 <div class="header-replace">
                     <div class="container">
-                        <div class="row fl" style="margin-top: 5px;">                            
-                            <c:choose>
+                        <div class="row fl" style="margin-top: 5px;">
+                           <c:choose>
                                 <c:when test="#{account.isUserPaciente()}">
                                     <div class="span1 columns">
                                         <h:link outcome="/pages/paciente/view" title="Perfil de Paciente">
@@ -66,7 +51,10 @@
                                         </h4>
                                     </div>      
                                 </c:when>
-                            </c:choose>                               
+                            </c:choose>  
+                        </div>
+                        <div class="row fl" style="margin-top: 5px; width: 100%">
+
                         </div>
                     </div>
                 </div>
@@ -81,32 +69,6 @@
             <h:panelGroup  rendered="#{identity.loggedIn}">
                 <h2>Bienvenidos al Softare Clínico de Gestión de Servicios de Salud </h2>
                 <br/>
-                <p:panel header="Módulo de Administración del Sistema" toggleable="true" toggleOrientation="vertical">
-                    <h:link value="#{messages['module.BussinesEntity']}" rendered="#{true}" 
-                            outcome="/pages/admin/bussinesentitytype/list">
-                        <f:param name="result"></f:param>
-                        <f:param name="typeName" value="edu.sgssalud.model.BussinesEntityType"></f:param>
-                    </h:link>
-                    <br />
-                    <h:link value="#{messages['module.setting']}" rendered="#{true}" 
-                            outcome="/pages/admin/setting/list">
-                        <f:param name="result"></f:param>
-                        <f:param name="typeName" value="edu.sgssalud.model.config.Setting"></f:param>
-                    </h:link>
-                    <br />               
-                    <p:panel header="Administrar Perfiles de Usuario" toggleable="true" toggleOrientation="vertical">
-                        <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
-                                outcome="/pages/admin/listProfile">
-                            <f:param name="result"></f:param>
-                            <f:param name="typeName" value="edu.sgssalud.model.profile.Profile"></f:param>
-                        </h:link>
-                        <br />
-                        <h:link value="#{messages['security.group']}" rendered="#{true}" 
-                                outcome="/pages/admin/security/list">
-                            <f:param name="result"></f:param>                
-                        </h:link>
-                    </p:panel>
-                </p:panel>
 
                 <p:panel header="#{messages['modulo.admin.secretaria']}" toggleable="true" toggleOrientation="vertical">
                     <h:link value="#{messages['paciente.admin']}" rendered="#{true}" 
@@ -132,6 +94,7 @@
                     <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
                 </div>
             </h:panelGroup>
-        </ui:define>
+        </ui:define>       
+
     </ui:composition>
 </html>

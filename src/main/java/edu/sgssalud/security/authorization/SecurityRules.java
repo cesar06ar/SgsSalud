@@ -38,12 +38,14 @@ import org.jboss.seam.security.annotations.Secures;
 import org.jboss.solder.logging.Logger;
 import org.picketlink.idm.api.Role;
 
+
 public class SecurityRules {
 
     private static Logger log = Logger.getLogger(SecurityRules.class);
     public static String ADMIN = "Admin";
     private static String ACCOUNTANT = "Accountant";
     private static String FARMACEUTICA = "Farmaceutica";
+    private static String PACIENTE = "paciente";
 
     /*public @Secures
      @Admin
@@ -56,8 +58,21 @@ public class SecurityRules {
     public boolean isProfileOwner(Identity identity, @Current Profile profile) {
         if (profile == null || identity.getUser() == null) {
             return false;
-        } else {
+        } else {            
             return profile.getIdentityKeys().contains(getUsername(identity))
+                    || identity.hasRole("admin", "USERS", "GROUP")
+                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+                    || "admin".contains(getUsername(identity));
+        }
+    }
+    
+    @Secures
+    @Paciente
+    public boolean isPacienteOwner(Identity identity, @Current edu.sgssalud.model.paciente.Paciente pacienteU) {
+        if (pacienteU == null || identity.getUser() == null) {
+            return false;
+        } else {            
+            return pacienteU.getIdentityKeys().contains(getUsername(identity))
                     || identity.hasRole("admin", "USERS", "GROUP")
                     || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                     || "admin".contains(getUsername(identity));
@@ -102,27 +117,8 @@ public class SecurityRules {
                     || "admin".contains(getUsername(identity));
         }
     }
+    
 
-    /*    
-     @Secures
-     @Owner
-     public boolean isOrganizationOwner(Identity identity, @Current Organization organization) {
-     if (organization == null || identity.getUser() == null) {
-     return false;
-     } else {
-     return organization.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
-     }
-     }
-        
-     @Secures
-     @Owner
-     public boolean isBussinesEntityOwner(Identity identity, @Current BussinesEntity bussinesEntity) {
-     if (bussinesEntity == null || identity.getUser() == null) {
-     return false;
-     } else {
-     return bussinesEntity.getAuthor().getIdentityKeys().contains(identity.getUser().getKey());
-     }
-     }*/
     public static String getUsername(Identity identity) {
         String user = "";
         if (identity != null && identity.getUser() != null) {

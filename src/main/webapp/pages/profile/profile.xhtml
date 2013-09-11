@@ -122,10 +122,10 @@
                 <div class="actions">
                     <h:commandButton id="save" action="#{profileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
-                    <h:commandButton action="/pages/profile/list.xhtml?faces-redirect=true"
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{not empty backView}"/>
+                    <h:commandButton action="/pages/admin/listProfile.xhtml?faces-redirect=true"
+                                     value="#{messages['common.cancel']}" styleClass="btn primary" immediate="true" rendered="#{profileHome.backView eq('listProfile')}"/>
                     <h:commandButton action="/pages/home"
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{empty backView}"/>
+                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{empty profileHome.backView}"/>
                 </div>
             </h:form>
 

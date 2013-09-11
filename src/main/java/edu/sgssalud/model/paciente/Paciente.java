@@ -30,6 +30,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -125,7 +127,7 @@ public class Paciente extends BussinesEntity implements Serializable {
     private String tipoEstudiante;
 
     public Paciente() {
-        tipoEstudiante = "datosAcademicosEstudiante"+"Universitario";
+        tipoEstudiante = "Universitario";
     }
 
     public String getNombreUsuario() {

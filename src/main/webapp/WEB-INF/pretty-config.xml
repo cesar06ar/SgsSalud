@@ -6,9 +6,15 @@
    <rewrite match=".*/" trailingSlash="remove"/>
    
    <!-- Content Pages -->
+   
    <url-mapping id="home">
        <pattern value="/"></pattern>
        <view-id value="/pages/home.xhtml"></view-id>
+   </url-mapping> 
+   
+   <url-mapping id="homePaciente">
+       <pattern value="/paciente"></pattern>
+       <view-id value="/pages/homePaciente.xhtml"></view-id>
    </url-mapping>
    
    <url-mapping id="profile">
@@ -56,9 +62,9 @@
    </url-mapping>
    <url-mapping id="profilelist">
       <pattern value="/admin/profile/list"></pattern>
-      <view-id value="/pages/profile/list.xhtml"></view-id>
-      <query-param name="result" decode="false">#{profileListService.firstResult}</query-param>
-      <!--<query-param name="typeName" decode="false">#{profileListService.typeName}</query-param>-->
+      <view-id value="/pages/admin/listProfile.xhtml"></view-id>
+      <!--<query-param name="result" decode="false">#{profileListService.firstResult}</query-param>
+      <query-param name="typeName" decode="false">#{profileListService.typeName}</query-param>-->
    </url-mapping>
    <url-mapping id="bussinesentitytype">
       <pattern value="/admin/bussinesentitytype/bussinesentitytype"></pattern>
@@ -110,15 +116,9 @@
       <view-id value="/pages/paciente/test.xhtml"></view-id>       
    </url-mapping>
    
-   <!-- Vistas de Medicamento-->
-   <url-mapping id="MedicamentoLista">
-      <pattern value="/medicamento/lista"></pattern>
-      <view-id value="/pages/farmacia/medicamento/lista.xhtml"></view-id>       
-       <query-param name="result" decode="false">#{medicamentoListServicio.firstResult}</query-param>
-   </url-mapping>
-   <url-mapping id="medicamento">
-      <pattern value="/medicamento/medicamento"></pattern>
-      <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
+   <url-mapping id="PacienteView">
+       <pattern value="/view"></pattern>
+       <view-id value="/pages/view.xhtml"></view-id>
    </url-mapping>
    
    <!-- Vistas de Medicamento-->
@@ -130,30 +130,9 @@
    <url-mapping id="medicamento">
       <pattern value="/medicamento/medicamento"></pattern>
       <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
-   </url-mapping>
-   
-   <!-- Vistas de Medicamento-->
-   <url-mapping id="MedicamentoLista">
-      <pattern value="/medicamento/lista"></pattern>
-      <view-id value="/pages/farmacia/medicamento/lista.xhtml"></view-id>       
-       <query-param name="result" decode="false">#{medicamentoListServicio.firstResult}</query-param>
-   </url-mapping>
-   <url-mapping id="medicamento">
-      <pattern value="/medicamento/medicamento"></pattern>
-      <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
-   </url-mapping>
-   
-   <!-- Vistas de Medicamento-->
-   <url-mapping id="MedicamentoLista">
-      <pattern value="/medicamento/lista"></pattern>
-      <view-id value="/pages/farmacia/medicamento/lista.xhtml"></view-id>       
-       <query-param name="result" decode="false">#{medicamentoListServicio.firstResult}</query-param>
-   </url-mapping>
-   <url-mapping id="medicamento">
-      <pattern value="/medicamento/medicamento"></pattern>
-      <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
-   </url-mapping>
-   
+   </url-mapping>  
+  
+      
     <!-- Begin Exception Mappings -->
     <url-mapping id="404">
         <pattern value="/404" />
