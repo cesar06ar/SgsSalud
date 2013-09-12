@@ -86,6 +86,7 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 
         QueryData<Paciente> qData = pacienteServicio.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
+        this.setResultList(qData.getResult());
         return qData.getResult();
 
     }

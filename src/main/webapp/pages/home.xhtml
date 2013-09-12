@@ -81,7 +81,7 @@
             <h:panelGroup  rendered="#{identity.loggedIn}">
                 <h2>Bienvenidos al Softare Clínico de Gestión de Servicios de Salud </h2>
                 <br/>
-                <p:panel header="Módulo de Administración del Sistema" toggleable="true" toggleOrientation="vertical">
+                <p:panel header="Módulo de Administración del Sistema" toggleable="true" >
                     <h:link value="#{messages['module.BussinesEntity']}" rendered="#{true}" 
                             outcome="/pages/admin/bussinesentitytype/list">
                         <f:param name="result"></f:param>
@@ -94,7 +94,7 @@
                         <f:param name="typeName" value="edu.sgssalud.model.config.Setting"></f:param>
                     </h:link>
                     <br />               
-                    <p:panel header="Administrar Perfiles de Usuario" toggleable="true" toggleOrientation="vertical">
+                    <p:panel header="Administrar Perfiles de Usuario" toggleable="true" >
                         <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
                                 outcome="/pages/admin/listProfile">
                             <f:param name="result"></f:param>
@@ -108,16 +108,47 @@
                     </p:panel>
                 </p:panel>
 
-                <p:panel header="#{messages['modulo.admin.secretaria']}" toggleable="true" toggleOrientation="vertical">
+                <p:panel header="#{messages['modulo.admin.secretaria']}" toggleable="true" >
                     <h:link value="#{messages['paciente.admin']}" rendered="#{true}" 
                             outcome="/pages/paciente/lista">                    
                     </h:link>
                     <br />                
                 </p:panel>
-                <p:panel header="#{messages['modulo.admin.farmacia']}" toggleable="true" toggleOrientation="vertical">
+                <p:panel header="#{messages['modulo.admin.Medicina']}" toggleable="true" toggleOrientation="vertical">
+                    <h:link value="#{messages['historiasclinicas.admin']}" rendered="#{true}" 
+                            outcome="/pages/medicina/fichaMedica">                    
+                    </h:link>
+                    <br />  
+                    <h:link value="#{messages['agendaMedica.admin']}" rendered="#{true}" 
+                            outcome="/pages/medicina/agenda">                    
+                    </h:link>
+                </p:panel>
+                <p:panel header="#{messages['modulo.admin.Odontologia']}" toggleable="true" toggleOrientation="vertical" >
+                    <h:link value="#{messages['fichaOdontologica.admin']}" rendered="#{true}" 
+                            outcome="/pages/odontologia/fichaOdontologica">                    
+                    </h:link> 
+                    <br />  
+                    <h:link value="#{messages['agendaOdontologica.admin']}" rendered="#{true}" 
+                            outcome="/pages/odontologia/agenda">                    
+                    </h:link>
+                </p:panel>
+                <p:panel header="#{messages['modulo.admin.LabClinico']}" toggleable="true" toggleOrientation="vertical" >
+                    <h:link value="#{messages['pedidoLabClinico.admin']}" rendered="#{true}" 
+                            outcome="/pages/labClinico/pedidoExamen">                    
+                    </h:link>
+                    <br />  
+                    <h:link value="#{messages['examenesLabClinico.admin']}" rendered="#{true}" 
+                            outcome="/pages/labClinico/examenes">                    
+                    </h:link>                
+                </p:panel>
+                <p:panel header="#{messages['modulo.admin.farmacia']}" toggleable="true" toggleOrientation="vertical" >
                     <h:link value="#{messages['medicamento.admin']}" rendered="#{true}" 
                             outcome="/pages/farmacia/medicamento/lista">                    
-                    </h:link>                
+                    </h:link> 
+                    <br />  
+                    <h:link value="#{messages['recetas.admin']}" rendered="#{true}" 
+                            outcome="/pages/farmacia/recetas">                    
+                    </h:link> 
                 </p:panel>
             </h:panelGroup>
             <h:panelGroup  rendered="#{!identity.loggedIn}">

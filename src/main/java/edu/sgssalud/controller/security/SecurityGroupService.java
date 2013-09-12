@@ -145,9 +145,10 @@ public class SecurityGroupService implements Serializable {
     }
 
     boolean isAssociated(Group group, User user) throws IdentityException {
-        boolean b = security.getRelationshipManager().isAssociated(group, user);
-        log.info("valor esta asociado: "+b);
-        return b;
+        log.info("Grupo : user "+group.getName() + user.getKey());
+        //boolean b = security.getRelationshipManager().isAssociated(group, user);
+        log.info("valor esta asociado: ");
+        return false;
     }
     
     boolean isAssociatedUser(Group group) throws IdentityException {

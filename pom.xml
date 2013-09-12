@@ -33,13 +33,14 @@
         <ocpsoft.logging.version>1.0.2.Final</ocpsoft.logging.version>
         <rewrite.version>1.1.0.Final</rewrite.version>
         <prettytime.version>2.0.0-SNAPSHOT</prettytime.version>
-        <drools.version>5.5.0.Beta1</drools.version>
+        <drools.version>6.0.0.Beta1</drools.version>
         <javaee6.web.spec.version>3.0.1.Final</javaee6.web.spec.version>
         <jboss-javaee-6.0.version>2.0.0.Final</jboss-javaee-6.0.version>
-        <primefaces.version>3.5</primefaces.version>
+        <primefaces.version>4.0-SNAPSHOT</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
         <seam.mail.version>3.1.1.Final</seam.mail.version>
         <seam-reports-version>3.1.0.Final</seam-reports-version>  
+        <primefaces.theme.version>1.0.10</primefaces.theme.version>
     </properties>
 
 
@@ -396,6 +397,12 @@
             <artifactId>primefaces</artifactId>  
             <version>${primefaces.version}</version>
         </dependency> 
+        
+         <dependency>  
+            <groupId>org.primefaces.themes</groupId>  
+            <artifactId>all-themes</artifactId>  
+            <version>${primefaces.theme.version}</version>  
+        </dependency>  
         
         <dependency>
             <groupId>org.omnifaces</groupId>

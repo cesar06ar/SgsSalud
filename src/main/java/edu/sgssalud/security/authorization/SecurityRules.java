@@ -43,7 +43,7 @@ public class SecurityRules {
 
     private static Logger log = Logger.getLogger(SecurityRules.class);
     public static String ADMIN = "Admin";
-    private static String ACCOUNTANT = "Accountant";
+    private static String MEDICO = "Medico";
     private static String FARMACEUTICA = "Farmaceutica";
     private static String PACIENTE = "paciente";
 
@@ -72,7 +72,8 @@ public class SecurityRules {
         if (pacienteU == null || identity.getUser() == null) {
             return false;
         } else {            
-            return pacienteU.getIdentityKeys().contains(getUsername(identity))
+            return pacienteU.getIdentityKeys().contains(getUsername(identity))                    
+                    || identity.hasRole(PACIENTE, "USERS", "GROUP")
                     || identity.hasRole("admin", "USERS", "GROUP")
                     || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                     || "admin".contains(getUsername(identity));
@@ -93,13 +94,13 @@ public class SecurityRules {
     }
 
     @Secures
-    @Accountant
-    public boolean isAccountant(Identity identity) {
+    @Medico
+    public boolean isMedico(Identity identity) {
         if (identity.getUser() == null) {
             return false;
         } else {
-            return identity.hasRole(ACCOUNTANT, "USERS", "GROUP")
-                    || identity.inGroup(ACCOUNTANT, "GROUP")
+            return identity.hasRole(MEDICO, "USERS", "GROUP")
+                    || identity.inGroup(MEDICO, "GROUP")
                     || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                     || "admin".contains(getUsername(identity));
         }
@@ -112,7 +113,7 @@ public class SecurityRules {
             return false;
         } else {
             return identity.hasRole(FARMACEUTICA, "USERS", "GROUP")
-                    || identity.inGroup(FARMACEUTICA, "GROUP")
+                    || identity.inGroup(FARMACEUTICA, "GROUP")                    
                     || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                     || "admin".contains(getUsername(identity));
         }

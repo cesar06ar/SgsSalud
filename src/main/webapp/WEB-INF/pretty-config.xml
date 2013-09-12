@@ -131,8 +131,37 @@
       <pattern value="/medicamento/medicamento"></pattern>
       <view-id value="/pages/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
    </url-mapping>  
+   
+   <!-- Vistas del Módulo de Medicina-->
+   <url-mapping id="FichaMedica">
+      <pattern value="/medicina/fichaMedica"></pattern>
+      <view-id value="/pages/medicina/fichaMedica.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="AgendaMedica">
+      <pattern value="/medicina/agendaMedica"></pattern>
+      <view-id value="/pages/medicina/agenda.xhtml"></view-id>       
+   </url-mapping> 
+   
+    <!-- Vistas del Módulo de Odontología-->
+   <url-mapping id="FichaOdontologica">
+      <pattern value="/odontologia/fichaOdontologica"></pattern>
+      <view-id value="/pages/odontologia/fichaOdontologica.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="AgendaOdontologica">
+      <pattern value="/odontologia/agendaOdontologica"></pattern>
+      <view-id value="/pages/odontologia/agenda.xhtml"></view-id>       
+   </url-mapping>
   
-      
+ <!-- Vistas del Módulo de Lab Clínico-->
+   <url-mapping id="pedidosLabClinico">
+      <pattern value="/labClinico/pedidoExamen"></pattern>
+      <view-id value="/pages/labClinico/pedidoExamen.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="examenLabClinico">
+      <pattern value="/labClinico/examen"></pattern>
+      <view-id value="/pages/labClinico/examen.xhtml"></view-id>       
+   </url-mapping>
+         
     <!-- Begin Exception Mappings -->
     <url-mapping id="404">
         <pattern value="/404" />

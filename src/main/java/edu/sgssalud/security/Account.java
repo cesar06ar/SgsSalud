@@ -89,14 +89,12 @@ public class Account implements Serializable {
             try {
                 loggedIn = ps.getProfileByIdentityKey(identity.getUser().getKey());
                 if (loggedIn != null) {
-                    id = loggedIn.getId();
-                    log.info("id :" + id);
+                    id = loggedIn.getId();                    
                     return id;
                 } else {
                     loggedIn1 = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey());
                     if (loggedIn1 != null) {
-                        id = loggedIn1.getId();
-                        log.info("id :" + id);
+                        id = loggedIn1.getId();                        
                         return id;
                     }
                 }
@@ -137,8 +135,7 @@ public class Account implements Serializable {
 
         if (identity.isLoggedIn() && !loggedIn.isPersistent()) {
             try {
-                boolean valor = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey()) != null;
-                System.out.println("valor: " + valor);
+                boolean valor = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey()) != null;                
                 return valor;
             } catch (NoResultException e) {
                 throw e;
@@ -152,8 +149,7 @@ public class Account implements Serializable {
 
         if (identity.isLoggedIn()) {
             try {
-                boolean valor = ps.getProfileByIdentityKey(identity.getUser().getKey()) != null;
-                System.out.println("valor: " + valor);
+                boolean valor = ps.getProfileByIdentityKey(identity.getUser().getKey()) != null;                
                 return valor;
             } catch (NoResultException e) {
                 throw e;

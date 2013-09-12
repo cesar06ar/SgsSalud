@@ -50,13 +50,14 @@
                         <p:commandButton id="add" value="#{messages['common.assignto']} #{messages['common.group']}" 
                                          actionListener="#{securityHome.associateTo()}" styleClass="btn primary"
                                          icon="ui-icon-disk" rendered="true" update="groupTable"/>
-                        <br/>
-                        <p:commandButton id="management" value="#{messages['common.admin']} #{messages['security.group']}" styleClass="btn"
-                                         icon="ui-icon-plusthick" 
-                                         rendered="true" action="list"/>
+
                         <span class="help-inline"><br/>#{messages['common.security.associateto.inlinehelp']} <ocp:message forId="#{name}" /></span>
                     </div>   
                 </h:panelGroup>
+                <br/>
+                <p:commandButton id="management" value="#{messages['common.admin']} #{messages['security.group']}" styleClass="btn"
+                                 icon="ui-icon-plusthick" 
+                                 rendered="true" action="list"/>
                 <div> 
                     <h4>#{messages['security.assignedgroups']}</h4>
                     <p:dataTable id="groupTable" var="group" value="#{securityHome.findGroups()}"
@@ -70,8 +71,8 @@
                         <p:column headerText="#{messages['common.actions']}" style="width:10%">
                             <p:commandLink value="#{messages['common.remove']}" 
                                            type="button" immediate="true" styleClass="btn"
-                                             onclick="deletedDlg.show();"
-                                             rendered="true">
+                                           onclick="deletedDlg.show();"
+                                           rendered="true">
                                 <f:setPropertyActionListener target="#{securityHome.group}" value="#{group}"/>
                                 <p:ajax process="@this" update=":delete-dialog" />
                             </p:commandLink>

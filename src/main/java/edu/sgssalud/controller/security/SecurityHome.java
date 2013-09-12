@@ -84,11 +84,11 @@ public class SecurityHome implements Serializable {
     }
 
     public Group getGroup() throws IdentityException {
-        if (this.group == null) {
-            if (getGroupname() != null && !getGroupname().isEmpty()) {
-                group = securityGroupService.findByName(getGroupname());
-            }
-        }
+//        if (this.group == null) {
+//            if (getGroupname() != null && !getGroupname().isEmpty()) {
+//                group = securityGroupService.findByName(getGroupname());
+//            }
+//        }
         return group;
     }
 
@@ -133,9 +133,11 @@ public class SecurityHome implements Serializable {
     public void associateTo() {
         try {
             if (getGroup() != null && getUser() != null) {
-                if (!securityGroupService.isAssociated(group, user)) {
-                    log.info("Asociar : "+group + " usuario: " + user);
+                log.info("Ingreso a Asociar : ");
+                if (!securityGroupService.isAssociated(group, user)) {   
+                    log.info("Asociar : "+getGroup() + " usuario: " + getUser());
                     securityGroupService.associate(getGroup(), getUser());
+                    
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully!", "Add " + getUser().getKey() + " into " + getGroup().getName() ));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization exists!", "User " + getUser().getKey() + " was assig into " + getGroup().getName() ));
