@@ -25,6 +25,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -39,8 +41,9 @@ import org.jboss.solder.logging.Logger;
  */
 @Entity
 public class Receta implements Serializable {
-
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private static Logger log = Logger.getLogger(Receta.class);
     private static final long serialVersionUID = 3L;

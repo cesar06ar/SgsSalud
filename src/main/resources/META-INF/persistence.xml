@@ -5,6 +5,7 @@
          data source, the example data source is just for proofs of concept! -->
     <jta-data-source>java:/datasources/sgssalud-ds</jta-data-source>
     <class>edu.sgssalud.model.medicina.FichaMedica</class>
+    <class>edu.sgssalud.model.medicina.HistoriaClinica</class>
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
