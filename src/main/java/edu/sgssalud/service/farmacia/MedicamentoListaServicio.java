@@ -148,11 +148,7 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
         FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.unselected"), ((Medicamento) event.getObject()).getNombreComercial());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setMedicamentoSeleccionado(null);
-    }
-
-    public void buscarPorParametroAutoComplete() {
-        this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
-    }
+    }    
 
     public void buscarPorParametro() {
         this.setResulList(medicamentoService.BuscarMedicamentosPorParametro1(parametroBusqueda));

@@ -20,6 +20,8 @@ import edu.sgssalud.model.paciente.Paciente;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
@@ -61,6 +63,10 @@ public class Medicamento extends BussinesEntity implements Serializable {
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCaducidad;
+    @ManyToOne
+    @JoinColumn(name = "receta_id")
+    private Receta receta;
+    
 
     public Medicamento() {
         //this.fechaIngreso = new Date();
@@ -145,6 +151,15 @@ public class Medicamento extends BussinesEntity implements Serializable {
     public void setFechaCaducidad(Date fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
+
+    public Receta getReceta() {
+        return receta;
+    }
+
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }   
+    
 
     @Override
     public String toString() {

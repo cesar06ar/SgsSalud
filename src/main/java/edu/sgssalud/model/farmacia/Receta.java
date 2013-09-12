@@ -16,42 +16,47 @@
 package edu.sgssalud.model.farmacia;
 
 import edu.sgssalud.model.BussinesEntity;
+import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import org.jboss.solder.logging.Logger;
+
 /**
  *
  * @author tania
  */
-
 @Entity
-public class Receta implements Serializable{
+public class Receta implements Serializable {
+
     @Id
     private Long id;
-    
     private static Logger log = Logger.getLogger(Receta.class);
     private static final long serialVersionUID = 3L;
-   
-    
-    
-    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")
     private Paciente paciente;
-    private String medicacion;
+    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Medicamento> medicaciones;
     private String indicaciones;
     @OneToOne
     private Profile usuarioResponsable;
-    
-    
-    
+    @ManyToOne
+    private ConsultaMedica consultaMedica;
+
     public Long getId() {
         return id;
     }
@@ -59,5 +64,96 @@ public class Receta implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }
+
+    public List<Medicamento> getMedicaciones() {
+        return medicaciones;
+    }
+
+    public void setMedicaciones(List<Medicamento> medicaciones) {        
+        for (Medicamento m : medicaciones) {
+            m.setReceta(this);
+        }
+        this.medicaciones = medicaciones;
+    }
+
+    public String getIndicaciones() {
+        return indicaciones;
+    }
+
+    public void setIndicaciones(String indicaciones) {
+        this.indicaciones = indicaciones;
+    }
+
+    public Profile getUsuarioResponsable() {
+        return usuarioResponsable;
+    }
+
+    public void setUsuarioResponsable(Profile usuarioResponsable) {
+        this.usuarioResponsable = usuarioResponsable;
+    }
+
+    public ConsultaMedica getConsultaMedica() {
+        return consultaMedica;
+    }
+
+    public void setConsultaMedica(ConsultaMedica consultaMedica) {
+        this.consultaMedica = consultaMedica;
+    }
+
+    public void agregarMedicamento(Medicamento m) {
+        if (!medicaciones.contains(m));
+        m.setReceta(this);
+        medicaciones.add(m);
+    }
     
+    public void agregarTodosMedicamento(Medicamento m) {
+        if (!medicaciones.contains(m));
+        m.setReceta(this);
+        medicaciones.add(m);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "edu.sgssalud.model.Property[ "
+                + "id=" + id + ","
+                + "indicaciones=" + indicaciones + ","                
+                + " ]";
+    }
 }

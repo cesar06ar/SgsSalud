@@ -84,11 +84,11 @@ public class SecurityHome implements Serializable {
     }
 
     public Group getGroup() throws IdentityException {
-//        if (this.group == null) {
-//            if (getGroupname() != null && !getGroupname().isEmpty()) {
-//                group = securityGroupService.findByName(getGroupname());
-//            }
-//        }
+        if (this.group == null) {
+            if (getGroupname() != null && !getGroupname().isEmpty()) {
+                group = securityGroupService.findByName(getGroupname());
+            }
+        }
         return group;
     }
 

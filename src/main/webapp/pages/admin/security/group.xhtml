@@ -33,10 +33,7 @@
                 <!-- Attributos personalizados -->                
                 <div class="actions">
                     <h:commandButton id="save" action="#{securityGroupHome.saveGroup}" value="#{messages['common.save']}" styleClass="btn primary"/>
-                    <!--&nbsp;
-                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" onclick="deletedDlg.show();" immediate="true"
-                                     update=":cancel-dialog:form-dialog-confirm-delete" rendered="#{organizationHome.organizationId != null}"/>
-                    &nbsp;-->
+                   
                     <h:link outcome="/pages/admin/security/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
                             value="#{messages['common.cancel']}" styleClass="btn" immediate="true">                         
                     </h:link>
