@@ -17,10 +17,12 @@ package edu.sgssalud.model.farmacia;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import org.jboss.solder.logging.Logger;
 /**
@@ -36,11 +38,20 @@ public class Receta implements Serializable{
     private static Logger log = Logger.getLogger(Receta.class);
     private static final long serialVersionUID = 3L;
    
+    
+    
+    
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
+    @OneToOne
+    private Paciente paciente;
     private String medicacion;
     private String indicaciones;
-
+    @OneToOne
+    private Profile usuarioResponsable;
+    
+    
+    
     public Long getId() {
         return id;
     }
