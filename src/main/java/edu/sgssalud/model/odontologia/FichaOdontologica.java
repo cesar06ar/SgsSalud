@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.sgssalud.model.medicina;
+package edu.sgssalud.model.odontologia;
 
+import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.BussinesEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ import javax.persistence.Temporal;
 @Table(name = "HistoriaClinica")
 @DiscriminatorValue(value = "HC")
 @PrimaryKeyJoinColumn(name = "id")
-public class HistoriaClinica extends BussinesEntity implements Serializable {
+public class FichaOdontologica extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // la fecha de apertura de la historiaClinica se guarda en (createOn)
@@ -51,8 +52,14 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
     @OneToOne
     private FichaMedica fichaMedica;
     
-    @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ConsultaMedica> consultas = new ArrayList<ConsultaMedica>();
+    @OneToOne
+    private Odontograma odontogramaInicial;
+    
+    @OneToOne
+    private Odontograma odontograma;
+    
+    @OneToMany(mappedBy = "fichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ConsultaOdontologica> consultas = new ArrayList<ConsultaOdontologica>();
    
     public FichaMedica getFichaMedica() {
         return fichaMedica;
@@ -62,20 +69,36 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
         this.fichaMedica = fichaMedica;
     }
 
-    public List<ConsultaMedica> getConsultas() {
+    public List<ConsultaOdontologica> getConsultas() {
         return consultas;
     }
 
-    public void setConsultas(List<ConsultaMedica> consultas) {
-        for (ConsultaMedica cm : consultas) {
-            cm.setHistoriaClinica(this);
+    public void setConsultas(List<ConsultaOdontologica> consultas) {
+        for (ConsultaOdontologica cm : consultas) {
+            cm.setFichaOdontologica(this); // falta:  agregar a q ficha pertenece  
         }
         this.consultas = consultas;
     }   
+
+    public Odontograma getOdontogramaInicial() {
+        return odontogramaInicial;
+    }
+
+    public void setOdontogramaInicial(Odontograma odontogramaInicial) {
+        this.odontogramaInicial = odontogramaInicial;
+    }
+
+    public Odontograma getOdontograma() {
+        return odontograma;
+    }
+
+    public void setOdontograma(Odontograma odontograma) {
+        this.odontograma = odontograma;
+    } 
     
-    public void agregarConsulta(ConsultaMedica c){
+     public void agregarConsulta(ConsultaOdontologica c){
         if(!this.consultas.contains(c)){
-            c.setHistoriaClinica(this);
+            c.setFichaOdontologica(this);
             this.consultas.add(c);
         }
         

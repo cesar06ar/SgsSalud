@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.sgssalud.model.medicina;
+package edu.sgssalud.model.odontologia;
 
+import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.farmacia.Receta;
 import java.io.Serializable;
@@ -23,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -40,48 +43,39 @@ import javax.persistence.Temporal;
  * @author tania
  */
 @Entity
-@Table(name = "HistoriaClinica")
-@DiscriminatorValue(value = "HC")
+@Table(name = "ConsultaOdontologica")
+@DiscriminatorValue(value = "FO")
 @PrimaryKeyJoinColumn(name = "id")
-public class ConsultaMedica extends BussinesEntity implements Serializable {
-    
+public class ConsultaOdontologica extends BussinesEntity implements Serializable {
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConsulta;
     @Temporal(javax.persistence.TemporalType.TIME)
-    private Date horaConsulta;    
+    private Date horaConsulta;
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date tiempoConsulta;
-    private String motivoConsulta;    
-    private String enfermedadActual;
-    private String observacionRevisionActualOrganosYSistemas;
-    private String examenFisico;
+    @Column(length = 2147483647)
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] radiografiaDental;
     private String diagnostico;
-    private String tratamiento;
-    private String observacionConsulta;
-        
-    
+    private String diagnosticoRadiografico;
     @OneToMany()
-    @JoinColumn(name = "historiaClinica_id")
-    private HistoriaClinica historiaClinica;
-
+    @JoinColumn(name = "fichaOdontologica_id")
+    private FichaOdontologica fichaOdontologica;
     @OneToOne
     @JoinColumn(name = "signosVitales_id")
     private SignosVitales signosVitales;
-    
-    @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "FichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
-    
-    
+    @OneToMany(mappedBy = "consultaOdontologica")
+    private List<Tratamiento> tratamientoDientes = new ArrayList<Tratamiento>();
+
     public Date getFechaConsulta() {
         return fechaConsulta;
     }
 
     public void setFechaConsulta(Date fechaConsulta) {
         this.fechaConsulta = fechaConsulta;
-    }  
-
-    public Date getTiempoConsulta() {
-        return tiempoConsulta;
     }
 
     public Date getHoraConsulta() {
@@ -92,48 +86,20 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
         this.horaConsulta = horaConsulta;
     }
 
-    public HistoriaClinica getHistoriaClinica() {
-        return historiaClinica;
+    public Date getTiempoConsulta() {
+        return tiempoConsulta;
     }
 
-    public void setHistoriaClinica(HistoriaClinica historiaClinica) {
-        this.historiaClinica = historiaClinica;
-    }
-    
     public void setTiempoConsulta(Date tiempoConsulta) {
-        this.tiempoConsulta = tiempoConsulta;        
+        this.tiempoConsulta = tiempoConsulta;
     }
 
-    public String getMotivoConsulta() {
-        return motivoConsulta;
+    public byte[] getRadiografiaDental() {
+        return radiografiaDental;
     }
 
-    public void setMotivoConsulta(String motivoConsulta) {
-        this.motivoConsulta = motivoConsulta;
-    }
-
-    public String getEnfermedadActual() {
-        return enfermedadActual;
-    }
-
-    public void setEnfermedadActual(String enfermedadActual) {
-        this.enfermedadActual = enfermedadActual;
-    }
-
-    public String getObservacionRevisionActualOrganosYSistemas() {
-        return observacionRevisionActualOrganosYSistemas;
-    }
-
-    public void setObservacionRevisionActualOrganosYSistemas(String observacionRevisionActualOrganosYSistemas) {
-        this.observacionRevisionActualOrganosYSistemas = observacionRevisionActualOrganosYSistemas;
-    }
-
-    public String getExamenFisico() {
-        return examenFisico;
-    }
-
-    public void setExamenFisico(String examenFisico) {
-        this.examenFisico = examenFisico;
+    public void setRadiografiaDental(byte[] radiografiaDental) {
+        this.radiografiaDental = radiografiaDental;
     }
 
     public String getDiagnostico() {
@@ -144,20 +110,20 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
         this.diagnostico = diagnostico;
     }
 
-    public String getTratamiento() {
-        return tratamiento;
+    public String getDiagnosticoRadiografico() {
+        return diagnosticoRadiografico;
     }
 
-    public void setTratamiento(String tratamiento) {
-        this.tratamiento = tratamiento;
+    public void setDiagnosticoRadiografico(String diagnosticoRadiografico) {
+        this.diagnosticoRadiografico = diagnosticoRadiografico;
     }
 
-    public String getObservacionConsulta() {
-        return observacionConsulta;
+    public FichaOdontologica getFichaOdontologica() {
+        return fichaOdontologica;
     }
 
-    public void setObservacionConsulta(String observacionConsulta) {
-        this.observacionConsulta = observacionConsulta;
+    public void setFichaOdontologica(FichaOdontologica fichaOdontologica) {
+        this.fichaOdontologica = fichaOdontologica;
     }
 
     public SignosVitales getSignosVitales() {
@@ -166,7 +132,7 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
 
     public void setSignosVitales(SignosVitales signosVitales) {
         this.signosVitales = signosVitales;
-    }   
+    }
 
     public List<Receta> getRecetas() {
         return recetas;
@@ -174,16 +140,33 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
 
     public void setRecetas(List<Receta> recetas) {
         for (Receta r : recetas) {
-            r.setConsultaMedica(this);
+            r.setConsultaOdontologica(this);
         }
         this.recetas = recetas;
-    } 
-    
-    public void agregarReceta(Receta r){
-        if(!this.recetas.contains(r)){
-           r.setConsultaMedica(this); 
-           this.recetas.add(r);
+    }
+
+    public List<Tratamiento> getTratamientoDientes() {
+        return tratamientoDientes;
+    }
+
+    public void setTratamientoDientes(List<Tratamiento> tratamientoDientes) {
+        for (Tratamiento td : tratamientoDientes) {
+            td.setConsultaOdontologica(this);
+        }
+        this.tratamientoDientes = tratamientoDientes;
+    }
+
+    public void agregarReceta(Receta r) {
+        if (!this.recetas.contains(r)) {
+            r.setConsultaOdontologica(this);
+            this.recetas.add(r);
         }
     }
-            
+
+    public void agregarTratamiento(Tratamiento t) {
+        if(!this.tratamientoDientes.contains(t)){
+            t.setConsultaOdontologica(this);
+            this.tratamientoDientes.add(t);
+        }
+    }
 }

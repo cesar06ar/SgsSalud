@@ -151,7 +151,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
                 create(getInstance());
                 setBussinesEntityTypeId(getInstance().getId());
                 wire();
-                getInstance().getStructures().get(0).setName("Propiedades para el tipo " + getInstance().getName());
+                getInstance().getStructures().get(0).setName(getInstance().getName());
                 save(getInstance());
 
             } catch (Exception ex) {

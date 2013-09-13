@@ -6,6 +6,11 @@
     <jta-data-source>java:/datasources/sgssalud-ds</jta-data-source>
     <class>edu.sgssalud.model.medicina.FichaMedica</class>
     <class>edu.sgssalud.model.medicina.HistoriaClinica</class>
+    <class>edu.sgssalud.model.medicina.SignosVitales</class>
+    <class>edu.sgssalud.model.odontologia.Odontograma</class>
+    <class>edu.sgssalud.model.odontologia.Diente</class>
+    <class>edu.sgssalud.model.odontologia.Tratamiento</class>
+    <class>edu.sgssalud.model.servicios.Servicio</class>
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>

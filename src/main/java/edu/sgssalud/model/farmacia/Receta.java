@@ -17,9 +17,11 @@ package edu.sgssalud.model.farmacia;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.medicina.ConsultaMedica;
+import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -49,16 +51,26 @@ public class Receta implements Serializable {
     private static final long serialVersionUID = 3L;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
+    private String estado;  //el estado puede ser emitido y entregado 
+    
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Medicamento> medicaciones;
+    private List<Medicamento> medicaciones = new ArrayList<Medicamento>();
     private String indicaciones;
     @OneToOne
-    private Profile usuarioResponsable;
+    private Profile ResponsableEntrega;   
+    
+    //el usuario responsable de emitir la receta se carga de la consulta medica
+    
     @ManyToOne
+    @JoinColumn(name = "consultaMedica_id")
     private ConsultaMedica consultaMedica;
+    
+    @ManyToOne
+    @JoinColumn(name = "consultaOdontologica_id")
+    private ConsultaOdontologica consultaOdontologica;
 
     public Long getId() {
         return id;
@@ -103,14 +115,6 @@ public class Receta implements Serializable {
         this.indicaciones = indicaciones;
     }
 
-    public Profile getUsuarioResponsable() {
-        return usuarioResponsable;
-    }
-
-    public void setUsuarioResponsable(Profile usuarioResponsable) {
-        this.usuarioResponsable = usuarioResponsable;
-    }
-
     public ConsultaMedica getConsultaMedica() {
         return consultaMedica;
     }
@@ -124,13 +128,35 @@ public class Receta implements Serializable {
         m.setReceta(this);
         medicaciones.add(m);
     }
-    
-    public void agregarTodosMedicamento(Medicamento m) {
-        if (!medicaciones.contains(m));
-        m.setReceta(this);
-        medicaciones.add(m);
+
+    public String getEstado() {
+        return estado;
     }
 
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Profile getResponsableEntrega() {
+        return ResponsableEntrega;
+    }
+
+    public void setResponsableEntrega(Profile ResponsableEntrega) {
+        this.ResponsableEntrega = ResponsableEntrega;
+    }
+
+    public ConsultaOdontologica getConsultaOdontologica() {
+        return consultaOdontologica;
+    }
+
+    public void setConsultaOdontologica(ConsultaOdontologica consultaOdontologica) {
+        this.consultaOdontologica = consultaOdontologica;
+    }  
+    
+    public boolean isPersistent() {
+        return getId() != null;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
