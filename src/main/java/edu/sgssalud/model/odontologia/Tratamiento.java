@@ -15,6 +15,7 @@
  */
 package edu.sgssalud.model.odontologia;
 
+import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.servicios.Servicio;
 import java.io.Serializable;
 import java.util.Date;
@@ -53,8 +54,12 @@ public class Tratamiento implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "consultaOdontologica_id")
-    private ConsultaOdontologica consultaOdontologica;
+    private ConsultaOdontologica consultaOdontologica;  
     
+    @ManyToOne
+    @JoinColumn(name = "consultaMedica_id")
+    private ConsultaMedica consultaMedica;
+        
     @OneToOne()
     @JoinColumn(name = "servicioDisponible_id")
     private Servicio servicioDisponible;
@@ -121,6 +126,14 @@ public class Tratamiento implements Serializable {
 
     public void setServicioDisponible(Servicio servicioDisponible) {
         this.servicioDisponible = servicioDisponible;
+    }
+
+    public ConsultaMedica getConsultaMedica() {
+        return consultaMedica;
+    }
+
+    public void setConsultaMedica(ConsultaMedica consultaMedica) {
+        this.consultaMedica = consultaMedica;
     }
     
     public boolean isPersistent() {

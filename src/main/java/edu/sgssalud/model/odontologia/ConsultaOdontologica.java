@@ -67,7 +67,7 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private SignosVitales signosVitales;
     @OneToMany(mappedBy = "FichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
-    @OneToMany(mappedBy = "consultaOdontologica")
+    @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Tratamiento> tratamientoDientes = new ArrayList<Tratamiento>();
 
     public Date getFechaConsulta() {
@@ -164,7 +164,7 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     }
 
     public void agregarTratamiento(Tratamiento t) {
-        if(!this.tratamientoDientes.contains(t)){
+        if (!this.tratamientoDientes.contains(t)) {
             t.setConsultaOdontologica(this);
             this.tratamientoDientes.add(t);
         }

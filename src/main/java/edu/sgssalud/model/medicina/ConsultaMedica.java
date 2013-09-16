@@ -17,6 +17,7 @@ package edu.sgssalud.model.medicina;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.farmacia.Receta;
+import edu.sgssalud.model.odontologia.Tratamiento;
 import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
     private String observacionConsulta;
         
     
-    @OneToMany()
+    @ManyToOne()
     @JoinColumn(name = "historiaClinica_id")
     private HistoriaClinica historiaClinica;
 
@@ -70,8 +71,7 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
     
     @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
-    
-    
+       
     public Date getFechaConsulta() {
         return fechaConsulta;
     }
@@ -171,7 +171,7 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
     public List<Receta> getRecetas() {
         return recetas;
     }
-
+      
     public void setRecetas(List<Receta> recetas) {
         for (Receta r : recetas) {
             r.setConsultaMedica(this);
@@ -185,5 +185,23 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
            this.recetas.add(r);
         }
     }
-            
+    /*
+    public List<Tratamiento> getTratamientos() {
+        return tratamientos;
+    }
+
+    public void setTratamientos(List<Tratamiento> tratamientos) {
+        for (Tratamiento t : tratamientos) {
+            t.setConsultaMedica(this);
+        }
+        this.tratamientos = tratamientos;
+    }
+    
+    public void agregarTratamiento(Tratamiento t){
+        if(!this.tratamientos.contains(t)){
+            t.setConsultaMedica(this);
+            this.tratamientos.add(t);
+        }
+    }*/
+    
 }

@@ -11,6 +11,11 @@
     <class>edu.sgssalud.model.odontologia.Diente</class>
     <class>edu.sgssalud.model.odontologia.Tratamiento</class>
     <class>edu.sgssalud.model.servicios.Servicio</class>
+    <class>edu.sgssalud.model.labClinico.TipoAnalisis</class>
+    <class>edu.sgssalud.model.labClinico.ResultadoExamenLaboratorioClinico</class>
+    <class>edu.sgssalud.model.labClinico.PedidoExamenLaboratorio</class>
+    <class>edu.sgssalud.model.servicios.Turno</class>
+    <class>edu.sgssalud.model.servicios.AgendaMedica</class>
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
