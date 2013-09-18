@@ -41,8 +41,8 @@ import javax.persistence.Temporal;
  * @author tania
  */
 @Entity
-@Table(name = "HistoriaClinica")
-@DiscriminatorValue(value = "HC")
+@Table(name = "ConsultaMedica")
+@DiscriminatorValue(value = "CM")
 @PrimaryKeyJoinColumn(name = "id")
 public class ConsultaMedica extends BussinesEntity implements Serializable {
     

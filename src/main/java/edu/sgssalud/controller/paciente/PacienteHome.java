@@ -153,16 +153,16 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
 
     /*<==....*/
-
+    
     /*<== Método para  cargar una instancia de paciente */
     @Produces
     @Named("paciente")
     @Current
     @TransactionAttribute   //
     public Paciente load() {
-        if (isIdDefined()) {
+        if (isIdDefined() ) {
             wire();
-        }
+        }        
         /*else if(this.instance == null){
             
          if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
@@ -353,12 +353,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         }
 
     }
-
-    public void cargarDatosPerfil(Profile p) {
-        p.setCode(getInstance().getCedula());
-        p.setFirstname(getInstance().getNombres());
-        p.setSurname(getInstance().getApellidos());
-        p.setEmail(getInstance().getApellidos());
-    }
+   
     /*<==....*/
 }

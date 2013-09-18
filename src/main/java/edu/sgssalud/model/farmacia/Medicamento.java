@@ -19,11 +19,14 @@ import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.paciente.Paciente;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.jboss.solder.logging.Logger;
 
@@ -32,6 +35,9 @@ import org.jboss.solder.logging.Logger;
  * @author tania
  */
 @Entity
+@Table(name = "Medicamento")
+@DiscriminatorValue(value = "Med")
+@PrimaryKeyJoinColumn(name = "id")
 @NamedQueries(value = {
     @NamedQuery(name = "Medicamento.buscarPorParametro",
     query = "select e from Medicamento e where"

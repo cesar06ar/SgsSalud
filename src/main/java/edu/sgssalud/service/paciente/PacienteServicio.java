@@ -144,7 +144,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
                 + " lower(e.apellidos) like lower(concat('%',:clave,'%')) or"
                 + " lower(e.cedula) like lower(concat('%',:clave,'%')) or" 
                 + " lower(e.edad) like lower(concat('%',:clave,'%')) "
-                + "order by e.nombres", Paciente.class);
+                + " order by e.nombres", Paciente.class);
         query.setParameter("clave", parametro);
         return query.getResultList();
     }

@@ -47,7 +47,7 @@ import org.jboss.solder.logging.Logger;
  */
 @Entity
 @Table(name = "Paciente")
-@DiscriminatorValue(value = "PR")
+@DiscriminatorValue(value = "Pac")
 @PrimaryKeyJoinColumn(name = "id")
 public class Paciente extends BussinesEntity implements Serializable {
 
@@ -126,8 +126,7 @@ public class Paciente extends BussinesEntity implements Serializable {
     
     private String tipoEstudiante;
 
-    public Paciente() {
-        tipoEstudiante = "Universitario";
+    public Paciente() {        
     }
 
     public String getNombreUsuario() {

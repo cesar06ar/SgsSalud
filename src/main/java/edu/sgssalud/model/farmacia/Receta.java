@@ -53,13 +53,14 @@ public class Receta implements Serializable {
     private Date fecha;
     private String estado;  //el estado puede ser emitido y entregado 
     
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Medicamento> medicaciones = new ArrayList<Medicamento>();
     private String indicaciones;
     @OneToOne
+    @JoinColumn(name = "responsableEntrega_id")
     private Profile ResponsableEntrega;   
     
     //el usuario responsable de emitir la receta se carga de la consulta medica

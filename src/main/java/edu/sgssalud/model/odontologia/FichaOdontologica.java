@@ -28,6 +28,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -39,28 +40,24 @@ import javax.persistence.Temporal;
  * @author cesar
  */
 @Entity
-@Table(name = "HistoriaClinica")
-@DiscriminatorValue(value = "HC")
+@Table(name = "FichaOdontologica")
+@DiscriminatorValue(value = "FC")
 @PrimaryKeyJoinColumn(name = "id")
 public class FichaOdontologica extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // la fecha de apertura de la historiaClinica se guarda en (createOn)
-    
     //private List <AntecedentesPersonales> antecedentesPersonales;    
-           
     @OneToOne
+    @JoinColumn(name = "fichaMedica_id")
     private FichaMedica fichaMedica;
-    
     @OneToOne
     private Odontograma odontogramaInicial;
-    
     @OneToOne
     private Odontograma odontograma;
-    
     @OneToMany(mappedBy = "fichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ConsultaOdontologica> consultas = new ArrayList<ConsultaOdontologica>();
-   
+
     public FichaMedica getFichaMedica() {
         return fichaMedica;
     }
@@ -78,7 +75,7 @@ public class FichaOdontologica extends BussinesEntity implements Serializable {
             cm.setFichaOdontologica(this); // falta:  agregar a q ficha pertenece  
         }
         this.consultas = consultas;
-    }   
+    }
 
     public Odontograma getOdontogramaInicial() {
         return odontogramaInicial;
@@ -94,13 +91,13 @@ public class FichaOdontologica extends BussinesEntity implements Serializable {
 
     public void setOdontograma(Odontograma odontograma) {
         this.odontograma = odontograma;
-    } 
-    
-     public void agregarConsulta(ConsultaOdontologica c){
-        if(!this.consultas.contains(c)){
+    }
+
+    public void agregarConsulta(ConsultaOdontologica c) {
+        if (!this.consultas.contains(c)) {
             c.setFichaOdontologica(this);
             this.consultas.add(c);
         }
-        
+
     }
 }

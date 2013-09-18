@@ -48,17 +48,13 @@ public class Tratamiento implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaProximaVisita;    
     
-    @OneToMany()
+    @ManyToOne()
     @JoinColumn(name = "diente_id")
     private Diente diente;
     
     @ManyToOne
     @JoinColumn(name = "consultaOdontologica_id")
     private ConsultaOdontologica consultaOdontologica;  
-    
-    @ManyToOne
-    @JoinColumn(name = "consultaMedica_id")
-    private ConsultaMedica consultaMedica;
         
     @OneToOne()
     @JoinColumn(name = "servicioDisponible_id")
@@ -128,14 +124,6 @@ public class Tratamiento implements Serializable {
         this.servicioDisponible = servicioDisponible;
     }
 
-    public ConsultaMedica getConsultaMedica() {
-        return consultaMedica;
-    }
-
-    public void setConsultaMedica(ConsultaMedica consultaMedica) {
-        this.consultaMedica = consultaMedica;
-    }
-    
     public boolean isPersistent() {
         return getId() != null;
     }

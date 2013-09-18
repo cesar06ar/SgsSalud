@@ -14,8 +14,8 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-           <!-- <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
-            <f:viewParam name="backView" value="#{pacienteHome.backView}" />-->
+            <f:viewParam name="pacienteId" value="#{fichaMedicaHome.pacienteId}" />
+            <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
         </f:metadata>
 
 
@@ -23,17 +23,75 @@
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
+                        <h2>#{fichaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{fichaMedicaHome.instance.numeroFicha}</h2>   
                     </div>
                 </div>
             </div>
         </ui:define>
         <ui:define name="content" class="span20">
             <h:form id="form">
-                
-               
+                <div class="offset8" >
+                    <h:panelGroup id="dnip" layout="block" class="clearfix">
+                        <label for="nombres">#{'Ingrese un parametro'}</label>
+                        <div class="input" >                
+                            <h:inputText id="nombres" value="#{fichaMedicaHome.parametroBusqueda}" styleClass="span3" required="true" label="#{messages['common.firstname']}">                                                
+                                <!--<f:validator validatorId="dniDisponiblePaciente" />-->
+                                <f:ajax execute="@this" render="dnip" />                                
+                            </h:inputText>                                           
+                            <p:commandButton id="cargar" value="Buscar" action="#{fichaMedicaHome.buscarPorParametro()}"
+                                             icon="ui-icon-search" styleClass="btn primary btn-short" title="Buscar Estudiante por Nombres" >                                                 
+
+                            </p:commandButton>
+                        </div>
+                    </h:panelGroup>
+                </div>  
+                <p:panel header="Información Personal" styleClass="span18">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <div class="span1 columns">
+                            <h:link outcome="/pages/paciente/paciente" title="#{fichaMedicaHome.paciente.nombres}">
+                                <ocp:gravatar email="#{fichaMedicaHome.paciente.email}" size="32" updatable="true" />
+                                <f:param name="pacienteId" value="#{fichaMedicaHome.paciente.id}"/>
+                            </h:link>
+                        </div>
+                        <div class="container-fluid">   
+                            <div class="row-fluid">
+                                <div class="span7">
+                                    <glue:input id="nfm" name="nficha" type="text" label="#{'N&ordm;. de Ficha'}" value="#{fichaMedicaHome.instance.numeroFicha}" required="true" inlinehelp="" execute="@this save" render="nfm" styleClass="xLarge"/>
+                                    <glue:input id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{fichaMedicaHome.paciente.nombres}" required="false" inlinehelp="" execute="@this save" render="fstn" styleClass="xLarge"/>
+                                    <glue:input id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{fichaMedicaHome.paciente.apellidos}" required="false" inlinehelp="" execute="@this save" render="srn" styleClass="xLarge"/>                                      
+                                    <glue:input id="genero" name="genero" type="select" label="#{messages['comun.genero']}" value="#{fichaMedicaHome.paciente.genero}" values="#{pacienteHome.listaGeneros}" converter="#{omnifaces.GenericEnumConverter}" required="false" inlinehelp="" execute="@this save" render="genero" styleClass="xLarge"/>                                      
+                                </div>
+                                <div class="span7" align="left">
+                                    <ui:repeat value="#{fichaMedicaHome.paciente.findBussinesEntityAttribute('datosPersonalesPaciente')}" var="a" varStatus="status">
+                                        <h:panelGroup layout="block" class="clearfix">
+                                            <c:choose>
+                                                <c:when test="#{'estadoCivil' eq a.name}">
+                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</label>
+                                                    <div class="input">                                                         
+                                                        <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}" disabled="#{not empty a}">  
+                                                            <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                        </p:selectOneMenu>                                                                                                       
+                                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
+                                                                        styleClass="validation-status" />
+                                                        <span class="help-inline"><br/>#{a.property.helpInline} <ocp:message forId="#{a.name}" /></span>
+                                                    </div>
+                                                </c:when>
+                                            </c:choose>
+                                        </h:panelGroup>     
+                                    </ui:repeat>
+                                    <glue:input id="fechaN" name="fechaNacimiento" type="calendar" label="#{messages['common.fecha.nacimiento']}" value="#{fichaMedicaHome.paciente.fechaNacimiento}" required="false" inlinehelp="" execute="@this save" render="fechaN" styleClass="xLarge"/>
+                                    <glue:input id="edad" name="edad" type="deciamal" label="#{messages['common.edad']}" value="#{fichaMedicaHome.paciente.edad}" required="false" inlinehelp="" execute="@this save" render="edad" styleClass="xLarge"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </p:panel>
+
                 <div class="admin-actions ">
-                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                    <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         

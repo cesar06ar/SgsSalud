@@ -44,7 +44,7 @@ import javax.persistence.Temporal;
  */
 @Entity
 @Table(name = "ConsultaOdontologica")
-@DiscriminatorValue(value = "FO")
+@DiscriminatorValue(value = "CO")
 @PrimaryKeyJoinColumn(name = "id")
 public class ConsultaOdontologica extends BussinesEntity implements Serializable {
 
@@ -59,13 +59,13 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private byte[] radiografiaDental;
     private String diagnostico;
     private String diagnosticoRadiografico;
-    @OneToMany()
+    @ManyToOne
     @JoinColumn(name = "fichaOdontologica_id")
     private FichaOdontologica fichaOdontologica;
     @OneToOne
     @JoinColumn(name = "signosVitales_id")
     private SignosVitales signosVitales;
-    @OneToMany(mappedBy = "FichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
     @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Tratamiento> tratamientoDientes = new ArrayList<Tratamiento>();
