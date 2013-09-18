@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/WEB-INF/view/templates/glue.xhtml">
+
+    <ui:param name="titulo" value="#{messages['paciente.admin']}"/>
+
+    <ui:define name="header-replace">
+        <div class="header-replace">            
+            <div class="container">
+                <div class="span9 columns">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h2>#{titulo}</h2>   
+                    </div>                    
+                </div> 
+                <!--Div para boton de regreso a inicio-->
+                <div class="span4 columns offset3">
+                    <h:form id="control">  
+                        <br/>
+                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
+                        </h:link>  
+                        <br/>                                             
+                    </h:form>
+                </div>
+            </div> 
+        </div>             
+    </ui:define>
+    <ui:define name="content">
+        <!--Metadato que se realiza antes de renderizarse la vista-->
+        <f:metadata>
+            <f:viewParam name="result" value="#{pacienteListaServicio.firstResult}" />
+        </f:metadata>
+        <!--Formulario dentro de un contenedor-->
+         <h:form id="form">            
+            <!--Opción de mensaje, cuando se realiza una acción-->
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+            <!--Botones de admin-->
+            <div class="admin-actions span17">
+                <div class="span6 ">
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="paciente" styleClass="btn success">
+                        <f:param name="pacienteId"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="paciente" styleClass="btn" 
+                            disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
+                        <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/medicina/fichaMedica" styleClass="btn" 
+                            disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
+                        <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                </div>
+                <div class="span6 offset5" >
+                    <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
+                        <p:ajax event="keyup" update="tablaPacientes" listener="#{pacienteListaServicio.buscarPorParametroAutoComplete()}"/>
+                    </p:inputText>
+                    &nbsp;
+                    <p:commandButton value="Buscar" action="#{pacienteListaServicio.buscarPorParametro()}" update="tablaPacientes" styleClass="btn info"/>                    
+                    <br/>
+                </div>             
+            </div>
+
+            <!--tabla de datos-->
+            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio}"
+                         paginator="true" rows="10" styleClass="span18"
+                         paginatorAlwaysVisible="false"
+                         paginatorPosition="top"
+                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                         rowsPerPageTemplate="5,10,15"
+                         lazy="true"
+                         rowKey="#{paciente_.id}"
+                         selection="#{pacienteListaServicio.pacienteSelecionado}"
+                         rendered="true"
+                         selectionMode="single">
+                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
+                <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   
+                        update=":form:button-edit :form:messages :form:button-abrirFM"/>                 
+                <p:ajax event="rowUnselect" listener="#{pacienteListaServicio.onRowUnselect}" 
+                        update=":form:button-edit :form:messages :form:button-abrirFM"/>
+
+                <!--Columnas para mostrar en la tabla-->
+                <p:column sortBy="#{paciente_.cedula}" style="width: 15%; text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['profile.dni']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.cedula}" />
+                </p:column>
+                <p:column sortBy="#{paciente_.nombres}" style="text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.firstname']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.nombres}" />
+                </p:column>
+                <p:column sortBy="#{paciente_.apellidos}" style="text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.surname']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.apellidos}" />
+                </p:column>
+                <p:column sortBy="#{paciente_.edad}" style="text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.edad']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.edad}" />
+                </p:column>
+                <p:column sortBy="#{paciente_.email}" style="text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.email']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{paciente_.email}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+

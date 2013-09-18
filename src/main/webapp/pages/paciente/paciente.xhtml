@@ -154,10 +154,10 @@
                         <label for="tipoEst_" class="control-label">#{messages['comun.tipoEstudiante']}</label>
                         <div class="input">
                             <p:selectOneMenu id="tipoEst_" value="#{pacienteHome.tipoEstudiante}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false"  
-                                             rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" disabled="#{pacienteHome.instance.tipoEstudiante != null}">
+                                             rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" > <!--disabled="#{not empty pacienteHome.tipoEstudiante}"-->
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
                                 <f:selectItems value="#{pacienteHome.tiposEstudiante()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
-                                <p:ajax event="change" update="@parent :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc" partialSubmit="true" rendered=":form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc"/>  
+                                <p:ajax event="change" update="@parent :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc" partialSubmit="true" rendered="this :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc"/>  
                                 
                             </p:selectOneMenu>  
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.tipoEstudiante != null}"

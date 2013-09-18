@@ -47,9 +47,9 @@
                 </div>  
                 <p:panel header="Información Personal" styleClass="span18">
                     <div class="row fl" style="margin-top: 5px;">
-                        <div class="span1 columns">
+                        <div class="span2 columns">
                             <h:link outcome="/pages/paciente/paciente" title="#{fichaMedicaHome.paciente.nombres}">
-                                <ocp:gravatar email="#{fichaMedicaHome.paciente.email}" size="32" updatable="true" />
+                                <ocp:gravatar email="#{fichaMedicaHome.paciente.email}" size="90" updatable="true" />
                                 <f:param name="pacienteId" value="#{fichaMedicaHome.paciente.id}"/>
                             </h:link>
                         </div>

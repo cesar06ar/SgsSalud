@@ -45,7 +45,7 @@ import javax.persistence.Temporal;
 public class HistoriaClinica extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    // la fecha de apertura de la historiaClinica se guarda en (createOn)
+    // la fecha de apertura de la historiaClinica se guarda en (createOn)...
     
     //private List <AntecedentesPersonales> antecedentesPersonales;    
            

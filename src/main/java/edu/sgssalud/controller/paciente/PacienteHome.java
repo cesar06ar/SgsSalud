@@ -153,16 +153,15 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
 
     /*<==....*/
-    
     /*<== Método para  cargar una instancia de paciente */
     @Produces
     @Named("paciente")
     @Current
     @TransactionAttribute   //
     public Paciente load() {
-        if (isIdDefined() ) {
+        if (isIdDefined()) {
             wire();
-        }        
+        }
         /*else if(this.instance == null){
             
          if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
@@ -171,6 +170,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
          setInstance(createInstance());
          }
          }*/
+
         log.info("sgssalud --> cargar instance " + getInstance());
         return getInstance();
     }
@@ -180,6 +180,16 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @TransactionAttribute
     public void wire() {
         getInstance();
+        if (getInstance().isPersistent()) {
+            String t = getInstance().getTipoEstudiante();
+            log.info("ingreso a fijar tipo: " + t);
+            this.setTipoEstudiante(t);
+        } else {
+            log.info("ingreso a fijar tipo Nuevo");
+            this.rendPanelEstUni = false;
+            this.rendPanelEstCol = false;
+            this.rendPanelEstEsc = false;
+        }
     }
     /*....==>*/
 
@@ -189,16 +199,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         setEntityManager(em);
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
-        if (getInstance().getTipoEstudiante() != null) {            
-            String t = getInstance().getTipoEstudiante();
-            log.info("ingreso a fijar tipo: "+t);
-            this.setTipoEstudiante(t);
-        } else {
-            log.info("ingreso a fijar tipo Nuevo");
-            this.rendPanelEstUni = false;
-            this.rendPanelEstCol = false;
-            this.rendPanelEstEsc = false;
-        }
     }
     /*....==>*/
 
@@ -328,7 +328,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     public void setTipoEstudiante(String tipoEstudiante) {
         log.info("setTipoEstudiante");
         this.tipoEstudiante = tipoEstudiante;
-        getInstance().setTipoEstudiante(tipoEstudiante);
+        getInstance().setTipoEstudiante(this.tipoEstudiante);
 
         log.info("fijar tipo estudiante : " + getInstance().getTipoEstudiante());
         if (!getInstance().getTipoEstudiante().isEmpty()) {
@@ -339,8 +339,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
                 log.info("TES---  Uniersitario " + rendPanelEstUni);
             } else if ("Colegio".equals(getInstance().getTipoEstudiante())) {
                 this.setRendPanelEstUni(false);
-                this.setRendPanelEstCol(true);
                 this.setRendPanelEstEsc(false);
+                this.setRendPanelEstCol(true);
             } else if ("Escuela".equals(getInstance().getTipoEstudiante())) {
                 this.setRendPanelEstUni(false);
                 this.setRendPanelEstCol(false);
@@ -353,6 +353,5 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         }
 
     }
-   
     /*<==....*/
 }
