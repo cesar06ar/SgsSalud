@@ -387,4 +387,14 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         List<BussinesEntityAttribute> temp = getBussinessEntityAttributes(names.split(","));
         return temp;
     }
+    
+     public boolean containsBussinesEntityType(String name) {
+        List<BussinesEntityAttribute> _buffer = new ArrayList<BussinesEntityAttribute>();
+        for (BussinesEntityAttribute a : getAttributes()) {            
+                if (name.equalsIgnoreCase(a.getProperty().getStructure().getBussinesEntityType().getName())) {
+                    return true;
+                }            
+        }        
+        return false;
+    }
 }

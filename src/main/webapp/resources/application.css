@@ -444,6 +444,11 @@ h1.header span {
     margin-bottom: 12px;
 }
 
+.ui-icon-buscar{    
+    background-image: url("/resources/images/buscar.png");    
+    background-position:right;    
+}
+
 .body {
     background-color: #E9F1F4;
     border-color: #E9F1F4 #D8DEE2 #D8DEE2;

@@ -48,6 +48,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.controller.medicina.FichaMedicaHome;
 import edu.sgssalud.controller.profile.GroupHome;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.BussinesEntityAttribute;
@@ -112,8 +113,8 @@ public class UI {
         }
 
         return columns;
-    }
-
+    }   
+  
     public BussinesEntity makeBussinessEntity(Group g) {
         Date now = Calendar.getInstance().getTime();
         //TODO internacionalizar cadenas estáticas

@@ -15,7 +15,10 @@
  */
 package edu.sgssalud.service.medicina;
 
+import edu.sgssalud.model.farmacia.Medicamento;
+import edu.sgssalud.model.farmacia.Medicamento_;
 import edu.sgssalud.model.medicina.FichaMedica;
+import edu.sgssalud.model.medicina.FichaMedica_;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
@@ -23,42 +26,53 @@ import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
  * @author cesar
  */
-public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements Serializable{
+public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements Serializable {
 
     private static final long serialVersionUID = 234L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(FichaMedicaServicio.class);
-    
     @Inject
     private BussinesEntityService bussinesEntityService;
-    
-    public FichaMedicaServicio(){
+
+    public FichaMedicaServicio() {
         super(FichaMedica.class);
     }
-    
+
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
         bussinesEntityService.setEntityManager(em);
     }
-    
+
     public long getFichaMedicaCount() {
         return count(FichaMedica.class);
     }
-    
+
     public List<FichaMedica> getFichasMedicas(final int limit, final int offset) {
         return findAll(FichaMedica.class);
-    }    
+    }
 
     public List<FichaMedica> getFichasMedicas() {
         List list = this.findAll(FichaMedica.class);
         return list;
     }
+
     public FichaMedica getFichaMedicaPorId(final Long id) {
         return (FichaMedica) findById(FichaMedica.class, id);
+    }
+    
+    public FichaMedica getFichaMedicaPorNumeroFicha(final String numeroFicha){
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<FichaMedica> query = builder.createQuery(FichaMedica.class);
+        Root<FichaMedica> bussinesEntityType = query.from(FichaMedica.class);
+        query.where(builder.equal(bussinesEntityType.get(FichaMedica_.numeroFicha), numeroFicha));
+        return getSingleResult(query);
     }
 }

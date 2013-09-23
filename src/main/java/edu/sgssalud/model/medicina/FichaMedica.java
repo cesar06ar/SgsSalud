@@ -20,8 +20,11 @@ import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.model.paciente.Paciente;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -46,6 +49,10 @@ public class FichaMedica extends BussinesEntity implements Serializable {
     
     private String observacionAntecedentesPersonales;
     private String observacionAntecedentesFamiliares;
+    
+    @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
+    @Column(nullable = false)  
+    private FichaMedica.GrupoSangineo grupoSangineo;
     
     @OneToOne
     @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
@@ -82,5 +89,36 @@ public class FichaMedica extends BussinesEntity implements Serializable {
     public void setObservacionAntecedentesFamiliares(String observacionAntecedentesFamiliares) {
         this.observacionAntecedentesFamiliares = observacionAntecedentesFamiliares;
     } 
+
+    public GrupoSangineo getGrupoSangineo() {
+        return grupoSangineo;
+    }
+
+    public void setGrupoSangineo(GrupoSangineo grupoSangineo) {
+        this.grupoSangineo = grupoSangineo;
+    }  
+    
+    
+    public enum GrupoSangineo {
+
+        A_POSITIVO(0), 
+        A_NEGATIVO(1),
+        B_POSITIVO(2), 
+        B_NEGATIVO(3),
+        AB_POSITIVO(4), 
+        AB_NEGATIVO(5),
+        O_POSITIVO(6), 
+        O_NEGATIVO(7);
         
+        private int grupoSangineo;
+
+        private GrupoSangineo(int grupoSangineo) {
+            this.grupoSangineo = grupoSangineo;
+        }
+
+        public int getGrupoSangineo() {
+            return grupoSangineo;
+        }
+        
+    }
 }

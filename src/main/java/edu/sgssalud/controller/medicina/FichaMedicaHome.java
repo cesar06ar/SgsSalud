@@ -22,7 +22,6 @@ import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
-import edu.sgssalud.util.Dates;
 import java.io.Serializable;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -50,8 +49,8 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     private PacienteServicio ps;
     private Long pacienteId;
     private Paciente paciente;
-    private String parametroBusqueda;
-
+    private String parametroBusqueda;  
+    
     /*<== Métodos get y set para obtener el Id de la clase*/
     public Long getFichaMedicaId() {
         return (Long) getId();
@@ -106,8 +105,12 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         setEntityManager(em);
         fms.setEntityManager(em);
         ps.setEntityManager(em);
-        if (pacienteId != null) {
+        bussinesEntityService.setEntityManager(em);
+        if (pacienteId == null) {
+            //BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(Paciente.class.getName());
             paciente = new Paciente();
+            //paciente.setType(_type);
+            //paciente.buildAttributes(bussinesEntityService);
         }
 
         //bussinesEntityService.setEntityManager(em);        
@@ -116,7 +119,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     @Override
     protected FichaMedica createInstance() {
         //prellenado estable para cualquier clase 
-        //BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(FichaMedica.class.getName());
+        BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(FichaMedica.class.getName());
         Date now = Calendar.getInstance().getTime();
         FichaMedica fichaMedic = new FichaMedica();
         fichaMedic.setCreatedOn(now);
@@ -124,8 +127,8 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         fichaMedic.setActivationTime(now);
         //fichaMedic.setExpirationTime(Dates.addDays(now, 364));
         //fichaMedic.setResponsable(null);    //cambiar atributo a 
-        //fichaMedic.setType(_type);
-        //fichaMedic.buildAttributes(bussinesEntityService);  //
+        fichaMedic.setType(_type);
+        fichaMedic.buildAttributes(bussinesEntityService);  //
         return fichaMedic;
     }
 
@@ -140,6 +143,18 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     }
 
     public void buscarPorParametro() {
-        getInstance().findBussinesEntityAttribute("");
+        //buscar primero por numero de ficha
+        FichaMedica fichaMedList = fms.getFichaMedicaPorNumeroFicha(parametroBusqueda);
+        if(true){
+            
+        }
+    }      
+    
+     /*<== método que retorna la lista de tipos de datos enumerados ...*/
+    public List<FichaMedica.GrupoSangineo> getListaGruposSangineos() {
+        wire();
+        List<FichaMedica.GrupoSangineo> list = Arrays.asList(getInstance().getGrupoSangineo().values());
+        return list;
     }
+    /*....==>*/
 }

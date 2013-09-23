@@ -43,10 +43,7 @@
                                 <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
                                                  rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
                                                  update=":control :summary">
-                                </p:commandButton>
-                                <br/>                                 
-                                <h:link outcome="/pages/home" styleClass="btn secondary" value="#{messages['common.dashboard']}">
-                                </h:link>
+                                </p:commandButton>                            
                             </h:form>
                         </div>
 

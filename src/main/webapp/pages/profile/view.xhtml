@@ -41,14 +41,7 @@
                                 <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
                                                  rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
                                                  update=":control :summary">
-                                </p:commandButton>
-                                <br/>
-                                <!--<h:link outcome="profile" styleClass="btn" value="#{messages['common.edit']} #{messages['profile']}" rendered="#{profileHome.editionEnabled}">
-                                    <f:param name="profileId" value="#{profileHome.instance.id}"/>
-                                </h:link>
-                                <br/>
-                                <h:link outcome="/pages/home" styleClass="btn secondary" value="#{messages['common.dashboard']}">
-                                </h:link>-->
+                                </p:commandButton>                                
                             </h:form>
                         </div>
                     </div>
@@ -82,13 +75,13 @@
                                         <h:panelGroup layout="block" class="clearfix" rendered="#{a.property.survey}">
                                             <span class="#{(not empty a.property.required and a.property.required) ? 'survey-label required' : 'survey-label'}">#{a.property.label}</span>
                                             <div class="survey-output">
-                                                <h:outputText value="#{a.value}"/>
+                                                <h:outputText value="#{a.value}" style="text-align: center"/>
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup layout="block" class="clearfix" rendered="#{not a.property.survey}">
                                             <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : ''}</strong></label>
                                             <div class="output">                                     
-                                                <h:outputText value="#{a.value}"/>
+                                                <h:outputText value="#{a.value}" style="text-align: center"/>
                                             </div>
                                         </h:panelGroup>  
                                     </ui:repeat>

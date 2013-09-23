@@ -28,4 +28,8 @@ limitations under the License.
         <tag-name>group</tag-name>
         <source>tags/group.xhtml</source>
     </tag>
+    <tag>
+        <tag-name>output</tag-name>
+        <source>tags/output.xhtml</source>
+    </tag>
 </facelet-taglib>

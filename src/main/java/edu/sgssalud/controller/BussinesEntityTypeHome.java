@@ -93,7 +93,6 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
         Calendar ago = Calendar.getInstance();
         ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
         Structure structure = new Structure();
-
         structure.setCreatedOn(now);
         structure.setLastUpdate(now);
         /*
@@ -144,6 +143,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     public String saveBussinesEntityType() {
         log.info("eqaula --> saving " + getInstance().getName());
         if (getInstance().isPersistent()) {
+            getInstance().getStructures().get(0).setName(getInstance().getName());
             save(getInstance());
         } else {
             try {
