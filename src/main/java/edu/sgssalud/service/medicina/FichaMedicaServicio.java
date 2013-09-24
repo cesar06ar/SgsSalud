@@ -71,8 +71,16 @@ public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements
     public FichaMedica getFichaMedicaPorNumeroFicha(final String numeroFicha){
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<FichaMedica> query = builder.createQuery(FichaMedica.class);
-        Root<FichaMedica> bussinesEntityType = query.from(FichaMedica.class);
-        query.where(builder.equal(bussinesEntityType.get(FichaMedica_.numeroFicha), numeroFicha));
+        Root<FichaMedica> entity = query.from(FichaMedica.class);
+        query.where(builder.equal(entity.get(FichaMedica_.numeroFicha), numeroFicha));
+        return getSingleResult(query);
+    }
+    
+    public FichaMedica getFichaMedicaPorPaciente(final Paciente p){
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<FichaMedica> query = builder.createQuery(FichaMedica.class);
+        Root<FichaMedica> entity = query.from(FichaMedica.class);
+        query.where(builder.equal(entity.get(FichaMedica_.paciente), p));
         return getSingleResult(query);
     }
 }

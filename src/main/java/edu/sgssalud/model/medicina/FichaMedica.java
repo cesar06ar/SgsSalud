@@ -44,6 +44,8 @@ public class FichaMedica extends BussinesEntity implements Serializable {
     private static final long serialVersionUID = 1L;   
     
     private Long numeroFicha;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaApertura;
 // la fecha de apertura de la historiaClinica se guarda en (createOn)
 // registrar Tipos de entidad de Negocio antecedentes familiares y personales    
     
@@ -96,6 +98,14 @@ public class FichaMedica extends BussinesEntity implements Serializable {
 
     public void setGrupoSangineo(GrupoSangineo grupoSangineo) {
         this.grupoSangineo = grupoSangineo;
+    }  
+
+    public Date getFechaApertura() {
+        return fechaApertura;
+    }
+
+    public void setFechaApertura(Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
     }  
     
     

@@ -61,7 +61,7 @@
                     <glue:input id="converter" name="converter" type="text" label="#{messages['common.property.converter']}" 
                                 value="#{propertyHome.instance.converter}" required="false" inlinehelp="#{messages['common.property.converter.help']}" execute="@this save" />
                 </p:panel>
-                <p:panel header="#{messages['common.properties']} para #{messages['panel.Group']}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" >                     
+                <p:panel header="#{messages['common.properties']} para #{messages['panel.Group']}" toggleable="true" closable="false" toggleSpeed="100" closeSpeed="0" collapsed="true">                     
                     <glue:input id="overwrite" name="overwrite" type="text" label="#{messages['common.property.overwrite']}" 
                                 value="#{propertyHome.instance.overwrite}" required="false" inlinehelp="#{messages['common.property.overwrite.help']}" execute="@this save" />
                     <glue:input id="shwclms" name="showInColumns" type="checkbox" label="#{messages['common.property.showInColumns']}" 
@@ -73,7 +73,7 @@
                     <glue:input id="maxmb" name="maximumMembers" type="java.lang.Long" label="#{messages['common.property.maximumMembers']}" 
                                 value="#{propertyHome.instance.maximumMembers}" required="false" inlinehelp="#{messages['common.property.maximumMembers.help']}" execute="@this save" /> 
                 </p:panel>
-                <p:panel header=" #{messages['common.properties']} #{messages['panel.Optional']}" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" >                                          
+                <p:panel header=" #{messages['common.properties']} #{messages['panel.Optional']}" toggleable="true" closable="false" toggleSpeed="100" closeSpeed="0" collapsed="true">                                          
                     <glue:input id="render" name="render" type="text" label="#{messages['common.property.render']}" 
                                 value="#{propertyHome.instance.render}" required="false" inlinehelp="#{messages['common.property.render.help']}" execute="@this save" />
                     <glue:input id="customf" name="customForm" type="text" label="#{messages['common.property.customForm']}" 

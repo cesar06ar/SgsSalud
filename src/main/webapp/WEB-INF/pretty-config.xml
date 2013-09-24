@@ -141,6 +141,14 @@
       <pattern value="/medicina/agendaMedica"></pattern>
       <view-id value="/pages/medicina/agenda.xhtml"></view-id>       
    </url-mapping> 
+   <url-mapping id="ConsultaMedica">
+      <pattern value="/medicina/consultaMedica"></pattern>
+      <view-id value="/pages/medicina/consultaMedica.xhtml"></view-id>       
+   </url-mapping> 
+   <url-mapping id="ListaConsultaMedica">
+      <pattern value="/medicina/listaConsulta"></pattern>
+      <view-id value="/pages/medicina/listaConsulta.xhtml"></view-id>       
+   </url-mapping>   
    
     <!-- Vistas del Módulo de Odontología-->
    <url-mapping id="FichaOdontologica">

@@ -61,10 +61,9 @@ limitations under the License.
                 </h:link>
             </div>           
             <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
-                         paginator="true" rows="10"
-                         paginatorAlwaysVisible="false"
+                         paginator="true" rows="15"                         
                          paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink} {RowsPerPageDropdown} {FirstPageLink} {LastPageLink}"
                          rowsPerPageTemplate="5,10,15"
                          id="bussinesEntityTypeTable" lazy="true"                          
                          selection="#{bussinesEntityTypeListService.selectedBussinesEntityType}"
