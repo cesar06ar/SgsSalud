@@ -6,6 +6,7 @@
       template="/WEB-INF/view/templates/glue.xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:s="http://jboss.org/seam/faces"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
       xmlns:glue="http://eqaula.org/jsf/facelets">
 
@@ -15,7 +16,6 @@
             <f:viewParam name="id" value="#{medicamentoHome.medicamentoId}"/>
         </f:metadata>
 
-
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container">
@@ -24,72 +24,69 @@
                     </div>
                 </div>
             </div>
-
         </ui:define>
-
-
+        
         <ui:define name="content">
             <h:form id="form" acceptcharset="UTF-8">
-                <!-- Administracion de Medicamentos 
-                <glue:input id="fechaIngreso" name="fechaIngreso" type="Date" label="#{messages['common.fecha.ingreso.medicamento']}" value="#{medicamentoHome.instance.fechaIngreso}" required="true" inlinehelp="#{messages['common.module.setting.dateformat.inlinehelp']}" execute ="@this save" render="fechaIngreso" />-->
-
-                <h:panelGroup id="fnp" layout="block" class="clearfix">
+                <!-- Administracion de Medicamentos -->                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <h:panelGroup id="fnp" layout="block" class="clearfix" >
                     <label for="fechaIngreso">#{messages['common.fecha.ingreso.medicamento']}</label>
                     <div class="input" >
                         <p:calendar  id="fechaIngreso" value="#{medicamentoHome.instance.fechaIngreso}" styleClass="xLarge" required="true" label="#{messages['common.fecha.ingreso.medicamento']}" 
-                                     rendered="true" disabled="true" locale="es" pattern="dd-MMM-yyyy">                            
-                            <p:ajax event="dateSelect" rendered="save" />  
+                                     rendered="true" disabled="false" locale="es" pattern="dd-MMM-yyyy">   
+                            <p:ajax event="change" rendered="save" />  
                         </p:calendar>                        
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{medicamentoHome.instance.fechaIngreso != null}"
                                         styleClass="validation-status" />
-                        <span class="help-inline"><br/>#{messages['common.module.setting.dateformat.inlinehelp']}<ocp:message forId="fechaIngreso" /></span>
+                        <span class="help-inline"><br/>#{messages['common.fecha.ingreso.medicamento.lineaAyuda']}<ocp:message forId="fechaIngreso" /></span>
                     </div>
                 </h:panelGroup>
-                                
+
                 <glue:input id="numFactura" name="numFactura" type="long" label="#{messages['common.numfactura']}" value="#{medicamentoHome.instance.numeroFactura}" required="true" inlinehelp="#{messages['common.numfactura']}" execute ="@this save" render="numFactura"/>
+                <glue:input id="nombreComercial" name="nombreComercial" type="text" label="#{messages['common.nombrecomercial']}" value="#{medicamentoHome.instance.nombreComercial}" required="true" inlinehelp="#{messages['common.nombrecomercial']}" execute="@this save" render="nombreComercial"/>
+                <glue:input id="nombreGenerico" name="nombreGenerico" type="text" label="#{messages['common.nombregenerico']}" value="#{medicamentoHome.instance.nombreGenerico}" required="true" inlinehelp="#{messages['common.nombregenerico']}" execute="@this save" render="nombreGenerico"/>
+                <glue:input id="unidades" name="unidadadesMedicamento" type="long" label="#{messages['common.unidadadesmedicamento']}" value="#{medicamentoHome.instance.unidades}" required="false" inlinehelp="#{messages['common.unidadadesmedicamento']}" execute="@this save" render="unidades"/>
                 <glue:input id="casaComercial" name="casaComercial" type="text" label="#{messages['common.casaComercialProveedora']}" value="#{medicamentoHome.instance.casaComercialProveedora}" required="true" inlinehelp="#{messages['common.casacaomercial.inlinehelp']}" execute="@this save" render="casaComercial"/>
                 <glue:input id="dirCasaComercial" name="dirCasaComercial" type="text" label="#{messages['common.dircasacomercial']}" value="#{medicamentoHome.instance.dirCasaComercial}" required="false" inlinehelp="#{messages['common.dircasacomercial']}" execute="@this save" render="dirCasaComercial"/>
-                <glue:input id="nombreComercial" name="nombreComercial" type="text" label="#{messages['common.nombrecomercial']}" value="#{medicamentoHome.instance.nombreComercial}" required="false" inlinehelp="#{messages['common.nombrecomercial']}" execute="@this save" render="nombreComercial"/>
-                <glue:input id="nombreGenerico" name="nombreGenerico" type="text" label="#{messages['common.nombregenerico']}" value="#{medicamentoHome.instance.nombreGenerico}" required="false" inlinehelp="#{messages['common.nombregenerico']}" execute="@this save" render="nombreGenerico"/>
-                <glue:input id="referencia" name="referencia" type="text" label="#{messages['common.referenciaMedicamento']}" value="#{medicamentoHome.instance.referencia}" required="false" inlinehelp="#{messages['common.referenciaMedicamento']}" execute="@this save" render="referencia"/>
-                <glue:input id="unidades" name="unidadadesMedicamento" type="long" label="#{messages['common.unidadadesmedicamento']}" value="#{medicamentoHome.instance.unidades}" required="false" inlinehelp="#{messages['common.unidadadesmedicamento']}" execute="@this save" render="unidades"/>
-
 
                 <h:panelGroup id="fnp1" layout="block" class="clearfix">
                     <label for="fechaElaboracion">#{messages['common.fechaelaboracionmedicamento']}</label>
                     <div class="input" >
                         <p:calendar  id="fechaElaboracion" locale="es" value="#{medicamentoHome.instance.fechaElaboracion}" styleClass="xLarge" required="true" label="Fecha de Elaboracion" 
-                                     rendered="true" disabled="false" navigator="true" showButtonPanel="true" disabledWeekends="false" pattern="dd-MMM-yyyy" >
-                            
+                                     rendered="true" disabled="false" navigator="true" showButtonPanel="true" disabledWeekends="false" pattern="dd-MM-yyyy" >
                             <p:ajax event="dateSelect" rendered="save" update="save" />  
                         </p:calendar>                        
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{medicamentoHome.instance.fechaElaboracion != null}"
                                         styleClass="validation-status" />
-                        <span class="help-inline"><br/>#{messages['common.module.setting.dateformat.inlinehelp']}<ocp:message forId="fechaElaboracion" /></span>
+                        <span class="help-inline"><br/>#{messages['common.fechaelaboracionmedicamento.lineaAyuda']}<ocp:message forId="fechaElaboracion" /></span>
                     </div>
                 </h:panelGroup>
-
 
                 <h:panelGroup id="fc" layout="block" class="clearfix">
                     <label for="fechaCaducidad">#{messages['common.fechacaducidadmedicamento']}</label>
                     <div class="input" >
                         <p:calendar  id="fechaCaducidad" value="#{medicamentoHome.instance.fechaCaducidad}" styleClass="xLarge" required="true" label="Fecha de Caducidad" 
                                      rendered="true" disabled="false" navigator="true" showButtonPanel="false" disabledWeekends="false" locale="es" pattern="dd-MM-yyyy">                            
-                            <f:validator validatorId="fachasMedicamento"/>                            
-                            <p:ajax event="dateSelect" rendered="save" update="save" listener="#{medicamentoHome.validarFC()}"/>  
-                        </p:calendar>                        
+                            <p:ajax event="dateSelect" process="fechaIngreso fechaElaboracion fechaCaducidad validadorFechas" rendered="save" update="fnp1 fc form:messages"/>  
+                            <!--Con el atributo process de p:ajax se puede activar el validadorFechas de seam   -->
+                        </p:calendar>                                                
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{medicamentoHome.instance.fechaCaducidad != null}"
                                         styleClass="validation-status" />
-                        <span class="help-inline"><br/>#{messages['common.module.setting.dateformat.inlinehelp']}<ocp:message forId="fechaCaducidad" /></span>
-                    </div>
-                </h:panelGroup>   
-                
-                
-                 <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary"/>
-
+                        <span class="help-inline"><br/>#{messages['common.fechacaducidadmedicamento.lineaAyuda']}<ocp:message forId="fechaCaducidad" /></span>
+                        
+                    </div>                    
+                </h:panelGroup>  
+                <s:validateForm id="validadorFechas" validatorId="validadorFechasMedicamento" />
+                <glue:input id="referencia" name="referencia" type="textarea" label="#{messages['common.referenciaMedicamento']}" value="#{medicamentoHome.instance.referencia}" required="false" inlinehelp="#{messages['common.referenciaMedicamento']}" execute="@this save" render="referencia"/>
+                <div class="admin-actions span9">
+                    <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary offset2"/>
+                    #{' '}
+                    <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn primary" inmediate="true">                         
+                    </h:link>
+                </div>
             </h:form>
         </ui:define>
-
     </ui:composition>
-
 </html>   

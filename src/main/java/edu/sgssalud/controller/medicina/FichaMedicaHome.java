@@ -189,7 +189,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         historiaClinica = new HistoriaClinica();
         historiaClinica.setCreatedOn(now);
         historiaClinica.setActivationTime(now);
-
+        historiaClinica.setLastUpdate(now);
         return fichaMedic;
     }
 
@@ -203,6 +203,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         log.info("Ingreso a guardar");
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
+        historiaClinica.setLastUpdate(now);
         log.info("Ingreso a guardar 1");
         try {
             if (getInstance().isPersistent()) {
