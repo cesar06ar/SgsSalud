@@ -38,14 +38,16 @@ import org.jboss.seam.security.annotations.Secures;
 import org.jboss.solder.logging.Logger;
 import org.picketlink.idm.api.Role;
 
-
 public class SecurityRules {
 
     private static Logger log = Logger.getLogger(SecurityRules.class);
-    public static String ADMIN = "Admin";
-    private static String MEDICO = "Medico";
-    private static String FARMACEUTICA = "Farmaceutica";
-    private static String PACIENTE = "paciente";
+    public static String ADMIN = "ADMIN";
+    public static String MEDICOS = "MEDICOS";
+    public static String ODONTOLOGOS = "ODONTOLOGOS";
+    public static String FARMACEUTICOS = "FARMACEUTICOS";
+    public static String LABORATORISTAS = "LABORATORISTAS";
+    public static String ENFERMEROS = "ENFERMEROS";
+    public static String SECRETARIA = "SECRETARIA";
 
     /*public @Secures
      @Admin
@@ -58,24 +60,25 @@ public class SecurityRules {
     public boolean isProfileOwner(Identity identity, @Current Profile profile) {
         if (profile == null || identity.getUser() == null) {
             return false;
-        } else {            
+        } else {
             return profile.getIdentityKeys().contains(getUsername(identity))
                     || identity.hasRole("admin", "USERS", "GROUP")
                     || identity.inGroup(SecurityRules.ADMIN, "GROUP")
                     || "admin".contains(getUsername(identity));
         }
     }
-    
+
     @Secures
-    @Paciente
+    @Secretaria
     public boolean isPacienteOwner(Identity identity, @Current edu.sgssalud.model.paciente.Paciente pacienteU) {
         if (pacienteU == null || identity.getUser() == null) {
             return false;
-        } else {            
-            return pacienteU.getIdentityKeys().contains(getUsername(identity))                    
-                    || identity.hasRole(PACIENTE, "USERS", "GROUP")
-                    || identity.hasRole("admin", "USERS", "GROUP")
-                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+        } else {
+            return pacienteU.getIdentityKeys().contains(getUsername(identity))
+                    || identity.hasRole(SECRETARIA, "USERS", "GROUP")
+                    //                    || identity.hasRole("admin", "USERS", "GROUP")
+                    || identity.inGroup(SecurityRules.SECRETARIA, "GROUP")
+                    || identity.inGroup(SecurityRules.ENFERMEROS, "GROUP")
                     || "admin".contains(getUsername(identity));
         }
     }
@@ -94,15 +97,41 @@ public class SecurityRules {
     }
 
     @Secures
+    @Secretaria
+    public boolean isSecretaria(Identity identity) {
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(SECRETARIA, "USERS", "GROUP")                    
+                    || identity.inGroup(SecurityRules.SECRETARIA, "GROUP")
+                    || identity.inGroup(SecurityRules.ENFERMEROS, "GROUP");
+//                    || "admin".contains(getUsername(identity));
+        }
+    }
+
+    @Secures
     @Medico
     public boolean isMedico(Identity identity) {
         if (identity.getUser() == null) {
             return false;
         } else {
-            return identity.hasRole(MEDICO, "USERS", "GROUP")
-                    || identity.inGroup(MEDICO, "GROUP")
-                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
-                    || "admin".contains(getUsername(identity));
+            return identity.hasRole(MEDICOS, "USERS", "GROUP")
+                    || identity.inGroup(SecurityRules.MEDICOS, "GROUP")
+                    || identity.inGroup(SecurityRules.ENFERMEROS, "GROUP");
+//                    || "admin".contains(getUsername(identity));
+        }
+    }
+
+    @Secures
+    @Odontologo
+    public boolean isOdontologo(Identity identity) {
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(ODONTOLOGOS, "USERS", "GROUP")
+                    || identity.inGroup(ODONTOLOGOS, "GROUP");
+//                    || identity.inGroup(SecurityRules.ADMIN, "GROUP");
+//                    || "admin".contains(getUsername(identity));
         }
     }
 
@@ -112,13 +141,44 @@ public class SecurityRules {
         if (identity.getUser() == null) {
             return false;
         } else {
-            return identity.hasRole(FARMACEUTICA, "USERS", "GROUP")
-                    || identity.inGroup(FARMACEUTICA, "GROUP")                    
-                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
-                    || "admin".contains(getUsername(identity));
+            return identity.hasRole(FARMACEUTICOS, "USERS", "GROUP")
+                    || identity.inGroup(FARMACEUTICOS, "GROUP");
+//                    || identity.inGroup(MEDICOS, "GROUP")
+//                    || identity.inGroup(ODONTOLOGOS, "GROUP")
+//                    || identity.inGroup(SecurityRules.ADMIN, "GROUP");
+            //|| "admin".contains(getUsername(identity));
         }
     }
-    
+
+    @Secures
+    @Laboratorista
+    public boolean isLaboratorista(Identity identity) {
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(LABORATORISTAS, "USERS", "GROUP")
+                    || identity.inGroup(LABORATORISTAS, "GROUP");
+//                    || identity.inGroup(MEDICOS, "GROUP")
+//                    || identity.inGroup(ODONTOLOGOS, "GROUP")
+//                    || identity.inGroup(SecurityRules.ADMIN, "GROUP")
+//                    || "admin".contains(getUsername(identity));
+        }
+    }
+
+    @Secures
+    @Enfermero
+    public boolean isEnfermero(Identity identity) {
+        if (identity.getUser() == null) {
+            return false;
+        } else {
+            return identity.hasRole(ENFERMEROS, "USERS", "GROUP")
+                    || identity.inGroup(ENFERMEROS, "GROUP");
+//                    || identity.inGroup(MEDICOS, "GROUP")
+//                    || identity.inGroup(ODONTOLOGOS, "GROUP")
+//                    || identity.inGroup(SecurityRules.ADMIN, "GROUP");
+            //|| "admin".contains(getUsername(identity));
+        }
+    }
 
     public static String getUsername(Identity identity) {
         String user = "";

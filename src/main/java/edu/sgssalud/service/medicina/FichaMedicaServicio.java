@@ -68,7 +68,7 @@ public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements
         return (FichaMedica) findById(FichaMedica.class, id);
     }
     
-    public FichaMedica getFichaMedicaPorNumeroFicha(final String numeroFicha){
+    public FichaMedica getFichaMedicaPorNumeroFicha(final Long numeroFicha){
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<FichaMedica> query = builder.createQuery(FichaMedica.class);
         Root<FichaMedica> entity = query.from(FichaMedica.class);

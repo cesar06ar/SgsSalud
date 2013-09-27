@@ -41,6 +41,8 @@ import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.model.SimpleUser;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -69,14 +71,14 @@ public class SecurityHome implements Serializable {
     private String username;
     private String groupname;
     private Group group;
+    private Group groupSelected;
     private User user;
 
     public SecurityHome() {
     }
 
     @PostConstruct
-    public void init() {
-        log.info("eqaula --> init SecurityHome ");
+    public void init() {        
         ps.setEntityManager(em);
         securityGroupService.setEntityManager(em);
         securityGroupService.setSecurity(security);
@@ -88,13 +90,12 @@ public class SecurityHome implements Serializable {
             if (getGroupname() != null && !getGroupname().isEmpty()) {
                 group = securityGroupService.findByName(getGroupname());
             }
-        }
+        }        
         return group;
     }
 
     public void setGroup(Group group) {
-        this.group = group;
-        log.info("Grupo Asignado: "+group);
+        this.group = group;        
     }
 
     private User getUser() throws IdentityException {
@@ -103,9 +104,17 @@ public class SecurityHome implements Serializable {
             if (getUsername() != null && !getUsername().isEmpty()) {
                 user = securityGroupService.findUser(getUsername());
             }
-        }
+        }        
         return user;
     }
+
+    public Group getGroupSelected() {
+        return groupSelected;
+    }
+
+    public void setGroupSelected(Group groupSelected) {
+        this.groupSelected = groupSelected;
+    } 
 
     public void setUser(User user) {
         this.user = user;
@@ -123,27 +132,22 @@ public class SecurityHome implements Serializable {
         return groupname;
     }
 
-    public void setGroupname(String groupname) {
-        System.out.println("--> set groupname " + groupname);
+    public void setGroupname(String groupname) {        
         this.groupname = groupname;
     }
     
-
     @Transactional
     public void associateTo() {
         try {
-            if (getGroup() != null && getUser() != null) {
-                log.info("Ingreso a Asociar : ");
-                if (!securityGroupService.isAssociated(group, user)) {   
-                    log.info("Asociar : "+getGroup() + " usuario: " + getUser());
-                    securityGroupService.associate(getGroup(), getUser());
-                    
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization was established succesfully!", "Add " + getUser().getKey() + " into " + getGroup().getName() ));
+            if (getGroup() != null && getUser() != null) {                
+                if (!securityGroupService.isAssociated(group, user)) {                 
+                    security.getRelationshipManager().associateUser(group, user);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Autorización realizada con exito! ", "Se añadio " + getUser().getKey() + " en " + getGroup().getName() ));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization exists!", "User " + getUser().getKey() + " was assig into " + getGroup().getName() ));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for " + getGroup().getName() + " and " + getUser().getKey(),null));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for ", getGroup().getName() + " and " + getUser().getKey()));
             }
 
         } catch (IdentityException ex) {
@@ -153,13 +157,10 @@ public class SecurityHome implements Serializable {
     
     @Transactional
     public void disassociate() {
-        Group g = null;
+        Group g = groupSelected;
+        
         try {
-            g = getGroup();
-        } catch (IdentityException ex) {
-            Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
+            log.info("Usuario: "+user+" Grupo: "+g);
             if (g != null && getUser() != null) {
                 if (securityGroupService.isAssociated(g, user)) {
                     securityGroupService.disassociate(g, getUser());
@@ -216,6 +217,17 @@ public class SecurityHome implements Serializable {
             Logger.getLogger(SecurityHome.class.getName()).log(Level.SEVERE, null, ex);
         }
         return groups;
-    }     
+    }
+    
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("Grupo") + " " + UI.getMessages("common.selected"), "" + ((Group) event.getObject()).getName());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("Grupo") + " " + UI.getMessages("common.unselected"), ((Group) event.getObject()).getName());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+        this.setGroupSelected(null);
+    }
     
 }

@@ -18,6 +18,7 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
+import edu.sgssalud.security.authorization.SecurityRules;
 import edu.sgssalud.service.paciente.PacienteServicio;
 
 import org.jboss.seam.security.Identity;
@@ -155,6 +156,26 @@ public class Account implements Serializable {
                 throw e;
             }
         } else if (!identity.isLoggedIn()) {
+        }
+        return false;
+    }
+    
+    public boolean tienePermiso(final String grupoUser){
+        SecurityRules s = new SecurityRules();
+        if(SecurityRules.ADMIN.equals(grupoUser)){
+            return s.isAdmin(identity);
+        }else if(SecurityRules.MEDICOS.equals(grupoUser)){
+            return s.isMedico(identity);
+        }else if(SecurityRules.ENFERMEROS.equals(grupoUser)){
+            return s.isEnfermero(identity);
+        }else if(SecurityRules.ODONTOLOGOS.equals(grupoUser)){
+            return s.isOdontologo(identity);
+        }else if(SecurityRules.SECRETARIA.equals(grupoUser)){
+            return s.isSecretaria(identity);
+        }else if(SecurityRules.FARMACEUTICOS.equals(grupoUser)){
+            return s.isFarmaceutica(identity);
+        }else if(SecurityRules.LABORATORISTAS.equals(grupoUser)){
+            return s.isLaboratorista(identity);
         }
         return false;
     }

@@ -66,14 +66,14 @@
                 <c:choose>
                     <c:when test="#{account.isUserPaciente()}">
                         <li>
-                            <h:link outcome="/pages/paciente/view" value="#{credentials.username}">
+                            <h:link outcome="/pages/paciente/view" value="#{identity.user.key}">
                                 <f:param name="pacienteId" value="#{account.loggedId}"/>
                             </h:link>
                         </li>
                     </c:when>
                     <c:when test="#{account.isUserProfile()}">                       
                         <li>
-                            <h:link outcome="/pages/profile/profile" value="#{credentials.username}">
+                            <h:link outcome="/pages/profile/profile" value="#{identity.user.key}">
                                 <f:param name="profileId" value="#{account.loggedId}"/>
                             </h:link>
                         </li> 

@@ -59,13 +59,18 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
     private String diagnostico;
     private String tratamiento;
     private String observacionConsulta;
-        
+    
+    public ConsultaMedica(){
+        fechaConsulta = new Date();
+        horaConsulta = new Date();         
+        horaConsulta = new Date();
+    }
     
     @ManyToOne()
     @JoinColumn(name = "historiaClinica_id")
     private HistoriaClinica historiaClinica;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "signosVitales_id")
     private SignosVitales signosVitales;
     

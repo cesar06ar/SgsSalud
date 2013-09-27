@@ -86,19 +86,16 @@ public class SecurityGroupService implements Serializable {
     }
 
     public Group getGroupById(final Long id) throws IdentityException {
-        Group g = security.getPersistenceManager().findGroupByKey(String.valueOf(id));
-        log.info("eqaula --> grupo key " + g.getKey());
+        Group g = security.getPersistenceManager().findGroupByKey(String.valueOf(id));        
         return g;
 
     }
 
-    public Group findByName(final String name) throws IdentityException {
-        log.info("finByName: " + name);
+    public Group findByName(final String name) throws IdentityException {        
         return security.getPersistenceManager().findGroup(name, "GROUP");
     }
 
-    public Group findByKey(final String key) throws IdentityException {
-        log.info("finByKey: " + key);
+    public Group findByKey(final String key) throws IdentityException {        
         return security.getPersistenceManager().findGroupByKey(key);
     }
 
@@ -144,16 +141,12 @@ public class SecurityGroupService implements Serializable {
         return security.getRelationshipManager().findAssociatedGroups(user);
     }
 
-    boolean isAssociated(Group group, User user) throws IdentityException {
-        log.info("Grupo : user "+group.getName() + user.getKey());
-        //boolean b = security.getRelationshipManager().isAssociated(group, user);
-        log.info("valor esta asociado: ");
-        return false;
+    boolean isAssociated(Group group, User user) throws IdentityException {        
+        return security.getRelationshipManager().isAssociated(group, user);
     }
     
     boolean isAssociatedUser(Group group) throws IdentityException {
-        boolean b = security.getRelationshipManager().findAssociatedUsers(group, true).isEmpty();
-        log.info("Eqaula-->  valor de asociacion "+b);
+        boolean b = security.getRelationshipManager().findAssociatedUsers(group, true).isEmpty();        
         return b;
     }
 }

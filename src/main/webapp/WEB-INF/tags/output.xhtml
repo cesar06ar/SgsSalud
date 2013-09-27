@@ -36,8 +36,13 @@ limitations under the License.
     <c:set var="validator" value="#{not empty validator ? validator : 'safeTextUTF8Validator'}" />
     <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
     <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
+    <c:set var="styleClass" value="#{not empty styleClass ? styleClass : 'clearfix'}" />    
+    <c:set var="max" value="#{not empty max ? max : null}" />    
+    <c:set var="min" value="#{not empty min ? min : null}" />    
+    <c:set var="stepFactor" value="#{not empty stepFactor ? stepFactor : 1}" />    
+    <c:set var="prefix" value="#{not empty prefix ? prefix : 1}" />    
     <!-- TODO habilitar o deshabilitar ajax validation -->
-    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
+    <h:panelGroup id="panel-group-#{id}" layout="block" class="#{styleClass}">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">
             <c:choose>
@@ -71,9 +76,10 @@ limitations under the License.
                     </p:selectOneMenu>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Long' or type == 'java.lang.Double' or type == 'java.lang.Float' or type == 'decimal'}">
-                    <pe:inputNumber id="#{name}" value="#{value}" styleClass="xLarge span4" required="#{required}" label="#{label}" disabled="#{disabled}">  
-                        <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
-                    </pe:inputNumber>  
+                    <p:spinner id="#{name}" value="#{value}" styleClass="xLarge" required="#{required}" label="#{label}" disabled="#{disabled}"
+                               min="#{min}" max="#{max}" stepFactor="#{stepFactor}" prefix="#{prefix}">  
+                        <p:ajax update="#{render}" process="@this"/>
+                    </p:spinner>
                     <br/>
                 </c:when>
                 <c:otherwise>

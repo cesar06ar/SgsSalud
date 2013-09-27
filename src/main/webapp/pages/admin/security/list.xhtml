@@ -19,9 +19,10 @@
                     </div>
                     <div class="span4 columns offset3">
                         <h:form id="control">                                                         
-                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                    outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                            </h:link>                            
+                            <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']}" rendered="#{true}" 
+                                    outcome="/pages/admin/listProfile.xhtml?faces-redirect=true" styleClass="btn secondary">
+                                <f:param name="result"></f:param>                
+                            </h:link>                           
                         </h:form>
                     </div>
                 </div>     

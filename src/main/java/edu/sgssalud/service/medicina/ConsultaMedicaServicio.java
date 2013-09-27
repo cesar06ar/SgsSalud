@@ -18,6 +18,7 @@ package edu.sgssalud.service.medicina;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.ConsultaMedica_;
 import edu.sgssalud.model.medicina.HistoriaClinica;
+import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
@@ -40,17 +41,16 @@ public class ConsultaMedicaServicio extends PersistenceUtil<ConsultaMedica> impl
     @Inject
     private BussinesEntityService bussinesEntityService;
 
-    
-    public ConsultaMedicaServicio(){
+    public ConsultaMedicaServicio() {
         super(ConsultaMedica.class);
     }
-    
+
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
         bussinesEntityService.setEntityManager(em);
     }
-    
+
     public List<ConsultaMedica> getConsultasMedicas(final int limit, final int offset) {
         return findAll(ConsultaMedica.class);
     }
@@ -63,21 +63,28 @@ public class ConsultaMedicaServicio extends PersistenceUtil<ConsultaMedica> impl
     public ConsultaMedica getConsultaMedicaPorId(final Long id) {
         return (ConsultaMedica) findById(ConsultaMedica.class, id);
     }
-    
-    public ConsultaMedica getConsultaMedicaPorFechaConsulta(final Date fechaConsulta){
+
+    public ConsultaMedica getConsultaMedicaPorFechaConsulta(final Date fechaConsulta) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<ConsultaMedica> query = builder.createQuery(ConsultaMedica.class);
         Root<ConsultaMedica> entity = query.from(ConsultaMedica.class);
         query.where(builder.equal(entity.get(ConsultaMedica_.fechaConsulta), fechaConsulta));
         return getSingleResult(query);
     }
-        
-    public List<ConsultaMedica> getConsultaMedicaPorHistoriaClinica(final HistoriaClinica historiaClinica){
+
+    public List<ConsultaMedica> getConsultaMedicaPorHistoriaClinica(final HistoriaClinica historiaClinica) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<ConsultaMedica> query = builder.createQuery(ConsultaMedica.class);
         Root<ConsultaMedica> entity = query.from(ConsultaMedica.class);
         query.where(builder.equal(entity.get(ConsultaMedica_.historiaClinica), historiaClinica));
         return getResultList(query);
     }
-    
+
+    public ConsultaMedica getPorSignosVitales(final SignosVitales signosVitales) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<ConsultaMedica> query = builder.createQuery(ConsultaMedica.class);
+        Root<ConsultaMedica> entity = query.from(ConsultaMedica.class);
+        query.where(builder.equal(entity.get(ConsultaMedica_.signosVitales), signosVitales));
+        return getSingleResult(query);
+    }
 }

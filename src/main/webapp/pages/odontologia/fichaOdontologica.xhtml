@@ -14,8 +14,7 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-           <!-- <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
-            <f:viewParam name="backView" value="#{pacienteHome.backView}" />-->
+           
         </f:metadata>
 
 
@@ -23,22 +22,14 @@
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
+                       
                     </div>
                 </div>
             </div>
         </ui:define>
         <ui:define name="content" class="span20">
-            <h:form id="form">
-                
+            <h:form id="form">                
                
-                <div class="admin-actions ">
-                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
-                    &nbsp;&nbsp;
-                    <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
-                    </h:link>
-                </div>
             </h:form>
         </ui:define>
     </ui:composition>

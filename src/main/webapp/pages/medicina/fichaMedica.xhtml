@@ -31,7 +31,7 @@
         <ui:define name="content" class="span20">            
             <h:form id="form">
                 <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" />  
-               <!--<div class="columns offset7" >
+                <div class="columns offset7" >
                     <h:panelGrid id="buscarp" class="clearfix" columns="3" style="margin: -12px 0px -6px -20px; ">
                         <label for="buscar">#{'Buscar por'}</label>
                         <script type="text/javascript">
@@ -42,12 +42,13 @@
                         <h:inputText id="buscar" value="#{fichaMedicaHome.parametroBusqueda}" styleClass="span5" required="true" label="" >                                                                                
                             <f:ajax execute="@this" render="buscarp" />                                
                         </h:inputText>                                                                   
-                        <p:commandLink id="cargar" action="#{fichaMedicaHome.buscarPorParametro()}" update=":form:infoP :form:infoFM"
+                        <p:commandLink id="cargar" actionListener="#{fichaMedicaHome.buscarPorParametro()}" ajax="true"
                                        title="Buscar Paciente"  styleClass="btn primary" style="height: 16px;">                                                                               
                             <p:graphicImage value="#{resource['/images/buscar.png']}" style="margin-top: -2px;"/>
+                            <p:ajax process="@this" update=":form:infoP :form:infoFM" rendered=":form:infoP :form:infoFM" />
                         </p:commandLink>                       
                     </h:panelGrid>
-                </div>  -->
+                </div>
                 <p:panel id="infoP" header="Información Personal" styleClass="clearfix">
                     <div class="row fl" >
                         <div class="span2 columns " style="margin-left: 15px;">
@@ -66,8 +67,17 @@
                                 <glue:output id="genero" name="genero" type="select" label="#{messages['comun.genero']}" value="#{fichaMedicaHome.paciente.genero}" values="#{fichaMedicaHome.listaGeneros}" converter="#{omnifaces.GenericEnumConverter}" 
                                              required="false" execute="@this save" render="genero" styleClass="xLarge" disabled="true"/>                                      
                             </div>
-                            <div class="span7" align="left">                                    
-                                <glue:output id="fafm" name="fechaApertura" type="calendar" label="#{messages['fichaMedica.fechaApertura']}" value="#{fichaMedicaHome.instance.fechaApertura}" required="false" execute="@this save" render="fafm" styleClass="xLarge" disabled="false"/>
+                            <div class="span7" align="left">                                                                
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="fafm" >#{messages['fichaMedica.fechaApertura']}"</label>
+                                    <div class="input">                                                         
+                                        <p:calendar id="fafm" value="#{fichaMedicaHome.instance.fechaApertura}"  label="#{messages['fichaMedica.fechaApertura']}" 
+                                                    disabled="true" pattern="dd-MMM-yyyy">                                            
+                                        </p:calendar>                                                                                                      
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{fichaMedicaHome.instance.fechaApertura != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup> 
                                 <ui:repeat value="#{fichaMedicaHome.paciente.findBussinesEntityAttribute('datosPersonalesPaciente')}" var="attrib" varStatus="status">
                                     <h:panelGroup layout="block" class="clearfix" rendered="#{attrib.name eq 'estadoCivil'}">
                                         <label for="#{a.name}" class="#{(not empty attrib.property.required and attrib.property.required) ? 'required' : ''}">#{attrib.property.label}#{(not empty attrib.property.required and attrib.property.required) ? '*&#160;' : ''}</label>
@@ -118,9 +128,10 @@
                             </div>
                         </h:panelGroup>
                     </p:tab>
-                    
+
                     <c:forEach items="#{ui.getProperties(fichaMedicaHome.instance)}" var="f" >                        
-                        <p:tab title="#{f.label}" titleStyleClass="clearfix">
+                        <p:tab title="#{f.label}" titleStyleClass="clearfix" 
+                               rendered="#{(f.name eq 'antecedentesPersonalesFichaMedica' and account.tienePermiso('ENFERMEROS')) or (f.name eq 'antecedentesFamiliaresFichaMedica' and  account.tienePermiso('ENFERMEROS'))}">
                             <c:choose>
                                 <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">                                
                                     <ui:repeat value="#{fichaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">
@@ -130,7 +141,7 @@
                                                 <h:panelGroup rendered="#{not a.property.survey}" layout="block" styleClass="clearfix">
                                                     <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
                                                     <div class="input" >                                                                                     
-                                                      
+
                                                         <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
                                                                          rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
@@ -155,7 +166,7 @@
                                                 <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
                                                     <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
                                                     <div class="span1" >                                                                                     
-                                                       
+
                                                         <p:selectBooleanCheckbox value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                         </p:selectBooleanCheckbox>                                                        
@@ -209,10 +220,10 @@
                             </c:choose> 
                         </p:tab>
                     </c:forEach>
-                    <!--Evolucion o consultas medicas #{fichaMedicaHome.instance.persistent}-->
-                    <p:tab title="#{messages['consultaMedica.title']}" rendered="true">                        
-                        
-                        <!--<div class="admin-actions">
+                    <!--Evolucion o consultas medicas-->
+                    <p:tab title="#{messages['consultaMedica.title']}" rendered="#{fichaMedicaHome.instance.persistent}" disabled="false">                        
+
+                        <div class="admin-actions">
                             <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn primary">
                                 <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
                                 <f:param name="pacienteId" value="#{fichaMedicaHome.paciente.id}"></f:param>
@@ -229,8 +240,8 @@
                         <p:dataTable id="tablaConsultasM" value="#{fichaMedicaHome.listaConsultasM}" rows="10" var="consultaM_"
                                      selection="single" selectionMode="#{fichaMedicaHome.consultaMedica}"
                                      rowKey="#{consultaM_.id}" paginator="true">                            
-                            
-                            
+
+
                             <p:column headerText="Id">
                                 <h:outputText value="#{consultaM_.id}"/>
                             </p:column>                            
@@ -243,12 +254,11 @@
                             <p:column headerText="#{messages['consultaMedica.enfermedadActual']}">
                                 <h:outputText value="#{consultaM_.enfermedadActual}"/>
                             </p:column>  
-                        </p:dataTable>-->
+                        </p:dataTable>
                     </p:tab>
                 </p:accordionPanel> 
-
-
-                <div class="admin-actions span16" style="padding-right: 50px;">
+                
+                <div class="admin-actions span15" style="padding-right: 40px;">
                     <br/>
                     <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
                                      immediate="true"/>
@@ -256,6 +266,10 @@
                     <h:link outcome="/pages/home.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
                     </h:link>
+                </div>
+                <div class="offset8" style="float: right">
+                    <glue:output id="respons" name="responsable" type="text" label="Responsable" value="#{fichaMedicaHome.instance.responsable.fullName}" 
+                                 required="false" execute="@this" render="edad" styleClass="xLarge" disabled="true"/>
                 </div>
             </h:form>
         </ui:define>

@@ -23,6 +23,7 @@ import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
@@ -39,6 +40,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.jboss.seam.security.Identity;
+import org.picketlink.idm.api.Credential;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -55,9 +58,13 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     @Web
     private EntityManager em;
     @Inject
+    private Identity identity;
+    @Inject
     private FichaMedicaServicio fms;
     @Inject
     private PacienteServicio ps;
+    @Inject
+    private ProfileService profileS;
     @Inject
     private ConsultaMedicaServicio cms;
     @Inject
@@ -79,7 +86,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         setId(fichaMedicaId);
         this.setPaciente(getInstance().getPaciente());
         this.setHistoriaClinica(hcs.buscarPorFichaMedica(getInstance()));
-//        this.setListaConsultasM(cms.getConsultaMedicaPorHistoriaClinica(historiaClinica));
+        this.setListaConsultasM(cms.getConsultaMedicaPorHistoriaClinica(historiaClinica));
     }
 
     public Long getPacienteId() {
@@ -89,6 +96,10 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
         this.setPaciente(ps.getPacientePorId(pacienteId));
+        this.setInstance(fms.getFichaMedicaPorPaciente(paciente));
+        if (!getInstance().isPersistent()) {
+            getInstance().setNumeroFicha(getGenerarNumeroFicha());
+        }
     }
 
     public Paciente getPaciente() {
@@ -159,17 +170,20 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
-
         fms.setEntityManager(em);
         ps.setEntityManager(em);
         cms.setEntityManager(em);
         hcs.setEntityManager(em);
-
+        profileS.setEntityManager(em);
         if (pacienteId == null) {
             paciente = new Paciente();
         }
-        getInstance().setFechaApertura(new Date());
-        this.getInstance().setNumeroFicha(this.getGenerarNumeroFicha());
+        if (consultaMedicaId != null) {
+            consultaMedica = new ConsultaMedica();
+        }
+        listaConsultasM = new ArrayList<ConsultaMedica>();
+        //getInstance().setFechaApertura(new Date());        
+        this.getInstance().setNumeroFicha(this.getGenerarNumeroFicha());  //asignacion automatica de numero de ficha
     }
 
     @Override
@@ -181,8 +195,8 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         fichaMedic.setCreatedOn(now);
         //fichaMedic.setLastUpdate(now);
         fichaMedic.setActivationTime(now);
-        fichaMedic.setFechaApertura(now);
-        //fichaMedic.setResponsable(null);    //cambiar atributo a 
+        //fichaMedic.setFechaApertura(now);
+        fichaMedic.setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));    //cambiar atributo a 
         fichaMedic.setType(_type);
         fichaMedic.buildAttributes(bussinesEntityService);  //
 
@@ -204,20 +218,18 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         historiaClinica.setLastUpdate(now);
-        log.info("Ingreso a guardar 1");
         try {
             if (getInstance().isPersistent()) {
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
                 this.getInstance().setPaciente(paciente);
-                log.info("Ingreso a guardar 2");
                 create(getInstance());
                 historiaClinica.setFichaMedica(getInstance());
                 save(getInstance());
                 save(historiaClinica);
-                
                 FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
@@ -226,26 +238,32 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
 
-        return "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getInstance().getId() + "&pacienteId=" + getInstance().getPaciente().getId();
+        return "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getInstance().getId() + "&pacienteId=" + paciente.getId();
     }
 
-    public void buscarPorParametro() {
+    public String buscarPorParametro() {
         //buscar primero por numero de ficha
-        FichaMedica fichaMedList = fms.getFichaMedicaPorNumeroFicha(parametroBusqueda);
-        if (StringValidations.isDecimal(parametroBusqueda)) {
-            Paciente p = ps.buscarPorCedula(parametroBusqueda);
+        String salida="/pages/medicina/fichaMedica.xhtml?faces-redirect=true";
+        if (!parametroBusqueda.isEmpty() && StringValidations.isDecimal(parametroBusqueda)) {
+            FichaMedica fichaMedList = fms.getFichaMedicaPorNumeroFicha(Long.parseLong(parametroBusqueda));
             if (fichaMedList != null) {
                 this.setInstance(fichaMedList);
                 this.setPaciente(getInstance().getPaciente());
-            } else if (p != null) {
-                this.setPaciente(p);
-                this.setInstance(fms.getFichaMedicaPorPaciente(p));
+                salida += "&pacienteId="+getInstance().getId();
             } else {
-                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados  ", ""));
+                Paciente p = ps.buscarPorCedula(parametroBusqueda);
+                if (p != null) {
+                    this.setPaciente(p);
+                    this.setInstance(fms.getFichaMedicaPorPaciente(p));
+                    salida += "&pacienteId="+getInstance().getId();
+                } else {
+                    FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados  ", ""));
+                }
             }
-        } else {
-            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "El parametro de busqueda es incorrecto:  ", ""));
+        } else {            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El parametro de busqueda es incorrecto", " "));
         }
+        return salida;
     }
 
     /*<== método que retorna la lista de tipos de datos enumerados ...*/
@@ -285,6 +303,11 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Medica") + " " + UI.getMessages("common.unselected"), ((ConsultaMedica) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsultaMedica(null);
+    }
+
+    public boolean getAcceso() {
+
+        return false;
     }
     /*....==>*/
 }

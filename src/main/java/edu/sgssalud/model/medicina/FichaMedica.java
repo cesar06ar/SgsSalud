@@ -59,7 +59,11 @@ public class FichaMedica extends BussinesEntity implements Serializable {
     @OneToOne
     @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
     private Paciente paciente;
-
+    
+    public FichaMedica(){
+        fechaApertura = new Date();
+    }
+    
     public Long getNumeroFicha() {
         return numeroFicha;
     }

@@ -4,6 +4,7 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.service.SettingListService;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
@@ -41,7 +42,7 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
     @Web
     private EntityManager em;
     @Inject
-    private MedicamentoService medicamentoService;
+    private MedicamentoService medicamentoService;    
     private List<Medicamento> resultList;
     private int primerResult = 0;
     private Medicamento[] medicamentosSeleccionados;
@@ -50,13 +51,10 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
 
     public MedicamentoListaServicio() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<Medicamento>();
+        resultList = new ArrayList<Medicamento>();        
     }
 
-    public List<Medicamento> getResultList() {
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = medicamentoService.obtenerMedicamentos(this.getPageSize(), primerResult);
-        }
+    public List<Medicamento> getResultList() {        
         return resultList;
     }
 
@@ -64,12 +62,12 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
         this.resultList = resulList;
     }
 
-    public int getPrimerResul() {
+    public int getPrimerResult() {
         return primerResult;
     }
 
-    public void setPrimerResul(int primerResul) {
-        this.primerResult = primerResul;
+    public void setPrimerResult(int primerResult) {
+        this.primerResult = primerResult;
         this.resultList = null;
     }
 
@@ -103,9 +101,9 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
-    }
-
+        this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));        
+    }   
+    
     @Override
     public List<Medicamento> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> map) {
         int end = first + pageSize;
@@ -126,7 +124,10 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
 
     @PostConstruct
     public void init() {
-        medicamentoService.setEntityManager(em);
+        medicamentoService.setEntityManager(em);        
+        if (resultList.isEmpty() ) {
+           resultList = medicamentoService.obtenerMedicamentos(this.getPageSize(), primerResult);
+        }
     }
 
     @Override
@@ -136,7 +137,7 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
 
     @Override
     public Object getRowKey(Medicamento entity) {
-        return entity.getName();
+        return entity.getId();
     }
 
     public void onRowSelect(SelectEvent event) {

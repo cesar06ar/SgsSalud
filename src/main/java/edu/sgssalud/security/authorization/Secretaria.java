@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 jlgranda.
+ * Copyright 2013 cesar.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ import org.jboss.seam.security.annotations.SecurityBindingType;
 
 /**
  *
- * @author jlgranda
+ * @author cesar
  */
 @SecurityBindingType
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD,ElementType.FIELD,})
-public @interface  Accountant {
+public @interface Secretaria {
     
 }

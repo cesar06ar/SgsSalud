@@ -31,6 +31,7 @@
  */
 package edu.sgssalud.rewrite;
 
+import javax.faces.event.PhaseId;
 import javax.servlet.ServletContext;
 import org.ocpsoft.common.services.NonEnriching;
 import org.ocpsoft.rewrite.config.Configuration;
@@ -43,8 +44,6 @@ import org.ocpsoft.rewrite.servlet.config.Path;
 import org.ocpsoft.rewrite.servlet.config.Redirect;
 import org.ocpsoft.rewrite.servlet.config.Response;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
-
-
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
@@ -68,12 +67,12 @@ public class AccessRewriteConfiguration extends HttpConfigurationProvider implem
                 //               .perform(Invoke.binding(El.retrievalMethod("authentication.logout"))
                 //                        .and(Redirect.temporary(context.getContextPath() + "/")))
 
-                // Authentication
-                //                .defineRule()
-                //                .when(Direction.isInbound().and(Path.matches("/logout")))
-                //                .perform(Invoke.binding(PhaseBinding.to(El.property("#{authentication.logout}")).after(PhaseId.RESTORE_VIEW))
-                //                .and(Redirect.temporary(context.getContextPath() + "/")))
-                // Create a dynamic logout URL via EL
+                //                 Authentication
+                .defineRule()
+//                .when(Direction.isInbound().and(Path.matches("/logout")))
+//                .perform(Invoke.binding(PhaseBinding.to(El.property("#{authentication.logout}")).after(PhaseId.RESTORE_VIEW))
+//                .and(Redirect.temporary(context.getContextPath() + "/")))
+                //                 Create a dynamic logout URL via EL
                 .defineRule()
                 .when(Direction.isInbound().and(Path.matches("/logout")))
                 .perform(Invoke.binding(El.retrievalMethod("#{authentication.logout}"))
