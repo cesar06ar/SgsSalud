@@ -42,8 +42,8 @@
                         <h:inputText id="buscar" value="#{fichaMedicaHome.parametroBusqueda}" styleClass="span5" required="true" label="" >                                                                                
                             <f:ajax execute="@this" render="buscarp" />                                
                         </h:inputText>                                                                   
-                        <p:commandLink id="cargar" actionListener="#{fichaMedicaHome.buscarPorParametro()}" ajax="true"
-                                       title="Buscar Paciente"  styleClass="btn primary" style="height: 16px;">                                                                               
+                        <p:commandLink id="cargarPaciente" action="#{fichaMedicaHome.buscarPorParametro()}" ajax="true"
+                                       title="Buscar Paciente"  styleClass="btn primary" style="height: 16px;">
                             <p:graphicImage value="#{resource['/images/buscar.png']}" style="margin-top: -2px;"/>
                             <p:ajax process="@this" update=":form:infoP :form:infoFM" rendered=":form:infoP :form:infoFM" />
                         </p:commandLink>                       
@@ -64,7 +64,7 @@
                                 <glue:output id="nfm" name="nficha" type="text" label="#{messages['fichaMedica.numero']}" value="#{fichaMedicaHome.instance.numeroFicha}" required="true" execute="@this save" render="nfm" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{fichaMedicaHome.paciente.nombres}" required="false" execute="@this save" render="fstn" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{fichaMedicaHome.paciente.apellidos}" required="false" execute="@this save" render="srn" styleClass="xLarge" disabled="true"/>                                      
-                                <glue:output id="genero" name="genero" type="select" label="#{messages['comun.genero']}" value="#{fichaMedicaHome.paciente.genero}" values="#{fichaMedicaHome.listaGeneros}" converter="#{omnifaces.GenericEnumConverter}" 
+                                <glue:output id="genero" name="genero" type="select" label="#{messages['comun.genero']}" value="#{fichaMedicaHome.paciente.genero}" values="#{pacienteHome.listaGeneros}" converter="#{omnifaces.GenericEnumConverter}" 
                                              required="false" execute="@this save" render="genero" styleClass="xLarge" disabled="true"/>                                      
                             </div>
                             <div class="span7" align="left">                                                                
@@ -111,8 +111,8 @@
                 <p:separator id="separador1" style="margin-top: 0px; height:8px; margin-bottom: 0px;" styleClass="clearfix"/>
 
                 <!--DATOS DE LA HISTORIA CLINICA-->               
-                <p:accordionPanel id="infoFM" styleClass="span17" dynamic="true" multiple="true" >                        
-                    <p:tab title="#{'INFORMACIÓN MÉDICA GENERAL'}">
+                <p:tabView id="infoFM" styleClass="span16">
+                    <p:tab title="#{'INF. MÉDICA'}" titletip="Información Medica General">
                         <h:panelGroup layout="block" class="clearfix">
                             <label for="gs_" class="control-label">#{messages['fichaMedica.grupoSangineo']}</label>
                             <div class="input">
@@ -130,8 +130,8 @@
                     </p:tab>
 
                     <c:forEach items="#{ui.getProperties(fichaMedicaHome.instance)}" var="f" >                        
-                        <p:tab title="#{f.label}" titleStyleClass="clearfix" 
-                               rendered="#{(f.name eq 'antecedentesPersonalesFichaMedica' and account.tienePermiso('ENFERMEROS')) or (f.name eq 'antecedentesFamiliaresFichaMedica' and  account.tienePermiso('ENFERMEROS'))}">
+                        <p:tab title="#{f.label}" titletip="#{f.helpInline}" titleStyleClass="clearfix" 
+                               disabled="#{(f.name eq 'antecedentesPersonalesFichaMedica' and account.tienePermiso('ENFERMEROS')) or (f.name eq 'antecedentesFamiliaresFichaMedica' and account.tienePermiso('ENFERMEROS'))}">
                             <c:choose>
                                 <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">                                
                                     <ui:repeat value="#{fichaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">
@@ -165,7 +165,7 @@
                                             <c:otherwise>
                                                 <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
                                                     <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                                    <div class="span1" >                                                                                     
+                                                    <div class="span1" > 
 
                                                         <p:selectBooleanCheckbox value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
@@ -190,29 +190,15 @@
 
                                     </ui:repeat>
                                     <br/><br/>
-                                    <div class="span14">                                
+                                    <div class="span14" style="margin-top: 15px;">                                
                                         <c:choose> 
                                             <c:when test="#{(f.name eq 'antecedentesPersonalesFichaMedica')}">                                                           
-                                                <h:panelGroup id="obapPanel" layout="block" class="clearfix">
-                                                    <label for="obap1">#{'Observación Antecedentes Personales'}</label>
-                                                    <div class="input">
-                                                        <p:inputTextarea id="obap1" value="#{fichaMedicaHome.instance.observacionAntecedentesPersonales}" styleClass="xLarge span6" required="false" style="width: 600px; height: 80px;" 
-                                                                         rendered="true">
-                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                                        </p:inputTextarea>                                              
-                                                    </div>
-                                                </h:panelGroup> 
+                                                <glue:output id="obap1" name="observacionAP" type="textarea" label="#{'Observación Antecedentes Familiares'}" value="#{fichaMedicaHome.instance.observacionAntecedentesPersonales}" 
+                                                             required="false" execute="@this :form:save" render="obap1" styleClass="span14"/>                                                                                                
                                             </c:when>                                
                                             <c:when test="#{(f.name eq 'antecedentesFamiliaresFichaMedica')}">                                                            
-                                                <h:panelGroup id="obafPanel" layout="block" class="clearfix">
-                                                    <label for="obaf1">#{'Observación Antecedentes Familiares'}</label>
-                                                    <div class="input">
-                                                        <p:inputTextarea id="obaf1" value="#{fichaMedicaHome.instance.observacionAntecedentesFamiliares}" styleClass="xLarge span6" required="false" style="width: 600px; height: 80px;" 
-                                                                         rendered="true">
-                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                                        </p:inputTextarea>                                              
-                                                    </div>
-                                                </h:panelGroup> 
+                                                <glue:output id="obaf1" name="observacionAF" type="textarea" label="#{'Observación Antecedentes Familiares'}" value="#{fichaMedicaHome.instance.observacionAntecedentesFamiliares}" 
+                                                             required="false" execute="@this :form:save" render="obaf1" styleClass="span14"/>                                                
                                             </c:when>
                                         </c:choose> 
                                     </div>
@@ -220,44 +206,70 @@
                             </c:choose> 
                         </p:tab>
                     </c:forEach>
-                    <!--Evolucion o consultas medicas-->
-                    <p:tab title="#{messages['consultaMedica.title']}" rendered="#{fichaMedicaHome.instance.persistent}" disabled="false">                        
+                </p:tabView>
 
-                        <div class="admin-actions">
-                            <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn primary">
-                                <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
-                                <f:param name="pacienteId" value="#{fichaMedicaHome.paciente.id}"></f:param>
-                                <f:param name="backView" value="fichaMedica"></f:param>
-                            </h:link>
-                            #{' '}
-                            <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn"
-                                    disabled="#{fichaMedicaHome.consultaMedica == null}" >
-                                <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
-                                <f:param name="pacienteId" value="#{fichaMedicaHome.paciente.id}"></f:param>
-                                <f:param name="backView" value="fichaMedica"></f:param>
-                            </h:link>
-                        </div> 
-                        <p:dataTable id="tablaConsultasM" value="#{fichaMedicaHome.listaConsultasM}" rows="10" var="consultaM_"
-                                     selection="single" selectionMode="#{fichaMedicaHome.consultaMedica}"
-                                     rowKey="#{consultaM_.id}" paginator="true">                            
+                <p:panel id="signosVitalesP" header="#{'TOMA DE SIGNOS VITALES'}" toggleable="true" styleClass="span16" toggleSpeed="100" closeSpeed="0" 
+                         rendered="#{fichaMedicaHome.instance.persistent and not account.tienePermiso('ENFERMEROS')}">
+                    <h:link value="#{'Nueva Consulta '} " rendered="#{true}" outcome="signosVitales" 
+                            styleClass="btn success Large">
+                        <h:graphicImage value="#{resource['images/sv2.png']}" style="float: left;" />
+                        <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
+                        <f:param name="backView" value="fichaMedica"></f:param>
+                    </h:link>
 
+                </p:panel>
+                <!--Evolucion o consultas medicas-->
+                <p:panel id="consultasM" header="#{'CONSULTAS MÉDICAS'}" toggleable="true" styleClass="span16" toggleSpeed="100" closeSpeed="0" 
+                         rendered="#{fichaMedicaHome.instance.persistent and not account.tienePermiso('ENFERMEROS')}">
+                    <div class="admin-actions">
+                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success">
+                            <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
+                            <f:param name="backView" value="fichaMedica"></f:param>
+                        </h:link>
+                        #{' '}
+                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success"
+                                disabled="#{fichaMedicaHome.consultaMedica == null}" >
+                            <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
+                            <f:param name="consultaMedicaId" value="#{fichaMedicaHome.consultaMedica.id}"></f:param>
+                            <f:param name="backView" value="fichaMedica"></f:param>
+                        </h:link>
+                        #{' '}
+                        <p:commandButton id="button-delete" type="button" value="#{messages['common.delete']}" styleClass="btn btn-short success" onclick="#{'deletedDlg.show()'}"  immediate="true"
+                                         update=":cancel-dialog" disabled="#{fichaMedicaHome.consultaMedica == null}">                        
+                        </p:commandButton>
+                    </div> 
+                    <p:dataTable id="tablaConsultasM" value="#{fichaMedicaHome.listaConsultasM}" rows="10" var="consultaM_" editable="true"
+                                 selection="#{fichaMedicaHome.consultaMedica}" selectionMode="single" rowKey="#{consultaM_.id}"
+                                 paginator="true">                           
+                        <p:ajax event="rowSelect" listener="#{fichaMedicaHome.onRowSelect}"   
+                                update=":form:button-edit :form:button-delete :form:messages1"/>  
+                        <p:ajax event="rowUnselect" listener="#{fichaMedicaHome.onRowUnselect}" 
+                                update=":form:button-edit :form:button-delete :form:messages1"/>
 
-                            <p:column headerText="Id">
-                                <h:outputText value="#{consultaM_.id}"/>
-                            </p:column>                            
-                            <p:column headerText="#{messages['consultaMedica.fechaConsulta']}">
-                                <p:calendar value="#{consultaM_.fechaConsulta}"/>
-                            </p:column>
-                            <p:column headerText="#{messages['consultaMedica.motivo']}">
-                                <h:outputText value="#{consultaM_.motivoConsulta}" styleClass="span3"/>
-                            </p:column>
-                            <p:column headerText="#{messages['consultaMedica.enfermedadActual']}">
-                                <h:outputText value="#{consultaM_.enfermedadActual}"/>
-                            </p:column>  
-                        </p:dataTable>
-                    </p:tab>
-                </p:accordionPanel> 
-                
+                        <p:column headerText="Id">
+                            <h:outputText value="#{consultaM_.id}"/>
+                        </p:column>                            
+                        <p:column headerText="#{messages['consultaMedica.fechaConsulta']}">
+                            <h:outputText value="#{consultaM_.fechaConsulta}">
+                                <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                            </h:outputText>&nbsp;&nbsp;
+                            <h:outputText value="#{consultaM_.horaConsulta}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.motivo']}">
+                            <h:outputText value="#{consultaM_.motivoConsulta}" styleClass="span3"/>
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.Tratamiento']}">
+                            <h:outputText value="#{consultaM_.tratamiento}"/>
+                        </p:column>  
+                    </p:dataTable>
+                </p:panel>
+                <!--Evolucion o consultas medicas-->
+                <p:panel id="consultasO" header="#{'CONSULTAS ODONTOLOGICAS'}" toggleable="true" styleClass="span16" toggleSpeed="100" closeSpeed="0" 
+                         rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ODONTOLOGOS')}">
+                    
+                </p:panel>
                 <div class="admin-actions span15" style="padding-right: 40px;">
                     <br/>
                     <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
@@ -270,8 +282,22 @@
                 <div class="offset8" style="float: right">
                     <glue:output id="respons" name="responsable" type="text" label="Responsable" value="#{fichaMedicaHome.instance.responsable.fullName}" 
                                  required="false" execute="@this" render="edad" styleClass="xLarge" disabled="true"/>
-                </div>
+                </div>                
             </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
+                                     action="#{fichaMedicaHome.borrarConsultaMedica()}" update=":form:tablaConsultasM"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>                

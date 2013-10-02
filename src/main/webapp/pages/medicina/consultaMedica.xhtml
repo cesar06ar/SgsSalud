@@ -14,7 +14,8 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="FichaMedicaId" value="#{consultaMedicaHome.consultaMedicaId}" />
+            <f:viewParam id="fichaMedId" name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}" />
+            <f:viewParam name="consultaMedicaId" value="#{consultaMedicaHome.consultaMedicaId}" />
             <f:viewParam name="backView" value="#{consultaMedicaHome.backView}" />
         </f:metadata>
 
@@ -30,7 +31,7 @@
         <ui:define name="content" class="span20">
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <p:panel id="consultaM" header="Información de Consulta" toggleable="true" >
+                <p:panel id="consultaM" header="Información de Consulta" toggleable="true" styleClass="span16">
                     <div class="container-fluid">   
                         <div class="row-fluid">
                             <div id="left" class="span7">
@@ -55,12 +56,12 @@
                                     </div>
                                 </h:panelGroup>                              
                             </div>
-                            <div id="rigth" class="span7">
+                            <div id="rigth" class="span7" style="margin-left: 15px; ">
                                 <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}"</label>
+                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
                                     <div class="input">                                                         
                                         <p:calendar id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}"  label="" 
-                                                    disabled="true" pattern="HH:mm" maxMinute="45" minMinute="15" stepMinute="5">                                            
+                                                    timeOnly="true" pattern="HH:mm" maxMinute="45" minMinute="0" stepMinute="5" maxHour="19" minHour="07">                                            
                                         </p:calendar>                                                                                                      
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.tiempoConsulta != null}"
                                                         styleClass="validation-status" />                                                        
@@ -70,134 +71,194 @@
                         </div>
                     </div>
                 </p:panel>
-                <p:accordionPanel id="infoFM" dynamic="true" multiple="true" >
-                    <p:tab title="#{'SIGNOS VITALES'}" >
-                        <h:panelGroup layout="block" class="clearfix" >
-                            <label for="peso" >#{messages['signosVitales.peso']}</label>
-                            <div class="input"> 
-                                <p:spinner  id="peso" value="#{consultaMedicaHome.signosVitales.peso}" styleClass="xLarge" required="true" 
-                                            rendered="true" min="0.0"  stepFactor="0.10">
-                                    <p:ajax event="change" update="@parent :form:save" process="@this"/>  
-                                </p:spinner>
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.signosVitales.peso != null}"
-                                                styleClass="validation-status" />                                                        
+                <p:tabView styleClass="span16">
+                    <p:tab title="SIGNOS VITALES" titletip="#{'SIGNOS VITALES'}" >
+                        <div class="container-fluid">   
+                            <div class="row-fluid">
+                                <div id="left" class="span8" style="margin-left: -10px;">
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="peso" >#{messages['signosVitales.peso']}</label>
+                                        <div class="input"> 
+                                            <p:spinner  id="peso" value="#{consultaMedicaHome.instance.signosVitales.peso}" styleClass="xLarge" required="true" 
+                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" Kg" dir="left">
+                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                            </p:spinner>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.peso != null}"
+                                                            styleClass="validation-status" />                                                        
+                                        </div>
+                                    </h:panelGroup>  
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="presionArt" >#{messages['signosVitales.presionArt']}</label>
+                                        <div class="input"> 
+                                            <p:spinner  id="presionArt" value="#{consultaMedicaHome.instance.signosVitales.presionArterial}" styleClass="xLarge" required="true" 
+                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" min">
+                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                            </p:spinner>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.presionArterial != null}"
+                                                            styleClass="validation-status" />                                                        
+                                        </div>
+                                    </h:panelGroup> 
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="pulso" >#{messages['signosVitales.pulso']}</label>
+                                        <div class="input"> 
+                                            <p:spinner  id="pulso" value="#{consultaMedicaHome.instance.signosVitales.pulso}" styleClass="xLarge" required="true" 
+                                                        rendered="true" min="0" suffix=" p/min">
+                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                            </p:spinner>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.pulso != null}"
+                                                            styleClass="validation-status" />                                                        
+                                        </div>
+                                    </h:panelGroup> 
+                                </div>
+                                <div id="left" class="span8"  style="margin-left: -40px; ">
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="frecuenciaResp" >#{messages['signosVitales.frecuenciaResp']}</label>
+                                        <div class="input"> 
+                                            <p:spinner  id="frecuenciaResp" value="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}" styleClass="xLarge" required="true" 
+                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" min">
+                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                            </p:spinner>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria != null}"
+                                                            styleClass="validation-status" />                                                        
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="talla" >#{messages['signosVitales.talla']}</label>
+                                        <div class="input"> 
+                                            <p:spinner  id="talla" value="#{consultaMedicaHome.instance.signosVitales.talla}" styleClass="xLarge" required="true" 
+                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" mm" style="text-align: left;">
+                                                <p:ajax event="keyup"  update="@parent :form:save" process="@this"/>  
+                                            </p:spinner>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.talla != null}"
+                                                            styleClass="validation-status" />                                                        
+                                        </div>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="temperatura" >#{messages['signosVitales.temperatura']}</label>
+                                        <div class="input"> 
+                                            <p:spinner  id="temperatura" value="#{consultaMedicaHome.instance.signosVitales.temperatura}" styleClass="xLarge" required="true" 
+                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" °C">
+                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                            </p:spinner>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.temperatura != null}"
+                                                            styleClass="validation-status" />                                                        
+                                        </div>
+                                    </h:panelGroup>  
+                                </div>
                             </div>
-                        </h:panelGroup>                        
-                        <glue:output id="presionArt" name="presionArt" type="decimal" label="#{messages['signosVitales.presionArt']}" value="#{consultaMedicaHom.signosVitales.presionArterial}" 
-                                     min="0" stepFactor="0.10" required="true" execute="@this save" render="presionArt" styleClass="clearfix xLarge"/>
-                        <glue:output id="pulso" name="pulso" type="decimal" label="#{messages['signosVitales.pulso']}" value="#{consultaMedicaHome.signosVitales.pulso}" 
-                                     min="0" required="true" execute="@this save" render="pulso" styleClass="clearfix"/>
-                        <glue:output id="frecuenciaResp" name="frecuenciaResp" type="decimal" label="#{messages['signosVitales.frecuenciaResp']}" value="#{consultaMedicaHome.signosVitales.fechaActual}" 
-                                     min="0" prefix="latidos/min" required="true" execute="@this save" render="frecuenciaResp" styleClass="clearfix"/>
-                        <glue:output id="talla" name="talla" type="decimal" label="#{messages['signosVitales.talla']}" value="#{consultaMedicaHome.signosVitales.talla}" 
-                                     min="0"  prefix="mm" required="true" execute="@this save" render="talla" styleClass="clearfix "/>
-                        <glue:output id="temperatura" name="temperatura" type="decimal" label="#{messages['signosVitales.temperatura']}" value="#{consultaMedicaHome.signosVitales.temperatura}" 
-                                     min="0"  prefix="°C" required="true" execute="@this save" render="temperatura" styleClass="clearfix"/>
-
-                    </p:tab>
-                    <p:tab title="#{'MOTIVO CONSULTA'}" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
-                        <glue:output id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
-                                     required="false" execute="@this save" render="motivoC" styleClass="span14"/>
-                    </p:tab>
-                    <p:tab title="#{'ENFERMEDAD O PROBLEMA ACTUAL'}" rendered="#{!account.tienePermiso('ENFERMEROS')}">
-                        <glue:output id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadAct']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
-                                     required="false" execute="@this save" render="enfermedadAct" styleClass="span14"/>
-                    </p:tab>
-                    <!--Ciclo para los tipos de entidad de negocio-->
-                    <c:forEach items="#{ui.getProperties(consultaMedicaHome.instance)}" var="f" >                        
-                        <p:tab title="#{f.label}" titleStyleClass="clearfix" rendered="#{account.tienePermiso('MEDICOS')}">
+                        </div>
+                    </p:tab>                 
+                    <c:forEach items="#{ui.getProperties(consultaMedicaHome.instance)}" var="f" >                                            
+                        <p:tab title="#{f.label}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
                             <c:choose>
                                 <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">                                
-                                    <ui:repeat value="#{consultaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">
-
-                                        <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
-                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                            <div class="span1" >                                                                                  
-                                                <p:selectBooleanCheckbox value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
-                                                    <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                    <ui:repeat value="#{consultaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">                                        
+                                        <h:panelGroup rendered="true" layout="block"  >
+                                            <label for="#{a.name}" title="#{a.property.helpInline}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                            <div class="span1" style="padding-left: 8px;"> 
+                                                <p:selectBooleanCheckbox value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}" >
+                                                    <p:ajax event="change" update="@parent" partialSubmit="true" />                                                     
                                                 </p:selectBooleanCheckbox>                                                        
-                                                <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+                                                <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                               rendered="#{a.property.type eq 'java.lang.String'}">
                                                     <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                                 </p:inputText>                                                        
-                                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                 rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
                                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                 </pe:inputNumber>  
                                                 <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" >  
                                                     <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                     <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                 </p:selectOneMenu> 
-                                                <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 500px; height: 100px;" 
-                                                                 rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
-                                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                                </p:inputTextarea>                                                                                                            
-                                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                 rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
                                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                 </pe:inputNumber>  
                                                 <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" title="#{a.property.helpInline}">  
                                                     <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                     <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                                </p:selectOneMenu> 
+                                                </p:selectOneMenu>
+                                                <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                                 rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
+                                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                </p:inputTextarea>
                                             </div>
-                                        </h:panelGroup>                                           
+                                        </h:panelGroup> 
                                     </ui:repeat>
-                                    <br/><br/>
-                                    <div class="span14">                                
-                                        <!--  <c:choose> 
-                                              <c:when test="#{(f.name eq 'antecedentesPersonalesFichaMedica')}">                                                           
-                                                  <h:panelGroup id="obapPanel" layout="block" class="clearfix">
-                                                      <label for="obap1">#{'Observación Antecedentes Personales'}</label>
-                                                      <div class="input">
-                                                          <p:inputTextarea id="obap1" value="#{fichaMedicaHome.instance.observacionAntecedentesPersonales}" styleClass="xLarge span6" required="false" style="width: 600px; height: 80px;" 
-                                                                           rendered="true">
-                                                              <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                                          </p:inputTextarea>                                              
-                                                      </div>
-                                                  </h:panelGroup> 
-                                              </c:when>                                
-                                              <c:when test="#{(f.name eq 'antecedentesFamiliaresFichaMedica')}">                                                            
-                                                  <h:panelGroup id="obafPanel" layout="block" class="clearfix">
-                                                      <label for="obaf1">#{'Observación Antecedentes Familiares'}</label>
-                                                      <div class="input">
-                                                          <p:inputTextarea id="obaf1" value="#{fichaMedicaHome.instance.observacionAntecedentesFamiliares}" styleClass="xLarge span6" required="false" style="width: 600px; height: 80px;" 
-                                                                           rendered="true">
-                                                              <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                                          </p:inputTextarea>                                              
-                                                      </div>
-                                                  </h:panelGroup> 
-                                              </c:when>
-                                          </c:choose> -->
+                                    <br/><br/>                                    
+                                    <div class="span14" style="padding-top: 10px;">                                
+                                        <c:choose>                                                                             
+                                            <c:when test="#{(f.name eq 'revisionOrganosYSistemasCM')}">                                                            
+                                                <h:panelGroup id="obraosp" layout="block" class="clearfix">
+                                                    <label for="observ1">#{'Observación Revisión Actual Organos y Sistemas'}</label>
+                                                    <div class="input">
+                                                        <p:inputTextarea id="observ1" value="#{consultaMedicaHome.instance.observacionRevisionOS}" styleClass="xLarge span6" required="false" style="width: 650px; height: 90px;" 
+                                                                         rendered="true">
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </p:inputTextarea>                                              
+                                                    </div>
+                                                </h:panelGroup> 
+                                            </c:when>
+                                            <c:when test="#{(f.name eq 'examenFisicoCM')}">                                                            
+                                                <h:panelGroup id="obEFP" layout="block" class="clearfix">
+                                                    <label for="observ2">#{'Observación de Examen Fisico'}</label>
+                                                    <div class="input">
+                                                        <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" styleClass="xLarge span6" required="false" style="width: 650px; height: 90px;" 
+                                                                         rendered="true">
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </p:inputTextarea>                                                                                                 
+                                                    </div>
+                                                </h:panelGroup> 
+                                            </c:when>
+                                        </c:choose> 
                                     </div>
                                 </c:when>
-                            </c:choose> 
+                            </c:choose>                     
                         </p:tab>
                     </c:forEach>
-                    <p:tab title="#{'DIAGNOSTICO'}" rendered="#{account.tienePermiso('MEDICOS')}">
+                </p:tabView>             
+                <p:tabView styleClass="span16">
+                    <p:tab title="MOTIVO CONSULTA" titletip="#{'MOTIVO CONSULTA'}" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
+                        <glue:output id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
+                                     required="false" execute="@this :form:save" render="motivoC" styleClass="span13"/>                
+                    </p:tab>                    
+                    <p:tab title="ENFERMEDAD" titletip="#{'ENFERMEDAD O PROBLEMA ACTUAL'}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}">
+                        <glue:output id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadActual']}" value="#{consultaMedicaHome.instance.enfermedadActual}" 
+                                     required="false" execute="@this :form:save" render="enfermedadAct" styleClass="span13"/>
+                    </p:tab>
+                    <p:tab title="DIAGNÓSTICO" titletip="#{'DIAGNÓSTICO'}" closable="false" 
+                           rendered="#{!account.tienePermiso('ENFERMEROS')}">
                         <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
-                                     required="false" execute="@this save" render="diagnostico" styleClass="span14"/>
+                                     required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
                     </p:tab>
-                    <p:tab title="#{'TRATAMIENTO'}" rendered="#{account.tienePermiso('MEDICOS')}">
-                        <glue:output id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
-                                     required="false" execute="@this save" render="tratamiento" styleClass="span14"/>
+                    <p:tab title="#{'TRATAMIENTO'}" titletip="#{'TRATAMIENTO'}" closable="false" 
+                           rendered="#{!account.tienePermiso('ENFERMEROS')}">
+                        <glue:output id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.Tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
+                                     required="false" execute="@this :form:save" render="tratamiento" styleClass="span14"/>
                     </p:tab>
-                    <p:tab title="#{'OBSERVACION'}" rendered="#{account.tienePermiso('MEDICOS')}">
+                    <p:tab title="#{'OBSERVACIÓN'}" titletip="#{'OBSERVACIÓN'}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}">
                         <glue:output id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
-                                     required="false" execute="@this save" render="observacionC" styleClass="span14"/>
+                                     required="false" execute="@this :form:save" render="observacionC" styleClass="span14"/>
                     </p:tab>
-                </p:accordionPanel>                
+                </p:tabView>
 
 
-                <div class="admin-actions ">
+                <div class="admin-actions span15" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/medicina/fichaMedica.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >
+                        <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                     </h:link>
                 </div>
+                
+                <div class="offset8" style="float: right">
+                    <glue:output id="user" name="responsable" type="text" label="Responsable" value="#{consultaMedicaHome.instance.responsable.fullName}" 
+                                 required="false" execute="@this" render="user" styleClass="xLarge" disabled="true"/>
+                </div>  
             </h:form>
         </ui:define>
     </ui:composition>

@@ -44,46 +44,43 @@ import javax.persistence.Temporal;
 @Table(name = "ConsultaMedica")
 @DiscriminatorValue(value = "CM")
 @PrimaryKeyJoinColumn(name = "id")
-public class ConsultaMedica extends BussinesEntity implements Serializable {
-    
+public class ConsultaMedica extends BussinesEntity implements Serializable, Comparable<ConsultaMedica> {
+
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConsulta;
     @Temporal(javax.persistence.TemporalType.TIME)
-    private Date horaConsulta;    
+    private Date horaConsulta;
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date tiempoConsulta;
-    private String motivoConsulta;    
+    private String motivoConsulta;
     private String enfermedadActual;
-    private String observacionRevisionActualOrganosYSistemas;
+    private String observacionRevisionOS;
+    private String observacionExamenFisico;
     private String examenFisico;
     private String diagnostico;
     private String tratamiento;
     private String observacionConsulta;
-    
-    public ConsultaMedica(){
+
+    public ConsultaMedica() {
         fechaConsulta = new Date();
-        horaConsulta = new Date();         
-        horaConsulta = new Date();
+        horaConsulta = new Date();        
     }
-    
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "historiaClinica_id")
     private HistoriaClinica historiaClinica;
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "signosVitales_id")
     private SignosVitales signosVitales;
-    
-    @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Receta> recetas = new ArrayList<Receta>();
-       
+
     public Date getFechaConsulta() {
         return fechaConsulta;
     }
 
     public void setFechaConsulta(Date fechaConsulta) {
         this.fechaConsulta = fechaConsulta;
-    }  
+    }
 
     public Date getTiempoConsulta() {
         return tiempoConsulta;
@@ -104,9 +101,9 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
     public void setHistoriaClinica(HistoriaClinica historiaClinica) {
         this.historiaClinica = historiaClinica;
     }
-    
+
     public void setTiempoConsulta(Date tiempoConsulta) {
-        this.tiempoConsulta = tiempoConsulta;        
+        this.tiempoConsulta = tiempoConsulta;
     }
 
     public String getMotivoConsulta() {
@@ -123,14 +120,6 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
 
     public void setEnfermedadActual(String enfermedadActual) {
         this.enfermedadActual = enfermedadActual;
-    }
-
-    public String getObservacionRevisionActualOrganosYSistemas() {
-        return observacionRevisionActualOrganosYSistemas;
-    }
-
-    public void setObservacionRevisionActualOrganosYSistemas(String observacionRevisionActualOrganosYSistemas) {
-        this.observacionRevisionActualOrganosYSistemas = observacionRevisionActualOrganosYSistemas;
     }
 
     public String getExamenFisico() {
@@ -171,42 +160,49 @@ public class ConsultaMedica extends BussinesEntity implements Serializable {
 
     public void setSignosVitales(SignosVitales signosVitales) {
         this.signosVitales = signosVitales;
-    }   
+    }
+
+    public String getObservacionRevisionOS() {
+        return observacionRevisionOS;
+    }
+
+    public void setObservacionRevisionOS(String observacionRevisionOS) {
+        this.observacionRevisionOS = observacionRevisionOS;
+    }
+
+    public String getObservacionExamenFisico() {
+        return observacionExamenFisico;
+    }
+
+    public void setObservacionExamenFisico(String observacionExamenFisico) {
+        this.observacionExamenFisico = observacionExamenFisico;
+    }
 
     public List<Receta> getRecetas() {
         return recetas;
     }
-      
+
     public void setRecetas(List<Receta> recetas) {
         for (Receta r : recetas) {
             r.setConsultaMedica(this);
         }
         this.recetas = recetas;
-    } 
-    
-    public void agregarReceta(Receta r){
-        if(!this.recetas.contains(r)){
-           r.setConsultaMedica(this); 
-           this.recetas.add(r);
-        }
-    }
-    /*
-    public List<Tratamiento> getTratamientos() {
-        return tratamientos;
     }
 
-    public void setTratamientos(List<Tratamiento> tratamientos) {
-        for (Tratamiento t : tratamientos) {
-            t.setConsultaMedica(this);
+    public void agregarReceta(Receta r) {
+        if (!this.recetas.contains(r)) {
+            r.setConsultaMedica(this);
+            this.recetas.add(r);
         }
-        this.tratamientos = tratamientos;
     }
-    
-    public void agregarTratamiento(Tratamiento t){
-        if(!this.tratamientos.contains(t)){
-            t.setConsultaMedica(this);
-            this.tratamientos.add(t);
-        }
-    }*/
-    
+
+    @Override
+    public int compareTo(ConsultaMedica o) {
+//        if (this.getFechaConsulta().before(o.getFechaConsulta())) {
+//            return 1;
+//        }else if(this.horaConsulta.before(o.getHoraConsulta())){
+//            return 1;
+//        }        
+        return (int)(this.getId() - o.getId());
+    }
 }

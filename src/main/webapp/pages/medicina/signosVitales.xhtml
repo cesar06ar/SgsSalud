@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="fichaMedicaId" value="#{signosVitalesHome.fichaMedicaId}" />            
+            <f:viewParam name="backView" value="#{signosVitalesHome.backView}" />
+        </f:metadata>
+
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h2>#{signosVitalesHome.managed? '' : messages['common.add']} #{'Singos Vitales'}</h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="content" >
+            <h:form id="form" acceptcharset="UTF-8">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <p:panel id="infoGeneral" header="Información de Consulta" toggleable="true" >
+                    <div class="container-fluid">   
+                        <div class="row-fluid">
+                            <div id="left" class="span7">
+                                <p:fieldset legend="Seleccione el servicio a utilizar">
+                                    <glue:output id="servicioM" name="servicioMedico" type="checkbox" label="#{'Servicio Medico'}" value="#{signosVitalesHome.servicioMedico}" 
+                                                 required="false" execute="@this :form:save" render="servicioM" styleClass="clearfix"/>
+                                    <glue:output id="servicioO" name="servicioDental" type="checkbox" label="#{'Servicio Odontológico'}" value="#{signosVitalesHome.servicioDental}" 
+                                                 required="false" execute="@this :form:save" render="servicioO" styleClass="clearfix"/>                
+                                </p:fieldset>                                  
+                            </div>
+                            <div id="rigth" class="span7" style="margin-left: 15px; ">
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
+                                    <div class="input">                                                         
+                                        <p:calendar id="fechaC" value="#{signosVitalesHome.consultaMed.fechaConsulta}"  label="" 
+                                                    disabled="true" pattern="dd-MMM-yyyy">                                            
+                                        </p:calendar>                                                                                                      
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.consultaMed.fechaConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
+                                    <div class="input">                                                         
+                                        <p:calendar id="horaC" value="#{signosVitalesHome.consultaMed.horaConsulta}"  label="" 
+                                                    disabled="true" pattern="HH:mm">                                            
+                                        </p:calendar>                                                                                                      
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.consultaMed.horaConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>                                  
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <p:panel id="consultaM" header="Signos Vitales" toggleable="true">                    
+                    <div class="container-fluid">   
+                        <div class="row-fluid">
+                            <div id="left" class="span8" style="margin-left: -10px;">
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="peso" >#{messages['signosVitales.peso']}</label>
+                                    <div class="input"> 
+                                        <p:spinner  id="peso" value="#{signosVitalesHome.instance.peso}" styleClass="xLarge" required="true" 
+                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" Kg" dir="left">
+                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                        </p:spinner>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.peso != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>  
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="presionArt" >#{messages['signosVitales.presionArt']}</label>
+                                    <div class="input"> 
+                                        <p:spinner  id="presionArt" value="#{signosVitalesHome.instance.presionArterial}" styleClass="xLarge" required="true" 
+                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" min">
+                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                        </p:spinner>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.presionArterial != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup> 
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="pulso" >#{messages['signosVitales.pulso']}</label>
+                                    <div class="input"> 
+                                        <p:spinner  id="pulso" value="#{signosVitalesHome.instance.pulso}" styleClass="xLarge" required="true" 
+                                                    rendered="true" min="0" suffix=" p/min">
+                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                        </p:spinner>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.pulso != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup> 
+                            </div>
+                            <div id="left" class="span8"  style="margin-left: -40px; ">
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="frecuenciaResp" >#{messages['signosVitales.frecuenciaResp']}</label>
+                                    <div class="input"> 
+                                        <p:spinner  id="frecuenciaResp" value="#{signosVitalesHome.instance.frecuenciaRespiratoria}" styleClass="xLarge" required="true" 
+                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" min">
+                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                        </p:spinner>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.frecuenciaRespiratoria != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="talla" >#{messages['signosVitales.talla']}</label>
+                                    <div class="input"> 
+                                        <p:spinner  id="talla" value="#{signosVitalesHome.instance.talla}" styleClass="xLarge" required="true" 
+                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" mm" style="text-align: left;">
+                                            <p:ajax event="keyup"  update="@parent :form:save" process="@this"/>  
+                                        </p:spinner>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.talla != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="temperatura" >#{messages['signosVitales.temperatura']}</label>
+                                    <div class="input"> 
+                                        <p:spinner  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" styleClass="xLarge" required="true" 
+                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" °C">
+                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
+                                        </p:spinner>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.temperatura != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>  
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <div class="admin-actions" style="padding-top: 20px;">
+                    <p:commandButton id="save" action="#{signosVitalesHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/medicina/fichaMedica.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >
+                        <f:param name="fichaMedicaId" value="#{signosVitalesHome.fichaMedicaId}"/>
+                    </h:link>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>                
+

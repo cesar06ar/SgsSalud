@@ -53,7 +53,7 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
     @JoinColumn(name = "fichaMedica_id")
     private FichaMedica fichaMedica;
     
-    @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "historiaClinica")
     private List<ConsultaMedica> consultas = new ArrayList<ConsultaMedica>();
    
     public FichaMedica getFichaMedica() {

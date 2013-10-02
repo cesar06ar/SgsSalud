@@ -46,7 +46,7 @@ import javax.persistence.Temporal;
 @Table(name = "ConsultaOdontologica")
 @DiscriminatorValue(value = "CO")
 @PrimaryKeyJoinColumn(name = "id")
-public class ConsultaOdontologica extends BussinesEntity implements Serializable {
+public class ConsultaOdontologica extends BussinesEntity implements Serializable, Comparable<ConsultaOdontologica> {
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaConsulta;
@@ -168,5 +168,10 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
             t.setConsultaOdontologica(this);
             this.tratamientoDientes.add(t);
         }
+    }
+
+    @Override
+    public int compareTo(ConsultaOdontologica o) {
+        return (int)(this.getId() - o.getId());
     }
 }

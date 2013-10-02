@@ -18,19 +18,18 @@ package edu.sgssalud.controller.medicina;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.BussinesEntityType;
+import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.medicina.ConsultaMedica;
-import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
-import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
+import edu.sgssalud.service.paciente.PacienteServicio;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
@@ -39,6 +38,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.jboss.seam.security.Identity;
+import org.jboss.seam.transaction.Transactional;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -58,17 +60,21 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private FichaMedicaServicio fms;
     @Inject
     private HistoriaClinicaServicio hcs;
+    @Inject
+    private Identity identity;
+    @Inject
+    private ProfileService profileS;
     private HistoriaClinica hc;
     private SignosVitales signosVitales;
-    
-    private Long fichaMedicaId;    
-            
+    private Long fichaMedicaId;
+
     public Long getConsultaMedicaId() {
         return (Long) getId();
     }
 
     public void setConsultaMedicaId(Long consultaMedicaId) {
         setId(consultaMedicaId);
+        //getInstance().setSignosVitales(cms.getSignosVitalesPorIdConsultaMedica(getInstance()));
     }
 
     public Long getFichaMedicaId() {
@@ -77,8 +83,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
 
     public void setFichaMedicaId(Long fichaMedicaId) {
         this.fichaMedicaId = fichaMedicaId;
-        hc = hcs.buscarPorFichaMedica(fms.getFichaMedicaPorId(fichaMedicaId));
-    }      
+        this.setHc(hcs.buscarPorFichaMedica(fms.getFichaMedicaPorId(fichaMedicaId)));
+    }
 
     public HistoriaClinica getHc() {
         return hc;
@@ -94,9 +100,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
 
     public void setSignosVitales(SignosVitales signosVitales) {
         this.signosVitales = signosVitales;
-    }  
-    
-    
+    }
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
@@ -107,13 +112,17 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         cms.setEntityManager(em);
         hcs.setEntityManager(em);
         fms.setEntityManager(em);
-        
-        if(!getInstance().isPersistent()){
+        profileS.setEntityManager(em);
+        if (!getInstance().isPersistent()) {
             signosVitales = new SignosVitales();
+        }else{
+            if(getInstance().getResponsable() == null){
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+            }
         }
     }
-    
-    @TransactionAttribute  
+
+    @TransactionAttribute
     public ConsultaMedica load() {
         if (isIdDefined()) {
             wire();
@@ -125,7 +134,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     @TransactionAttribute
     public void wire() {
         getInstance();
-    }   
+    }
 
     @Override
     protected ConsultaMedica createInstance() {
@@ -135,9 +144,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         ConsultaMedica consultaMedica = new ConsultaMedica();
         consultaMedica.setCreatedOn(now);
         consultaMedica.setLastUpdate(now);
-        consultaMedica.setActivationTime(now);
-
-        //fichaMedic.setResponsable(null);    //cambiar atributo a 
+        consultaMedica.setActivationTime(now);        
         consultaMedica.setSignosVitales(new SignosVitales());
         consultaMedica.setType(_type);
         consultaMedica.buildAttributes(bussinesEntityService);  //
@@ -151,25 +158,53 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
 
     @TransactionAttribute
     public String guardar() {
+        log.info("Ingreso a guardar");
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         try {
-            if (getInstance().isPersistent()) {              
+            if (getInstance().isPersistent()) {
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                getInstance().getSignosVitales().setFechaActual(now);
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
-                create(getInstance());
-                hc.agregarConsulta(getInstance());
+                getInstance().setHistoriaClinica(hc);
                 getInstance().getSignosVitales().setFechaActual(now);
+                create(getInstance());
                 save(getInstance());
-                save(hc);
                 FacesMessage msg = new FacesMessage("Se creo nueva Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+        //return "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId="+getFichaMedicaId();
+        return null;
+    }
+
+    @Transactional
+    public String borrar() {
+        try {
+            if (getInstance() == null) {
+                throw new NullPointerException("property is null");
+            }
+            if (getInstance().isPersistent()) {
+
+                delete(getInstance());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+                RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
+
+
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "" + " " + getInstance().getName(), ""));
+                RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente                    
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
         return null;
     }

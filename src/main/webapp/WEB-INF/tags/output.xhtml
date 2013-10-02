@@ -65,7 +65,7 @@ limitations under the License.
                 </c:when>
                 <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
                     <h:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" style="width: 650px; height: 100px;" disabled="#{disabled}">
-                        <f:ajax execute="#{execute}" render="#{render}"  />
+                        <f:ajax event="blur" execute="#{execute}" render="#{render}"  />
                     </h:inputTextarea>
                 </c:when>
                 <c:when test="#{type == 'java.lang.String[]' or type == 'select'}">

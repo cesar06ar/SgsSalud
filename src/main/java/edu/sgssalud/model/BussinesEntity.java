@@ -68,15 +68,15 @@ import edu.sgssalud.util.Lists;
  query = "select m FROM Group "
  + "g JOIN g.members m WHERE g.id=:id and m.type=:type ORDER BY g.name")*/})
 public class BussinesEntity extends DeletableObject<BussinesEntity> {
-
+    
     private static final long serialVersionUID = -3282665873474370357L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntity.class);
     @ManyToOne(optional = true)
     @JoinColumn(name = "author", nullable = true)
     private Profile responsable;
-   /* @ManyToOne
-    @JoinColumn(name = "parent")
-    public BussinesEntity parent;*/
+    /* @ManyToOne
+     @JoinColumn(name = "parent")
+     public BussinesEntity parent;*/
     /*@OneToMany(targetEntity = Group.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
      @JoinTable(name = "bussinesentity_group", joinColumns =
      @JoinColumn(name = "bussinesEntityId", referencedColumnName = "id"),
@@ -97,44 +97,43 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     private Property property;
 
     /*public BussinesEntity getParent() {
-        return parent;
-    }
+     return parent;
+     }
 
-    public void setParent(BussinesEntity parent) {
-        this.parent = parent;
-    }*/
-
+     public void setParent(BussinesEntity parent) {
+     this.parent = parent;
+     }*/
     public List<Membership> getMemberships() {
         return memberships;
     }
-
+    
     public void setMemberships(List<Membership> memberships) {
         this.memberships = memberships;
     }
-
+    
     public void setGroups(List<Group> groups) {
         //TODO this.groups = groups;
     }
-
+    
     public List<Group> getGroups() {
         List<Group> groups = new ArrayList<Group>();
         for (Membership m : getMemberships()) {
             groups.add(m.getGroup());
         }
-
+        
         return groups;
     }
-
+    
     public Group getGroup(String name) {
         for (Group g : getGroups()) {
             if (name.equals(g.getName())) {
                 return g;
             }
         }
-
+        
         return null;
     }
-
+    
     public List<Group> findGroups(final String... names) {
         List<Group> _buffer = new ArrayList<Group>();
         Group g = null;
@@ -146,11 +145,11 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return _buffer;
     }
-
+    
     public List<Group> findGroupsFor(final String names) {
         return findGroups(names.split(","));
     }
-
+    
     public void add(Group g) {
         Date now = Calendar.getInstance().getTime();
         Membership membershipt = new Membership();
@@ -164,14 +163,14 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             getMemberships().add(membershipt);
         }
     }
-
+    
     public void remove(Group g) {
         /*if (groups.contains(g)) {
          this.getGroups().remove(g);
          }
          */
     }
-
+    
     public boolean containsGroup(String name) {
         for (Group g : getGroups()) {
             if (name.equalsIgnoreCase(g.getName())) {
@@ -180,40 +179,48 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return false;
     }
-
+    
     public Profile getResponsable() {
         return responsable;
     }
-
+    
     public void setResponsable(Profile responsable) {
         this.responsable = responsable;
     }
-
+    
     public BussinesEntityType getType() {
         return type;
     }
-
+    
     public void setType(BussinesEntityType type) {
         this.type = type;
     }
-
+    
     public List<BussinesEntityAttribute> getAttributes() {
         Collections.sort(attributes);
         return attributes;
     }
-
+    
     public void setAttributes(List<BussinesEntityAttribute> attributes) {
         for (BussinesEntityAttribute attr : attributes) {
             attr.setBussinesEntity(this);
         }
         this.attributes.addAll(attributes);
     }
-
+    
     public void addBussinesEntityAttribute(BussinesEntityAttribute attribute) {
         attribute.setBussinesEntity(this);
         this.attributes.add(attribute);
     }
-
+    
+    public boolean removeBussinesEntityAttribute(BussinesEntityAttribute attribute) {        
+        if (attributes.contains(attribute)) {
+            attributes.remove(attribute);
+            return true;
+        }
+        return false;
+    }
+    
     public boolean containsBussinesEntityAttribute(String name) {
         for (BussinesEntityAttribute attr : getAttributes()) {
             if (name.equalsIgnoreCase(attr.getName())) {
@@ -222,7 +229,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return false;
     }
-
+    
     public BussinesEntityAttribute getBussinessEntityAttribute(String name) {
         for (BussinesEntityAttribute attr : getAttributes()) {
             if (name.equalsIgnoreCase(attr.getName())) {
@@ -231,7 +238,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return null;
     }
-
+    
     public String findAttributeValue(String name) {
         if ("code".equalsIgnoreCase(name)) {
             return getCode();
@@ -256,15 +263,15 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return _buffer;
     }
-
+    
     public Property getProperty() {
         return property;
     }
-
+    
     public void setProperty(Property property) {
         this.property = property;
     }
-
+    
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers
@@ -272,7 +279,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
                 append(getName()).
                 toHashCode();
     }
-
+    
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
@@ -311,7 +318,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             }
         }
     }
-
+    
     public void buildAttributes(String name, BussinesEntityService bes) {
         BussinesEntityType _type = bes.findBussinesEntityTypeByName(name);
         if (_type == null) {
@@ -329,7 +336,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             }
         }
     }
-
+    
     protected void loadStructure(Property a, BussinesEntityService bes) {
         BussinesEntityType _type = bes.findBussinesEntityTypeByName(a.getName());
         if (_type == null) {
@@ -341,7 +348,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             }
         }
     }
-
+    
     protected Group buildGroup(Property attr, BussinesEntityService bes) {
         Date now = Calendar.getInstance().getTime();
         Group g = null;
@@ -359,7 +366,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         }
         return g;
     }
-
+    
     protected BussinesEntityAttribute buildAtribute(Property p) {
         BussinesEntityAttribute attribute = new BussinesEntityAttribute();
         attribute.setName(p.getName());
@@ -388,12 +395,12 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         return temp;
     }
     
-     public boolean containsBussinesEntityType(String name) {
+    public boolean containsBussinesEntityType(String name) {
         List<BussinesEntityAttribute> _buffer = new ArrayList<BussinesEntityAttribute>();
         for (BussinesEntityAttribute a : getAttributes()) {            
-                if (name.equalsIgnoreCase(a.getProperty().getStructure().getBussinesEntityType().getName())) {
-                    return true;
-                }            
+            if (name.equalsIgnoreCase(a.getProperty().getStructure().getBussinesEntityType().getName())) {
+                return true;
+            }            
         }        
         return false;
     }
