@@ -17,6 +17,7 @@ package edu.sgssalud.model.farmacia;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.medicina.ConsultaMedica;
+import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
@@ -53,17 +54,20 @@ public class Receta implements Serializable {
     private Date fecha;
     private String estado;  //el estado puede ser emitido y entregado 
     
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Medicamento> medicaciones = new ArrayList<Medicamento>();
+    private List<Medicamento> medicaciones = new ArrayList<Medicamento>();   
     private String indicaciones;
-    @OneToOne
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "responsableEmision_id")
+    private Profile responsableEmision;
+    @ManyToOne
     @JoinColumn(name = "responsableEntrega_id")
     private Profile ResponsableEntrega;   
     
-    //el usuario responsable de emitir la receta se carga de la consulta medica
+       //el usuario responsable de emitir la receta se carga de la consulta medica
     
     @ManyToOne
     @JoinColumn(name = "consultaMedica_id")
@@ -153,6 +157,16 @@ public class Receta implements Serializable {
     public void setConsultaOdontologica(ConsultaOdontologica consultaOdontologica) {
         this.consultaOdontologica = consultaOdontologica;
     }  
+
+    public Profile getResponsableEmision() {
+        return responsableEmision;
+    }
+
+    public void setResponsableEmision(Profile responsableEmision) {
+        this.responsableEmision = responsableEmision;
+    }
+    
+    
     
     public boolean isPersistent() {
         return getId() != null;
@@ -167,13 +181,11 @@ public class Receta implements Serializable {
 
     @Override
     public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+         if (!(obj instanceof Receta)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        Receta other = (Receta) obj;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;

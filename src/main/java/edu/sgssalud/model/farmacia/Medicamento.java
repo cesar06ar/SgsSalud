@@ -166,6 +166,7 @@ public class Medicamento extends BussinesEntity implements Serializable {
         this.receta = receta;
     }   
     
+    
 
     @Override
     public String toString() {

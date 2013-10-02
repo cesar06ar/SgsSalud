@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core">
+   
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml"> 
+        <f:metadata>
+            <f:viewParam name="pacienteId" value="#{RecetaHome.pacienteId}" />
+            <f:viewParam name="consultaMedicaId" value="#{Receta.consultaMedicaId}" />
+            <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
+        </f:metadata>
+    
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h2>#{RecetaHome.managed? messages['common.edit'] : messages['common.add']} #{RecetaHome.instance.pacienteListaServicio}</h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        
+        
+    </ui:composition>
+
+</html>

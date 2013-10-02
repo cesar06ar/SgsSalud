@@ -17,6 +17,7 @@ package edu.sgssalud.service.farmacia;
 
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Medicamento_;
+import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.paciente.Paciente_;
 import edu.sgssalud.service.BussinesEntityService;
@@ -53,7 +54,7 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
         this.em = em;
     }
 
-    public Medicamento buscarMedicamentosProId(final Long id) {
+    public Medicamento buscarMedicamentosPorId(final Long id) {
         return (Medicamento) findById(Medicamento.class, id);
     }
 
@@ -104,6 +105,14 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
         return query.getResultList();
     }
 
+     public List<Medicamento> buscarTodos() {
+        try {
+            return findAll(Medicamento.class);
+        } catch (Exception e) {
+            log.info("error no encontro nada " + e.getMessage());
+            return null;
+        }
+    }
     public boolean esNombreDisponible(String nombre) {
         try {
             Medicamento med = buscarPorNombreMed(nombre);

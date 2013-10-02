@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="pacienteId" value="#{recetaHome.pacienteId}" />
+            <f:viewParam name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}" />
+            <f:viewParam name="fichaMedicaId" value="#{recetaHome.fichaMedicaId}" />
+            <f:viewParam name="backView" value="#{recetaHome.backView}" />
+        </f:metadata>
+
+
+
+        <ui:define name="header-replace">                
+
+
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h2>#{recetaHome.recetaId == null? 'Nueva Receta:': 'editar'} 
+                            #{recetaHome.paciente.nombres}</h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+
+      
+
+        <ui:define name="content" class="span20">
+            <h:form id="form">
+                <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                    
+                    <div class="container-fluid">   
+                        <div class="row-fluid">
+                            <div class="span7">
+                                <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{recetaHome.fichaMedica.numeroFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{recetaHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{recetaHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>                                      
+
+                            </div>
+
+                            <div class="span7" align="left">                                                                
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
+                                    <div class="input">                                                         
+                                        <p:calendar id="fafm" value="#{recetaHome.instance.fecha}"  label="#{messages['fechaReceta.fechaEmision']}" 
+                                                    disabled="true" pattern="dd-MMM-yyyy">                                            
+                                        </p:calendar>                                                                                                      
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.instance.fecha != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>  
+
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+
+
+
+                <p:panel id="panelPrescripcion" header="Receta Médica" styleClass="clearfix">
+                    <p:selectOneMenu value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:80px" converter="#{omnifaces.SelectItemsConverter}" required="true"
+                                     effect="fade" var="m" style="width:160px"  filter="true" filterMatchMode="contains">  
+                        <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                        <f:selectItems value="#{recetaHome.listaMedicamentos}" var="medicamento" itemLabel="#{medicamento.nombreComercial} #{medicamento.unidades}" itemValue="#{medicamento}" 
+                                       rendered="true"/>
+
+                        <p:column>  
+                            #{m.unidades}                            
+
+                        </p:column>  
+
+                        <p:column>  
+                            #{m.nombreComercial}
+
+                        </p:column>  
+                        <f:converter converterId="convertidorDeMedicamento"/>
+                        <p:ajax event="change" update="@parent " partialSubmit="true"/>
+
+                    </p:selectOneMenu>
+
+                </p:panel>
+
+
+                <div class="admin-actions ">
+                    <p:commandButton id="save" action="#{recetaHome.guardarReceta()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                    </h:link>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>                
+

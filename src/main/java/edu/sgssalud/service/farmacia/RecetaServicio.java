@@ -83,6 +83,15 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         
     } 
     
+    public List<Receta> buscarTodos() {
+        try {
+            return findAll(Receta.class);
+        } catch (Exception e) {
+            log.info("error no encontro nada " + e.getMessage());
+            return null;
+        }
+    }
+
 //    public List<Receta> BuscarRecetasPorParametro1(String parametro) {
 //        TypedQuery<Receta> query = null;
 //        if (Dates.getFormatoFecha(parametro) != null) {
