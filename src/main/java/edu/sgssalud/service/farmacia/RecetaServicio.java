@@ -74,12 +74,12 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         
     } 
     
-    public Receta buscarRecetaPorConsultaMedica(final ConsultaMedica consulMedica ) throws NoResultException {
+    public List<Receta> buscarRecetaPorConsultaMedica(final ConsultaMedica consulMedica ) throws NoResultException {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta> query = builder.createQuery(Receta.class);
         Root<Receta> bussinesEntityType = query.from(Receta.class);
         query.where(builder.equal(bussinesEntityType.get(Receta_.consultaMedica), consulMedica));
-        return getSingleResult(query);
+        return getResultList(query);
         
     } 
     
