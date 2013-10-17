@@ -17,20 +17,24 @@
             <f:viewParam name="pacienteId" value="#{fichaMedicaHome.pacienteId}" />
             <f:viewParam name="fichaMedicaId" value="#{fichaMedicaHome.fichaMedicaId}" />
             <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
+            
         </f:metadata>
 
-        <ui:define name="header-replace">
-            <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{fichaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{fichaMedicaHome.instance.numeroFicha}</h2>   
+        <ui:define name="header-replace" > <!--rendered="#{identity.loggedIn and account.renderView}"-->
+            <h:panelGroup  rendered="#{identity.loggedIn and account.renderView}">
+                <div class="header-replace">
+                    <div class="container">
+                        <div class="row fl" style="margin-top: 5px;">
+                            <h2>#{fichaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{fichaMedicaHome.instance.numeroFicha}</h2>   
+                        </div>
                     </div>
                 </div>
-            </div>
+            </h:panelGroup>
         </ui:define>
-        <ui:define name="content" class="span20">            
-            <h:form id="form">
-                <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" />  
+        <ui:define name="content" class="span20" >            
+            <h:form id="form" rendered="#{identity.loggedIn and account.renderView}">
+                <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" escape="false"/>
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false"/>  
                 <div class="columns offset7" >
                     <h:panelGrid id="buscarp" class="clearfix" columns="3" style="margin: -12px 0px -6px -20px; ">
                         <label for="buscar">#{'Buscar por'}</label>
@@ -52,7 +56,7 @@
                 <p:panel id="infoP" header="Información Personal" styleClass="clearfix">
                     <div class="row fl" >
                         <div class="span2 columns " style="margin-left: 15px;">
-                            <h:link outcome="/pages/paciente/paciente" title="#{fichaMedicaHome.paciente.nombres}">
+                            <h:link outcome="/pages/secretaria/paciente" title="#{fichaMedicaHome.paciente.nombres}">
                                 <!--<ocp:gravatar email="#{fichaMedicaHome.paciente.email}" size="100" updatable="true" />-->
                                 <f:param name="pacienteId" value="#{fichaMedicaHome.paciente.id}"/>
                             </h:link>
@@ -135,54 +139,73 @@
                             <c:choose>
                                 <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">                                
                                     <ui:repeat value="#{fichaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">
-
                                         <c:choose>
                                             <c:when test="${f.name eq 'habitosFichaMedica'}">
-                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" styleClass="clearfix">
-                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                                    <div class="input" >                                                                                     
-
-                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
-                                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
-                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                                        </p:inputTextarea> 
-                                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" style="padding-left: 5px; float: left" >
+                                                    <label for="#{a.name}" style="float: left" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                                    <div class="span4" style="padding-left: 10px; padding-top: 3px; padding-bottom: 5px;"> 
+                                                        <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}" >
+                                                            <p:ajax event="change" update="@parent" partialSubmit="true" />                                                     
+                                                        </p:selectBooleanCheckbox>   
+                                                        <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                                    rendered="#{a.property.type eq 'java.util.Date'}">
+                                                            <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                                        </p:calendar>                                                 
+                                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                       rendered="#{a.property.type eq 'java.lang.String'}">
                                                             <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
-                                                        </p:inputText>                                                         
-                                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                                        </p:inputText>                                                                                                     
+                                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                         rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </pe:inputNumber>  
                                                         <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}" title="#{a.property.helpInline}">  
                                                             <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                                        </p:selectOneMenu> 
+                                                        </p:selectOneMenu>
+                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </p:inputTextarea>
+                                                        <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
+                                                            <h:outputText escape="false" value="#{a.property.helpInline}"/>
+                                                        </p:tooltip>
                                                     </div>
                                                 </h:panelGroup>  
                                             </c:when>                                            
                                             <c:otherwise>
                                                 <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
                                                     <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                                    <div class="span1" > 
+                                                    <div class="span1" style="padding-left: 5px; padding-top: 5px;"> 
 
-                                                        <p:selectBooleanCheckbox value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
+                                                        <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                         </p:selectBooleanCheckbox>                                                        
-                                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" 
+                                                        <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                                    rendered="#{a.property.type eq 'java.util.Date'}">
+                                                            <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                                        </p:calendar>                                                 
+                                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                       rendered="#{a.property.type eq 'java.lang.String'}">
                                                             <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
-                                                        </p:inputText>                                                        
-                                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}"
+                                                        </p:inputText>                                                                                                     
+                                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                         rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </pe:inputNumber>  
                                                         <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}">  
+                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}" title="#{a.property.helpInline}">  
                                                             <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                                        </p:selectOneMenu> 
+                                                        </p:selectOneMenu>
+                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </p:inputTextarea>
+                                                        <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
+                                                            <h:outputText escape="false" value="#{a.property.helpInline}"/>
+                                                        </p:tooltip>
                                                     </div>
                                                 </h:panelGroup>  
                                             </c:otherwise>
@@ -209,8 +232,8 @@
                 </p:tabView>
 
                 <p:panel id="signosVitalesP" header="#{'TOMA DE SIGNOS VITALES'}" toggleable="true" styleClass="span16" toggleSpeed="100" closeSpeed="0" 
-                         rendered="#{fichaMedicaHome.instance.persistent and not account.tienePermiso('ENFERMEROS')}">
-                    <h:link value="#{'Nueva Consulta '} " rendered="#{true}" outcome="signosVitales" 
+                         rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ENFERMEROS') }">
+                    <h:link value="#{'Nueva Consulta '} " rendered="#{true}" outcome="/pages/depSalud/enfermeria/signosVitales" 
                             styleClass="btn success Large">
                         <h:graphicImage value="#{resource['images/sv2.png']}" style="float: left;" />
                         <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
@@ -220,38 +243,38 @@
                 </p:panel>
                 <!--Evolucion o consultas medicas-->
                 <p:panel id="consultasM" header="#{'CONSULTAS MÉDICAS'}" toggleable="true" styleClass="span16" toggleSpeed="100" closeSpeed="0" 
-                         rendered="#{fichaMedicaHome.instance.persistent and not account.tienePermiso('ENFERMEROS')}">
+                         rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('MEDICOS')}">                    
                     <div class="admin-actions">
-                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success">
+                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn success" >
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="fichaMedica"></f:param>
                         </h:link>
                         #{' '}
-                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success"
+                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn success"
                                 disabled="#{fichaMedicaHome.consultaMedica == null}" >
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
                             <f:param name="consultaMedicaId" value="#{fichaMedicaHome.consultaMedica.id}"></f:param>
                             <f:param name="backView" value="fichaMedica"></f:param>
                         </h:link>
                         #{' '}
-                        <p:commandButton id="button-delete" type="button" value="#{messages['common.delete']}" styleClass="btn btn-short success" onclick="#{'deletedDlg.show()'}"  immediate="true"
+                        <p:commandButton id="button-delete" type="button" value="#{messages['common.delete']}" styleClass="btn success" onclick="#{'deletedDlg.show()'}"  immediate="true"
                                          update=":cancel-dialog" disabled="#{fichaMedicaHome.consultaMedica == null}">                        
                         </p:commandButton>
                     </div> 
                     <p:dataTable id="tablaConsultasM" value="#{fichaMedicaHome.listaConsultasM}" rows="10" var="consultaM_" editable="true"
-                                 selection="#{fichaMedicaHome.consultaMedica}" selectionMode="single" rowKey="#{consultaM_.id}"
+                                 selection="#{fichaMedicaHome.consultaMedica}" selectionMode="single" rowKey="#{consultaM_.id}" 
                                  paginator="true">                           
                         <p:ajax event="rowSelect" listener="#{fichaMedicaHome.onRowSelect}"   
-                                update=":form:button-edit :form:button-delete :form:messages1"/>  
+                                update=":form:button-edit :form:button-delete :form:growl"/>  
                         <p:ajax event="rowUnselect" listener="#{fichaMedicaHome.onRowUnselect}" 
-                                update=":form:button-edit :form:button-delete :form:messages1"/>
+                                update=":form:button-edit :form:button-delete :form:growl" />
 
                         <p:column headerText="Id">
                             <h:outputText value="#{consultaM_.id}"/>
                         </p:column>                            
                         <p:column headerText="#{messages['consultaMedica.fechaConsulta']}">
                             <h:outputText value="#{consultaM_.fechaConsulta}">
-                                <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
                             </h:outputText>&nbsp;&nbsp;
                             <h:outputText value="#{consultaM_.horaConsulta}">
                                 <f:convertDateTime pattern="HH:mm"/>
@@ -267,8 +290,46 @@
                 </p:panel>
                 <!--Evolucion o consultas medicas-->
                 <p:panel id="consultasO" header="#{'CONSULTAS ODONTOLOGICAS'}" toggleable="true" styleClass="span16" toggleSpeed="100" closeSpeed="0" 
-                         rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ODONTOLOGOS')}">
-                    
+                         rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ODONTOLOGOS')}">                   
+                    <div class="admin-actions">
+                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success">
+                            <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
+                            <f:param name="backView" value="fichaMedica"></f:param>
+                        </h:link>
+                        #{' '}
+                        <h:link id="button-edit1" value="#{messages['common.edit']}" rendered="#{true}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success"
+                                disabled="#{fichaMedicaHome.consultaOdont == null}" >
+                            <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
+                            <f:param name="consultaOdontId" value="#{fichaMedicaHome.consultaOdont.id}"></f:param>
+                            <f:param name="backView" value="fichaMedica"></f:param>
+                        </h:link>
+
+                    </div> 
+                    <p:dataTable id="tablaConsultasO" value="#{fichaMedicaHome.listaConsultasO}" rows="10" var="consultaO_" editable="true"
+                                 selection="#{fichaMedicaHome.consultaOdont}" selectionMode="single" rowKey="#{consultaO_.id}"
+                                 paginator="true">                           
+                        <p:ajax event="rowSelect" listener="#{fichaMedicaHome.onRowSelect1}"   
+                                update=":form:button-edit1 :form:growl"/>  
+                        <p:ajax event="rowUnselect" listener="#{fichaMedicaHome.onRowUnselect1}" 
+                                update=":form:button-edit1 :form:growl"/>
+
+                        <p:column headerText="Id">
+                            <h:outputText value="#{consultaO_.id}"/>
+                        </p:column>                            
+                        <p:column headerText="#{messages['consultaMedica.fechaConsulta']}">
+                            <h:outputText value="#{consultaO_.fechaConsulta}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>                            
+                        <p:column headerText="#{messages['consultaMedica.horaConsulta']}">
+                            <h:outputText value="#{consultaO_.horaConsulta}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.motivo']}">
+                            <h:outputText value="#{consultaO_.motivoConsulta}" styleClass="span3"/>
+                        </p:column>                        
+                    </p:dataTable>
                 </p:panel>
                 <div class="admin-actions span15" style="padding-right: 40px;">
                     <br/>
@@ -298,6 +359,20 @@
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog>
+        </ui:define>
+        <ui:define name="content-pre">
+            <h:panelGroup  rendered="#{!account.renderView}">
+                <br/><br/>
+                <div class="section">
+                    <h1>Accesso Denegado</h1>
+                </div>
+
+                <div class="section">
+                    <p>Usted no tiene autorización para realizar la acción solicitada.</p>
+
+                    <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
+                </div>
+            </h:panelGroup>
         </ui:define>
     </ui:composition>
 </html>                

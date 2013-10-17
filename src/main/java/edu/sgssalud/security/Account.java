@@ -90,12 +90,12 @@ public class Account implements Serializable {
             try {
                 loggedIn = ps.getProfileByIdentityKey(identity.getUser().getKey());
                 if (loggedIn != null) {
-                    id = loggedIn.getId();                    
+                    id = loggedIn.getId();
                     return id;
                 } else {
                     loggedIn1 = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey());
                     if (loggedIn1 != null) {
-                        id = loggedIn1.getId();                        
+                        id = loggedIn1.getId();
                         return id;
                     }
                 }
@@ -136,7 +136,7 @@ public class Account implements Serializable {
 
         if (identity.isLoggedIn() && !loggedIn.isPersistent()) {
             try {
-                boolean valor = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey()) != null;                
+                boolean valor = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey()) != null;
                 return valor;
             } catch (NoResultException e) {
                 throw e;
@@ -150,7 +150,7 @@ public class Account implements Serializable {
 
         if (identity.isLoggedIn()) {
             try {
-                boolean valor = ps.getProfileByIdentityKey(identity.getUser().getKey()) != null;                
+                boolean valor = ps.getProfileByIdentityKey(identity.getUser().getKey()) != null;
                 return valor;
             } catch (NoResultException e) {
                 throw e;
@@ -159,24 +159,40 @@ public class Account implements Serializable {
         }
         return false;
     }
-    
-    public boolean tienePermiso(final String grupoUser){
+
+    public boolean tienePermiso(final String grupoUser) {
         SecurityRules s = new SecurityRules();
-        if(SecurityRules.ADMIN.equals(grupoUser)){
+        if (SecurityRules.ADMIN.equals(grupoUser)) {
             return s.isAdmin(identity);
-        }else if(SecurityRules.MEDICOS.equals(grupoUser)){
+        } else if (SecurityRules.MEDICOS.equals(grupoUser)) {
             return s.isMedico(identity);
-        }else if(SecurityRules.ENFERMEROS.equals(grupoUser)){
+        } else if (SecurityRules.ENFERMEROS.equals(grupoUser)) {
             return s.isEnfermero(identity);
-        }else if(SecurityRules.ODONTOLOGOS.equals(grupoUser)){
+        } else if (SecurityRules.ODONTOLOGOS.equals(grupoUser)) {
             return s.isOdontologo(identity);
-        }else if(SecurityRules.SECRETARIA.equals(grupoUser)){
+        } else if (SecurityRules.SECRETARIA.equals(grupoUser)) {
             return s.isSecretaria(identity);
-        }else if(SecurityRules.FARMACEUTICOS.equals(grupoUser)){
+        } else if (SecurityRules.FARMACEUTICOS.equals(grupoUser)) {
             return s.isFarmaceutica(identity);
-        }else if(SecurityRules.LABORATORISTAS.equals(grupoUser)){
+        } else if (SecurityRules.LABORATORISTAS.equals(grupoUser)) {
             return s.isLaboratorista(identity);
         }
         return false;
+    }
+
+    public boolean isRenderView() {
+        SecurityRules s = new SecurityRules();
+        /*if(SecurityRules.MEDICOS.equals("MEDICOS")){
+         return s.isMedico(identity);
+         }else if(SecurityRules.ODONTOLOGOS.equals("ODONTOLOGOS")){
+         return s.isOdontologo(identity);
+         }else if(SecurityRules.ENFERMEROS.equals("ENFERMEROS")){
+         return s.isEnfermero(identity);
+         }*/
+        if (s.isMedico(identity) || s.isOdontologo(identity) || s.isEnfermero(identity)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

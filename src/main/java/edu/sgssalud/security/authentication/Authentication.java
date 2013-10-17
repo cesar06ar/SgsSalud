@@ -86,11 +86,11 @@ public class Authentication {
             //Configurar si es usuario de perfil o usuario de paciente...  
             log.info("Nombre usuario: " + credencials.getUsername());
             pacienteServic.setEntityManager(em);
-            if (pacienteServic.buscarPorCedula(credencials.getUsername()) != null) {
-                String result = "/pages/homePaciente";
+            if (pacienteServic.getPacientePorIdentityKey(identity.getUser().getKey()) != null) {
+                String result = "/pages/homePaciente.xhtml";
                 navigation.handleNavigation(context, null, result + "?faces-redirect=true");
             } else {
-                String result = "/pages/home";
+                String result = "/pages/home.xhtml";
                 navigation.handleNavigation(context, null, result + "?faces-redirect=true");
             }
 

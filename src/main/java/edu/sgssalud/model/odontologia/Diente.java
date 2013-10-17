@@ -28,19 +28,30 @@ import javax.persistence.ManyToOne;
  * @author cesar
  */
 @Entity
-public class Diente implements Serializable {
+public class Diente implements Serializable, Comparable<Diente> {
     
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
+    private Long id;    
     private String nombre;
-    private int posicion;    
+    private int posicion;  
+    private int cuadrante;
+    private String rutaIcon;
     @ManyToOne
     @JoinColumn(name = "odontograma_id")
     private Odontograma odontograma;
 
+    public Diente() {
+    }
+
+    public Diente(String nombre, int posicion, int cuadrante, String rutaIcon) {
+        this.nombre = nombre;
+        this.posicion = posicion;
+        this.cuadrante = cuadrante;
+        this.rutaIcon = rutaIcon;
+    }   
+    
     public Long getId() {
         return id;
     }
@@ -65,6 +76,22 @@ public class Diente implements Serializable {
         this.posicion = posicion;
     }
 
+    public int getCuadrante() {
+        return cuadrante;
+    }
+
+    public void setCuadrante(int cuadrante) {
+        this.cuadrante = cuadrante;
+    }   
+
+    public String getRutaIcon() {
+        return rutaIcon;
+    }
+
+    public void setRutaIcon(String rutaIcon) {
+        this.rutaIcon = rutaIcon;
+    }  
+        
     public Odontograma getOdontograma() {
         return odontograma;
     }
@@ -99,7 +126,18 @@ public class Diente implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.odontologia.Diente[ id=" + id + " ]";
+        return "edu.sgssalud.model.odontologia.Diente[ "
+                + "id=" + id + ","
+                + "nombre=" + nombre + ","
+                + "posicion=" + posicion + ","
+                + "cuadrante=" + cuadrante + ","
+                + "rutaIcon=" + rutaIcon + ","
+                + " ]";
+    }
+
+    @Override
+    public int compareTo(Diente o) {
+        return (int)o.getPosicion() - this.getPosicion();
     }
     
 }

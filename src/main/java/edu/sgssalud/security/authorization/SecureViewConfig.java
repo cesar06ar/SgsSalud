@@ -53,21 +53,27 @@ public interface SecureViewConfig {
         @ViewPattern("/pages/admin/*")
         @Admin
         ADMIN,
-        @ViewPattern("/pages/paciente/*")                
-        @Secretaria
+        @ViewPattern("/pages/secretaria/*")                        
+        @Secretaria                
         SECRETARIA,
         @ViewPattern("/pages/farmacia/*")
-        @farmaceutica        
-        FARMACEUTICOS,
-        @ViewPattern("/pages/medicina/*")                
+        @Farmaceutica   
+        FARMACEUTICOS,        
+        @ViewPattern("/pages/depSalud/medicina/*")        
         @Medico                               
-        MEDICOS,
-        @ViewPattern("/pages/odontologia/*")
+        MEDICOS,        
+        @ViewPattern("/pages/depSalud/odontologia/*")
         @Odontologo        
-        ODONTOLOGOS,
+        ODONTOLOGOS,        
+        @ViewPattern("/pages/depSalud/enfermeria/*")
+        @Enfermero        
+        ENFERMEROS,       
         @ViewPattern("/pages/labClinico/*")
         @Laboratorista        
         LABORATORISTA,
+        @ViewPattern("/pages/paciente/*")
+        @Paciente        
+        PACIENTE,
         @ViewPattern("/pages/*")
         @AccessDeniedView("/pages/denied.xhtml")
         @LoginView("/pages/login.xhtml")

@@ -44,9 +44,7 @@ public class Tratamiento implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaRelizacion;    
     private String nombre;
-    private String procedimiento;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaProximaVisita;    
+    private String procedimiento;       
     
     @ManyToOne()
     @JoinColumn(name = "diente_id")
@@ -56,7 +54,7 @@ public class Tratamiento implements Serializable {
     @JoinColumn(name = "consultaOdontologica_id")
     private ConsultaOdontologica consultaOdontologica;  
         
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name = "servicioDisponible_id")
     private Servicio servicioDisponible;
 
@@ -90,15 +88,7 @@ public class Tratamiento implements Serializable {
 
     public void setProcedimiento(String procedimiento) {
         this.procedimiento = procedimiento;
-    }
-
-    public Date getFechaProximaVisita() {
-        return fechaProximaVisita;
-    }
-
-    public void setFechaProximaVisita(Date fechaProximaVisita) {
-        this.fechaProximaVisita = fechaProximaVisita;
-    }
+    }   
 
     public Diente getDiente() {
         return diente;

@@ -40,6 +40,7 @@ import javax.inject.Named;
 public class UrlConstants
 {
    public static final String HOME = "/pages/home.xhtml?faces-redirect=true";
+   public static final String HOMEPACIENTE = "/pages/homePaciente.xhtml?faces-redirect=true";
    public static final String PROJECT_VIEW = "/pages/project/view.xhtml?faces-redirect=true";
    public static final String PROJECT_CREATE = "/pages/project/create.xhtml?faces-redirect=true";
    public static final String REFRESH = "?faces-redirect=true";

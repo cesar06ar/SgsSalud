@@ -244,7 +244,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             }
         }
 
-        return "/pages/paciente/lista?faces-redirect=true";
+        return "/pages/secretaria/lista?faces-redirect=true";
     }
     /*....==>*/
 

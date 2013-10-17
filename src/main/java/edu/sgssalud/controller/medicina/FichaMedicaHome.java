@@ -28,6 +28,7 @@ import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
+import edu.sgssalud.security.authorization.SecurityRules;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
@@ -49,6 +50,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -277,32 +279,41 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     @TransactionAttribute
     public String guardar() {
         log.info("Ingreso a guardar");
+        String salida = null;
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         historiaClinica.setLastUpdate(now);
+        fichaOdontologica.setLastUpdate(now);
         try {
-            if (getInstance().isPersistent()) {
-                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
-                save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
-                FacesContext.getCurrentInstance().addMessage("", msg);
+            if (paciente.isPersistent()) {
+                if (getInstance().isPersistent()) {
+                    getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                    save(getInstance());
+                    FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                } else {
+                    this.getInstance().setPaciente(paciente);
+                    create(getInstance());
+                    historiaClinica.setFichaMedica(getInstance());
+                    fichaOdontologica.setFichaMedica(getInstance());
+                    save(getInstance());
+                    save(historiaClinica);
+                    save(fichaOdontologica);
+                    FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                }
+                salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getInstance().getId();
             } else {
-                this.getInstance().setPaciente(paciente);
-                create(getInstance());
-                historiaClinica.setFichaMedica(getInstance());
-                fichaOdontologica.setFichaMedica(getInstance());
-                save(getInstance());
-                save(historiaClinica);
-                save(fichaOdontologica);
-                FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
+                FacesMessage msg = new FacesMessage("Primero debe cargar un paciente");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
+
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getNumeroFicha());
-            FacesContext.getCurrentInstance().addMessage("", msg);
+            FacesContext.getCurrentInstance().addMessage(" ", msg);
         }
 
-        return "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getInstance().getId() + "&pacienteId=" + paciente.getId();
+        return salida;
     }
 
     @Transactional
@@ -332,7 +343,14 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public String buscarPorParametro() {
         //buscar primero por numero de ficha
-        String salida = "/pages/medicina/fichaMedica.xhtml?faces-redirect=true";
+        SecurityRules s = new SecurityRules();
+        String salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true";
+//        if(s.isOdontologo(identity)){
+//            salida = "/pages/odontologia/fichaMedica.xhtml?faces-redirect=true";
+//        }else{
+//            salida = "/pages/medicina/fichaMedica.xhtml?faces-redirect=true";
+//        }       
+        
         if (!parametroBusqueda.isEmpty() && StringValidations.isDecimal(parametroBusqueda)) {
             FichaMedica fichaMedList = fichaMedicaService.getFichaMedicaPorNumeroFicha(Long.parseLong(parametroBusqueda));
             if (fichaMedList != null) {
@@ -391,6 +409,20 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Medica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaMedica) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+        this.setConsultaMedica(null);
+    }
+
+    public void onRowSelect1(SelectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+        FacesContext f = FacesContext.getCurrentInstance();
+        f.getExternalContext().getFlash().setKeepMessages(true);
+        //RequestContext.getCurrentInstance().execute("msgDialog.show()");
+    }
+
+    public void onRowUnselect1(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsultaMedica(null);
     }

@@ -5,6 +5,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;
 import javax.jws.WebService;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.ws.RequestWrapper;
 import javax.xml.ws.ResponseWrapper;
 
@@ -16,6 +17,7 @@ import javax.xml.ws.ResponseWrapper;
  * 
  */
 @WebService(name = "SGAWebServicesPersonal_PortType", targetNamespace = "http://ws.unl.edu.ec/sgaws/wspersonal/soap/")
+@XmlSeeAlso({ec.edu.unl.ws.sgaws.wspersonal.soap.types.ObjectFactory.class})
 public interface SGAWebServicesPersonalPortType {
 
 

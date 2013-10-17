@@ -73,8 +73,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     }
 
     public void setConsultaMedicaId(Long consultaMedicaId) {
-        setId(consultaMedicaId);
-        //getInstance().setSignosVitales(cms.getSignosVitalesPorIdConsultaMedica(getInstance()));
+        setId(consultaMedicaId);        
     }
 
     public Long getFichaMedicaId() {
@@ -113,9 +112,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         hcs.setEntityManager(em);
         fms.setEntityManager(em);
         profileS.setEntityManager(em);
-        if (!getInstance().isPersistent()) {
-            signosVitales = new SignosVitales();
-        }else{
+        if (getInstance().isPersistent()) {
             if(getInstance().getResponsable() == null){
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
             }

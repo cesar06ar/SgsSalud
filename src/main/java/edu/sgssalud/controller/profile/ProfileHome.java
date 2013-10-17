@@ -133,11 +133,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     public Profile load() {
         if (isIdDefined()) {
             wire();
-        } else if(this.instance == null){
-            
-            if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {                
+        } else if (this.instance == null) {
+
+            if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "ADMIN".contains(SecurityRules.getUsername(identity)))) {
                 setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
-            } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))){
+            } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "ADMIN".contains(SecurityRules.getUsername(identity)))) {
                 setInstance(createInstance());
             }
         }
@@ -233,7 +233,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         attributesManager.updatePassword(user, getPassword());
         getInstance().setPassword(getPassword());
         save(getInstance());
-        
+
         em.flush();
         credentials.setUsername(getInstance().getUsername());
         credentials.setCredential(new PasswordCredential(getPassword()));
@@ -306,10 +306,10 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if ("list".equalsIgnoreCase(getBackView())) {
-            return "/pages/admin/listProfile?typeName=org.eqaula.glue.model.Profile";
+        if ("listProfile".equalsIgnoreCase(getBackView())) {
+            return "/pages/admin/security/authorization.xhtml?faces-redirect=true&username=" + getInstance().getUsername() + "&backView=" + getBackView();
         } else {
-            return "/pages/profile/view?faces-redirect=true&profileId=" + getProfileId();
+            return "/pages/admin/listProfile?typeName=edu.sgssalud.model.Profile";
         }
     }
 
@@ -348,12 +348,12 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         //Set default values into dinamycs properties
         //TODO idear un mecanismo generico de inicialización de variables dinamicas
         //entity.getBussinessEntityAttribute("title").setValue(name);
-        
+
         group.add(entity);
 
         setBussinesEntity(entity); //Establecer para edición
     }
-    
+
     @Transactional
     public void saveBussinesEntity() {
 
@@ -374,5 +374,4 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
         }
     }
-    
 }

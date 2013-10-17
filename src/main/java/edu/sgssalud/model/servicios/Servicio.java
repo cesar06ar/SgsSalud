@@ -32,19 +32,21 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class Servicio implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nombre; 
-    private String descripcion; 
+    private String categoria;
+    private String nombre;
+    private String descripcion;
+    private String rutaImg;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaLimiteVigencia; 
-    
+    private Date fechaLimiteVigencia;
+    private boolean todasZonas;
     @OneToOne
     @JoinColumn(name = "responsable_id")
     private Profile responsable;     //Quien presta este servicio
-    
 
     public Long getId() {
         return id;
@@ -54,6 +56,14 @@ public class Servicio implements Serializable {
         this.id = id;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+    
     public String getNombre() {
         return nombre;
     }
@@ -70,6 +80,14 @@ public class Servicio implements Serializable {
         this.descripcion = descripcion;
     }
 
+    public String getRutaImg() {
+        return rutaImg;
+    }
+
+    public void setRutaImg(String rutaImg) {
+        this.rutaImg = rutaImg;
+    }
+    
     public Date getFechaLimiteVigencia() {
         return fechaLimiteVigencia;
     }
@@ -78,14 +96,26 @@ public class Servicio implements Serializable {
         this.fechaLimiteVigencia = fechaLimiteVigencia;
     }
 
+    public boolean isTodasZonas() {
+        return todasZonas;
+    }
+
+    public void setTodasZonas(boolean todasZonas) {
+        this.todasZonas = todasZonas;
+    }
+    
     public Profile getResponsable() {
         return responsable;
     }
 
     public void setResponsable(Profile responsable) {
         this.responsable = responsable;
-    }    
-    
+    }
+
+    public boolean isPersistent() {
+        return getId() != null;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -108,7 +138,10 @@ public class Servicio implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.servicios.Servicio[ id=" + id + " ]";
+        return "edu.sgssalud.model.servicios.Servicio[ "
+                + "id=" + id + ","
+                + "nombre=" + nombre + ","
+                + "descripcion=" + descripcion + ","
+                + " ]";
     }
-    
 }

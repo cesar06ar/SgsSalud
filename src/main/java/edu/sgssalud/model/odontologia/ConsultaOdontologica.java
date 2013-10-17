@@ -54,9 +54,12 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private Date horaConsulta;
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date tiempoConsulta;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaProximaVisita; 
     @Column(length = 2147483647)
     @Basic(fetch = FetchType.LAZY)
     private byte[] radiografiaDental;
+    private String motivoConsulta;
     private String diagnostico;
     private String diagnosticoRadiografico;
     @ManyToOne
@@ -102,14 +105,30 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
         this.radiografiaDental = radiografiaDental;
     }
 
+    public String getMotivoConsulta() {
+        return motivoConsulta;
+    }
+
+    public void setMotivoConsulta(String motivoConsulta) {
+        this.motivoConsulta = motivoConsulta;
+    }    
+
+    public Date getFechaProximaVisita() {
+        return fechaProximaVisita;
+    }
+
+    public void setFechaProximaVisita(Date fechaProximaVisita) {
+        this.fechaProximaVisita = fechaProximaVisita;
+    } 
+        
     public String getDiagnostico() {
         return diagnostico;
     }
 
     public void setDiagnostico(String diagnostico) {
         this.diagnostico = diagnostico;
-    }
-
+    }    
+    
     public String getDiagnosticoRadiografico() {
         return diagnosticoRadiografico;
     }
@@ -172,6 +191,6 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
 
     @Override
     public int compareTo(ConsultaOdontologica o) {
-        return (int)(this.getId() - o.getId());
+        return (int)(o.getId() - this.getId());
     }
 }

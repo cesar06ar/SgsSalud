@@ -111,15 +111,15 @@ public class TestWebService implements Serializable {
                 
                 
                 //MtomStreamWriter proxy = svc.getPort();
-                BindingProvider bp = (BindingProvider) port;
-                SOAPBinding binding = (SOAPBinding) bp.getBinding();
-                binding.setMTOMEnabled(true);
+//                BindingProvider bp = (BindingProvider) port;
+//                SOAPBinding binding = (SOAPBinding) bp.getBinding();
+//                binding.setMTOMEnabled(true);
                 //URL url = svc.getWSDLDocumentLocation();
                 //svc.addPort(wscpersonal.getServiceName(),SOAPBinding.SOAP11HTTP_MTOM_BINDING, url.toString());
                 
                 log.info("Ingreso a cargar datos ");
                 JsonParser parser = new JsonParser();
-                log.info("cedula valor 1" + cedula);
+                log.info("cedula valor 1 " + cedula);
                 String r = port.sgawsDatosEstudiante(cedula);
 
                 log.info("cedula valor " + cedula);

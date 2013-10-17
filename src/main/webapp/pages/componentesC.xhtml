@@ -26,13 +26,18 @@
             <h:form id="form" acceptcharset="UTF-8">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <!--Componente para valor entero o spinner-->
-                <h:panelGroup id="fc" layout="block" class="clearfix">
+                <h:panelGroup id="fc" style="margin: 30px 10px;">
                     <label for="componente">#{messages['common.value']}</label>
-                    <div class="input" >
-                        <p:spinner  id="componente" value="#{galleryController.real}" styleClass="xLarge" required="false" label="#{'Nivel'}" min="0" max="10" 
-                                    rendered="true" >
+                    <div class="small">
+                        <pe:inputNumber value="#{galleryController.enteroL}" symbol=" °C" symbolPosition="s" style="width: 60px;" />
+                        <br/>
+                        <p:spinner  id="componente" value="#{galleryController.real}"  required="false" label="#{'Nivel'}" min="0" max="10" style="margin: 20px -10px; max-width: 30px; " 
+                                    rendered="true" size="6" maxlength="5">
+                            
                             <p:ajax rendered="@this"  process="@this"/>  
                         </p:spinner>
+                        
+                        
                     </div>
                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{galleryController.entero != null}"
                                     styleClass="validation-status" />

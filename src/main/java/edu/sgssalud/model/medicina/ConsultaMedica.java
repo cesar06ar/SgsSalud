@@ -203,6 +203,6 @@ public class ConsultaMedica extends BussinesEntity implements Serializable, Comp
 //        }else if(this.horaConsulta.before(o.getHoraConsulta())){
 //            return 1;
 //        }        
-        return (int)(this.getId() - o.getId());
+        return (int)(o.getId() - this.getId());
     }
 }

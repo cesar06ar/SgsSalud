@@ -174,6 +174,12 @@ public class InitializeDatabase {
         org.picketlink.idm.api.Group g = session.getPersistenceManager().findGroup("ADMIN", "GROUP");
         if (g == null) {
             g = session.getPersistenceManager().createGroup("ADMIN", "GROUP");
+            g = session.getPersistenceManager().createGroup("MEDICOS", "GROUP");
+            g = session.getPersistenceManager().createGroup("ODONTOLOGOS", "GROUP");
+            g = session.getPersistenceManager().createGroup("ENFERMEROS", "GROUP");
+            g = session.getPersistenceManager().createGroup("SECRETARIA", "GROUP");
+            g = session.getPersistenceManager().createGroup("FARMACEUTICOS", "GROUP");
+            g = session.getPersistenceManager().createGroup("LABORATORISTAS", "GROUP");
         }
 
         bussinesEntityType = query.getSingleResult();
@@ -235,8 +241,9 @@ public class InitializeDatabase {
         validarEstructuraFichaOdontologica();
         //validar estructuras de consulta odontologica
         validarEstructuraConsultaOdontologica();
-        
-
+        validarExamenFisicoConsultaOdont();
+        validarExamenDentarioConsultaOdont();
+        validarEvaluacionPeriodontalConsultaOdont();
 
     }
 
@@ -258,7 +265,7 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName("Data for " + Profile.class.getName());
+            structure.setName(Profile.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
@@ -298,7 +305,7 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName("Data for " + name);
+            structure.setName(name);
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
@@ -348,7 +355,7 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName("Data for " + name);
+            structure.setName(name);
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
@@ -667,11 +674,11 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("fichaGeneralAP", "crecimientoNormal", Boolean.class.getName(), "", false, "A. Crecimiento normal", "", false, 1L));
-            attributes.add(buildProperty("fichaGeneralAp", "vacunasCompletas", Boolean.class.getName(), "", false, "B. Vacunas Completas", "", false, 2L));
-            attributes.add(buildProperty("fichaGeneralAP", "enfCronicas", Boolean.class.getName(), "", false, "C. Enfermedades Cronicas", "", false, 3L));
-            attributes.add(buildProperty("fichaGeneralAP", "enfContagiosas", Boolean.class.getName(), "", false, "D. Enfermedades Contagiosas", "", false, 4L));
-            attributes.add(buildProperty("fichaGeneralAP", "otros", Boolean.class.getName(), "", false, "X. Otros", "", false, 11L));
+            attributes.add(buildProperty("fichaGeneralAP", "crecimientoNormal", Boolean.class.getName(), "", false, "1. Crecimiento normal", "", false, 1L));
+            attributes.add(buildProperty("fichaGeneralAp", "vacunasCompletas", Boolean.class.getName(), "", false, "2. Vacunas Completas", "", false, 2L));
+            attributes.add(buildProperty("fichaGeneralAP", "enfCronicas", Boolean.class.getName(), "", false, "3. Enf. Cronicas", "Enfermedades Cronicas", false, 3L));
+            attributes.add(buildProperty("fichaGeneralAP", "enfContagiosas", Boolean.class.getName(), "", false, "4. Enf. Contagiosas", "Enfermedades Contagiosas", false, 4L));
+            attributes.add(buildProperty("fichaGeneralAP", "otros", Boolean.class.getName(), "", false, "5. Otros", "", false, 11L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -704,15 +711,14 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
 
             //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("fichaGeneralAF", "alergias", Boolean.class.getName(), "", false, "1. ALERGIAS", "", false, 1L));
-            attributes.add(buildProperty("fichaGeneralAF", "diabetes", Boolean.class.getName(), "", false, "2. DIABETES", "", false, 2L));
-            attributes.add(buildProperty("fichaGeneralAF", "hemorragais", Boolean.class.getName(), "", false, "3. HEMORRAGIAS", "", false, 3L));
-            attributes.add(buildProperty("fichaGeneralAF", "hipertension", Boolean.class.getName(), "", false, "4. HIPERTENSIÓN", "", false, 4L));
-            attributes.add(buildProperty("fichaGeneralAF", "tuberculosis", Boolean.class.getName(), "", false, "5. TUBERCULOSIS", "", false, 5L));
-            attributes.add(buildProperty("fichaGeneralAF", "asma", Boolean.class.getName(), "", false, "6. ASMA", "", false, 6L));
-            attributes.add(buildProperty("fichaGeneralAF", "enfCardiaca", Boolean.class.getName(), "", false, "7. ENF. CARDIACA", "", false, 7L));
-            attributes.add(buildProperty("fichaGeneralAF", "cancer", Boolean.class.getName(), "", false, "8. CANCER", "", false, 8L));
+            List<Property> attributes = new ArrayList<Property>();            
+            attributes.add(buildProperty("fichaGeneralAF", "diabetes", Boolean.class.getName(), "", false, "2. Diabetes", "", false, 1L));
+            attributes.add(buildProperty("fichaGeneralAF", "hemorragais", Boolean.class.getName(), "", false, "3. Hemorragias", "", false, 2L));
+            attributes.add(buildProperty("fichaGeneralAF", "hipertension", Boolean.class.getName(), "", false, "4. Hipertensión", "", false, 3L));
+            attributes.add(buildProperty("fichaGeneralAF", "tuberculosis", Boolean.class.getName(), "", false, "5. Tuberculosis", "", false, 4L));
+            attributes.add(buildProperty("fichaGeneralAF", "asma", Boolean.class.getName(), "", false, "6. Asma", "", false, 5L));
+            attributes.add(buildProperty("fichaGeneralAF", "enfCardiaca", Boolean.class.getName(), "", false, "7. Enf. Cardiaca", "", false, 6L));
+            attributes.add(buildProperty("fichaGeneralAF", "cancer", Boolean.class.getName(), "", false, "8. Cancer", "", false, 7L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -740,7 +746,7 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName(FichaMedica.class.getName());
+            structure.setName(HistoriaClinica.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
@@ -776,7 +782,7 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName(FichaMedica.class.getName());
+            structure.setName(FichaOdontologica.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
@@ -807,14 +813,14 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName(FichaMedica.class.getName());
+            structure.setName(ConsultaMedica.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
             //Lista de atributos de Tipos de entidades de negocio
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildStructureTypeProperty("revisionOrganosYSistemasCM", "Revisión Actual Órganos y Sistemas", "Información Consulta Médica", "/pages/medicina/fichaMedica", 1L));
-            attributes.add(buildStructureTypeProperty("examenFisicoCM", "Examen Físico", "Información Consulta Médica", "/pages/medicina/fichaMedica", 1L));
+            attributes.add(buildStructureTypeProperty("revisionOrganosYSistemasCM", "REVISIÓN DE ÓRGANOS Y SISTEMAS", "Revisión Actual de Órganos y Sistemas", "/pages/medicina/fichaMedica", 1L));
+            attributes.add(buildStructureTypeProperty("examenFisicoCM", "EXAMEN FÍSICO", "Examen Físico", "/pages/medicina/fichaMedica", 1L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -850,17 +856,16 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("consultaMedicaROS", "orgSentidos", Boolean.class.getName(), "", false, "1.ÓRGANOS DE \n LOS SENTIDOS", "(Sin marcar [] = Sin Patologia | marcado [x] = Con Patologia)", false, 1L));
-            attributes.add(buildProperty("consultaMedicaROS", "respiratorios", Boolean.class.getName(), "", false, "2.RESPIRATORIO", "", false, 2L));
-            attributes.add(buildProperty("consultaMedicaROS", "cardioVascular", Boolean.class.getName(), "", false, "3.CARDIO VASCULAR", "", false, 3L));
-            attributes.add(buildProperty("consultaMedicaROS", "digestivo", Boolean.class.getName(), "", false, "4.DIGESTIVO", "", false, 4L));
-            attributes.add(buildProperty("consultaMedicaROS", "genital", Boolean.class.getName(), "", false, "5.GENITAL", "", false, 5L));
-            attributes.add(buildProperty("consultaMedicaROS", "urinario", Boolean.class.getName(), "", false, "6.URINARIO", "", false, 6L));
-            attributes.add(buildProperty("consultaMedicaROS", "musculoEsq", Boolean.class.getName(), "", false, "7.MÚSCOLO \n ESQUELÉTICO", "", false, 7L));
-            attributes.add(buildProperty("consultaMedicaROS", "endocrino", Boolean.class.getName(), "", false, "8.ENDOCRINO", "", false, 8L));
-            attributes.add(buildProperty("consultaMedicaROS", "hemoLinfatico", Boolean.class.getName(), "", false, "9.HEMO LINFÁTICO", "", false, 9L));
-            attributes.add(buildProperty("consultaMedicaROS", "nervioso", Boolean.class.getName(), "", false, "10.NERVIOSO", "", false, 10L));
-            attributes.add(buildProperty("consultaMedicaROS", "observacionROS", "java.lang.MultiLineString", null, false, "Observacion de \n Organos y Sistemas", "Observación adicional...", false, 11L));
+            attributes.add(buildProperty("consultaMedicaROS", "orgSentidos", Boolean.class.getName(), "", false, "1. Órg. de Sentidos", "Órganos de los Sentidos <br/>(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 1L));
+            attributes.add(buildProperty("consultaMedicaROS", "respiratorios", Boolean.class.getName(), "", false, "2. Respiratorio", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 2L));
+            attributes.add(buildProperty("consultaMedicaROS", "cardioVascular", Boolean.class.getName(), "", false, "3. Cardio Vascular", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 3L));
+            attributes.add(buildProperty("consultaMedicaROS", "digestivo", Boolean.class.getName(), "", false, "4. Digestivo", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 4L));
+            attributes.add(buildProperty("consultaMedicaROS", "genital", Boolean.class.getName(), "", false, "5. Genital", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 5L));
+            attributes.add(buildProperty("consultaMedicaROS", "urinario", Boolean.class.getName(), "", false, "6. Urinario", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 6L));
+            attributes.add(buildProperty("consultaMedicaROS", "musculoEsq", Boolean.class.getName(), "", false, "7. Mús. Esquelético", "Músculo Esquelético <br/> (Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 7L));
+            attributes.add(buildProperty("consultaMedicaROS", "endocrino", Boolean.class.getName(), "", false, "8. Endocrino", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 8L));
+            attributes.add(buildProperty("consultaMedicaROS", "hemoLinfatico", Boolean.class.getName(), "", false, "9. Hemo Linfático", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 9L));
+            attributes.add(buildProperty("consultaMedicaROS", "nervioso", Boolean.class.getName(), "", false, "10. Nervioso", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 10L));            
             //Agregar atributos
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
@@ -893,13 +898,12 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("consultaMedicaEF", "cabeza", Boolean.class.getName(), "", false, "1.CABEZA", "(Sin marcar [] = Sin Patologia | marcado [x] = Con Patologia)", false, 1L));
-            attributes.add(buildProperty("consultaMedicaEF", "cuello", Boolean.class.getName(), "", false, "2.CUELLO", "", false, 2L));
-            attributes.add(buildProperty("consultaMedicaEF", "torax", Boolean.class.getName(), "", false, "3.TORAX", "", false, 3L));
-            attributes.add(buildProperty("consultaMedicaEF", "abdomen", Boolean.class.getName(), "", false, "4.ABDOMEN", "", false, 4L));
-            attributes.add(buildProperty("consultaMedicaEF", "pelvis", Boolean.class.getName(), "", false, "5.PELVIS", "", false, 5L));
-            attributes.add(buildProperty("consultaMedicaEF", "extremidades", Boolean.class.getName(), "", false, "6.EXTREMIDADES", "", false, 6L));
-            attributes.add(buildProperty("consultaMedicaEF", "observacionEF", "java.lang.MultiLineString", null, false, "Observación de Examen Físico", "Observación adicional...", false, 11L));
+            attributes.add(buildProperty("consultaMedicaEF", "cabeza", Boolean.class.getName(), "", false, "1. Cabeza", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 1L));
+            attributes.add(buildProperty("consultaMedicaEF", "cuello", Boolean.class.getName(), "", false, "2. Cuello", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 2L));
+            attributes.add(buildProperty("consultaMedicaEF", "torax", Boolean.class.getName(), "", false, "3. Torax", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 3L));
+            attributes.add(buildProperty("consultaMedicaEF", "abdomen", Boolean.class.getName(), "", false, "4. Abdomen", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 4L));
+            attributes.add(buildProperty("consultaMedicaEF", "pelvis", Boolean.class.getName(), "", false, "5. Pelvis", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 5L));
+            attributes.add(buildProperty("consultaMedicaEF", "extremidades", Boolean.class.getName(), "", false, "6. Extremidades", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 6L));            
             
             //Agregar atributos
             structure.setProperties(attributes);
@@ -907,8 +911,8 @@ public class InitializeDatabase {
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-    }
-    
+    }  
+         
     public void validarEstructuraConsultaOdontologica() {
         BussinesEntityType bussinesEntityType = null;
 
@@ -927,15 +931,15 @@ public class InitializeDatabase {
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             Structure structure = null;
             structure = new Structure();
-            structure.setName(FichaMedica.class.getName());
+            structure.setName(ConsultaOdontologica.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
 
             //Lista de atributos de Tipos de entidades de negocio
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildStructureTypeProperty("examenFisicoFO", "Examen Físico", "Información Ficha Odontologica", "/pages/medicina/fichaMedica", 1L));
-            attributes.add(buildStructureTypeProperty("examenDetarioFO", "Examen Dentario", "Información Ficha Odontologica", "/pages/medicina/fichaMedica", 2L));
-            attributes.add(buildStructureTypeProperty("evaluacionPeriodontalFO", "Evaluación Periodontal", "Información Ficha Odontologica", "/pages/medicina/fichaMedica", 3L));
+            attributes.add(buildStructureTypeProperty("examenFisicoConsultaOdont", "EXAMEN FÍSICO", "Información Ficha Odontologica", "/pages/medicina/fichaMedica", 1L));
+            attributes.add(buildStructureTypeProperty("examenDentarioConsultaOdont", "EXAMEN DENTARIO", "Información Ficha Odontologica", "/pages/medicina/fichaMedica", 2L));
+            attributes.add(buildStructureTypeProperty("evaluacionPeriodontalConsultaOdont", "EVALUACIÓN PERIODONTAL", "Información Ficha Odontologica", "/pages/medicina/fichaMedica", 3L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -946,7 +950,130 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
+    
+    public void validarExamenFisicoConsultaOdont() {
+        BussinesEntityType bussinesEntityType = null;
+        String name = "examenFisicoConsultaOdont";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
 
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName(name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+            attributes.add(buildProperty("consultaOdontEF", "piel", Boolean.class.getName(), "", false, "Piel", "", false, 1L));
+            attributes.add(buildProperty("consultaOdontEF", "tejidoMuscular", Boolean.class.getName(), "", false, "Tejido muscular", "", false, 2L));
+            attributes.add(buildProperty("consultaOdontEF", "puntosDolorosos", Boolean.class.getName(), "", false, "Puntos dolorosos", "", false, 3L));
+            attributes.add(buildProperty("consultaOdontEF", "pisoBoca", Boolean.class.getName(), "", false, "Piso de la boca", "", false, 4L));
+            attributes.add(buildProperty("consultaOdontEF", "galndulaSalival", Boolean.class.getName(), "", false, "Glándulas salivales", "", false, 5L));
+            attributes.add(buildProperty("consultaOdontEF", "oclusion", Boolean.class.getName(), "", false, "Oclusión", "", false, 6L)); 
+            attributes.add(buildProperty("consultaOdontEF", "labios", Boolean.class.getName(), "", false, "Labios", "", false, 7L)); 
+            attributes.add(buildProperty("consultaOdontEF", "atm", Boolean.class.getName(), "", false, "A.T.M", "", false, 8L)); 
+            attributes.add(buildProperty("consultaOdontEF", "lengua", Boolean.class.getName(), "", false, "Lengua", "", false, 9L)); 
+            attributes.add(buildProperty("consultaOdontEF", "carrillos", Boolean.class.getName(), "", false, "Carrillos", "", false, 10L)); 
+            attributes.add(buildProperty("consultaOdontEF", "maxSuperior", Boolean.class.getName(), "", false, "Max. Superior", "", false, 11L)); 
+            attributes.add(buildProperty("consultaOdontEF", "posicionMaxilar", Boolean.class.getName(), "", false, "Mal posición Maxilar", "", false, 12L)); 
+            attributes.add(buildProperty("consultaOdontEF", "gangliosLinfaticos", Boolean.class.getName(), "", false, "Ganglios Linfáticos", "", false, 13L)); 
+            attributes.add(buildProperty("consultaOdontEF", "organosSentidos", Boolean.class.getName(), "", false, "Órganos de los Sentidos", "", false, 14L)); 
+            attributes.add(buildProperty("consultaOdontEF", "paladar", Boolean.class.getName(), "", false, "Paladar", "", false, 15L)); 
+            attributes.add(buildProperty("consultaOdontEF", "encia", Boolean.class.getName(), "", false, "Encía", "", false, 16L)); 
+            attributes.add(buildProperty("consultaOdontEF", "maxInferior", Boolean.class.getName(), "", false, "Max. inferior", "", false, 17L)); 
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+            bussinesEntityType.addStructure(structure);
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
+    
+    public void validarExamenDentarioConsultaOdont() {
+        BussinesEntityType bussinesEntityType = null;
+        String name = "examenDentarioConsultaOdont";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName(name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+            attributes.add(buildProperty("consultaOdontED", "malFormacionesDent", Boolean.class.getName(), "", false, "Mal formación dentarias", "", false, 1L));
+            attributes.add(buildProperty("consultaOdontED", "desgastes", Boolean.class.getName(), "", false, "Desgastes", "", false, 2L));
+            attributes.add(buildProperty("consultaOdontED", "pigmentaciones", Boolean.class.getName(), "", false, "Pigmentaciones", "", false, 3L));
+            attributes.add(buildProperty("consultaOdontED", "malPosicionDent", Boolean.class.getName(), "", false, "Mal posición dentarias", "", false, 4L));
+            attributes.add(buildProperty("consultaOdontED", "patologiaPopular", Boolean.class.getName(), "", false, "Patología popular", "", false, 5L));            
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+            bussinesEntityType.addStructure(structure);
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
+    
+    public void validarEvaluacionPeriodontalConsultaOdont() {
+        BussinesEntityType bussinesEntityType = null;
+        String name = "evaluacionPeriodontalConsultaOdont";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName(name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+            attributes.add(buildProperty("consultaOdontED", "placaBacteriana", Boolean.class.getName(), "", false, "Placa bacteriana", "", false, 1L));
+            attributes.add(buildProperty("consultaOdontED", "materiaAlba", Boolean.class.getName(), "", false, "Materia alba", "", false, 2L));
+            attributes.add(buildProperty("consultaOdontED", "calculo", Boolean.class.getName(), "", false, "Cálculo", "", false, 3L));           
+            
+            //Agregar atributos
+            structure.setProperties(attributes);
+            bussinesEntityType.addStructure(structure);
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+    }
     /*FIN Estructuras del SGSSALUD*/
     private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {
         Property property = new Property();

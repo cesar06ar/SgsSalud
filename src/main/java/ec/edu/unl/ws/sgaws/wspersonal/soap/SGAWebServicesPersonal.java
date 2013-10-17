@@ -21,7 +21,7 @@ import javax.xml.ws.soap.SOAPBinding;
  * 
  */
 @WebServiceClient(name = "SGAWebServicesPersonal", targetNamespace = "http://ws.unl.edu.ec/sgaws/wspersonal/soap/", wsdlLocation = "file:/home/cesar/servidores/jboss-as-7.2.0.Alpha1-SNAPSHOT/wsdls/api2.wsdl")
-@BindingType(SOAPBinding.SOAP12HTTP_MTOM_BINDING)
+@BindingType("http://java.sun.com/xml/ns/jaxws/2003/05/soap/bindings/HTTP/")
 public class SGAWebServicesPersonal
     extends Service
 {

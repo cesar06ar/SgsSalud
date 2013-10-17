@@ -55,7 +55,7 @@
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                     #{' '}
-                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/medicina/fichaMedica" styleClass="btn" 
+                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/fichaMedica" styleClass="btn" 
                             disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
                         <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>

@@ -155,7 +155,7 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         bussinesEntityService.setEntityManager(em);
         fms.setEntityManager(em);
         hcs.setEntityManager(em);
-        fichaOdonServicio.setEntityManager(em);       
+        fichaOdonServicio.setEntityManager(em);
     }
 
     @Override
@@ -201,34 +201,36 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         String salida = null;
         Date now = Calendar.getInstance().getTime();
         try {
-            if (getInstance().isPersistent()) {
-                save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getId() + " con éxito");
-                FacesContext.getCurrentInstance().addMessage("", msg);
-            } else {
-                create(getInstance());                
-                log.info("crear ");
-                if (servicioMedico) {                                     
-                    consultaMed.setHistoriaClinica(historiaClinica);                    
-                    consultaMed.setSignosVitales(getInstance());                                    
-                    save(consultaMed);                    
-                    salida = "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
-                }
-                if (servicioDental) {                                      
-                    consultaOdont.setFichaOdontologica(fichaOdontologica);
-                    consultaOdont.setSignosVitales(getInstance());                    
-                    save(consultaOdont);
-                    salida = "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
-                } else {
-                    FacesMessage msg = new FacesMessage("Debe selecionar al menos un servicio");
+            if (servicioMedico || servicioDental) {
+                if (getInstance().isPersistent()) {
+                    save(getInstance());
+                    FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getId() + " con éxito");
                     FacesContext.getCurrentInstance().addMessage("", msg);
+                } else {
+                    create(getInstance());
+                    log.info("crear ");
+                    if (servicioMedico) {
+                        consultaMed.setHistoriaClinica(historiaClinica);
+                        consultaMed.setSignosVitales(getInstance());
+                        save(consultaMed);
+                        salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
+                    }
+                    if (servicioDental) {
+                        consultaOdont.setFichaOdontologica(fichaOdontologica);
+                        consultaOdont.setSignosVitales(getInstance());
+                        save(consultaOdont);
+                        salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
+                    } 
                 }
+            } else {
+                FacesMessage msg = new FacesMessage("Debe selecionar al menos un servicio");
+                FacesContext.getCurrentInstance().addMessage("", msg);
             }
+
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
         return salida;
     }
-    
 }

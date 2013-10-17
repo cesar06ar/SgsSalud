@@ -56,7 +56,7 @@ limitations under the License.
                     <h:selectBooleanCheckbox value="#{value}" id="#{name}" styleClass="xLarge" required="#{required}" label="#{label}">
                         <f:ajax execute="#{execute}" render="#{render}"  />
                     </h:selectBooleanCheckbox>
-                    <span>#{inlinehelp}</span>
+                    <!--<span>#{inlinehelp}</span>-->
                 </c:when>
                 <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
                     <h:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" style="width: 400px; height: 100px;" >

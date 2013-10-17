@@ -459,8 +459,23 @@ h1.header span {
     padding: 10px 0 10px 10px;
 }
 
+.odont {
+    background-image: url("/resources/images/odontograma.png");
+}
 /* Pretty Print
 -------------------------------------------------- */
 PRE.prettyprint {
     overflow: hidden;
+}
+
+#growl {
+    left:20px;
+    margin-top: 40px;
+    padding-top: 10px;
+}
+
+#growl1 {
+    left:20px;
+    margin-top: 40px;
+    padding-top: 10px;
 }

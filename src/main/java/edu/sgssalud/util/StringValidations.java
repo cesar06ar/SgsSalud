@@ -31,6 +31,11 @@
  */
 package edu.sgssalud.util;
 
+import edu.sgssalud.model.odontologia.Diente;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringValidations {
 
     public static final String EMAIL_REGEX = "(?:[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e"
@@ -191,18 +196,35 @@ public class StringValidations {
 
     public static void main(String args[]) {
         String field = "*Luis,";
-        if (field.contains("*")) {
-            field = field.replace("*", "");
-        }
-        if (!StringValidations.isPunctuatedText(field)) {
+        /*
+         if (field.contains("*")) {
+         field = field.replace("*", "");
+         }
+         if (!StringValidations.isPunctuatedText(field)) {
 
-            System.out.print("Este texto " + field + " no anda bien, evite usar caracteres extraños...");
+         System.out.print("Este texto " + field + " no anda bien, evite usar caracteres extraños...");
 
-        } else {
-                        System.out.print("Este texto " + field + " esta bién ;)...");
-        }
+         } else {
+         System.out.print("Este texto " + field + " esta bién ;)...");
+         }
         
-        //System.out.println("Validar numero :"+StringValidations.isDecimal("53a"));
-        System.out.println("Validar fecha :"+Dates.getFormatoFecha("05/12/2013"));
+         //System.out.println("Validar numero :"+StringValidations.isDecimal("53a"));
+         System.out.println("Validar fecha :"+Dates.getFormatoFecha("05/12/2013"));
+        
+         * List<Diente> dientes = new ArrayList<Diente>();     
+         System.out.println("lista \n: "+dientes.toString());*/
+        String ruta = "/home/cesar/NetBeansProjects/sgssaludunl/src/main/webapp/resources/odontograma/";
+        File dir = new File(ruta);
+        String[] imagenes = dir.list();
+        if (imagenes == null) {
+            System.out.println("No hay ficheros en el directorio especificado");
+        } else {
+            for (String s : imagenes) {
+                if (s.contains(".png") || s.contains(".jpg") || s.contains(".gif")) {
+                    System.out.println(ruta+s);
+                }
+                
+            }
+        }
     }
 }

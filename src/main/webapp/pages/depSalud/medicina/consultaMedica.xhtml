@@ -149,14 +149,14 @@
                         </div>
                     </p:tab>                 
                     <c:forEach items="#{ui.getProperties(consultaMedicaHome.instance)}" var="f" >                                            
-                        <p:tab title="#{f.label}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
+                        <p:tab title="#{f.label}" titletip="#{f.helpInline}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}" titleStyleClass="clearfix">
                             <c:choose>
                                 <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">                                
                                     <ui:repeat value="#{consultaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">                                        
-                                        <h:panelGroup rendered="true" layout="block"  >
-                                            <label for="#{a.name}" title="#{a.property.helpInline}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                            <div class="span1" style="padding-left: 8px;"> 
-                                                <p:selectBooleanCheckbox value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}" >
+                                        <h:panelGroup rendered="true" layout="block" style="padding-left: 1px; padding-top: 5px; float: left">
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                            <div class="span1" style="padding-left: 5px; padding-top: 5px; padding-bottom: 1px;"> 
+                                                <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}" >
                                                     <p:ajax event="change" update="@parent" partialSubmit="true" />                                                     
                                                 </p:selectBooleanCheckbox>                                                        
                                                 <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
@@ -185,6 +185,10 @@
                                                                  rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
                                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                 </p:inputTextarea>
+                                                <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
+                                                    <h:outputText escape="false" value="#{a.property.helpInline}"/>
+                                                </p:tooltip>
+                                                    
                                             </div>
                                         </h:panelGroup> 
                                     </ui:repeat>
@@ -249,12 +253,12 @@
                 <div class="admin-actions span15" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/medicina/fichaMedica.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                     </h:link>
                 </div>
-                
+
                 <div class="offset8" style="float: right">
                     <glue:output id="user" name="responsable" type="text" label="Responsable" value="#{consultaMedicaHome.instance.responsable.fullName}" 
                                  required="false" execute="@this" render="user" styleClass="xLarge" disabled="true"/>

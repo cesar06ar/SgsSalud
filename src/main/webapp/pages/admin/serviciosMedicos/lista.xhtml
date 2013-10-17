@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/view/templates/glue.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="result" value="#{servicioMedListS.firstResult}" />
+    </f:metadata>
+
+    <ui:define name="header-replace">
+        <div class="header-replace">
+            <div class="container">
+                <div class="row fl" style="margin-top: 5px;">
+                    <div class="span9 columns">   
+                        <div class="row fl" style="margin-top: 5px;">
+                            <h2>#{'Servicios Médicos'}</h2>   
+                        </div>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+            <div class="admin-actions">
+                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="servicioMedico" styleClass="btn primary">                    
+                    <f:param name="backView" value="listaServicios"></f:param>
+                </h:link>                
+                #{' '}
+                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="servicioMedico" 
+                        styleClass="btn" disabled="#{empty servicioMedListS.selectedServicio.id}">
+                    <f:param name="servicioId" value="#{servicioMedListS.selectedServicio.id}"/>
+                    <f:param name="backView" value="listaServicios"></f:param>
+                </h:link> 
+                #{' '}
+                <p:commandButton id="delete" type="button" value="#{messages['common.delete']}" styleClass="btn" 
+                                 onclick="deletedDlg.show();" 
+                                 immediate="true" disabled="#{empty servicioMedListS.selectedServicio.id}"
+                                 update="form-dialog-confirm-delete" />
+
+            </div>
+            <!--   -->
+            <p:dataTable id="serviciosMedTable" var="servicio_" value="#{servicioMedListS}" paginator="true" rows="10" 
+                         paginatorPosition="top" emptyMessage="No hay ningun Servicio" paginatorAlwaysVisible="true"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"  
+                         rowsPerPageTemplate="2,5,10,15" lazy="true" 
+                         selection="#{servicioMedListS.selectedServicio}"
+                         rendered="true" rowKey="#{servicio_.nombre}"
+                         selectionMode="single">
+
+                <p:ajax event="rowSelect" listener="#{servicioMedListS.onRowSelect}"   
+                        update=":form:button-edit :form:messages :form:delete" rendered=":form:button-edit"/>                 
+                <p:ajax event="rowUnselect" listener="#{servicioMedListS.onRowUnselect}" 
+                        update=":form:button-edit :form:messages :form:delete" rendered=":form:button-edit"/>
+
+                <p:column headerText="#{messages['common.name']}" sortBy="#{servicio_.nombre}">
+                    <h:outputText value="#{servicio_.nombre}" />
+                </p:column>               
+                <p:column headerText="#{messages['servicioMedico.categoria']}" sortBy="#{servicio_.categoria}">
+                    <h:outputText value="#{servicio_.categoria}" />
+                </p:column>
+                <p:column headerText="#{messages['fechaReceta.fechaEmision']} #{messages['comun.limite.vigencia']}" sortBy="#{servicio_.fechaLimiteVigencia}">
+                    <h:outputText value="#{servicio_.fechaLimiteVigencia}" >
+                        <f:convertDateTime pattern="dd-MMM-yyyy" />
+                    </h:outputText>
+                </p:column>                   
+                <p:column headerText="#{messages['common.description']}" sortBy="#{servicio_.descripcion}">
+                    <h:outputText value="#{servicio_.descripcion}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+            <h:form id="form-dialog-confirm-delete">
+                <h:panelGroup layout="block" style="padding:5px;">  
+                    <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                </h:panelGroup>  
+                <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                 action="#{servicioMedListS.borrarEntidad()}"                                          
+                                 ajax="true" process="@this"  
+                                 style="margin-top:10px;">  
+                </p:commandButton>  
+                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                 style="margin-top:10px;"/>  
+            </h:form>
+        </p:dialog> 
+    </ui:define>
+</ui:composition>

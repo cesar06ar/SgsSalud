@@ -36,7 +36,7 @@
         <drools.version>6.0.0.Beta1</drools.version>
         <javaee6.web.spec.version>3.0.1.Final</javaee6.web.spec.version>
         <jboss-javaee-6.0.version>2.0.0.Final</jboss-javaee-6.0.version>
-        <primefaces.version>4.0-SNAPSHOT</primefaces.version>
+        <primefaces.version>3.5</primefaces.version>
         <prettyfaces-jsf2.version>3.3.2</prettyfaces-jsf2.version>
         <seam.mail.version>3.1.1.Final</seam.mail.version>
         <seam-reports-version>3.1.0.Final</seam-reports-version>  
@@ -398,11 +398,17 @@
             <version>${primefaces.version}</version>
         </dependency> 
         
-         <dependency>  
+        <dependency>  
             <groupId>org.primefaces.themes</groupId>  
             <artifactId>all-themes</artifactId>  
             <version>${primefaces.theme.version}</version>  
         </dependency>  
+        <!--
+        <dependency>
+            <groupId>org.primefaces.extensions</groupId>
+            <artifactId>resources-ckeditor</artifactId>
+            <version>0.6.2</version>
+        </dependency>-->
         
         <dependency>
             <groupId>org.omnifaces</groupId>
