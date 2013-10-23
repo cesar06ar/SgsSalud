@@ -26,6 +26,8 @@ import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.MedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
+import edu.sgssalud.service.medicina.FichaMedicaServicio;
+import edu.sgssalud.service.odontologia.consultaOdontologicaServicio;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,69 +46,71 @@ import org.jboss.seam.security.Identity;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
-
 /**
  *
  * @author tania
  */
-
 @Named("recetaHome")
 @ViewScoped
-public class RecetaHome extends BussinesEntityHome<Receta> implements Serializable{
-    
+public class RecetaHome extends BussinesEntityHome<Receta> implements Serializable {
+
     private static final long serialVersionUID = 10L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(RecetaHome.class);
-    
     /*Atributos importantes para acceso a la BD ==>*/
     @Inject
     @Web
     private EntityManager em;
     @Inject
-    private RecetaServicio rs;
+    private RecetaServicio recetasServicio;
     @Inject
-    private MedicamentoService ms;
+    private MedicamentoService medicamentosServicio;
     @Inject
     private Identity identity;
     @Inject
-    private ConsultaMedicaServicio cms;
+    private ConsultaMedicaServicio consultaMedicaServicio;
     @Inject
-    private ProfileService profileS;
-            
+    private ProfileService profileServicio;
+    @Inject
+    private FichaMedicaServicio fichaMedicaServicio;
+    @Inject
+    private consultaOdontologicaServicio consultaOdontServicio;
+    
+    private Long pacienteId;
+    private Long fichaMedicaId;
+    private Long consultaMedicaId;
+    private Long consultaOdontId;
+    private int unidadesMedicacion;
+    private int dosis;
+    private String unidadDosis;
+    private int tiempoToma;
+    private String unidadTiempoToma;
+    private int duracionTratamiento;
+    private String unidadDuracionTratamiento;
+    private String parametroBusqueda;
     private Paciente paciente;
     private Medicamento medicamento;
     private ConsultaMedica consultaMedica;
     private FichaMedica fichaMedica;
-    private Long pacienteId;
-    private String parametroBusqueda;
-    
-    private Long fichaMedicaId;
-    
-    private Long consultaMedicaId; 
-    
-    
-    private List<Receta> listaRecetas;
+    private Medicamento medicamentoSeleccionado;
     private Receta recetaSeleccionada;
     private List<Medicamento> listaMedicamentos;
-    private Medicamento medicamentoSeleccionado;
+    private List<Receta> listaRecetas;
 
     public RecetaHome() {
         listaRecetas = new ArrayList<Receta>();
         listaMedicamentos = new ArrayList<Medicamento>();
     }
-    
 
-    
     /*Métodos get y set para obtener el Id de la clase*/
     public Long getRecetaId() {
         return (Long) getId();
-        
+
     }
-    
+
     public void setRecetaId(Long recetaId) {
         setId(recetaId);
-        this.setPaciente(getInstance().getPaciente());        
-      
     }
+
     public Paciente getPaciente() {
         return paciente;
     }
@@ -138,8 +142,6 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void setFichaMedica(FichaMedica fichaMedica) {
         this.fichaMedica = fichaMedica;
     }
-    
-    
 
     public Long getPacienteId() {
         return pacienteId;
@@ -155,6 +157,10 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setFichaMedicaId(Long fichaMedicaId) {
         this.fichaMedicaId = fichaMedicaId;
+        if(fichaMedicaId != null){
+            this.setFichaMedica(fichaMedicaServicio.getFichaMedicaPorId(fichaMedicaId));
+            this.setPaciente(fichaMedica.getPaciente());
+        }
     }
 
     public Long getConsultaMedicaId() {
@@ -163,8 +169,21 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setConsultaMedicaId(Long consultaMedicaId) {
         this.consultaMedicaId = consultaMedicaId;
+        if(consultaMedicaId != null){
+            this.setConsultaMedica(consultaMedicaServicio.getConsultaMedicaPorId(consultaMedicaId));
+        }
     }
 
+    public Long getConsultaOdontId() {
+        return consultaOdontId;
+    }
+
+    public void setConsultaOdontId(Long consultaOdontId) {
+        this.consultaOdontId = consultaOdontId;
+        if(consultaOdontId != null){
+            getInstance().setConsultaOdontologica(consultaOdontServicio.getPorId(consultaOdontId));
+        }
+    } 
     
     public String getParametroBusqueda() {
         return parametroBusqueda;
@@ -199,16 +218,71 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     }
 
     public List<Medicamento> getListaMedicamentos() {
-        return ms.buscarTodos(); //controlar los medicamentos en stock
+        return medicamentosServicio.buscarTodos(); //controlar los medicamentos en stock
     }
 
     public void setListaMedicamentos(List<Medicamento> listaMedicamentos) {
         this.listaMedicamentos = listaMedicamentos;
     }
+
+    public int getUnidadesMedicacion() {
+        return unidadesMedicacion;
+    }
+
+    public void setUnidadesMedicacion(int unidadesMedicacion) {
+        this.unidadesMedicacion = unidadesMedicacion;
+    }
+
+    public int getDosis() {
+        return dosis;
+    }
+
+    public void setDosis(int dosis) {
+        this.dosis = dosis;
+    }
+
+    public String getUnidadDosis() {
+        return unidadDosis;
+    }
+
+    public void setUnidadDosis(String unidadDosis) {
+        this.unidadDosis = unidadDosis;
+    }
+
+    public int getTiempoToma() {
+        return tiempoToma;
+    }
+
+    public void setTiempoToma(int tiempoToma) {
+        this.tiempoToma = tiempoToma;
+    }
+
+    public String getUnidadTiempoToma() {
+        return unidadTiempoToma;
+    }
+
+    public void setUnidadTiempoToma(String unidadTiempoToma) {
+        this.unidadTiempoToma = unidadTiempoToma;
+    }
+
+    public int getDuracionTratamiento() {
+        return duracionTratamiento;
+    }
+
+    public void setDuracionTratamiento(int duracionTratamiento) {
+        this.duracionTratamiento = duracionTratamiento;
+    }
+
+    public String getUnidadDuracionTratamiento() {
+        return unidadDuracionTratamiento;
+    }
+
+    public void setUnidadDuracionTratamiento(String unidadDuracionTratamiento) {
+        this.unidadDuracionTratamiento = unidadDuracionTratamiento;
+    }
     
     
 
-  
     @TransactionAttribute   //    
     public Receta load() {
         if (isIdDefined()) {
@@ -229,11 +303,12 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
-        rs.setEntityManager(em);
-        ms.setEntityManager(em);  
-        cms.setEntityManager(em);
-        profileS.setEntityManager(em);
-         if (pacienteId == null) {
+        fichaMedicaServicio.setEntityManager(em);
+        recetasServicio.setEntityManager(em);
+        medicamentosServicio.setEntityManager(em);
+        consultaMedicaServicio.setEntityManager(em);
+        profileServicio.setEntityManager(em);
+        if (pacienteId == null) {
             paciente = new Paciente();
         }
         if (consultaMedicaId != null) {
@@ -247,10 +322,10 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         Date now = Calendar.getInstance().getTime();
         Receta receta = new Receta();
         receta.setFecha(now);
-        receta.setResponsableEmision(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
-        receta.setResponsableEntrega(profileS.getProfileByIdentityKey(identity.getUser().getKey())); 
+        receta.setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+        receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
         return receta;
-       
+
     }
 
     @Override
@@ -275,6 +350,4 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void validarFC() {
     }
-   
-  
 }

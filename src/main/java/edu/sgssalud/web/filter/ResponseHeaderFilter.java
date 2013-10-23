@@ -51,7 +51,12 @@ public class ResponseHeaderFilter implements Filter {
 
         // Set the characterencoding for the request and response streams.  
         //req.setCharacterEncoding("UTF-8");  
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+ 
         response.setContentType("text/xml; charset=UTF-8"); 
+        
         req.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 

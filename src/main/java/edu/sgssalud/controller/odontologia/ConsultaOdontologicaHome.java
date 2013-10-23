@@ -104,10 +104,6 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         if (fichaMedicaId != null) {
             this.setFichaOdontolog(fichaOdontServicio.getFichaOdontologicaPorFichaMedica(
                     fichaMedicaServicio.getFichaMedicaPorId(fichaMedicaId)));
-//            fichaOdontolog.setOdontograma(new Odontograma());
-//            fichaOdontolog.getOdontograma().setDientes(listaDientes);
-//            fichaOdontolog.setOdontogramaInicial(new Odontograma());
-//            fichaOdontolog.getOdontogramaInicial().setDientes(listaDientes);
         }
     }
 

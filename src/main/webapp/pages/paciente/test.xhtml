@@ -19,41 +19,39 @@
             </div>             
         </ui:define>
         <ui:define name="content">
-            <h:form id="form" >
-                <div class="admin">
-                    <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary" >
-                        
-                    </p:commandButton>                    
-                </div>
+            <h:form id="form" >               
 
                 <br/>
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <h:panelGroup id="dnip" layout="block" class="clearfix">
-                    <label for="fdni">#{messages['profile.dni']}</label>
+                    <label for="dni">#{messages['profile.dni']}</label>
                     <div class="input" >
-                        <h:inputText id="dni" value="#{testWebService.cedula}" styleClass="xLarge" required="true" label="#{messages['profile.dni']}">
-                            <!--<f:validator validatorId="ciValidator" />-->
+                        <h:inputText id="dni" value="#{testWebService.cedula}" styleClass="xLarge" required="true" label="#{messages['profile.dni']}">                            
                             <f:ajax execute="@this" render="dnip"  />
                         </h:inputText>
                         <br/> 
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{testWebService.cedula != null}"
                                         styleClass="validation-status" />
-                        <span class="help-inline"><br/>#{messages['profile.dni.inlinehelp']}<ocp:message forId="fdni" /></span>
+                        <span class="help-inline"><br/>#{messages['profile.dni.inlinehelp']}<ocp:message forId="dni" /></span>
                     </div>
                 </h:panelGroup> 
-                <!--
                 <h:panelGroup id="pasw" layout="block" class="clearfix">
                     <label for="clave">#{'contraseña'}</label>
                     <div class="input" >
-                        <p:password id="dni" value="#{testWebService.clave}" styleClass="xLarge" required="false" label="#{'contraseña'}">                                                     
-                            <f:ajax execute="@this" render="pasw"  />
+                        <p:password id="clave" value="#{testWebService.clave}" styleClass="xLarge" required="false" label="#{'contraseña'}">                                                     
+                            <f:ajax execute="@this" render="clave"  />
                         </p:password>
                         <br/>                                                 
                     </div>
-                </h:panelGroup>     -->          
+                </h:panelGroup>     
+                <glue:input id="result1" name="resultado" type="textarea" label="#{'Resultado'}" value="#{testWebService.result}" required="false" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="result1" />
 
-                <glue:input id="result" name="resultado" type="textarea" label="#{'Resultado'}" value="#{testWebService.result}" required="false" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="result" />
-
+                <p:inputTextarea id="result" value="#{testWebService.result}" styleClass="offset3"/>
+                <div class="admin offset3">
+                    <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary"  ajax="true" >
+                        <p:ajax  rendered=":form:result" update=":form:result" />
+                    </p:commandButton>                    
+                </div>
 
             </h:form>
         </ui:define>             

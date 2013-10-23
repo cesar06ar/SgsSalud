@@ -11,6 +11,7 @@ import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
     }
 
     public List<Medicamento> getResultList() {        
+        Collections.sort(resultList);
         return resultList;
     }
 
@@ -109,8 +111,8 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
         int end = first + pageSize;
 
         QuerySortOrder order = QuerySortOrder.DESC;
-        if (sortOrder == SortOrder.ASCENDING) {
-            order = QuerySortOrder.ASC;
+        if (sortOrder == SortOrder.DESCENDING) {
+            order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
         /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto

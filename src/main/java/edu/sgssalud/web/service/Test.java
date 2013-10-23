@@ -22,12 +22,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.namespace.QName;
+import org.jboss.net.axis.ServiceFactory;
 import org.primefaces.json.JSONArray;
 import org.primefaces.json.JSONException;
 
@@ -37,7 +41,7 @@ import org.primefaces.json.JSONException;
  */
 public class Test {
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         /*try {
 
          System.out.println("-- SERIALIZANDO OBJETO a String JSON como: ");
@@ -136,22 +140,22 @@ public class Test {
 //                }
 //            }
 
-            //r = new JsonReader();
-        
-            JsonParser parser = new JsonParser();
-            //JsonElement elem = parser.parse(r);
-            JsonElement elem = parser.parse("[\"1722404041\", \"c\u00e9sar antonio\", \"abad ramos\", \"1989-06-24\", \"2688501\", \"086768023\", \"Cdla. Julio Ordo\u00f1ez\", \"Ecuador\", \"loja\", \"cesar06ar@gmail.com\", \"masculino\"]");
-            JsonArray elemArr = elem.getAsJsonArray();
-            String c = "";//elemArr.getAsString();
-            List<String> ls = new ArrayList<String>();
-            //ls.addAll(elemArr.);
-            for (int i = 0; i < elemArr.size(); i++) {
-                ls.add(elemArr.get(i).getAsString());
-                System.out.println(elemArr.get(i).getAsString());
-            }
-            System.out.println("JSON ARRAY" + elem.toString());
-            System.out.println("LISTA JAVA " + ls.toString());
-        
+        //r = new JsonReader();
+
+        JsonParser parser = new JsonParser();
+        //JsonElement elem = parser.parse(r);
+        JsonElement elem = parser.parse("[\"1722404041\", \"c\u00e9sar antonio\", \"abad ramos\", \"1989-06-24\", \"2688501\", \"086768023\", \"Cdla. Julio Ordo\u00f1ez\", \"Ecuador\", \"loja\", \"cesar06ar@gmail.com\", \"masculino\"]");
+        JsonArray elemArr = elem.getAsJsonArray();
+        String c = "";//elemArr.getAsString();
+        List<String> ls = new ArrayList<String>();
+        //ls.addAll(elemArr.);
+        for (int i = 0; i < elemArr.size(); i++) {
+            ls.add(elemArr.get(i).getAsString());
+            System.out.println(elemArr.get(i).getAsString());
+        }
+        System.out.println("JSON ARRAY" + elem.toString());
+        System.out.println("LISTA JAVA " + ls.toString());
+
 //        
 //        Date fIngreso = new Date(); //Date(2013, 02, 2);
 //        Date felaboracion = new Date();//Date(2014, 02, 5);
@@ -159,5 +163,7 @@ public class Test {
 //        boolean c = fIngreso.before(felaboracion);
 //        //int c = FechasUtil.getFechaLimite(fIngreso, felaboracion);
 //        System.out.println("dias: " + c);
+       
+        
     }
 }

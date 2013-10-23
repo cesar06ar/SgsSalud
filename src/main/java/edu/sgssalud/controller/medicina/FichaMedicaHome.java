@@ -256,7 +256,9 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         //fichaMedic.setLastUpdate(now);
         fichaMedic.setActivationTime(now);
         //fichaMedic.setFechaApertura(now);
-        fichaMedic.setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));    //cambiar atributo a 
+        if(identity.isLoggedIn()){
+            fichaMedic.setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));    //cambiar atributo a 
+        }        
         fichaMedic.setType(_type);
         fichaMedic.buildAttributes(bussinesEntityService);  //
 

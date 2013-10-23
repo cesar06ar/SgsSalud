@@ -52,7 +52,7 @@ import org.jboss.solder.logging.Logger;
     query = "select e from Medicamento e where"
     + " e.fechaIngreso=:clave  OR"
     + " e.fechaElaboracion=:clave")})
-public class Medicamento extends BussinesEntity implements Serializable {
+public class Medicamento extends BussinesEntity implements Serializable, Comparable<Medicamento> {
 
     private static Logger log = Logger.getLogger(Medicamento.class);
     private static final long serialVersionUID = 2L;
@@ -64,6 +64,7 @@ public class Medicamento extends BussinesEntity implements Serializable {
     private String nombreComercial;
     private String nombreGenerico;
     private String referencia;
+    private String presentacion;
     private int unidades;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaElaboracion;
@@ -165,9 +166,15 @@ public class Medicamento extends BussinesEntity implements Serializable {
     public void setReceta(Receta receta) {
         this.receta = receta;
     }   
-    
-    
 
+    public String getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(String presentacion) {
+        this.presentacion = presentacion;
+    }  
+    
     @Override
     public String toString() {
         return "edu.sgssalud.model.farmacia.Medicamento[ "
@@ -175,5 +182,10 @@ public class Medicamento extends BussinesEntity implements Serializable {
                 + "nombreComercial=" + getNombreComercial() + ","
                 + "nombreGenerico" + getNombreGenerico() + ","
                 + " ]";
+    }
+    
+    @Override
+    public int compareTo(Medicamento o) {      
+        return (int)(o.getId() - this.getId());
     }
 }
