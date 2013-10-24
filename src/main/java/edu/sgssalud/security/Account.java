@@ -181,18 +181,19 @@ public class Account implements Serializable {
     }
 
     public boolean isRenderView() {
-        SecurityRules s = new SecurityRules();
-        /*if(SecurityRules.MEDICOS.equals("MEDICOS")){
-         return s.isMedico(identity);
-         }else if(SecurityRules.ODONTOLOGOS.equals("ODONTOLOGOS")){
-         return s.isOdontologo(identity);
-         }else if(SecurityRules.ENFERMEROS.equals("ENFERMEROS")){
-         return s.isEnfermero(identity);
-         }*/
+        SecurityRules s = new SecurityRules();        
         if (s.isMedico(identity) || s.isOdontologo(identity) || s.isEnfermero(identity)) {
             return true;
         } else {
             return false;
         }
+    }
+    
+    public String loadPages(){
+        if(identity.isLoggedIn()){
+            //return "/pages/depSalud/fichaMedica.xhtml";
+            return null;
+        }
+        return "/pages/login.xhtml";
     }
 }

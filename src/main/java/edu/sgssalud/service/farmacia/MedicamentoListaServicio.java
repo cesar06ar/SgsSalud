@@ -119,8 +119,9 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
          _filters.putAll(filters);*/
 
         QueryData<Medicamento> qData = medicamentoService.find(first, end, sortField, order, _filters);
-        this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResulList(qData.getResult());
+        this.setRowCount(qData.getTotalResultCount().intValue());        
+        this.setResulList(qData.getResult());        
+        Collections.sort(resultList);
         return qData.getResult();
     }
 

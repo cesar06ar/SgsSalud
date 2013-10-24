@@ -32,10 +32,9 @@
             </div>
         </ui:define>
 
-        <ui:define name="content" class="span20">
+        <ui:define name="content" >
             <h:form id="form">
                 <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
-
                     <div class="container-fluid">   
                         <div class="row-fluid">
                             <div class="span7">
@@ -44,7 +43,6 @@
                                 <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{recetaHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>                                      
 
                             </div>
-
                             <div class="span7" align="left">                                                                
                                 <h:panelGroup layout="block" class="clearfix" >
                                     <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
@@ -61,15 +59,16 @@
                         </div>
                     </div>
                 </p:panel>
-                <p:panel id="panelPrescripcion" header="Receta Médica" styleClass="clearfix">
+
+                <p:panel id="panelPrescripcion" header="Receta Médica" >
                     <div class="container-fluid">   
                         <div class="row-fluid">
-                            <div class="span7">
-                                <h:panelGroup layout="block" styleClass="clearfix">
-                                    <label for="medic" >#{messages['medicamento.nombre']}</label>   
-                                    <div class="input">
-                                        <p:selectOneMenu id="medic" value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:80px" converter="#{omnifaces.SelectItemsConverter}" required="true"
-                                                         effect="fade" var="m" style="width:200px"  filter="true" filterMatchMode="contains">  
+                            <div class="span6" style="border-bottom-color: #5eb95e;">
+                                <h:panelGroup layout="block" styleClass="clearfix" style="">
+                                    <label for="medic" style="width: 30px;">#{messages['medicamento.nombre']}</label>   
+                                    <div class="input" style="margin-left: 100px;">
+                                        <p:selectOneMenu id="medic" value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:150px" converter="#{omnifaces.SelectItemsConverter}" required="true"
+                                                         effect="fade" var="m" style="width:200px"  filter="true" filterMatchMode="contains" >  
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
                                             <f:selectItems value="#{recetaHome.listaMedicamentos}" var="medicamento" itemLabel="#{medicamento.nombreComercial} #{medicamento.unidades}" itemValue="#{medicamento}" 
                                                            rendered="true"/>
@@ -80,31 +79,41 @@
                                                 #{m.nombreComercial}
                                             </p:column>  
                                             <f:converter converterId="convertidorDeMedicamento"/>
-                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                            <p:ajax event="change" update="@parent, :form:present" partialSubmit="true" rendered=":form:present" />
                                         </p:selectOneMenu>  
                                     </div>
-                                </h:panelGroup>
-
+                                </h:panelGroup>                                                              
                                 <h:panelGroup layout="block" >
-                                    <label for="unidadesMedicacion" >#{messages['receta.unidadesMedicacion']}</label>
-                                    <div class="input"> 
-                                        <pe:inputNumber  id="unidadesMedicacion" style="width: 50px;" required="true" value="#{recetaHome.unidadesMedicacion}"
+                                    <label for="unidadesMedicacion" style="width: 30px;">#{messages['receta.unidadesMedicacion']}</label>
+                                    <div class="input" style="margin-left: 100px;"> 
+                                        <pe:inputNumber  id="unidadesMedicacion" style="width: 55px;" required="true" value="#{recetaHome.unidadesMedicacion}"
                                                          rendered="true" minValue="1" >
-                                            <p:ajax event="keyup" update="@parent :form:save :form:btnMedicacion" process="@this"/>  
+                                            <p:ajax event="keyup" update="@parent" process="@this"/>  
                                         </pe:inputNumber>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.unidadesMedicacion != null}" 
                                                         styleClass="validation-status" />                                                        
                                     </div>
-                                </h:panelGroup> 
-                            </div>
-                            <div class="span7" align="rigth">                                                                                        
-
+                                </h:panelGroup>                                 
+                                <p:outputLabel id="present" value="Presentación" style="width: 100px; margin: -30px 20px 0 0; padding-right: 5px; float: right; margin-right: 30px; background-color: #49afcd" />
+                                <script type="text/javascript">
+                                    function seleccionar(){
+                                        $(document).ready(function() {
+                                            $("#form\\:medic").change()(function(){                                                
+                                                var nombre = ("#form\\:medic").attr('value');
+                                                //$('#form\\:present').text(nombre);                                                                                                            
+                                                alert(nombre.attr('presentacion'));
+                                            });                                      
+                                                                         
+                                        });
+                                    }
+                                </script>
+                            </div>                            
+                            <div class="span8" align="left" style="background-color: #49afcd;">     
                                 <h:panelGroup layout="block" >
-                                    <label for="posologia" >#{messages['receta.dosis']}</label>  
-                                    <br/>
+                                    <label for="posologia" >#{messages['receta.dosis']}</label>                                      
                                     <div class="input">                                             
-                                        <pe:inputNumber  id="posologia" value="#{recetaHome.dosis}" required="true" size="2" style="width: 10" 
-                                                         rendered="true" minValue="1" styleClass="span1">
+                                        <pe:inputNumber  id="posologia" value="#{recetaHome.dosis}" required="true" style="width: 50px;" 
+                                                         rendered="true" minValue="1" >
                                             <p:ajax event="keyup" update="@parent :form:save :form:btnMedicacion" process="@this"/>  
                                         </pe:inputNumber>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.dosis != null}"  
@@ -136,20 +145,35 @@
                                                         styleClass="validation-status" />                                                        
                                     </div>
                                 </h:panelGroup>
-
-
-                                <p:commandButton id="btnMedicacion" value="#{messages['receta.cargar.indicaciones']}" update="indicaciones" action="#{recetaHome.cargarIndicaciones()}" styleClass="offset3"/> 
-                                <glue:output id="indicaciones" name="indicaciones" type="textarea" label="#{messages['receta.indicaciones']}" value="#{recetaHome.indicacion}" 
-                                             required="true" render="indicaciones"/>
+                                <p:commandButton id="btnMedicacion" value="#{messages['receta.cargar.indicacion']}" onclick="cargarIndicacion()" styleClass="offset3"/> 
+                                <script type="text/javascript">
+                                    function cargarIndicacion(){
+                                        $(document).ready(function() {                                            
+                                            $("#form\\:btnMedicacion").click(function(){                                        
+                                                var nombre = "hola";                                      
+                                                alert(nombre);
+                                            });
+                                        });
+                                    }
+                                </script>                                
                             </div>
                         </div>
-                    </div>
+                    </div>                    
                 </p:panel>
 
-                <div class="admin-actions ">
+                <p:panelGrid columns="2" >
+                    <p:panel header="Medicaciones" styleClass="span7" style="padding-right: 12px;">
+                        <h1>Hola</h1>
+                    </p:panel>
+                    <p:panel header="indicaciones" styleClass="span8" style="padding-right: 13px;">                        
+                        <h:inputTextarea id="indicaciones" value="#{recetaHome.instance.indicaciones}"  disabled="true"
+                                         style="width: 450px; height: 250px; margin-left: -10px;" />
+                    </p:panel>
+                </p:panelGrid>
+                <div class="span17 admin-actions">
                     <p:commandButton id="save" action="#{recetaHome.guardarReceta()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/secretaria/lista.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
                     </h:link>
                 </div>

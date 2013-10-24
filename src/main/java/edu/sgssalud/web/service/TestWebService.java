@@ -55,10 +55,10 @@ import org.primefaces.json.JSONException;
  */
 @Named
 @ViewScoped
-public class TestWebService implements Serializable{
+public class TestWebService implements Serializable {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(TestWebService.class);
-    private String cedula ;
+    private String cedula;
     private String clave;
     private String result;
 
@@ -85,12 +85,12 @@ public class TestWebService implements Serializable{
     public void setResult(String result) {
         this.result = result;
     }
-    
+
     @PostConstruct
     public void init() {
-        this.setCedula("1722404041");        
+        this.setCedula("1722404041");
     }
-    
+
     public String validar() {
         log.info("Ingreso a cargar 1 ");
         SGAWebServicesValidacion wsvalidacion = new SGAWebServicesValidacion();
@@ -106,55 +106,45 @@ public class TestWebService implements Serializable{
 
     @TransactionAttribute
     public String cargar() {
-        log.info("Ingreso a cargar 1 ");
-        URL url = null;
         try {
-            url = new URL("http://ws.unl.edu.ec/sgaws/wspersonal/soap/api.wsdl");
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        SGAWebServicesPersonal wscpersonal = new SGAWebServicesPersonal(url);
-        SGAWebServicesPersonalPortType port = wscpersonal.getSGAWebServicesPersonalPortType();
-        log.info("Ingreso a cargar 2 ");
-        if (!cedula.isEmpty()) {
-            TestWebService.autenticacion_Servidor((BindingProvider) port);
-            Service svc = Service.create(wscpersonal.getServiceName());
-
-
-            //JAXBContext jbc;
+            log.info("Ingreso a cargar 1 ");
+            URL url = null;
             try {
-//                jbc = JAXBContext.newInstance("org.apache.axis2.jaxws.sample.mtom");
-//                Dispatch<Object> dispatch = svc.createDispatch(wscpersonal.getServiceName(), jbc, Service.Mode.PAYLOAD);
-
-
-                //MtomStreamWriter proxy = svc.getPort();
-//                BindingProvider bp = (BindingProvider) port;
-//                SOAPBinding binding = (SOAPBinding) bp.getBinding();
-//                binding.setMTOMEnabled(true);
-                //URL url = svc.getWSDLDocumentLocation();
-                //svc.addPort(wscpersonal.getServiceName(),SOAPBinding.SOAP11HTTP_MTOM_BINDING, url.toString());
-
-                log.info("Ingreso a cargar datos ");
-                JsonParser parser = new JsonParser();
-                log.info("cedula valor 1 " + cedula);
-                String r = port.sgawsDatosEstudiante(cedula);
-
-                log.info("cedula valor " + cedula);
-                JsonElement elem = parser.parse(r);
-                JsonArray elemArr = elem.getAsJsonArray();
-                log.info("Resultado " + elemArr.toString());
-                this.setResult(elemArr.toString());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("resultado: " + elemArr.toString(), ""));
-
-            } catch (Exception ex) {
+                url = new URL("http://ws.unl.edu.ec/sgaws/wspersonal/soap/api.wsdl");
+            } catch (MalformedURLException ex) {
                 Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
-                log.info("Ingreso a cargar error ");
             }
-            log.info("Ingreso a cargar datos");
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Ingrese una CedulaValida!", ""));
+            SGAWebServicesPersonal wscpersonal = new SGAWebServicesPersonal(url);
+            SGAWebServicesPersonalPortType port = wscpersonal.getSGAWebServicesPersonalPortType();
+            log.info("Ingreso a cargar 2 ");
+            if (!cedula.isEmpty()) {
+                TestWebService.autenticacion_Servidor((BindingProvider) port);
+                try {
+                    log.info("Ingreso a cargar datos ");
+                    JsonParser parser = new JsonParser();
+                    log.info("cedula valor 1 " + cedula);
+                    String r = port.sgawsDatosEstudiante(cedula);
+
+                    log.info("cedula valor " + cedula);
+                    JsonElement elem = parser.parse(r);
+                    JsonArray elemArr = elem.getAsJsonArray();
+                    log.info("Resultado " + elemArr.toString());
+                    this.setResult(elemArr.toString());
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("resultado: " + elemArr.toString(), ""));
+
+                } catch (Exception ex) {
+                    Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
+                    log.info("Ingreso a cargar error ");
+                }
+                log.info("Ingreso a cargar datos");
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Ingrese una CedulaValida!", ""));
+            }
+            log.info("cargado con éxito");
+        } catch (Exception e) {
+            log.info("Error al cargar");
         }
-        log.info("cargado con éxito");
+
         return null;
     }
 

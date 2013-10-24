@@ -348,6 +348,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         return "/pages/farmacia/receta/lista.xhtml?faces-redirect=true";
     }
 
-    public void validarFC() {
+    public void cargarIndicacion(){
+        
     }
 }

@@ -186,6 +186,6 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     
     @Override
     public int compareTo(Medicamento o) {      
-        return (int)(o.getId() - this.getId());
+        return (int)(this.getId() - o.getId());
     }
 }
