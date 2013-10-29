@@ -74,7 +74,6 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     private FichaMedicaServicio fichaMedicaServicio;
     @Inject
     private consultaOdontologicaServicio consultaOdontServicio;
-    
     private Long pacienteId;
     private Long fichaMedicaId;
     private Long consultaMedicaId;
@@ -93,12 +92,13 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     private FichaMedica fichaMedica;
     private Medicamento medicamentoSeleccionado;
     private Receta recetaSeleccionada;
-    private List<Medicamento> listaMedicamentos;
-    private List<Receta> listaRecetas;
+    private List<Medicamento> listaMedicamentos = new ArrayList<Medicamento>();;
+    private List<Receta> listaRecetas = new ArrayList<Receta>();;
+    private List<String> unidadesDosis = new ArrayList<String>();;
+    private String presentacion;
 
     public RecetaHome() {
-        listaRecetas = new ArrayList<Receta>();
-        listaMedicamentos = new ArrayList<Medicamento>();
+         
     }
 
     /*Métodos get y set para obtener el Id de la clase*/
@@ -157,7 +157,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setFichaMedicaId(Long fichaMedicaId) {
         this.fichaMedicaId = fichaMedicaId;
-        if(fichaMedicaId != null){
+        if (fichaMedicaId != null) {
             this.setFichaMedica(fichaMedicaServicio.getFichaMedicaPorId(fichaMedicaId));
             this.setPaciente(fichaMedica.getPaciente());
         }
@@ -169,7 +169,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setConsultaMedicaId(Long consultaMedicaId) {
         this.consultaMedicaId = consultaMedicaId;
-        if(consultaMedicaId != null){
+        if (consultaMedicaId != null) {
             this.setConsultaMedica(consultaMedicaServicio.getConsultaMedicaPorId(consultaMedicaId));
         }
     }
@@ -180,11 +180,11 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setConsultaOdontId(Long consultaOdontId) {
         this.consultaOdontId = consultaOdontId;
-        if(consultaOdontId != null){
+        if (consultaOdontId != null) {
             getInstance().setConsultaOdontologica(consultaOdontServicio.getPorId(consultaOdontId));
         }
-    } 
-    
+    }
+
     public String getParametroBusqueda() {
         return parametroBusqueda;
     }
@@ -215,6 +215,8 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setMedicamentoSeleccionado(Medicamento medicamentoSeleccionado) {
         this.medicamentoSeleccionado = medicamentoSeleccionado;
+        this.setPresentacion(medicamentoSeleccionado.getPresentacion());
+        this.cargarUnidadesDosis();
     }
 
     public List<Medicamento> getListaMedicamentos() {
@@ -280,8 +282,14 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void setUnidadDuracionTratamiento(String unidadDuracionTratamiento) {
         this.unidadDuracionTratamiento = unidadDuracionTratamiento;
     }
-    
-    
+
+    public String getPresentacion() {
+        return presentacion;
+    }
+
+    public void setPresentacion(String presentacion) {
+        this.presentacion = presentacion;
+    }
 
     @TransactionAttribute   //    
     public Receta load() {
@@ -348,7 +356,36 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         return "/pages/farmacia/receta/lista.xhtml?faces-redirect=true";
     }
 
-    public void cargarIndicacion(){
+    public void cargarIndicacion() {
+    }
+
+    public void cargarUnidadesDosis() {
+        unidadesDosis = new ArrayList<String>();
+        if ("Ampollas".equals(presentacion)) {
+            unidadesDosis.add("Ampolla/s");            
+        } else if ("Pastillas".equals(presentacion)) {
+            unidadesDosis.add("Pastilla/s");            
+        } else if ("Sobres".equals(presentacion)) {
+            unidadesDosis.add("Sobre/s");            
+        } else if ("Jarabe".equals(presentacion)) {
+            unidadesDosis.add("Cucharada");            
+            unidadesDosis.add("Cucharadita");
+            unidadesDosis.add("ml");
+            unidadesDosis.add("cm3");            
+        } else if ("Crema".equals(presentacion)) {
+            unidadesDosis.add("Aplicacion");            
+        } else if ("Pomada".equals(presentacion)) {
+            unidadesDosis.add("Aplicacion");     
+        }
         
     }
+
+    public List<String> getUnidadesDosis() {
+        return unidadesDosis;
+    }
+
+    public void setUnidadesDosis(List<String> unidadesDosis) {
+        this.unidadesDosis = unidadesDosis;
+    }    
+    
 }

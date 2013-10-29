@@ -33,11 +33,11 @@
             <!--Metadato que se realiza antes de renderizarse la vista-->
             <f:metadata>
                 <f:viewParam name="result" value="#{medicamentoListaServicio.primerResult}" />
-                <f:viewParam name="" value="#{medicamentoListaServicio.parametroBusqueda}" />                
+                <f:viewParam name="" value="#{medicamentoListaServicio.parametroBusqueda}"/>
             </f:metadata>
             <!--Formulario dentro de un contenedor-->
             <h:form id="form">            
-                <!--Opción de mensaje, cuando se realiza una acción-->
+                <!--Opción de mensaje, cuando se realiza una acción dfghdh-->
                 <!--para mostrar mensaje de componentes seleccionados y errores si fuera el caso-->
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
@@ -51,7 +51,7 @@
                         #{' '}
                         <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
                                 disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
-                            <f:param name="id" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
+                            <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
                             <f:param name="backView" value="lista"></f:param>
                         </h:link>
                     </div>
@@ -65,48 +65,50 @@
                 </div>
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             paginator="true" rows="10" paginatorAlwaysVisible="true"  emptyMessage="No encontro Medicamentos"
-                             paginatorPosition="top" rowsPerPageTemplate="5,10,15"
-                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"                                                           
-                             rowKey="#{medicamento_.nombreComercial}"
+                             paginator="true" rows="10" styleClass="span18" style=""
+                             paginatorAlwaysVisible="false"
+                             paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                             rowsPerPageTemplate="5,10,15"
+                             lazy="true"
+                             rowKey="#{medicamento_.id}"
                              selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
-                             rendered="true" lazy="true"
+                             rendered="true"
                              selectionMode="single">
-                                       
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{medicamentoListaServicio.onRowSelect}"
                             update=":form:button-edit :form:messages "/>   
                     <p:ajax event="rowUnselect" listener="#{medicamentoListaServicio.onRowUnselect}" update=":form:button-edit :form:messages"/>
                     <!--Columnas para mostrar en la tabla-->
 
-                    <p:column headerText="#{'Nro. Factura'}" sortBy="#{medicamento_.numeroFactura}"  style="text-align: center;" >
-                        <!--<f:facet name="header">  
+                    <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 10%; text-align: center;">
+                        <f:facet name="header">  
                             <h:outputText value="#{'Nro. Factura'}" />  
-                        </f:facet>  -->
+                        </f:facet>  
                         <h:outputText value="#{medicamento_.numeroFactura}" />                        
                     </p:column>
-                    <p:column sortBy="#{medicamento_.nombreComercial}" style="text-align: center;" >
+                    <p:column sortBy="#{medicamento_.nombreComercial}" style="text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.nombre.comercial']}" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.nombreComercial}" />
                     </p:column>
 
-                    <p:column sortBy="#{medicamento_.nombreGenerico}" style="text-align: center;" >
+                    <p:column sortBy="#{medicamento_.nombreGenerico}" style="text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.nombre.generico']}" />  
                         </f:facet>                         
                         <h:outputText value="#{medicamento_.nombreGenerico}" />                            
                     </p:column>
 
-                    <p:column sortBy="#{medicamento_.unidades}" style="text-align: center;" >
+                    <p:column sortBy="#{medicamento_.unidades}" style="text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{'Unidades'}" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.unidades}" />
                     </p:column>
 
-                    <p:column style="width: 15%; text-align: center;" >
+                    <p:column style="width: 15%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{'Fecha de Ingreso'}" />  
                         </f:facet> 
@@ -115,36 +117,15 @@
                         </h:outputText>  
                     </p:column>
                     <p:column style="width: 15%; text-align: center;">
-                        <f:facet name="header">  
-                            <h:outputText value="#{'Fecha de Elaboración'}" />  
+                        <f:facet name="header">                               
+                                <h:outputText value="#{messages['common.referenciaMedicamento']}" />  
                         </f:facet> 
-                        <h:outputText value="#{medicamento_.fechaElaboracion}" >
-                            <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
-                        </h:outputText>  
+                        <h:outputText value="#{medicamento_.presentacion}" />
                     </p:column>
-                    <p:column style="width: 15%; text-align: center;">
-                        <f:facet name="header">  
-                            <h:outputText value="#{'Fecha de Caducidad'}" />  
-                        </f:facet> 
-                        <h:outputText value="#{medicamento_.fechaCaducidad}" >
-                            <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
-                        </h:outputText>  
-                    </p:column>
-                    <!--
-                    <p:column sortBy="#{medicamento_.referencia}">
-                        <f:facet name="header">  
-                            <h:outputText value="#{messages['common.referenciaMedicamento']}" />  
-                        </f:facet> 
-                        <h:outputText value="#{medicamento_.referencia}" />
-                    </p:column>-->
-
                 </p:dataTable>
-
-
             </h:form>
         </ui:define>
 
     </ui:composition>
 
 </html>
-

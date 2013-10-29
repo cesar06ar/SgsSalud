@@ -59,6 +59,7 @@ public class Receta implements Serializable {
     private Paciente paciente;
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Medicamento> medicaciones = new ArrayList<Medicamento>();   
+    
     private String indicaciones;
     @ManyToOne(optional = true)
     @JoinColumn(name = "responsableEmision_id")
@@ -112,6 +113,7 @@ public class Receta implements Serializable {
         this.medicaciones = medicaciones;
     }
 
+      
     public String getIndicaciones() {
         return indicaciones;
     }
