@@ -30,6 +30,7 @@ import edu.sgssalud.service.ServiciosMedicosService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.consultaOdontologicaServicio;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -41,6 +42,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -72,12 +74,14 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     private SignosVitales signosVitales;
     private Tratamiento tratamiento;
     private Long fichaMedicaId;
+    private UploadedFile file;
     private List<Servicio> listaServicios = new ArrayList<Servicio>();
     private List<Diente> listaDientes = new ArrayList<Diente>();
     private List<Diente> listaDientesC1 = new ArrayList<Diente>();
     private List<Diente> listaDientesC2 = new ArrayList<Diente>();
     private List<Diente> listaDientesC3 = new ArrayList<Diente>();
     private List<Diente> listaDientesC4 = new ArrayList<Diente>();
+    private List<Tratamiento> tratamientos = new ArrayList<Tratamiento>();
 
     public Long getConsultaOdontologicaId() {
         return (Long) getId();
@@ -113,6 +117,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
+        diente.setRutaIcon(servicio.getRutaImg());
     }
 
     public SignosVitales getSignosVitales() {
@@ -138,6 +143,14 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
     public void setTratamiento(Tratamiento tratamiento) {
         this.tratamiento = tratamiento;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
     public List<Servicio> getListaServicios() {
@@ -192,17 +205,25 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         this.listaDientesC4 = listaDientesC4;
     }
 
+    public List<Tratamiento> getTratamientos() {
+        return tratamientos;
+    }
+
+    public void setTratamientos(List<Tratamiento> tratamientos) {
+        this.tratamientos = tratamientos;
+    }
+
     @TransactionAttribute
     public ConsultaOdontologica load() {
         if (isIdDefined()) {
             wire();
         }
         log.info("sgssalud --> cargar instance " + getInstance());
-         if (getInstance().isPersistent()) {
+        if (getInstance().isPersistent()) {
             if (getInstance().getResponsable() == null) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
             }
-         }
+        }
         return getInstance();
     }
 
@@ -220,7 +241,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         fichaOdontServicio.setEntityManager(em);
         profileS.setEntityManager(em);
         serviciosMedicosS.setEntityManager(em);
-        if (getInstance().isPersistent()) {            
+        if (getInstance().isPersistent()) {
             this.IniciarDientes();
             Odontograma o = new Odontograma();
             o.setDientes(listaDientes);
@@ -292,7 +313,22 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     @TransactionAttribute
     public void guardarTratamiento() {
         log.info("valor diente: " + diente);
+        diente.setRutaIcon(servicio.getRutaImg());
+//        tratamiento.setFechaRelizacion(new Date());
+//        tratamientos.add(tratamiento);
+        this.actualizarDiente(diente);
+    }
 
+    public void upload() {
+
+        try {
+            byte[] buffer = new byte[(int) file.getSize()];
+            this.getInstance().setRadiografiaDental(buffer);
+            FacesMessage msg = new FacesMessage("Ok", "Fichero " + file.getFileName() + " subido correctamente.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            log.info("Consulta Odont: Error al cargar la imagen");
+        }
     }
 
     public void IniciarDientes() {
@@ -356,6 +392,34 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                     if (j == 6 || j == 7 || j == 8) {
                         listaDientesC4.add(new Diente("Molar", Integer.parseInt(p), i, ruta));
                     }
+                }
+            }
+        }
+    }
+
+    public void actualizarDiente(Diente dient) {
+        if (dient.getCuadrante() == 1) {
+            for (Diente d : listaDientesC1) {
+                if (d.equals(dient)) {
+                    d = dient;
+                }
+            }
+        } else if (dient.getCuadrante() == 2) {
+            for (Diente d : listaDientesC3) {
+                if (d.equals(dient)) {
+                    d = dient;
+                }
+            }
+        } else if (dient.getCuadrante() == 3) {
+            for (Diente d : listaDientesC2) {
+                if (d.equals(dient)) {
+                    d = dient;
+                }
+            }
+        } else if (dient.getCuadrante() == 4) {
+            for (Diente d : listaDientesC1) {
+                if (d.equals(dient)) {
+                    d = dient;
                 }
             }
         }
