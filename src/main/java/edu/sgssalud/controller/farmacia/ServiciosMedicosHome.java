@@ -63,7 +63,7 @@ public class ServiciosMedicosHome extends BussinesEntityHome<Servicio> implement
     public List<String> getRutaImagenes() {
         List<String> rutas = new ArrayList<String>();
         String ruta = "/resources/odontograma/";
-        File dir = new File("/home/cesar/NetBeansProjects/sgssaludunl/src/main/webapp/resources/odontograma/");
+        File dir = new File("/home/freddy/NetBeansProjects/SgsSalud/src/main/webapp/resources/odontograma/");
         String[] imagenes = dir.list();
         if (imagenes != null) {
             for (String s : imagenes) {

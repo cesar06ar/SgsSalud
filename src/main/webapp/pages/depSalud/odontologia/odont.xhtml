@@ -14,24 +14,228 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-           
+            <f:viewParam name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}" />
+            <f:viewParam name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}" />
         </f:metadata>
-
-
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        
+                        <h2>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{'Odontograma'} 
+                            #{odontogramaHome.instance.id}</h2> 
                     </div>
                 </div>
             </div>
         </ui:define>
         <ui:define name="content" class="span20">
             <h:form id="form">                
-               
-               
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <p:panel id="odont" header="Odontograma">
+                    <p:panelGrid columns="2">
+                        <p:panelGrid columns="8" style="margin-left: -5px; margin-bottom: -5px;">
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn18" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente18.posicion}</label>
+                                <p:commandLink id="btn18" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente18.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente18.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente18}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn17" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente17.posicion}</label>
+                                <p:commandLink id="btn17" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente17.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente17.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente17}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn16" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente16.posicion}</label>
+                                <p:commandLink id="btn16" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente16.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente16.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente16}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn15" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente15.posicion}</label>
+                                <p:commandLink id="btn15" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente15.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente15.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente15}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn14" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente14.posicion}</label>
+                                <p:commandLink id="btn14" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente14.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente14.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente14}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn13" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente13.posicion}</label>
+                                <p:commandLink id="btn13" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente13.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente13.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente13}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn12" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente12.posicion}</label>
+                                <p:commandLink id="btn12" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente12.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente12.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente12}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn11" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente11.posicion}</label>
+                                <p:commandLink id="btn11" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente11.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente11.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente11}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panelGrid columns="8" style="margin-left: 0px; margin-bottom: -7px;">
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn21" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente21.posicion}</label>
+                                <p:commandLink id="btn21" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente21.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente21.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente21}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn22" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente22.posicion}</label>
+                                <p:commandLink id="btn22" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente22.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente22.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente22}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn23" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente23.posicion}</label>
+                                <p:commandLink id="btn23" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente23.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente23.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente23}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn24" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente24.posicion}</label>
+                                <p:commandLink id="btn24" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente24.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente24.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente24}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn25" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente25.posicion}</label>
+                                <p:commandLink id="btn25" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente25.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente25.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente25}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn26" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente26.posicion}</label>
+                                <p:commandLink id="btn26" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente26.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente26.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente26}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn27" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente27.posicion}</label>
+                                <p:commandLink id="btn27" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente27.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente27.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente27}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                            <h:panelGroup style="margin: -5px -7px 0px;">
+                                <label for="btn28" style="width: 11px; margin: -8px -15px 0 6px;">#{odontogramaHome.diente28.posicion}</label>
+                                <p:commandLink id="btn28" style="margin: 0 -8px -7px;" title="#{odontogramaHome.diente28.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente28.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente28}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panelGrid columns="8" style="margin-left: -5px;">
+                            <h:panelGroup style="margin: -2px -10px 0px;">                                
+                                <p:commandLink id="btn48" style="margin: -2px -9px 0px 5px;" title="#{odontogramaHome.diente48.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente48.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente48}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                                <label for="btn48" style="width: 11px; margin: -7px -5px 0 4px;">#{odontogramaHome.diente48.posicion}</label>
+                            </h:panelGroup>
+                        </p:panelGrid>
+                        <p:panelGrid columns="8" style="margin-left: -5px;">
+                            
+                        </p:panelGrid>
+                    </p:panelGrid>
+                </p:panel> 
+                <p:panel header="tratamientos">
+
+                </p:panel>                
+
             </h:form>
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['trataminento.nombre']} a #{consultaOdontHome.diente.nombre}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="600">
+                <h:form id="form-dialog">                   
+                    <h:panelGroup layout="block" class="clearfix" rendered="true">
+                        <label for="servicM_" class="control-label">#{messages['servicioMedico.nombre.odont']}</label>
+                        <div class="input">
+                            <p:selectOneMenu id="servicM_" value="#{odontogramaHome.servicio}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="Debe seleccionar un tratamiento"  var="sm"
+                                             rendered="true" label="#{messages['Account']}">
+                                <f:selectItem  itemLabel="#{messages['common.choice']}"  ItemValue = ""  />  
+                                <f:selectItems value="#{odontogramaHome.listaServicios}" var="servicioM" itemLabel="#{servicioM.nombre} #{servicioM.descripcion}" itemValue="#{servicioM}"/>                          
+                                <p:column>  
+                                    #{sm.nombre}
+                                </p:column> 
+                                <p:column >  
+                                    <p:graphicImage value="#{sm.rutaImg}" width="30" height="25"/>
+                                </p:column> 
+                                <f:converter converterId="servicioMedicoConverter"/>                                
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>                             
+                        </div>
+                    </h:panelGroup>                    
+                    <glue:input id="procedimient" name="procedimient" type="textarea" label="#{messages['tratamiento.procedimiento']}" value="#{odontogramaHome.tratamiento.procedimiento}" inlinehelp="" required="true" execute="@this save1" style="width: -100px; height: -20px;"/>   
+                    <div class="admin-actions">
+                        <p:commandButton id="save1" value="#{messages['common.save']}" rendered="true"
+                                         action="#{odontogramaHome.guardarTratamiento()}" 
+                                         update=":edit-dialog :form:odont" immediate="true"
+                                         ajax="true" process="@this" styleClass="btn primary"
+                                         style="margin-top:10px;" icon="ui-icon-disk">  
+                        </p:commandButton>
+                        #{' '}                     
+                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
+                                         rendered="true" onclick="editDlg.hide();"                                      
+                                         styleClass="btn"/>  
+                    </div> 
+                </h:form>
+            </p:dialog> 
         </ui:define>
     </ui:composition>
 </html>                

@@ -185,7 +185,7 @@ public class InitializeDatabase {
         bussinesEntityType = query.getSingleResult();
         if (session.getPersistenceManager().findUser("admin") == null) {
             User u = session.getPersistenceManager().createUser("admin");
-            session.getAttributesManager().updatePassword(u, "4dm1nglue3");
+            session.getAttributesManager().updatePassword(u, "admin");
             session.getAttributesManager().addAttribute(u, "email", "cesar06ar@hotmail.com");
             members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 

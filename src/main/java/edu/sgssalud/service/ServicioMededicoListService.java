@@ -154,7 +154,7 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/serviciosMedicos/lista.xhtml?faces-redirect=true";
+        return "/pages/admin/serviciosMedicos/lista.xhtml?faces-redirect=true";
     }
 
     public void onRowSelect(SelectEvent event) {

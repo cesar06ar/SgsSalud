@@ -30,6 +30,21 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="cate" name="categoria" type="text" label="#{messages['servicioMedico.categoria']}" value="#{serviciosMedicosHome.instance.categoria}" required="true" inlinehelp="#{messages['servicioMedico.categoria.lineaAyuda']}" execute="@this save zonas" render="cate" validator="">                    
                 </glue:input>                
+                 <h:panelGroup layout="block" class="clearfix" rendered="true">
+                    <label for="imagen1" >#{messages['servicioMedico.imagen']}  </label>
+                    <div class="input">
+                        <p:selectOneMenu id="imagen1" value="#{serviciosMedicosHome.instance.rutaImg}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true"                                           
+                                         var="img" rendered="true"  label="#{messages['servicioMedico.imagen']}" panelStyleClass="span5"  style="width: 200px;">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" /> 
+                            <f:selectItems value="#{serviciosMedicosHome.rutaImagenes}" var="rutaI" itemLabel="#{serviciosMedicosHome.nombreImg(rutaI)}" itemValue="#{rutaI}"/>                                                      
+                            <p:ajax event="change" update="@parent :form:i save" partialSubmit="true" rendered=":form:i"/>                                                       
+                        </p:selectOneMenu>                                                                        
+                    </div>  
+                </h:panelGroup>
+                <div class="offset6" style="margin-top: -30px; padding-bottom: 20px;">
+                    <p:graphicImage id="i" value="#{serviciosMedicosHome.instance.rutaImg}" width="40" height="40" rendered="true"/>
+                </div> 
+                <br/>
                 <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{serviciosMedicosHome.instance.nombre}" required="true" inlinehelp="#{messages['servicioMedico.nombre.lineaAyuda']}" execute="@this save" render="name" validator="" />                                
                 <glue:input id="zonas" name="zonasDentales" type="checkbox" label="#{messages['servicioMedico.todasZonas']}" value="#{serviciosMedicosHome.instance.todasZonas}" inlinehelp="#{messages['servicioMedico.todasZonas.lineaAyuda']}" execute="@this save" render="zonas" rendered="#{serviciosMedicosHome.instance.categoria eq 'ODONTOLOGIA'}"/>                
                 <h:panelGroup id="fnp" layout="block" class="clearfix">
@@ -45,21 +60,7 @@
                     </div>
                 </h:panelGroup>
 
-                <h:panelGroup layout="block" class="clearfix" rendered="true">
-                    <label for="imagen1" >#{messages['servicioMedico.imagen']}  </label>
-                    <div class="input">
-                        <p:selectOneMenu id="imagen1" value="#{serviciosMedicosHome.instance.rutaImg}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true"                                           
-                                         var="img" rendered="true"  label="#{messages['servicioMedico.imagen']}" panelStyleClass="span5"  style="width: 200px;">
-                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" /> 
-                            <f:selectItems value="#{serviciosMedicosHome.rutaImagenes}" var="rutaI" itemLabel="#{serviciosMedicosHome.nombreImg(rutaI)}" itemValue="#{rutaI}"/>                                                      
-                            <p:ajax event="change" update="@parent :form:i save" partialSubmit="true" rendered=":form:i"/>                                                       
-                        </p:selectOneMenu>                                                                        
-                    </div>  
-                </h:panelGroup>
-                <div class="offset6" style="margin-top: -30px; padding-bottom: 20px;">
-                    <p:graphicImage id="i" value="#{serviciosMedicosHome.instance.rutaImg}" width="60" height="60" rendered="true"/>
-                </div> 
-                <br/>
+               
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{serviciosMedicosHome.instance.descripcion}" inlinehelp="#{messages['servicioMedico.descripcion.lineaAyuda']}" execute="@this save" render="description"/>                                
                 <div class="actions">
 
