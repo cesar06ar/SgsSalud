@@ -180,17 +180,26 @@
                                 </p:commandLink>
                             </h:panelGroup>
                         </p:panelGrid>
-                        <p:panelGrid columns="8" style="margin-left: -5px;">
-                            <h:panelGroup style="margin: -2px -10px 0px;">                                
-                                <p:commandLink id="btn48" style="margin: -2px -9px 0px 5px;" title="#{odontogramaHome.diente48.nombre}" ajax="true"
+                        <p:panelGrid columns="8" style="margin: -5px 0 0 -5px;">
+                            <h:panelGroup style="margin: -5px -6px -5px;">                             
+                                <p:commandLink id="btn48" style="margin: 0 -7px -5px; float: right" title="#{odontogramaHome.diente48.nombre}" ajax="true"
                                                rendered="true" onclick="editDlg.show();" >   
                                     <p:graphicImage value="#{odontogramaHome.diente48.rutaIcon}" />
                                     <f:setPropertyActionListener value="#{odontogramaHome.diente48}" target="#{odontogramaHome.selectDient}"/>
                                     <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
                                 </p:commandLink>
-                                <label for="btn48" style="width: 11px; margin: -7px -5px 0 4px;">#{odontogramaHome.diente48.posicion}</label>
-                            </h:panelGroup>
-                        </p:panelGrid>
+                                <label for="btn48" style="width: 11px; margin: -5px -11px 0 6px;">#{odontogramaHome.diente48.posicion}</label>
+                            </h:panelGroup>                         
+                            <h:panelGroup style="margin: -5px -6px -5px;">                             
+                                <p:commandLink id="btn47" style="margin: 0 -7px -5px; float: right" title="#{odontogramaHome.diente47.nombre}" ajax="true"
+                                               rendered="true" onclick="editDlg.show();" >   
+                                    <p:graphicImage value="#{odontogramaHome.diente47.rutaIcon}" />
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente47}" target="#{odontogramaHome.selectDient}"/>
+                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
+                                </p:commandLink>
+                                <label for="btn47" style="width: 11px; margin: -5px -11px 0 6px;">#{odontogramaHome.diente47.posicion}</label>
+                            </h:panelGroup> 
+                        </p:panelGrid>                       
                         <p:panelGrid columns="8" style="margin-left: -5px;">
                             
                         </p:panelGrid>

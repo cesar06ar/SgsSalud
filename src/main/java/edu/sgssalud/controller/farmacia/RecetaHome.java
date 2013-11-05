@@ -215,8 +215,9 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setMedicamentoSeleccionado(Medicamento medicamentoSeleccionado) {
         this.medicamentoSeleccionado = medicamentoSeleccionado;
-        this.setPresentacion(medicamentoSeleccionado.getPresentacion());
+        this.setPresentacion(medicamentoSeleccionado.getPresentacion());        
         this.cargarUnidadesDosis();
+                
     }
 
     public List<Medicamento> getListaMedicamentos() {
@@ -316,12 +317,14 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         medicamentosServicio.setEntityManager(em);
         consultaMedicaServicio.setEntityManager(em);
         profileServicio.setEntityManager(em);
+        cargarUnidadesDosis();
         if (pacienteId == null) {
             paciente = new Paciente();
         }
         if (consultaMedicaId != null) {
             consultaMedica = new ConsultaMedica();
         }
+        
     }
 
     @Override
@@ -359,7 +362,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void cargarIndicacion() {
     }
 
-    public void cargarUnidadesDosis() {
+    public void cargarUnidadesDosis() {             
         unidadesDosis = new ArrayList<String>();
         if ("Ampollas".equals(presentacion)) {
             unidadesDosis.add("Ampolla/s");            
