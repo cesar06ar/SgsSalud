@@ -186,9 +186,15 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     @TransactionAttribute
     public void guardarTratamiento() {
         log.info("valor diente: " + SelectDient);
+        Date now = Calendar.getInstance().getTime();
         //this.SelectDient.setRutaIcon(servicio.getRutaImg());
         this.actualizarDiente(SelectDient);
-        servicio = new Servicio();
+        tratamiento.setServicioDisponible(servicio);
+        tratamiento.setFechaRelizacion(now);
+        tratamiento.setDiente(SelectDient);        
+        ListaTratamient.add(tratamiento);        
+        servicio = new Servicio();        
+        tratamiento = new Tratamiento();
     }
 
     public Long getFichaMedicaId() {
