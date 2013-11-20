@@ -92,13 +92,15 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     private FichaMedica fichaMedica;
     private Medicamento medicamentoSeleccionado;
     private Receta recetaSeleccionada;
-    private List<Medicamento> listaMedicamentos = new ArrayList<Medicamento>();;
-    private List<Receta> listaRecetas = new ArrayList<Receta>();;
-    private List<String> unidadesDosis = new ArrayList<String>();;
+    private List<Medicamento> listaMedicamentosStock = new ArrayList<Medicamento>();
+    private List<Medicamento> listaMedicamentosReceta = new ArrayList<Medicamento>();
+    private List<String> listaIndicaciones = new ArrayList<String>();
+    private List<Receta> listaRecetas = new ArrayList<Receta>();
+    private List<String> unidadesDosis = new ArrayList<String>();
     private String presentacion;
+    private static String inicioIndicacion = "";
 
     public RecetaHome() {
-         
     }
 
     /*Métodos get y set para obtener el Id de la clase*/
@@ -215,17 +217,33 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setMedicamentoSeleccionado(Medicamento medicamentoSeleccionado) {
         this.medicamentoSeleccionado = medicamentoSeleccionado;
-        this.setPresentacion(medicamentoSeleccionado.getPresentacion());        
+        this.setPresentacion(medicamentoSeleccionado.getPresentacion());
         this.cargarUnidadesDosis();
-                
+
     }
 
-    public List<Medicamento> getListaMedicamentos() {
+    public List<Medicamento> getListaMedicamentosStock() {
         return medicamentosServicio.buscarTodos(); //controlar los medicamentos en stock
     }
 
-    public void setListaMedicamentos(List<Medicamento> listaMedicamentos) {
-        this.listaMedicamentos = listaMedicamentos;
+    public void setListaMedicamentosStock(List<Medicamento> listaMedicamentosStock) {
+        this.listaMedicamentosStock = listaMedicamentosStock;
+    }
+
+    public List<Medicamento> getListaMedicamentosReceta() {
+        return listaMedicamentosReceta;
+    }
+
+    public void setListaMedicamentosReceta(List<Medicamento> listaMedicamentosReceta) {
+        this.listaMedicamentosReceta = listaMedicamentosReceta;
+    }
+
+    public List<String> getListaIndicaciones() {
+        return listaIndicaciones;
+    }
+
+    public void setListaIndicaciones(List<String> listaIndicaciones) {
+        this.listaIndicaciones = listaIndicaciones;
     }
 
     public int getUnidadesMedicacion() {
@@ -324,7 +342,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         if (consultaMedicaId != null) {
             consultaMedica = new ConsultaMedica();
         }
-        
+
     }
 
     @Override
@@ -362,25 +380,65 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void cargarIndicacion() {
     }
 
-    public void cargarUnidadesDosis() {             
+    public void cargarUnidadesDosis() {
         unidadesDosis = new ArrayList<String>();
         if ("Ampollas".equals(presentacion)) {
-            unidadesDosis.add("Ampolla/s");            
+            unidadesDosis.add("Ampolla/s");
+            inicioIndicacion = "Aplicar ";
         } else if ("Pastillas".equals(presentacion)) {
-            unidadesDosis.add("Pastilla/s");            
+            unidadesDosis.add("Pastilla/s");
+            inicioIndicacion = "Tomar ";
         } else if ("Sobres".equals(presentacion)) {
-            unidadesDosis.add("Sobre/s");            
+            unidadesDosis.add("Sobre/s");
+            inicioIndicacion = "Tomar ";
         } else if ("Jarabe".equals(presentacion)) {
-            unidadesDosis.add("Cucharada");            
+            unidadesDosis.add("Cucharada");
             unidadesDosis.add("Cucharadita");
             unidadesDosis.add("ml");
-            unidadesDosis.add("cm3");            
+            unidadesDosis.add("cm3");
+            inicioIndicacion = "Tomar ";
         } else if ("Crema".equals(presentacion)) {
-            unidadesDosis.add("Aplicacion");            
+            unidadesDosis.add("Aplicacion");
+            inicioIndicacion = "Aplicar ";
         } else if ("Pomada".equals(presentacion)) {
-            unidadesDosis.add("Aplicacion");     
+            unidadesDosis.add("Aplicacion");
+//            inicioIndicacion = "Aplicar ";
         }
-        
+
+    }
+
+    public void cargarMedicamentoAReceta() {
+     
+        this.actualizarStockMedicamento(unidadesMedicacion);
+//        if (!listaMedicamentosReceta.contains(medicamentoSeleccionado)) {
+//        Medicamento medic =new Medicamento();
+//        medicamentoSeleccionado.setUnidades(unidadesMedicacion);
+            listaMedicamentosReceta.add(medicamentoSeleccionado);
+            String indicacion = medicamentoSeleccionado.getNombreComercial().toUpperCase() + ": " + inicioIndicacion + " " + dosis + " " + unidadDosis
+                    + " cada " + tiempoToma + " " + unidadTiempoToma + "<br/>" + "durante " + duracionTratamiento + " " + unidadDuracionTratamiento +"<br/>" +"<br/>";
+
+            listaIndicaciones.add(indicacion);
+            this.reiniciar();
+//        } else {
+//            this.reiniciar();
+//        }
+
+
+
+    }
+
+    public void eliminarMedicamentoReceta(Medicamento med) {
+        if (listaMedicamentosReceta.contains(med)) {
+            listaMedicamentosReceta.remove(med);
+            String nombreComercial = med.getNombreComercial();
+            String indicacion = "";
+            for (String i : listaIndicaciones) {
+                if (i.contains(nombreComercial)) {
+                    indicacion = i;
+                }
+            }
+            listaIndicaciones.remove(indicacion);
+        }
     }
 
     public List<String> getUnidadesDosis() {
@@ -389,6 +447,28 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setUnidadesDosis(List<String> unidadesDosis) {
         this.unidadesDosis = unidadesDosis;
-    }    
-    
+    }
+
+    public void actualizarStockMedicamento(int cantidad) {
+        for (Medicamento m : listaMedicamentosStock) {
+            if (cantidad > 0 && cantidad < medicamentoSeleccionado.getUnidades() &&medicamentoSeleccionado != null) {
+                if (m.equals(medicamentoSeleccionado)) {
+                    m.setUnidades(medicamentoSeleccionado.getUnidades() - cantidad);
+                    System.out.print("actualiza stock");
+                }
+            }
+        }
+    }
+
+    public void reiniciar() {
+        medicamentoSeleccionado = new Medicamento();
+        unidadesMedicacion = 0;
+        dosis = 0;
+        unidadDosis = null;
+        tiempoToma = 0;
+        unidadTiempoToma = null;
+        duracionTratamiento = 0;
+        unidadDuracionTratamiento = null;
+
+    }
 }
