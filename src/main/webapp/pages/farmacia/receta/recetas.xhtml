@@ -70,7 +70,7 @@
                                         <p:selectOneMenu id="medic" value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:150px" converter="#{omnifaces.SelectItemsConverter}" required="true"
                                                          effect="fade" var="m" style="width:200px"  filter="true" filterMatchMode="contains" >
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
-                                            <f:selectItems value="#{recetaHome.listaMedicamentos}" var="medicamento" itemLabel="#{medicamento.nombreComercial} ( #{medicamento.unidades} uds.)" itemValue="#{medicamento}"
+                                            <f:selectItems value="#{recetaHome.listaMedicamentosStock}" var="medicamento" itemLabel="#{medicamento.nombreComercial} ( #{medicamento.unidades} uds.)" itemValue="#{medicamento}"
                                                            rendered="true"/>
                                             <p:column>
                                                 #{m.unidades}
@@ -87,7 +87,7 @@
                                     <label for="unidadesMedicacion" style="width: 30px;">#{messages['receta.unidadesMedicacion']}</label>
                                     <div class="input" style="margin-left: 100px;">
                                         <pe:inputNumber  id="unidadesMedicacion" style="width: 55px;" required="false" value="#{recetaHome.unidadesMedicacion}"
-                                                         rendered="true" decimalPlaces="0">
+                                                         rendered="true" decimalPlaces="0" >
                                             <p:ajax event="blur" process="@this"/>
                                         </pe:inputNumber>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.unidadesMedicacion != null}"
@@ -95,34 +95,36 @@
                                     </div>
                                 </h:panelGroup>
                                 <p:outputLabel id="present" value="#{recetaHome.presentacion}&nbsp;" style="width: 90px; margin: -27px 0px 0 180px; float: left; background-color: #49afcd" title="Presentacion"/>
+                                <p:spacer width="70" height="10" /> <span class="help-inline" > #{messages['receta.instriccion.unidadaesMedicacion']}<ocp:message forId="unidadesMedicacion" /></span>
                             </div>
 
                             <div class="span8" align="left" style="margin-left: -40px;"> 
                                 <h:panelGroup layout="block"   >
-                                    <label for="dosis" >#{messages['receta.dosis']}</label>
+                                    <label for="dosis" >#{messages['receta.dosis']} </label>
                                     <div class="input">
                                         <pe:inputNumber  id="dosis" style="width: 50px;" required="true" value="#{recetaHome.dosis}"
-                                                      rendered="true" decimalPlaces="0">
+                                                         rendered="true" decimalPlaces="0">
                                             <p:ajax event="blur" update="@parent" />
                                         </pe:inputNumber>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty recetaHome.dosis}"
                                                         styleClass="validation-status" />
-                                    </div>
+                                    </div>                                    
                                 </h:panelGroup>
-                                <h:panelGroup id="panelUDosis" layout="block"  style="margin: -27px 0 0 100px;">                                    
+                                <h:panelGroup layout="block"  style="margin: -27px 0 0 100px;">                                    
                                     <div class="input">
-                                        <p:selectOneMenu id="unidadesDosis1" value="#{recetaHome.unidadDosis}" converter="omnifaces.SelectItemsConverter" required="false"
+                                        <p:selectOneMenu id="unidadesDosis1" value="#{recetaHome.unidadDosis}" converter="#{omnifaces.SelectItemsConverter}" required="false"
                                                          effect="fade" var="UDosis" style="width: 150px;">
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue=""/>
                                             <f:selectItems value="#{recetaHome.unidadesDosis}" var="UnidadD" itemLabel="#{UnidadD}" itemValue="#{UnidadD}"/>
-                                            <p:ajax event="change" partialSubmit="true"/>
+                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                         </p:selectOneMenu>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty recetaHome.unidadDosis}"
                                                         styleClass="validation-status" />
                                     </div>
                                 </h:panelGroup>
+                                <p:spacer width="20" height="10" /> <span class="help-inline" >  #{messages['receta.instriccion.dosis']}<ocp:message forId="dosis"/></span>
                                 <h:panelGroup layout="block" >
-                                    <label for="tiempoToma" >#{messages['receta.tiempoToma']}</label>
+                                    <label for="tiempoToma" style="margin-top: 15px">#{messages['receta.tiempoToma']}</label>
                                     <div class="input">
                                         <pe:inputNumber  id="tiempoToma" value="#{recetaHome.tiempoToma}" required="true" style="width: 50px;"
                                                          rendered="true" decimalPlaces="0">
@@ -130,11 +132,11 @@
                                         </pe:inputNumber>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty recetaHome.tiempoToma}"
                                                         styleClass="validation-status" />
-                                    </div>
+                                    </div>                                    
                                 </h:panelGroup>
                                 <h:panelGroup layout="block" style="margin: -27px 0 0 100px;"  >
                                     <div class="input" >
-                                        <p:selectOneMenu id="unidadesToma" value="#{recetaHome.unidadTiempoToma}" converter="#{omnifaces.SelectItemsConverter}" required="true"
+                                        <p:selectOneMenu id="unidadesToma" value="#{recetaHome.unidadTiempoToma}" converter="#{omnifaces.SelectItemsConverter}" required="false"
                                                          effect="fade" var="m" style="width:150px" >
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
                                             <f:selectItem itemLabel="horas" itemValue="horas" />
@@ -143,22 +145,26 @@
                                             <f:selectItem itemLabel="semana" itemValue="semana" />
                                             <f:selectItem itemLabel="meses" itemValue="meses" />
                                             <f:selectItem itemLabel="año" itemValue="año" />
-                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                         </p:selectOneMenu>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.unidadTiempoToma!= null}"
                                                         styleClass="validation-status" />
-                                    </div>
+                                    </div>      
+                                    <p:spacer width="50" height="10" /> <span class="help-inline" > #{messages['receta.instriccion.tiempoToma']}<ocp:message forId="tiempoToma" /></span>
                                 </h:panelGroup>
+
+
                                 <h:panelGroup layout="block" class="clearfix"  >
                                     <label style="margin-top: -5px" for="duracionTratamiento" >#{messages['receta.duracionTratamiento']}</label>
                                     <div class="input">
-                                        <pe:inputNumber  id="duracionTratamiento" value="#{recetaHome.tiempoToma}" required="true" style="width: 50px;"
-                                                      rendered="true" decimalPlaces="0" >
-                                            <p:ajax event="blur" update="@parent" process="@this"/>
+                                        <pe:inputNumber  id="duracionTratamiento" value="#{recetaHome.duracionTratamiento}" required="true" style="width: 50px;"
+                                                         rendered="true" decimalPlaces="0" >
+                                            <p:ajax event="blur" update="@parent"/>
                                         </pe:inputNumber>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty recetaHome.tiempoToma}"
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty recetaHome.duracionTratamiento}"
                                                         styleClass="validation-status" />
-                                    </div>
+                                    </div>                                  
+
                                 </h:panelGroup> 
                                 <h:panelGroup layout="block" style="margin: -40px 0 0 100px;" >
                                     <div class="input" >
@@ -175,10 +181,65 @@
                                                         styleClass="validation-status" />
                                     </div>
                                 </h:panelGroup>
+                                <p:spacer width="20" height="10" /> <span class="help-inline"> #{messages['receta.instriccion.duracionTratamiento']}<ocp:message forId="duracionTratamiento" /></span>
+
+                                <br/>
+                                <br/>
+                                <p:commandButton id="btnMedicacion" value="#{messages['receta.cargar.medicamento']}" 
+                                                 action="#{recetaHome.cargarMedicamentoAReceta()}" styleClass="offset3" 
+                                                 ajax="true"  update=":form:tablaMedicamentos :form:Indicac :form:medic
+                                                 :form:unidadesMedicacion :form:present :form:dosis :form:unidadesDosis1 
+                                                 :form:tiempoToma :form:unidadesToma :form:duracionTratamiento :form:unidadesDuracionTratamiento" >
+                                    <p:ajax process="@this" rendered=":form:tablaMedicamentos :form:Indicac :form:medic 
+                                            :form:unidadesMedicacion :form:present :form:dosis :form:unidadesDosis1 
+                                            :form:tiempoToma :form:unidadesToma :form:duracionTratamiento :form:unidadesDuracionTratamiento"/> 
+                                </p:commandButton>
+
                             </div>
                         </div>
                     </div>
                 </p:panel>
+
+
+
+
+
+
+
+
+                <p:panelGrid columns="2" >
+                    <p:panel header="Medicaciones" styleClass="span8" style="padding-right: 8px; height: 250px" >
+                        <p:dataTable id="tablaMedicamentos" var="medicamento" value="#{recetaHome.listaMedicamentosReceta}" styleClass="span5" emptyMessage="No hay medicamentos cargados">  
+
+                            <p:column headerText="Nombre Comercial" style="width:6px; font-size:12px">  
+                                <h:outputText value="#{medicamento.nombreComercial}" />  
+                            </p:column>
+
+                            <p:column headerText="Nombre Genérico" style="width:6px; font-size:12px">  
+                                <h:outputText value="#{medicamento.nombreGenerico}" />  
+                            </p:column>
+
+                            <p:column headerText="Cantidad" style="width:6px; font-size:12px">  
+                                <h:outputText value="#{medicamento.unidades}" />  
+                            </p:column>
+
+                            <p:column headerText="Opcion" style="width:5px; font-size:12px">  
+                                <p:commandLink value="Eliminar" update=":form:tablaMedicamentos :form:Indicac" process=":form:medic" action="#{recetaHome.eliminarMedicamentoReceta(medicamento)}">  
+
+                                </p:commandLink> 
+                            </p:column>  
+
+                        </p:dataTable> 
+
+                    </p:panel>
+                    <p:panel header="Indicaciones" id="Indicac" styleClass="span7" style="padding-right: 13px; height: 250px; font-size:12px">
+                        <c:forEach id="Indic" var="indi" items="#{recetaHome.listaIndicaciones}"  >  
+                            <h:outputText value="#{indi}" disabled="true" styleClass="span8" escape="false" />   
+
+
+                        </c:forEach>
+                    </p:panel>
+                </p:panelGrid>
 
 
                 <div class="span17 admin-actions">
