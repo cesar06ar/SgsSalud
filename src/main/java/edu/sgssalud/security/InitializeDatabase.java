@@ -185,7 +185,7 @@ public class InitializeDatabase {
         bussinesEntityType = query.getSingleResult();
         if (session.getPersistenceManager().findUser("admin") == null) {
             User u = session.getPersistenceManager().createUser("admin");
-            session.getAttributesManager().updatePassword(u, "admin");
+            session.getAttributesManager().updatePassword(u, "adminadmin");
             session.getAttributesManager().addAttribute(u, "email", "cesar06ar@hotmail.com");
             members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
@@ -637,7 +637,7 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("fichaGeneralH", "injestaAlcohol", "java.lang.String[]", "Frecuentemente,Esporádicamente,Nunca*", false, "Injesta de Alcohol", "", false, 1L));
+            attributes.add(buildProperty("fichaGeneralH", "ingestaAlcohol", "java.lang.String[]", "Frecuentemente,Esporádicamente,Nunca*", false, "Ingesta de Alcohol", "", false, 1L));
             attributes.add(buildProperty("fichaGeneralH", "Tabaco", "java.lang.String[]", "Frecuentemente,Esporádicamente,Nunca*", false, "Consumo de Tabaco", "", false, 2L));
             attributes.add(buildProperty("fichaGeneralH", "actividadFisica", "java.lang.String[]", "Frecuente,Esporádica*,Nunca", false, "Actividad Física", "", false, 3L));
             attributes.add(buildProperty("fichaGeneralH", "estupefacientes", "java.lang.String[]", "Frecuentemente,Esporádicamente,Nunca*", false, "Consumo de Estupefacientes", "", false, 4L));

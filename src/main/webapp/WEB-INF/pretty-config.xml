@@ -170,6 +170,10 @@
       <pattern value="/odontologia/agendaOdontologica"></pattern>
       <view-id value="/pages/depSalud/odontologia/agenda.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="Odontograma">
+      <pattern value="/odontologia/odontograma"></pattern>
+      <view-id value="/pages/depSalud/odontologia/odont.xhtml"></view-id>       
+   </url-mapping>
   
  <!-- Vistas del Módulo de Lab Clínico-->
    <url-mapping id="pedidosLabClinico">

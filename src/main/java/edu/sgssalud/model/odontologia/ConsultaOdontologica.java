@@ -62,6 +62,7 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private String motivoConsulta;
     private String diagnostico;
     private String diagnosticoRadiografico;
+    private String observacion;
     @ManyToOne
     @JoinColumn(name = "fichaOdontologica_id")
     private FichaOdontologica fichaOdontologica;
@@ -175,6 +176,14 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
         this.tratamientoDientes = tratamientoDientes;
     }
 
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    } 
+        
     public void agregarReceta(Receta r) {
         if (!this.recetas.contains(r)) {
             r.setConsultaOdontologica(this);

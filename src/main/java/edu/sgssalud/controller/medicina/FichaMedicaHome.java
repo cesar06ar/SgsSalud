@@ -202,7 +202,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void setListaConsultasM(List<ConsultaMedica> listaConsultasM) {
         this.listaConsultasM = listaConsultasM;
     }
-
+        
     /*<==....*/
     @TransactionAttribute   //
     public FichaMedica load() {
@@ -364,7 +364,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 if (p != null) {
                     this.setPaciente(p);
                     this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
-                    salida += "&fichaMedicaId=" + getInstance().getId();
+                    salida += "&pacienteId=" + paciente.getId();
                 } else {
                     FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
                     FacesContext.getCurrentInstance().addMessage("", msg);

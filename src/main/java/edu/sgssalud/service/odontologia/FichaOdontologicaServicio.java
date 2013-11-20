@@ -37,7 +37,7 @@ import javax.persistence.criteria.Root;
  * @author cesar
  */
 public class FichaOdontologicaServicio extends PersistenceUtil<FichaOdontologica> implements Serializable{
-     private static final long serialVersionUID = 234L;
+    private static final long serialVersionUID = 234L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(FichaOdontologicaServicio.class);
     @Inject
     private BussinesEntityService bussinesEntityService;

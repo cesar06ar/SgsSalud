@@ -162,6 +162,9 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
             if (getInstance().isPersistent()) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 getInstance().getSignosVitales().setFechaActual(now);
+                /*El codigo hace referencia al estado de la consulta puede ser
+                *PENDIENTE o REALIZADA*/                
+                getInstance().setCode("REALIZADA"); 
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);

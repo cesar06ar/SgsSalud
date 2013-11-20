@@ -22,7 +22,7 @@
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{consultaOdontHome.managed? messages['common.edit'] : messages['common.add']} 
+                        <h2>#{consultaOdontHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaOdontologica.nombre']}
                             #{consultaOdontHome.instance.id}</h2>   
                     </div>
                 </div>
@@ -31,49 +31,41 @@
         <ui:define name="content" class="span20">
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <p:panel id="consultaM" header="Información de Consulta" toggleable="true" styleClass="span18">
-                    <div class="container-fluid">   
-                        <div class="row-fluid">
-                            <div id="left" class="span7">
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
-                                    <div class="input">                                                         
-                                        <p:calendar id="fechaC" value="#{consultaOdontHome.instance.fechaConsulta}"  label="" 
-                                                    disabled="true" pattern="dd-MMM-yyyy">                                            
-                                        </p:calendar>                                                                                                      
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.fechaConsulta != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
-                                    <div class="input">                                                         
-                                        <p:calendar id="horaC" value="#{consultaOdontHome.instance.horaConsulta}"  label="" 
-                                                    disabled="true" pattern="HH:mm">                                            
-                                        </p:calendar>                                                                                                      
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.horaConsulta != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>                              
+                <p:panel id="consultaM" header="#{messages['consultaOdontologica.info']}" toggleable="true" styleClass="span18">
+                    <p:panelGrid columns="3" styleClass="clearfix">
+                        <h:panelGroup layout="block" class="clearfix" >
+                            <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
+                            <div class="input">                                                         
+                                <p:calendar id="fechaC" value="#{consultaOdontHome.instance.fechaConsulta}"  label="" dir="rtl"
+                                            disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es">
+                                </p:calendar>                                                                                                      
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.fechaConsulta != null}"
+                                                styleClass="validation-status" />                                                        
                             </div>
-                            <div id="rigth" class="span7" style="margin-left: 15px; ">
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
-                                    <div class="input">                                                         
-                                        <!--<p:calendar id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}"  label="" 
-                                                    timeOnly="true" pattern="HH:mm" maxMinute="45" minMinute="0" stepMinute="5" maxHour="19" minHour="07">                                            
-                                        </p:calendar>-->
-                                        <pe:timePicker id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}"  maxMinute="45" minMinute="0" stepMinute="5" maxHour="19" minHour="07"/>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.tiempoConsulta != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>
+                        </h:panelGroup>                    
+                        <h:panelGroup layout="block" class="clearfix" >
+                            <label for="horaC" >#{messages['consultaMedica.horaConsulta']}</label>
+                            <div class="input"> 
+                                <pe:timePicker id="horaC" value="#{consultaOdontHome.instance.horaConsulta}"  label="" 
+                                             disabled="true"  style="width: 50px;" mode="popup">                                            
+                                    
+                                </pe:timePicker>                            
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.horaConsulta != null}"
+                                                styleClass="validation-status" />                                                        
                             </div>
-                        </div>
-                    </div>
+                        </h:panelGroup>                            
+                        <h:panelGroup layout="block" class="clearfix" >
+                            <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
+                            <div class="input">                                                                                         
+                                <pe:timePicker id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}" />
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.tiempoConsulta != null}"
+                                                styleClass="validation-status" />                                                        
+                            </div>
+                        </h:panelGroup>
+                    </p:panelGrid>
                 </p:panel>
                 <p:tabView  styleClass="span18">
-                    <p:tab title="SIGNOS VITALES" titletip="#{'SIGNOS VITALES'}" >
+                    <p:tab title="#{messages['signosVitales.Nombre']}" titletip="#{messages['signosVitales.peso']}" >
                         <div class="container-fluid">   
                             <div class="row-fluid">
                                 <div id="left" class="span8" style="margin-left: -10px;">
@@ -173,7 +165,7 @@
                                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                 </pe:inputNumber>  
                                                 <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" title="#{a.property.helpInline}">  
+                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" >  
                                                     <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                     <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                 </p:selectOneMenu>
@@ -192,10 +184,53 @@
                         </p:tab>
                     </c:forEach>
                 </p:tabView>   
+
+                <p:tabView styleClass="span18" style="padding-bottom: 15px;">
+                    <p:tab title="#{messages['consultaMedica.Motivo']}" titletip="#{messages['consultaMedica.Motivo']}" rendered="true" >
+                        <glue:output id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaOdontHome.instance.motivoConsulta}" 
+                                     required="false" execute="@this :form:save" render="motivoC" styleClass="span13"/>                
+
+                    </p:tab>                     
+                    <p:tab title="#{messages['consultaMedica.Diagnostico']}" titletip="#{messages['consultaMedica.Diagnostico']}" closable="false" 
+                           rendered="true">
+                        <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaOdontHome.instance.diagnostico}" 
+                                     required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
+                    </p:tab> 
+                    <p:tab title="#{messages['consultaOdontologica.Diagnostico.radiof']}" titletip="#{messages['consultaOdontologica.Diagnostico.radiof']}" closable="false" 
+                           rendered="true">
+                        <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaOdontologica.diagnostico.radiof']}" value="#{consultaOdontHome.instance.diagnosticoRadiografico}" 
+                                     required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
+                    </p:tab> 
+                    <p:tab title="#{messages['consultaMedica.Observacion']}" titletip="#{messages['consultaMedica.Observacion']}" closable="false" rendered="true">
+                        <glue:output id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaOdontologica.observacionC']}" value="#{consultaOdontHome.instance.observacion}" 
+                                     required="false" execute="@this :form:save" render="observacionC" styleClass="span14"/>
+                    </p:tab>
+                </p:tabView>
+
                 <p:tabView id="tab1" styleClass="span18">
-                    <p:tab title="ODONTOGRAMA" titletip="#{'ODONTOGRAMA EN TRATAMIENTO'}" rendered="true" titleStyle="background-image: '/resources/images/odontograma.png'">                        
-                        <div class="odont" style="margin: 40px 10px;">
-                            <p:panelGrid columns="2" styleClass="odont">                            
+                    <p:tab title="#{messages['Odontograma']} #{messages['Odontograma.Evolutivo']}" rendered="true" >                                               
+                        <div class="admin-actions">
+                            <h:link value="#{messages['common.add']} #{messages['Odontograma.name']} #{messages['Odontograma.name.evolutivo']}" 
+                                    rendered="#{not consultaOdontHome.fichaOdontolog.odontograma.persistent}" 
+                                    outcome="/pages/depSalud/odontologia/odont"  styleClass="link success">
+                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
+                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                                                                               
+                                <f:param name="backView" value="consultaOdontologica"></f:param>
+                                <f:param name="tipo" value="1"></f:param>
+
+                            </h:link>                            
+                            <h:link id="button-edit" value="#{messages['common.edit']} #{messages['Odontograma.name']} #{messages['Odontograma.name.evolutivo']}" 
+                                    rendered="#{consultaOdontHome.fichaOdontolog.odontograma.persistent}" 
+                                    outcome="/pages/depSalud/odontologia/odont" type="link" styleClass="link success" >
+                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaOdontolog.id}"></f:param>
+                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                                                
+                                <f:param name="odontogramaId" value="#{consultaOdontHome.fichaOdontolog.odontograma.id}"></f:param>                                                                
+                                <f:param name="backView" value="consultaOdontologica"></f:param>
+                                <f:param name="tipo" value="1"></f:param>
+                            </h:link>                       
+                        </div> 
+                        <div class="odont" style="margin: 0px 10px;">
+                            <p:panelGrid columns="2" styleClass="odont" rendered="#{consultaOdontHome.fichaOdontolog.odontograma.persistent}">                            
                                 <ui:repeat value="#{consultaOdontHome.listaDientesC1}" var="dc1">                               
                                     <ui:param id="p1" name="pos" value="#{dc1.posicion}"/>
                                     <p:commandLink style="width: 25px; padding-right: 5px;" title="#{dc1.nombre} #{dc1.posicion}" ajax="true"
@@ -237,64 +272,53 @@
                                 </ui:repeat>
                             </p:panelGrid>
                         </div>
-
                         <p:separator id="separador1" style="margin-top: 0px; height:8px; margin-bottom: 0px;" styleClass="clearfix"/>
-                        <br/>                        
-                        <h:graphicImage id="text" value="/resources/odontograma/protesis_fija.png" title="" />
-                        <p:inputText id="t1" value="boton"/>
-                        <p:commandButton id="test" type="button" value="jquery" style="margin-top:10px;" rendered="true" styleClass="btn"
-                                         onclick="cambioImagen('/resources/odontograma/diente.png')" update="text">                                                        
-                        </p:commandButton>  
-                        <script type="text/javascript">
-                            function cambioImagen(ruta){                                          
-                                $(document).ready(function() {
-                                    var nombre = $('#form\\:tab1\\:t1').val();
-                                    /*alert(ruta);  document.getElementById('#form\\:tab1\\:tex1').valueOf(); update="text" rendered="text"*/
-                                    $('#form\\:tab1\\:test').text(nombre);                                                                                                            
-                                    $('#form\\:tab1\\:text').hide();
-                                    $('#form\\:tab1\\:text').attr({                                                                                                                   
-                                       title:'prueba img'
-                                    });   
-                                    $('#form\\:tab1\\:text').val(ruta)
-                                    var n = $('#form\\:tab1\\:text').val();                                  
-                                    $('#form\\:tab1\\:t1').val(n);
-                                    $('#form\\:tab1\\:text').show();
-                                    $("#form\\:tab1\\:test").click(function(){                                        
-                                        
-                                    });                                   
-                                });
-                            }
-                        </script>                        
+
                     </p:tab>     
-                    <p:tab title="ODONTOGRAMA INICIAL " titletip="#{'ODONTOGRAMA INICIAL'}" closable="false" 
+                    <p:tab title="#{messages['Odontograma']} #{messages['Odontograma.Inicial']}" closable="false" 
                            rendered="true">
+                        <div class="admin-actions">                                                  
+                            <h:link value="#{messages['common.add']} #{messages['Odontograma.name']} #{messages['Odontograma.inicial']}" 
+                                    rendered="#{not consultaOdontHome.fichaOdontolog.odontogramaInicial.persistent}" 
+                                    outcome="/pages/depSalud/odontologia/odont"  styleClass="link success">
+                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
+                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                                                                               
+                                <f:param name="backView" value="consultaOdontologica"></f:param>
+                                <f:param name="tipo" value="0"></f:param>
 
+                            </h:link>
+                            #{' '}
+                            <h:link id="button-edit" value="#{messages['common.edit']} #{messages['Odontograma.inicial']}" 
+                                    rendered="#{consultaOdontHome.fichaOdontolog.odontogramaInicial.persistent}" 
+                                    outcome="/pages/depSalud/odontologia/odont" type="link" styleClass="link success">
+                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaOdontolog.id}"></f:param>
+                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                                                
+                                <f:param name="odontogramaId" value="#{consultaOdontHome.fichaOdontolog.odontograma.id}"></f:param>                                                                
+                                <f:param name="backView" value="consultaOdontologica"></f:param>
+                                <f:param name="tipo" value="0"></f:param>
+                            </h:link>
+                        </div>
                     </p:tab>
-                </p:tabView>
-
-                <p:tabView styleClass="span18" style="padding-bottom: 15px;">
-                    <p:tab title="MOTIVO CONSULTA" titletip="#{'MOTIVO CONSULTA'}" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
-                        <glue:output id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
-                                     required="false" execute="@this :form:save" render="motivoC" styleClass="span13"/>                
-
-                    </p:tab> 
-                    <!--
-                    <p:tab title="DIAGNÓSTICO" titletip="#{'DIAGNÓSTICO'}" closable="false" 
-                           rendered="#{!account.tienePermiso('ENFERMEROS')}">
-                        <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
-                                     required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
-                    </p:tab>
-                    <p:tab title="#{'TRATAMIENTO'}" titletip="#{'TRATAMIENTO'}" closable="false" 
-                           rendered="#{!account.tienePermiso('ENFERMEROS')}">
-                        <glue:output id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.Tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
-                                     required="false" execute="@this :form:save" render="tratamiento" styleClass="span14"/>
-                    </p:tab>
-                    <p:tab title="#{'OBSERVACIÓN'}" titletip="#{'OBSERVACIÓN'}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}">
-                        <glue:output id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
-                                     required="false" execute="@this :form:save" render="observacionC" styleClass="span14"/>
-                    </p:tab>-->
-                </p:tabView>
-
+                </p:tabView>               
+                <p:panel id="tratamientosCO" header="#{messages['tratamiento.Label']} DE #{messages['consultaOdontologica.Nombre']}" toggleable="true" styleClass="span18">
+                    <p:dataTable id="tablaTratamientos" value="#{consultaOdontHome.instance.tratamientoDientes}" var="tratam_" 
+                                 paginator="true"
+                                 rows="10" editable="true" selectionMode="single"
+                                 selection="#{consultaOdontHome.tratamiento}"  rowKey="#{tratam_.id}" >                        
+                                          
+                        <p:column headerText="Fecha realizada">
+                            <h:outputText value="#{tratam_.fechaRelizacion}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Procedimiento">
+                            <h:outputText value="#{tratam_.procedimiento}" styleClass="span3"/>
+                        </p:column>                                                
+                        <p:column headerText="Responsable">
+                            <h:outputText value="#{consultaOdontHome.instance.responsable}" styleClass="span3"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
                 <div class="admin-actions span17" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaOdontHome.guardar()}" value="#{messages['common.save']}" 
                                      styleClass="btn success offset4"/>
@@ -308,7 +332,7 @@
                 <div class="offset8" style="float: right">
                     <glue:output id="user" name="responsable" type="text" label="Responsable" value="#{consultaOdontHome.instance.responsable.fullName}" 
                                  required="false" execute="@this" render="user" styleClass="xLarge" disabled="true"/>
-                </div>  
+                </div>
 
             </h:form>
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['trataminento.nombre']} a #{consultaOdontHome.diente.nombre}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
@@ -318,7 +342,7 @@
                         <div class="input">
                             <p:selectOneMenu id="servicM_" value="#{consultaOdontHome.servicio}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="Debe seleccionar un tratamiento"  var="sm"
                                              rendered="true" label="#{messages['Account']}">
-                                <f:selectItem  itemLabel="#{messages['common.choice']}"  ItemValue = ""  />  
+                                <f:selectItem  itemLabel="#{messages['common.choice']}" />  
                                 <f:selectItems value="#{consultaOdontHome.listaServicios}" var="servicioM" itemLabel="#{servicioM.nombre} #{servicioM.descripcion}" itemValue="#{servicioM}"/>                          
                                 <p:column>  
                                     #{sm.nombre}
@@ -333,15 +357,7 @@
                     </h:panelGroup>
                     <h:outputText id="ruta" value="#{sm.rutaImg}"/>
                     <glue:input id="procedimient" name="procedimient" type="text" label="#{messages['tratamiento.procedimiento']}" value="#{consultaOdontHome.tratamiento.procedimiento}" required="false" inlinehelp="" execute="@this save1"/>                                       
-                    <!--<script>
-                        $(document).ready(function(){                           
-                            var value = $("#form-dialog:ruta").value;
-                            /*alert(nombre);*/
-                            $("#form-dialog:servicM_").click(function(){
-                                $("#form:c11").val(value);
-                            });
-                        });
-                    </script>-->
+
 
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.save']}" rendered="true"

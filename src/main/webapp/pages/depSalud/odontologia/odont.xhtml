@@ -14,14 +14,16 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}" />
-            <f:viewParam name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}" />
+            <f:viewParam name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}" />            
+            <f:viewParam name="odontogramaId" value="#{odontogramaHome.odontogramaId}"/>
+            <f:viewParam name="tipo" value="#{odontogramaHome.tipo}"/>            
         </f:metadata>
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{'Odontograma'} 
-                            #{odontogramaHome.instance.id}</h2> 
+                        <h2>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{' Odontograma'} 
+                            #{odontogramaHome.nombreOdont}</h2> 
                     </div>
                 </div>
             </div>
@@ -30,10 +32,10 @@
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="odont" header="Odontograma">
-                    <p:panelGrid columns="2">
+                    <p:panelGrid columns="2" style="margin-left: 40px;">
                         <p:panelGrid columns="8" styleClass="odont-column">
                             <h:panelGroup styleClass="odontPanelG">
-                                <label for="btn18" class="odontLabel">#{odontogramaHome.diente18.posicion}</label>
+                                <label for="btn18" style=" width: 12px; margin: -4px -12px 0px 6px;">#{odontogramaHome.diente18.posicion}</label>
                                 <p:commandLink id="btn18" styleClass="odontLink" title="#{odontogramaHome.diente18.nombre}" ajax="true"
                                                rendered="true" onclick="editDlg.show();" >   
                                     <p:graphicImage value="#{odontogramaHome.diente18.rutaIcon}" />
@@ -104,7 +106,7 @@
                                     <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
                                 </p:commandLink>
                             </h:panelGroup>
-                        </p:panelGrid>
+                        </p:panelGrid>                        
                         <p:panelGrid columns="8" styleClass="odont-column-rigth">
                             <h:panelGroup styleClass="odontPanelG">
                                 <label for="btn21" class="odontLabel">#{odontogramaHome.diente21.posicion}</label>
@@ -285,20 +287,11 @@
                                 <p:commandLink id="btn34" styleClass="odontLink1" title="#{odontogramaHome.diente34.nombre}" ajax="true"
                                                rendered="true" onclick="editDlg.show();" >   
                                     <p:graphicImage value="#{odontogramaHome.diente34.rutaIcon}" />
-                                    <f:setPropertyActionListener value="#{odontogramaHome.diente34}" target="#{odontogramaHome.selectDient}"/>
+                                    <f:setPropertyActionListener value="#{odontogramaHome.diente34}" target="#{odontogramaHome.selectDient}" />
                                     <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
                                 </p:commandLink>
                                 <label for="btn34" class="odontLabel1">#{odontogramaHome.diente34.posicion}</label>
-                            </h:panelGroup> 
-                            <h:panelGroup styleClass="odontPanelG1">                             
-                                <p:commandLink id="btn35" styleClass="odontLink1" title="#{odontogramaHome.diente35.nombre}" ajax="true"
-                                               rendered="true" onclick="editDlg.show();" >   
-                                    <p:graphicImage value="#{odontogramaHome.diente35.rutaIcon}" />
-                                    <f:setPropertyActionListener value="#{odontogramaHome.diente35}" target="#{odontogramaHome.selectDient}"/>
-                                    <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
-                                </p:commandLink>
-                                <label for="btn35" class="odontLabel1">#{odontogramaHome.diente35.posicion}</label>
-                            </h:panelGroup> 
+                            </h:panelGroup>                             
                             <h:panelGroup styleClass="odontPanelG1">                             
                                 <p:commandLink id="btn35" styleClass="odontLink1" title="#{odontogramaHome.diente35.nombre}" ajax="true"
                                                rendered="true" onclick="editDlg.show();" >   
@@ -327,8 +320,8 @@
                                 <label for="btn37" class="odontLabel1">#{odontogramaHome.diente37.posicion}</label>
                             </h:panelGroup>
                             <h:panelGroup styleClass="odontPanelG1">                             
-                                <p:commandLink id="btn38" styleClass="odontLink1" title="#{odontogramaHome.diente38.nombre}" ajax="true"
-                                               rendered="true" onclick="editDlg.show();" >   
+                                <p:commandLink  id="btn38" styleClass="odontLink1" title="#{odontogramaHome.diente38.nombre}" ajax="true"
+                                                rendered="true" onclick="editDlg.show();" >   
                                     <p:graphicImage value="#{odontogramaHome.diente38.rutaIcon}" />
                                     <f:setPropertyActionListener value="#{odontogramaHome.diente38}" target="#{odontogramaHome.selectDient}"/>
                                     <p:ajax rendered=":edit-dialog" process="@this :edit-dialog" update=":edit-dialog" />
@@ -337,20 +330,16 @@
                             </h:panelGroup>
                         </p:panelGrid>
                     </p:panelGrid>
-                </p:panel> 
+                </p:panel>         
+
                 <p:panel id="tratam" header="Tratamientos">
-                    <p:dataTable id="tratamientosT" value="#{odontogramaHome.listaTratamient}" var="tratam_" 
+                    <p:dataTable id="tablaTratamientos" value="#{odontogramaHome.listaTratamient}" var="tratam_" 
                                  paginator="true"
                                  rows="10" editable="true" selectionMode="single"
-                                 selection="#{odontogramaHome.tratamiento}"  rowKey="#{tratam_.id}" >
-                        
-                        <p:ajax event="rowSelect" listener="#{odontogramaHome.onRowSelect}"   
-                                update=":form:button-edit :form:button-delete "/>  
-                        <p:ajax event="rowUnselect" listener="#{odontogramaHome.onRowUnselect}" 
-                                update=":form:button-edit :form:button-delete " />
-                        
+                                 selection="#{odontogramaHome.tratamiento}"  rowKey="#{tratam_.id}" >                        
+
                         <p:column headerText="Diente">
-                            <h:outputText value="#{tratam_.diente.nombre}"/>&nbsp;&nbsp;
+                            <h:outputText value="#{tratam_.diente.nombre}"/>&nbsp;&nbsp; 
                             <h:outputText value="#{tratam_.diente.posicion}"/>
                         </p:column>
                         <p:column headerText="Servicio Dental">
@@ -363,18 +352,30 @@
                         </p:column>
                         <p:column headerText="Procedimiento">
                             <h:outputText value="#{tratam_.procedimiento}" styleClass="span3"/>
-                        </p:column> 
+                        </p:column>                         
                     </p:dataTable>                
-                </p:panel>               
-
+                </p:panel> 
+                <div class="admin-actions" style="padding-right: 50px;">
+                    <p:commandButton id="save" action="#{odontogramaHome.guardar()}" value="#{messages['common.save']}" 
+                                     styleClass="btn success offset4"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
+                            value="#{messages['common.cancel']}" styleClass="btn success" >
+                        <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
+                        <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
+                    </h:link>
+                </div>
             </h:form>
-            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['trataminento.nombre']} a #{consultaOdontHome.diente.nombre}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="600">
-                <h:form id="form-dialog">                   
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['tratamiento.nombre']} " 
+                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="600">
+                <h:form id="form-dialog">
+                    <!--<h3> #{messages['common.for']} </h3>-->
+                    <h:outputText value="#{messages['common.new']} #{messages['tratamiento.nombre']} a diente seleccionado"/>
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <label for="servicM_" class="control-label">#{messages['servicioMedico.nombre.odont']}</label>
                         <div class="input">
-                            <p:selectOneMenu id="servicM_" value="#{odontogramaHome.servicio}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="Debe seleccionar un tratamiento"  var="sm"
-                                             rendered="true" label="#{messages['Account']}">
+                            <p:selectOneMenu id="servicM_" value="#{odontogramaHome.servicio}" effect="fade"  converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="Debe seleccionar un tratamiento"  var="sm"
+                                             rendered="true" label="#{messages['servicioMedico.nombre.odont']}">
                                 <f:selectItem  itemLabel="#{messages['common.choice']}"  />  
                                 <f:selectItems value="#{odontogramaHome.listaServicios}" var="servicioM" itemLabel="#{servicioM.nombre} #{servicioM.descripcion}" itemValue="#{servicioM}"/>                          
                                 <p:column>  
@@ -391,10 +392,11 @@
                     <glue:input id="procedimient" name="procedimient" type="textarea" label="#{messages['tratamiento.procedimiento']}" value="#{odontogramaHome.tratamiento.procedimiento}" inlinehelp="" required="true" execute="@this save1" style="width: -100px; height: -20px;"/>   
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.save']}" rendered="true"
-                                         action="#{odontogramaHome.guardarTratamiento()}" 
-                                         update=":edit-dialog :form:odont :form:tratam" immediate="true"
-                                         ajax="true" process="@this" styleClass="btn primary"
-                                         style="margin-top:10px;" icon="ui-icon-disk">  
+                                         actionListener="#{odontogramaHome.guardarTratamiento()}" 
+                                         ajax="true" update="@parent :edit-dialog :form:odont :form:tablaTratamientos" process="@this"
+                                         styleClass="btn primary" 
+                                         style="margin-top:10px;" icon="ui-icon-disk">
+                            <p:ajax rendered=":form:tablaTratamientos"/>
                         </p:commandButton>
                         #{' '}                     
                         <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 

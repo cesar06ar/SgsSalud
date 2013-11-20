@@ -324,6 +324,14 @@ public class Paciente extends BussinesEntity implements Serializable {
         this.showBootcamp = showBootcamp;
     }
        
+    public String cargarFoto(){
+        if(getFoto() != null){
+            return getFoto().toString();
+        }else{
+            return "/resources/images/paciente.png";
+        }
+    }
+    
         
     @Override
     public String toString() {

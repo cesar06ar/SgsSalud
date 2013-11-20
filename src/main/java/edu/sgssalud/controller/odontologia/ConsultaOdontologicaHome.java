@@ -162,7 +162,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     }
 
     public List<Diente> getListaDientes() {
-        this.IniciarDientes();
+        //this.IniciarDientes();
         return listaDientes;
     }
 
@@ -171,7 +171,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     }
 
     public List<Diente> getListaDientesC1() {
-        this.IniciarDientes();
+        //this.IniciarDientes();
         Collections.sort(listaDientesC1);
         return listaDientesC1;
     }
@@ -241,16 +241,14 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         fichaOdontServicio.setEntityManager(em);
         profileS.setEntityManager(em);
         serviciosMedicosS.setEntityManager(em);
+        
         if (getInstance().isPersistent()) {
             this.IniciarDientes();
             Odontograma o = new Odontograma();
             o.setDientes(listaDientes);
             log.info("Init Dientes  " + fichaOdontolog.toString());
-            fichaOdontolog.setOdontograma(o);
-            fichaOdontolog.setOdontogramaInicial(o);
-            if (!tratamiento.isPersistent()) {
-                this.setTratamiento(new Tratamiento());
-            }
+            //fichaOdontolog.setOdontograma(o);
+            //fichaOdontolog.setOdontogramaInicial(o);            
         }
         //log.info("Odont Inicial " + fichaOdontolog.getOdontogramaInicial());
         //log.info("Odont  " + fichaOdontolog.getOdontograma());
@@ -289,11 +287,14 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
     @TransactionAttribute
     public String guardar() {
-        String salida = null;
+        String salida = "";
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         try {
             if (getInstance().isPersistent()) {
+                getInstance().setCode("REALIZADA"); 
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                getInstance().getSignosVitales().setFechaActual(now);
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);

@@ -23,7 +23,8 @@
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{consultaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{consultaMedicaHome.instance.id}</h2>   
+                        <h2>#{consultaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaMedica.nombre']} 
+                            #{consultaMedicaHome.instance.id}</h2>   
                     </div>
                 </div>
             </div>
@@ -32,47 +33,40 @@
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="consultaM" header="Información de Consulta" toggleable="true" styleClass="span16">
-                    <div class="container-fluid">   
-                        <div class="row-fluid">
-                            <div id="left" class="span7">
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
-                                    <div class="input">                                                         
-                                        <p:calendar id="fechaC" value="#{consultaMedicaHome.instance.fechaConsulta}"  label="" 
-                                                    disabled="true" pattern="dd-MMM-yyyy">                                            
-                                        </p:calendar>                                                                                                      
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.fechaConsulta != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
-                                    <div class="input">                                                         
-                                        <p:calendar id="horaC" value="#{consultaMedicaHome.instance.horaConsulta}"  label="" 
-                                                    disabled="true" pattern="HH:mm">                                            
-                                        </p:calendar>                                                                                                      
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.horaConsulta != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>                              
+                    <p:panelGrid columns="3">
+                        <h:panelGroup layout="block" class="clearfix" >
+                            <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
+                            <div class="input">                                                         
+                                <p:calendar id="fechaC" value="#{consultaMedicaHome.instance.fechaConsulta}"  label="" dir="rtl"
+                                            disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es">
+                                </p:calendar>                                                                                                      
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.fechaConsulta != null}"
+                                                styleClass="validation-status" />                                                        
                             </div>
-                            <div id="rigth" class="span7" style="margin-left: 15px; ">
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
-                                    <div class="input">                                                         
-                                        <p:calendar id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}"  label="" 
-                                                    timeOnly="true" pattern="HH:mm" maxMinute="45" minMinute="0" stepMinute="5" maxHour="19" minHour="07">                                            
-                                        </p:calendar>                                                                                                      
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.tiempoConsulta != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>
+                        </h:panelGroup>
+                        <h:panelGroup layout="block" class="clearfix" >
+                            <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
+                            <div class="input">                                                                                                                                                                                          
+                                <pe:timePicker id="horaC" value="#{consultaMedicaHome.instance.horaConsulta}"  label="" 
+                                             disabled="true"  style="width: 50px;" mode="popup">                                            
+                                    
+                                </pe:timePicker>  
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.horaConsulta != null}"
+                                                styleClass="validation-status" />                                                        
                             </div>
-                        </div>
-                    </div>
+                        </h:panelGroup> 
+                        <h:panelGroup layout="block" class="clearfix" >
+                            <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
+                            <div class="input">                                                                                         
+                                <pe:timePicker id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}" />
+                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.tiempoConsulta != null}"
+                                                styleClass="validation-status" />                                                        
+                            </div>
+                        </h:panelGroup>
+                    </p:panelGrid>
                 </p:panel>
                 <p:tabView styleClass="span16">
-                    <p:tab title="SIGNOS VITALES" titletip="#{'SIGNOS VITALES'}" >
+                    <p:tab title="#{messages['signosVitales.Nombre']}" titletip="#{messages['signosVitales.Nombre']}" >
                         <div class="container-fluid">   
                             <div class="row-fluid">
                                 <div id="left" class="span8" style="margin-left: -10px;">
@@ -177,7 +171,7 @@
                                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                 </pe:inputNumber>  
                                                 <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
-                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" title="#{a.property.helpInline}">  
+                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" >
                                                     <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                     <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                 </p:selectOneMenu>
@@ -188,7 +182,7 @@
                                                 <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
                                                     <h:outputText escape="false" value="#{a.property.helpInline}"/>
                                                 </p:tooltip>
-                                                    
+
                                             </div>
                                         </h:panelGroup> 
                                     </ui:repeat>
@@ -225,25 +219,24 @@
                     </c:forEach>
                 </p:tabView>             
                 <p:tabView styleClass="span16">
-                    <p:tab title="MOTIVO CONSULTA" titletip="#{'MOTIVO CONSULTA'}" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
+                    <p:tab title="#{messages['consultaMedica.Motivo']}" titletip="#{messages['consultaMedica.Motivo']}" rendered="true" >
                         <glue:output id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
                                      required="false" execute="@this :form:save" render="motivoC" styleClass="span13"/>                
                     </p:tab>                    
-                    <p:tab title="ENFERMEDAD" titletip="#{'ENFERMEDAD O PROBLEMA ACTUAL'}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}">
+                    <p:tab title="#{messages['consultaMedica.Enfermedad']}" titletip="#{messages['consultaMedica.Enfermedad.tip']}" closable="false" rendered="true">
                         <glue:output id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadActual']}" value="#{consultaMedicaHome.instance.enfermedadActual}" 
                                      required="false" execute="@this :form:save" render="enfermedadAct" styleClass="span13"/>
                     </p:tab>
-                    <p:tab title="DIAGNÓSTICO" titletip="#{'DIAGNÓSTICO'}" closable="false" 
-                           rendered="#{!account.tienePermiso('ENFERMEROS')}">
+                    <p:tab title="#{messages['consultaMedica.Diagnostico']}" titletip="#{messages['consultaMedica.Diagnostico']}" closable="false" 
+                           rendered="true">
                         <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
                                      required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
                     </p:tab>
-                    <p:tab title="#{'TRATAMIENTO'}" titletip="#{'TRATAMIENTO'}" closable="false" 
-                           rendered="#{!account.tienePermiso('ENFERMEROS')}">
+                    <p:tab title="#{messages['tratamiento.Nombre']}" titletip="#{messages['tratamiento.Nombre']}" closable="false" rendered="true">                           
                         <glue:output id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.Tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
                                      required="false" execute="@this :form:save" render="tratamiento" styleClass="span14"/>
                     </p:tab>
-                    <p:tab title="#{'OBSERVACIÓN'}" titletip="#{'OBSERVACIÓN'}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}">
+                    <p:tab title="#{messages['consultaMedica.Observacion']}" titletip="#{messages['consultaMedica.Observacion']}" closable="false" rendered="true">
                         <glue:output id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
                                      required="false" execute="@this :form:save" render="observacionC" styleClass="span14"/>
                     </p:tab>

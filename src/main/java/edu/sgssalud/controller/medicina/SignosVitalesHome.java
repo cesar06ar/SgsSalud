@@ -208,16 +208,18 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
                     FacesContext.getCurrentInstance().addMessage("", msg);
                 } else {
                     create(getInstance());
-                    log.info("crear ");
+                    //log.info("crear ");
                     if (servicioMedico) {
                         consultaMed.setHistoriaClinica(historiaClinica);
                         consultaMed.setSignosVitales(getInstance());
+                        consultaMed.setCode("PENDIENTE");
                         save(consultaMed);
                         salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
                     }
                     if (servicioDental) {
                         consultaOdont.setFichaOdontologica(fichaOdontologica);
                         consultaOdont.setSignosVitales(getInstance());
+                        consultaOdont.setCode("PENDIENTE");
                         save(consultaOdont);
                         salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
                     } 

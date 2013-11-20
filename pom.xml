@@ -41,6 +41,7 @@
         <seam.mail.version>3.1.1.Final</seam.mail.version>
         <seam-reports-version>3.1.0.Final</seam-reports-version>  
         <primefaces.theme.version>1.0.10</primefaces.theme.version>
+        
     </properties>
 
 

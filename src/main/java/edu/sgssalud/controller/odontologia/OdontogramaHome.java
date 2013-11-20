@@ -17,6 +17,7 @@ package edu.sgssalud.controller.odontologia;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
+import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.Diente;
@@ -28,6 +29,7 @@ import edu.sgssalud.service.ServiciosMedicosService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.consultaOdontologicaServicio;
+import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +44,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.transaction.Transactional;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -66,6 +70,8 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     private Long fichaMedicaId;
     private Long consultaOdontId;
     private int tipo;  //se refiere al otontograma 0 es el inicial 1 es el evolutivo
+    private String nombreOdont;
+    private String nombreDiente;
     private static String ruta = "/resources/odontograma/diente.png";
     private Diente diente11 = new Diente("Incisivo", 11, 1, ruta);
     private Diente diente12 = new Diente("Incisivo", 12, 1, ruta);
@@ -99,13 +105,13 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     private Diente diente46 = new Diente("Molar", 46, 4, ruta);
     private Diente diente47 = new Diente("Molar", 47, 4, ruta);
     private Diente diente48 = new Diente("Molar", 48, 4, ruta);
-    private Diente SelectDient;
+    private Diente selectDient;
     private FichaOdontologica fichaOdont;
     private ConsultaOdontologica consultaOdont;
     private Servicio servicio;
     private Tratamiento tratamiento;
     private List<Servicio> listaServicios = new ArrayList<Servicio>();
-    private List<Tratamiento> ListaTratamient = new ArrayList<Tratamiento>();
+    private List<Tratamiento> listaTratamient = new ArrayList<Tratamiento>();
 
     public Long getOdontogramaId() {
         return (Long) getId();
@@ -137,7 +143,10 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         consultaOdontServ.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         serviciosMedicosS.setEntityManager(em);
-        SelectDient = new Diente();
+        selectDient = new Diente();
+        tratamiento = new Tratamiento();
+        
+
     }
 
     @Override
@@ -185,16 +194,29 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     @TransactionAttribute
     public void guardarTratamiento() {
-        log.info("valor diente: " + SelectDient);
+        log.info("valor diente: " + selectDient);
         Date now = Calendar.getInstance().getTime();
-        //this.SelectDient.setRutaIcon(servicio.getRutaImg());
-        this.actualizarDiente(SelectDient);
-        tratamiento.setServicioDisponible(servicio);
-        tratamiento.setFechaRelizacion(now);
-        tratamiento.setDiente(SelectDient);        
-        ListaTratamient.add(tratamiento);        
-        servicio = new Servicio();        
+        if (servicio.isTodasZonas()) {
+            //cambiar imagen del diente... 
+        }
+        selectDient.setRutaIcon(servicio.getRutaImg());
+        try {
+//            save(selectDient);            
+            tratamiento.setNombre(servicio.getNombre());            
+            tratamiento.setServicioDisponible(servicio);
+            tratamiento.setFechaRelizacion(now);
+            tratamiento.setDiente(selectDient);
+            tratamiento.setConsultaOdontologica(consultaOdont);
+            save(tratamiento);
+            getListaTratamient().add(tratamiento);
+            this.actualizarDiente(selectDient);
+            log.info("guardo con exito ");
+        } catch (Exception e) {
+            log.info("Error guardar");
+        }
+        servicio = new Servicio();
         tratamiento = new Tratamiento();
+
     }
 
     public Long getFichaMedicaId() {
@@ -242,14 +264,21 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
+        if(tipo == 0){
+            this.setNombreOdont("Inicial");
+        }else{
+            this.setNombreOdont("Evolutivo");            
+        }
     }
 
     public Diente getSelectDient() {
-        return SelectDient;
+        return selectDient;
     }
 
-    public void setSelectDient(Diente SelectDient) {
-        this.SelectDient = SelectDient;
+    public void setSelectDient(Diente selectDient) {
+        //log.info("setSelecDiente");
+        this.selectDient = selectDient;
+        this.setNombreDiente(this.selectDient.getNombre()+ this.selectDient.getPosicion());
     }
 
     public Diente getDiente11() {
@@ -509,12 +538,12 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     }
 
     public Servicio getServicio() {
-        return servicio;        
+        return servicio;
     }
 
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
-        this.SelectDient.setRutaIcon(servicio.getRutaImg());
+        //this.SelectDient.setRutaIcon(servicio.getRutaImg());
     }
 
     public Tratamiento getTratamiento() {
@@ -534,15 +563,32 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     }
 
     public List<Tratamiento> getListaTratamient() {
-        return ListaTratamient;
+        return listaTratamient;
     }
 
-    public void setListaTratamient(List<Tratamiento> ListaTratamient) {
-        this.ListaTratamient = ListaTratamient;
+    public void setListaTratamient(List<Tratamiento> listaTratamient) {
+        this.listaTratamient = listaTratamient;
+    }      
+
+    public String getNombreOdont() {
+        //return (selectDient.getNombre() + " " + selectDient.getPosicion());
+        return nombreOdont;
     }
 
+    public void setNombreOdont(String nombreOdont) {
+        this.nombreOdont = nombreOdont;
+    }
+
+    public String getNombreDiente() {
+        return nombreDiente;
+    }
+
+    public void setNombreDiente(String nombreDiente) {
+        this.nombreDiente = nombreDiente;
+    }
+    
     public void actualizarDiente(Diente d) {
-        //String nombre = "diente"+d.getPosicion();
+        //log.info("actualizar diente: ");
         if (d.getPosicion() == 11) {
             setDiente11(d);
         } else if (d.getPosicion() == 12) {
@@ -609,4 +655,17 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
             setDiente48(d);
         }
     }
+
+    //metodos de seleccion de primefaces     
+//    public void onRowSelect(SelectEvent event) {
+//        FacesMessage msg = new FacesMessage(UI.getMessages("Tratamiento") + " " + UI.getMessages("common.selected"), ((Tratamiento) event.getObject()).getNombre());
+//        FacesContext.getCurrentInstance().addMessage("", msg);
+//    }
+//
+//    public void onRowUnselect(UnselectEvent event) {
+//        FacesMessage msg = new FacesMessage(UI.getMessages("Tratamiento") + " " + UI.getMessages("common.unselected"), ((Tratamiento) event.getObject()).getNombre());
+//        FacesContext.getCurrentInstance().addMessage("", msg);
+//        this.setTratamiento(null);
+//    }
+
 }

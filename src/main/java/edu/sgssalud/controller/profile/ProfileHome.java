@@ -135,9 +135,9 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             wire();
         } else if (this.instance == null) {
 
-            if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "ADMIN".contains(SecurityRules.getUsername(identity)))) {
+            if (identity.isLoggedIn() && !(identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {
                 setInstance(ps.getProfileByUsername(identity.getUser().getKey()));
-            } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "ADMIN".contains(SecurityRules.getUsername(identity)))) {
+            } else if (identity.isLoggedIn() && (identity.inGroup(SecurityRules.ADMIN, "GROUP") || "admin".contains(SecurityRules.getUsername(identity)))) {
                 setInstance(createInstance());
             }
         }
