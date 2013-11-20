@@ -338,9 +338,34 @@
                         </p:panelGrid>
                     </p:panelGrid>
                 </p:panel> 
-                <p:panel header="tratamientos">
-
-                </p:panel>                
+                <p:panel id="tratam" header="Tratamientos">
+                    <p:dataTable id="tratamientosT" value="#{odontogramaHome.listaTratamient}" var="tratam_" 
+                                 paginator="true"
+                                 rows="10" editable="true" selectionMode="single"
+                                 selection="#{odontogramaHome.tratamiento}"  rowKey="#{tratam_.id}" >
+                        
+                        <p:ajax event="rowSelect" listener="#{odontogramaHome.onRowSelect}"   
+                                update=":form:button-edit :form:button-delete "/>  
+                        <p:ajax event="rowUnselect" listener="#{odontogramaHome.onRowUnselect}" 
+                                update=":form:button-edit :form:button-delete " />
+                        
+                        <p:column headerText="Diente">
+                            <h:outputText value="#{tratam_.diente.nombre}"/>&nbsp;&nbsp;
+                            <h:outputText value="#{tratam_.diente.posicion}"/>
+                        </p:column>
+                        <p:column headerText="Servicio Dental">
+                            <h:outputText value="#{tratam_.servicioDisponible.nombre}" styleClass="span2"/>
+                        </p:column>                        
+                        <p:column headerText="Fecha realizada">
+                            <h:outputText value="#{tratam_.fechaRelizacion}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Procedimiento">
+                            <h:outputText value="#{tratam_.procedimiento}" styleClass="span3"/>
+                        </p:column> 
+                    </p:dataTable>                
+                </p:panel>               
 
             </h:form>
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['trataminento.nombre']} a #{consultaOdontHome.diente.nombre}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="600">
@@ -367,7 +392,7 @@
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.save']}" rendered="true"
                                          action="#{odontogramaHome.guardarTratamiento()}" 
-                                         update=":edit-dialog :form:odont" immediate="true"
+                                         update=":edit-dialog :form:odont :form:tratam" immediate="true"
                                          ajax="true" process="@this" styleClass="btn primary"
                                          style="margin-top:10px;" icon="ui-icon-disk">  
                         </p:commandButton>
