@@ -38,12 +38,16 @@ import org.ocpsoft.rewrite.config.Configuration;
 import org.ocpsoft.rewrite.config.ConfigurationBuilder;
 import org.ocpsoft.rewrite.config.Direction;
 import org.ocpsoft.rewrite.config.Invoke;
+import org.ocpsoft.rewrite.context.EvaluationContext;
 import org.ocpsoft.rewrite.el.El;
+import org.ocpsoft.rewrite.faces.config.PhaseBinding;
 import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
+import org.ocpsoft.rewrite.servlet.config.HttpOperation;
 import org.ocpsoft.rewrite.servlet.config.Path;
 import org.ocpsoft.rewrite.servlet.config.Redirect;
 import org.ocpsoft.rewrite.servlet.config.Response;
 import org.ocpsoft.rewrite.servlet.config.rule.Join;
+import org.ocpsoft.rewrite.servlet.http.event.HttpServletRewrite;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
@@ -53,8 +57,8 @@ public class AccessRewriteConfiguration extends HttpConfigurationProvider implem
 
     @Override
     public Configuration getConfiguration(final ServletContext context) {
-        return ConfigurationBuilder.begin()                
-                .addRule(Join.path("/").to("/pages/home.xhtml"))                
+        return ConfigurationBuilder.begin()
+                .addRule(Join.path("/").to("/pages/home.xhtml"))
                 .addRule(Join.path("/paciente").to("/pages/homePaciente.xhtml"))
                 .addRule(Join.path("/signup").to("/pages/signup.xhtml"))
                 .addRule(Join.path("/login").to("/pages/login.xhtml"))
@@ -67,20 +71,31 @@ public class AccessRewriteConfiguration extends HttpConfigurationProvider implem
                 //               .perform(Invoke.binding(El.retrievalMethod("authentication.logout"))
                 //                        .and(Redirect.temporary(context.getContextPath() + "/")))
 
-                //                 Authentication
-                .defineRule()
-//                .when(Direction.isInbound().and(Path.matches("/logout")))
-//                .perform(Invoke.binding(PhaseBinding.to(El.property("#{authentication.logout}")).after(PhaseId.RESTORE_VIEW))
-//                .and(Redirect.temporary(context.getContextPath() + "/")))
+                //                 Authentication               
+
+                //                                .when(Direction.isInbound().and(Path.matches("/logout")))
+                //                                .perform(Invoke.binding(PhaseBinding.to(El.property("#{authentication.logout}")).after(PhaseId.RESTORE_VIEW))
+                //                                        .and(Redirect.temporary(context.getContextPath() + "/")));
+
                 //                 Create a dynamic logout URL via EL
                 .defineRule()
                 .when(Direction.isInbound().and(Path.matches("/logout")))
-                .perform(Invoke.binding(El.retrievalMethod("#{authentication.logout}"))
-                .and(Redirect.temporary(context.getContextPath() + "/")));
+//                .perform(Invoke.binding(El.retrievalMethod("#{authentication.logout}"))
+//                        .and(Redirect.temporary(context.getContextPath() + "/")));
+                .perform(new HttpOperation() {
+
+                    @Override
+                    public void performHttp(HttpServletRewrite event, EvaluationContext context) {
+                        event.getRequest().getSession().invalidate();
+                    }
+
+                }.and(Redirect.temporary(context.getContextPath() + "/")));
+
     }
 
     @Override
     public int priority() {
         return 10;
+        //return Integer.MIN_VALUE;
     }
 }

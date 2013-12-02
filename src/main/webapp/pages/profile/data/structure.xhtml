@@ -145,7 +145,7 @@
                     <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
                     <h:link outcome="/pages/profile/view.xhtml?faces-redirect=true"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">
+                            value="#{messages['common.cancel']}" styleClass="btn">
                         <f:param name="profileId" value="#{profileHome.profileId}"></f:param>
                     </h:link>
                 </div>

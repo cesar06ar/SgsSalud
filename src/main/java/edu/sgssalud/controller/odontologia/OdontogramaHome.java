@@ -28,7 +28,7 @@ import edu.sgssalud.model.servicios.Servicio;
 import edu.sgssalud.service.ServiciosMedicosService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
-import edu.sgssalud.service.odontologia.consultaOdontologicaServicio;
+import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     @Inject
     private FichaOdontologicaServicio fichaOdontServ;
     @Inject
-    private consultaOdontologicaServicio consultaOdontServ;
+    private ConsultaOdontologicaServicio consultaOdontServ;
     @Inject
     private ServiciosMedicosService serviciosMedicosS;
     private Long fichaMedicaId;

@@ -244,7 +244,7 @@ public class InitializeDatabase {
         validarExamenFisicoConsultaOdont();
         validarExamenDentarioConsultaOdont();
         validarEvaluacionPeriodontalConsultaOdont();
-
+        validarDatosEnfermedadesCIE10();
     }
 
     private void validarEstructuraParaPerfilDeUsuario() {
@@ -311,7 +311,6 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-
 
             attributes.add(buildProperty("Personal", "maritalstatus", "java.lang.String[]", "Casado*,Soltero,Divorciado,Unión libre", false, "Estado civil", "Indique su estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", false, 2L));
@@ -486,9 +485,14 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
-            attributes.add(buildProperty("academicoColegio", "especialidad", String.class.getName(), "", false, "Especialidad", "Indique que especialidad sigue", false, 1L));
+            attributes.add(buildProperty("academicoColegio", "nivelEducativo", "java.lang.String[]", "Bachillerato*, E.G.B (Basica Superior)", false, "Nivel Educativo",
+                    "Indique el Nivel Educativo "
+                    + "<br/>Educacion General Basica (E.G.B) "
+                    + "<br/>E.G.B - Basica Superior: corresponde a 8º., 9º. y 10º. para estudiantes de 12 a 14 años de edad"
+                    + "<br/>Bachillerato", false, 1L));
+            attributes.add(buildProperty("academicoColegio", "especialidad", String.class.getName(), "", false, "Especialidad", "Indique que especialidad sigue, si es estudiante de bachillerato", false, 1L));
             attributes.add(buildProperty("academicoColiegio", "curso", String.class.getName(), "", false, "Curso", "Indique el nombre en que está", false, 3L));
-            attributes.add(buildProperty("academicoColegio", "paralelo", java.lang.Long.class.getName(), "", false, "Paralelo", "Indique en que paralelo está", false, 3L));
+            attributes.add(buildProperty("academicoColegio", "paralelo", String.class.getName(), "", false, "Paralelo", "Indique en que paralelo está", false, 3L));
             //Agregar atributos
             structure.setProperties(attributes);
 
@@ -525,6 +529,12 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
 
+            attributes.add(buildProperty("academicoColegio", "nivelEducativo", "java.lang.String[]", "E.G.B (Preparatoria), E.G.B (Basica Elemental), E.G.B (Basica Media)*", false, "Nivel Educativo",
+                    "Indique el Nivel Educativo "
+                    + "<br/>Educacion General Basica (E.G.B) "
+                    + "<br/>E.G.B - Preparatoria: corresponde a 1er grado, para estudiantes de 5 años de edad."
+                    + "<br/>E.G.B - Basica Elemental: corresponde a 2º., 3º. grados, y 4º. para estudiantes de 6 a 8 años de edad"
+                    + "<br/>E.G.B - Basica Media: corresponde a 5º., 6º. y 7º. grado, para estudiantes de 9 a 11 años de edad", false, 1L));
             attributes.add(buildProperty("academicoEscuela", "anioBasica", String.class.getName(), "", false, "Año de Básica", "Indique en que año de básica está", false, 1L));
             attributes.add(buildProperty("academicoEscuela", "paralelo", String.class.getName(), "", false, "Paralelo", "Indique en que paralelo está", false, 2L));
 
@@ -711,7 +721,7 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
 
             //Lista de atributos de entidad de negocios
-            List<Property> attributes = new ArrayList<Property>();            
+            List<Property> attributes = new ArrayList<Property>();
             attributes.add(buildProperty("fichaGeneralAF", "diabetes", Boolean.class.getName(), "", false, "2. Diabetes", "", false, 1L));
             attributes.add(buildProperty("fichaGeneralAF", "hemorragais", Boolean.class.getName(), "", false, "3. Hemorragias", "", false, 2L));
             attributes.add(buildProperty("fichaGeneralAF", "hipertension", Boolean.class.getName(), "", false, "4. Hipertensión", "", false, 3L));
@@ -787,7 +797,6 @@ public class InitializeDatabase {
             structure.setLastUpdate(now);
 
             //Lista de atributos de Tipos de entidades de negocio           
-
             bussinesEntityType.addStructure(structure);
 
             entityManager.persist(bussinesEntityType);
@@ -831,7 +840,7 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    
+
     public void validarRevisionOrganosYSistemasConsultaMedica() {
         BussinesEntityType bussinesEntityType = null;
         String name = "revisionOrganosYSistemasCM";
@@ -865,7 +874,7 @@ public class InitializeDatabase {
             attributes.add(buildProperty("consultaMedicaROS", "musculoEsq", Boolean.class.getName(), "", false, "7. Mús. Esquelético", "Músculo Esquelético <br/> (Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 7L));
             attributes.add(buildProperty("consultaMedicaROS", "endocrino", Boolean.class.getName(), "", false, "8. Endocrino", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 8L));
             attributes.add(buildProperty("consultaMedicaROS", "hemoLinfatico", Boolean.class.getName(), "", false, "9. Hemo Linfático", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 9L));
-            attributes.add(buildProperty("consultaMedicaROS", "nervioso", Boolean.class.getName(), "", false, "10. Nervioso", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 10L));            
+            attributes.add(buildProperty("consultaMedicaROS", "nervioso", Boolean.class.getName(), "", false, "10. Nervioso", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 10L));
             //Agregar atributos
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
@@ -873,8 +882,8 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    
-     public void validarExamenFisicoConsultaMedica() {
+
+    public void validarExamenFisicoConsultaMedica() {
         BussinesEntityType bussinesEntityType = null;
         String name = "examenFisicoCM";
         try {
@@ -903,16 +912,16 @@ public class InitializeDatabase {
             attributes.add(buildProperty("consultaMedicaEF", "torax", Boolean.class.getName(), "", false, "3. Torax", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 3L));
             attributes.add(buildProperty("consultaMedicaEF", "abdomen", Boolean.class.getName(), "", false, "4. Abdomen", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 4L));
             attributes.add(buildProperty("consultaMedicaEF", "pelvis", Boolean.class.getName(), "", false, "5. Pelvis", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 5L));
-            attributes.add(buildProperty("consultaMedicaEF", "extremidades", Boolean.class.getName(), "", false, "6. Extremidades", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 6L));            
-            
+            attributes.add(buildProperty("consultaMedicaEF", "extremidades", Boolean.class.getName(), "", false, "6. Extremidades", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 6L));
+
             //Agregar atributos
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-    }  
-         
+    }
+
     public void validarEstructuraConsultaOdontologica() {
         BussinesEntityType bussinesEntityType = null;
 
@@ -950,7 +959,7 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    
+
     public void validarExamenFisicoConsultaOdont() {
         BussinesEntityType bussinesEntityType = null;
         String name = "examenFisicoConsultaOdont";
@@ -980,19 +989,19 @@ public class InitializeDatabase {
             attributes.add(buildProperty("consultaOdontEF", "puntosDolorosos", Boolean.class.getName(), "", false, "Puntos dolorosos", "", false, 3L));
             attributes.add(buildProperty("consultaOdontEF", "pisoBoca", Boolean.class.getName(), "", false, "Piso de la boca", "", false, 4L));
             attributes.add(buildProperty("consultaOdontEF", "galndulaSalival", Boolean.class.getName(), "", false, "Glándulas salivales", "", false, 5L));
-            attributes.add(buildProperty("consultaOdontEF", "oclusion", Boolean.class.getName(), "", false, "Oclusión", "", false, 6L)); 
-            attributes.add(buildProperty("consultaOdontEF", "labios", Boolean.class.getName(), "", false, "Labios", "", false, 7L)); 
-            attributes.add(buildProperty("consultaOdontEF", "atm", Boolean.class.getName(), "", false, "A.T.M", "", false, 8L)); 
-            attributes.add(buildProperty("consultaOdontEF", "lengua", Boolean.class.getName(), "", false, "Lengua", "", false, 9L)); 
-            attributes.add(buildProperty("consultaOdontEF", "carrillos", Boolean.class.getName(), "", false, "Carrillos", "", false, 10L)); 
-            attributes.add(buildProperty("consultaOdontEF", "maxSuperior", Boolean.class.getName(), "", false, "Max. Superior", "", false, 11L)); 
-            attributes.add(buildProperty("consultaOdontEF", "posicionMaxilar", Boolean.class.getName(), "", false, "Mal posición Maxilar", "", false, 12L)); 
-            attributes.add(buildProperty("consultaOdontEF", "gangliosLinfaticos", Boolean.class.getName(), "", false, "Ganglios Linfáticos", "", false, 13L)); 
-            attributes.add(buildProperty("consultaOdontEF", "organosSentidos", Boolean.class.getName(), "", false, "Órganos de los Sentidos", "", false, 14L)); 
-            attributes.add(buildProperty("consultaOdontEF", "paladar", Boolean.class.getName(), "", false, "Paladar", "", false, 15L)); 
-            attributes.add(buildProperty("consultaOdontEF", "encia", Boolean.class.getName(), "", false, "Encía", "", false, 16L)); 
-            attributes.add(buildProperty("consultaOdontEF", "maxInferior", Boolean.class.getName(), "", false, "Max. inferior", "", false, 17L)); 
-            
+            attributes.add(buildProperty("consultaOdontEF", "oclusion", Boolean.class.getName(), "", false, "Oclusión", "", false, 6L));
+            attributes.add(buildProperty("consultaOdontEF", "labios", Boolean.class.getName(), "", false, "Labios", "", false, 7L));
+            attributes.add(buildProperty("consultaOdontEF", "atm", Boolean.class.getName(), "", false, "A.T.M", "", false, 8L));
+            attributes.add(buildProperty("consultaOdontEF", "lengua", Boolean.class.getName(), "", false, "Lengua", "", false, 9L));
+            attributes.add(buildProperty("consultaOdontEF", "carrillos", Boolean.class.getName(), "", false, "Carrillos", "", false, 10L));
+            attributes.add(buildProperty("consultaOdontEF", "maxSuperior", Boolean.class.getName(), "", false, "Max. Superior", "", false, 11L));
+            attributes.add(buildProperty("consultaOdontEF", "posicionMaxilar", Boolean.class.getName(), "", false, "Mal posición Maxilar", "", false, 12L));
+            attributes.add(buildProperty("consultaOdontEF", "gangliosLinfaticos", Boolean.class.getName(), "", false, "Ganglios Linfáticos", "", false, 13L));
+            attributes.add(buildProperty("consultaOdontEF", "organosSentidos", Boolean.class.getName(), "", false, "Órganos de los Sentidos", "", false, 14L));
+            attributes.add(buildProperty("consultaOdontEF", "paladar", Boolean.class.getName(), "", false, "Paladar", "", false, 15L));
+            attributes.add(buildProperty("consultaOdontEF", "encia", Boolean.class.getName(), "", false, "Encía", "", false, 16L));
+            attributes.add(buildProperty("consultaOdontEF", "maxInferior", Boolean.class.getName(), "", false, "Max. inferior", "", false, 17L));
+
             //Agregar atributos
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
@@ -1000,7 +1009,7 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    
+
     public void validarExamenDentarioConsultaOdont() {
         BussinesEntityType bussinesEntityType = null;
         String name = "examenDentarioConsultaOdont";
@@ -1029,8 +1038,8 @@ public class InitializeDatabase {
             attributes.add(buildProperty("consultaOdontED", "desgastes", Boolean.class.getName(), "", false, "Desgastes", "", false, 2L));
             attributes.add(buildProperty("consultaOdontED", "pigmentaciones", Boolean.class.getName(), "", false, "Pigmentaciones", "", false, 3L));
             attributes.add(buildProperty("consultaOdontED", "malPosicionDent", Boolean.class.getName(), "", false, "Mal posición dentarias", "", false, 4L));
-            attributes.add(buildProperty("consultaOdontED", "patologiaPopular", Boolean.class.getName(), "", false, "Patología popular", "", false, 5L));            
-            
+            attributes.add(buildProperty("consultaOdontED", "patologiaPopular", Boolean.class.getName(), "", false, "Patología popular", "", false, 5L));
+
             //Agregar atributos
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
@@ -1038,7 +1047,7 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
-    
+
     public void validarEvaluacionPeriodontalConsultaOdont() {
         BussinesEntityType bussinesEntityType = null;
         String name = "evaluacionPeriodontalConsultaOdont";
@@ -1065,8 +1074,8 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
             attributes.add(buildProperty("consultaOdontED", "placaBacteriana", Boolean.class.getName(), "", false, "Placa bacteriana", "", false, 1L));
             attributes.add(buildProperty("consultaOdontED", "materiaAlba", Boolean.class.getName(), "", false, "Materia alba", "", false, 2L));
-            attributes.add(buildProperty("consultaOdontED", "calculo", Boolean.class.getName(), "", false, "Cálculo", "", false, 3L));           
-            
+            attributes.add(buildProperty("consultaOdontED", "calculo", Boolean.class.getName(), "", false, "Cálculo", "", false, 3L));
+
             //Agregar atributos
             structure.setProperties(attributes);
             bussinesEntityType.addStructure(structure);
@@ -1074,7 +1083,46 @@ public class InitializeDatabase {
             entityManager.flush();
         }
     }
+
+    public void validarDatosEnfermedadesCIE10() {
+        TypedQuery<EnfermedadCIE10> query = entityManager.createQuery("from EnfermedadCIE10 b",
+                EnfermedadCIE10.class);
+        if (query.getResultList().isEmpty()) {
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            EnfermedadCIE10 enf = null;
+
+            List<EnfermedadCIE10> enfs = new ArrayList<EnfermedadCIE10>();
+            enf = new EnfermedadCIE10("A00", "Colera", "Enfermedades infecciosas intestinales", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A01", "Fiebre tifoidea y paratifoidea", "Enfermedades infecciosas intestinales", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A02", "Otras infecciones debidas a Salmonella", "Enfermedades infecciosas intestinales", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A03", "Shigelosis", "Enfermedades infecciosas intestinales", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A15", "Tuberculosis respiratoria, confirmada bacteriológica e histológicamente", "Tuberculosis", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A16", "Tuberculosis respiratoria, no confirmada bacteriológica o histológicamente", "Tuberculosis", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A20", "Peste", "Ciertas zoonosis bacterianas", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A21", "Tularemia", "Ciertas zoonosis bacterianas", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A22", "Carbunco [ántrax]", "Ciertas zoonosis bacterianas", now);
+            enfs.add(enf);
+            enf = new EnfermedadCIE10("A23", "Brucelosis", "Ciertas zoonosis bacterianas", now);
+            enfs.add(enf);
+
+            for (EnfermedadCIE10 enf1 : enfs) {
+                entityManager.persist(enf1);
+                entityManager.flush();
+            }
+        }
+    }
     /*FIN Estructuras del SGSSALUD*/
+
     private Property buildGroupTypeProperty(String name, String label, boolean showDefaultBussinesEntityProperties, String generatorName, Long minimumMembers, Long maximumMembers, String helpinline, Long sequence) {
         Property property = new Property();
         property.setName(name);

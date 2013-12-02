@@ -15,6 +15,7 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="fichaMedicaId" value="#{signosVitalesHome.fichaMedicaId}" />            
+            <f:viewParam name="signosVitalesId" value="#{signosVitalesHome.signosVitalesId}" />            
             <f:viewParam name="backView" value="#{signosVitalesHome.backView}" />
         </f:metadata>
 
@@ -35,11 +36,11 @@
                     <div class="container-fluid">   
                         <div class="row-fluid">
                             <div id="left" class="span7">
-                                <p:fieldset legend="Seleccione el servicio a utilizar">
+                                <p:fieldset legend="Seleccione el servicio a utilizar" >
                                     <glue:output id="servicioM" name="servicioMedico" type="checkbox" label="#{'Servicio Medico'}" value="#{signosVitalesHome.servicioMedico}" 
-                                                 required="false" execute="@this :form:save" render="servicioM" styleClass="clearfix"/>
+                                                 required="false" execute="@this :form:save" render="servicioM" styleClass="clearfix" />
                                     <glue:output id="servicioO" name="servicioDental" type="checkbox" label="#{'Servicio Odontológico'}" value="#{signosVitalesHome.servicioDental}" 
-                                                 required="false" execute="@this :form:save" render="servicioO" styleClass="clearfix"/>                
+                                                 required="false" execute="@this :form:save" render="servicioO" styleClass="clearfix" /> 
                                 </p:fieldset>                                  
                             </div>
                             <div id="rigth" class="span7" style="margin-left: 15px; ">
@@ -71,74 +72,57 @@
                     <div class="container-fluid">   
                         <div class="row-fluid">
                             <div id="left" class="span8" style="margin-left: -10px;">
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="peso" >#{messages['signosVitales.peso']}</label>
+                                <p:panelGrid columns="2">
+                                    <label for="peso" class="span3">#{messages['signosVitales.peso']} *</label>
                                     <div class="input"> 
-                                        <p:spinner  id="peso" value="#{signosVitalesHome.instance.peso}" styleClass="xLarge" required="true" 
-                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" Kg" dir="left">
-                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                        </p:spinner>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.peso != null}"
-                                                        styleClass="validation-status" />                                                        
+                                        <pe:inputNumber id="peso" value="#{signosVitalesHome.instance.peso}" required="true" style="width: 190px;" 
+                                                        maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left" decimalPlaces="2">
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                                                                                                                  
                                     </div>
-                                </h:panelGroup>  
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="presionArt" >#{messages['signosVitales.presionArt']}</label>
+                                    <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} *</label>
+                                    <div class="input">                                                                                
+                                        <pe:inputNumber  id="presionArtDiag" value="#{signosVitalesHome.instance.presionArterialDiastolica}" required="true" style="width: 190px;" 
+                                                         rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                        
+                                    </div>
+                                    <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} *</label>
                                     <div class="input"> 
-                                        <p:spinner  id="presionArt" value="#{signosVitalesHome.instance.presionArterial}" styleClass="xLarge" required="true" 
-                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" min">
-                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                        </p:spinner>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.presionArterial != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup> 
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="pulso" >#{messages['signosVitales.pulso']}</label>
-                                    <div class="input"> 
-                                        <p:spinner  id="pulso" value="#{signosVitalesHome.instance.pulso}" styleClass="xLarge" required="true" 
-                                                    rendered="true" min="0" suffix=" p/min">
-                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                        </p:spinner>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.pulso != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup> 
+                                        <pe:inputNumber  id="presionArtSis" value="#{signosVitalesHome.instance.presionArterialSistolica}" required="true" style="width: 190px;" 
+                                                         rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >                                            
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                                                                                                 
+                                    </div>             
+                                    <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
+                                    <pe:inputNumber  id="pulso" value="#{signosVitalesHome.instance.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
+                                                     rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" >
+                                        <p:ajax event="blur" update="@parent" process="@this"/>  
+                                    </pe:inputNumber>                                        
+                                </p:panelGrid>                                                                                             
                             </div>
                             <div id="left" class="span8"  style="margin-left: -40px; ">
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="frecuenciaResp" >#{messages['signosVitales.frecuenciaResp']}</label>
-                                    <div class="input"> 
-                                        <p:spinner  id="frecuenciaResp" value="#{signosVitalesHome.instance.frecuenciaRespiratoria}" styleClass="xLarge" required="true" 
-                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" min">
-                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                        </p:spinner>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.frecuenciaRespiratoria != null}"
-                                                        styleClass="validation-status" />                                                        
+                                <p:panelGrid columns="2">
+                                    <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
+                                    <div class="input">                                                                                
+                                        <pe:inputNumber  id="frecuenciaResp" value="#{signosVitalesHome.instance.frecuenciaRespiratoria}" required="true" style="width: 190px;" 
+                                                         rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" >
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>  
                                     </div>
-                                </h:panelGroup>
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="talla" >#{messages['signosVitales.talla']}</label>
-                                    <div class="input"> 
-                                        <p:spinner  id="talla" value="#{signosVitalesHome.instance.talla}" styleClass="xLarge" required="true" 
-                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" mm" style="text-align: left;">
-                                            <p:ajax event="keyup"  update="@parent :form:save" process="@this"/>  
-                                        </p:spinner>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.talla != null}"
-                                                        styleClass="validation-status" />                                                        
+                                    <label for="talla" class="span3">#{messages['signosVitales.talla']} *</label>
+                                    <div class="input">                                                                                
+                                        <pe:inputNumber id="talla" value="#{signosVitalesHome.instance.talla}" required="true" style="width: 190px;" 
+                                                        rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0" >
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                        
                                     </div>
-                                </h:panelGroup>
-                                <h:panelGroup layout="block" class="clearfix" >
-                                    <label for="temperatura" >#{messages['signosVitales.temperatura']}</label>
-                                    <div class="input"> 
-                                        <p:spinner  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" styleClass="xLarge" required="true" 
-                                                    rendered="true" min="0"  stepFactor="0.25" suffix=" °C">
-                                            <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                        </p:spinner>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{signosVitalesHome.instance.temperatura != null}"
-                                                        styleClass="validation-status" />                                                        
-                                    </div>
-                                </h:panelGroup>  
+                                    <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
+                                    <pe:inputNumber  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" required="true" style="width: 190px;" 
+                                                     rendered="true" symbol=" milimetros/mercurio" symbolPosition="rigth" maxValue="90" decimalPlaces="2" >
+                                        <p:ajax event="blur" update="@parent" process="@this"/>  
+                                    </pe:inputNumber>                                        
+                                </p:panelGrid>                                
                             </div>
                         </div>
                     </div>

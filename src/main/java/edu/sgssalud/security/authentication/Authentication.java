@@ -143,9 +143,7 @@ public class Authentication {
     public String logout() {
         identity.setAuthenticatorClass(IdmAuthenticator.class);
         identity.logout();
-
         //session.invalidate();
-
         return "/pages/loggedOffHome.xhtml?faces-redirect=true";
     }
 }

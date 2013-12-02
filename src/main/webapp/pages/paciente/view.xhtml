@@ -98,7 +98,7 @@
                                     <div class="input">
                                         <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
                                                          rendered="true" label="#{messages['comun.genero']}">
-                                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
                                             <f:selectItems value="#{pacienteHome.listaGeneros}" var="genero" itemLabel="#{genero}" itemValue="#{genero}"/>                          
                                             <p:ajax event="change" update="@parent " partialSubmit="true"/>
                                         </p:selectOneMenu>  
@@ -172,7 +172,7 @@
                         <div class="input">
                             <p:selectOneMenu id="area_" value="#{pacienteHome.instance.area}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false" requiredMessage="false" 
                                              label="#{messages['comun.area']}" rendered="true">
-                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
                                 <f:selectItems value="#{pacienteHome.listaAreas()}" var="_area" itemLabel="#{_area}" itemValue="#{_area}"/>                          
                                 <p:ajax event="change" update="@parent" partialSubmit="true"/>
                             </p:selectOneMenu>  

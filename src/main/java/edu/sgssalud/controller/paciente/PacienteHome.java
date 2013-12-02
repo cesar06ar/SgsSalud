@@ -29,6 +29,7 @@ import javax.persistence.EntityManager;
 import org.jboss.seam.international.status.Messages;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.Dates;
+import edu.sgssalud.util.Strings;
 import edu.sgssalud.util.UI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +53,8 @@ import org.picketlink.idm.api.PersistenceManager;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.PasswordCredential;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /*...==>*/
 /*...==>*/
@@ -91,6 +94,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private boolean rendPanelEstCol;
     private boolean rendPanelEstEsc;
     private String tipoEstudiante;
+
+    private UploadedFile file;
     /*....==>*/
 
     /*<== Métodos get y set para obtener el Id de la clase*/
@@ -150,6 +155,14 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     public void setRendPanelEstUni(boolean rendPanelEstUni) {
         this.rendPanelEstUni = rendPanelEstUni;
+    }
+
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
     }
 
     /*<==....*/
@@ -282,7 +295,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         em.flush();
 
         // TODO figure out a good pattern for this...
-
         getInstance().getIdentityKeys().add(user.getKey());
         getInstance().setShowBootcamp(true);
         create(getInstance());
@@ -354,4 +366,25 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     }
     /*<==....*/
+
+    public void upload() {
+        FacesMessage msg = new FacesMessage("Ok", "Fichero " + file.getFileName() + " subido correctamente.");
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void subirImagen(FileUploadEvent event) {
+        if (file != null) {
+            try {
+                getInstance().setFoto(event.getFile().getContents());
+                getInstance().setRutaFoto(Strings.guardarImagenEnFicheroTemporal(getInstance().getFoto(), event.getFile().getFileName()));
+                FacesMessage msg = new FacesMessage("Ok", "Fichero " + event.getFile().getFileName() + " subido correctamente.");                
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            } catch (Exception e) {
+                FacesMessage msg = new FacesMessage("Error", "Al subir fichero");
+                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
+        }
+    }
 }

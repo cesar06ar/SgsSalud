@@ -18,7 +18,9 @@ package edu.sgssalud.service.paciente;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.paciente.Paciente_;
 import edu.sgssalud.service.BussinesEntityService;
+import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.PersistenceUtil;
+import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.Strings;
 import java.io.Serializable;
 import java.util.List;
@@ -142,7 +144,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
                 "select e from Paciente e where"
                 + " lower(e.nombres) like lower(concat('%',:clave,'%')) or"
                 + " lower(e.apellidos) like lower(concat('%',:clave,'%')) or"
-                + " lower(e.cedula) like lower(concat('%',:clave,'%')) or" 
+                + " lower(e.cedula) like lower(concat('%',:clave,'%')) or"
                 + " lower(e.edad) like lower(concat('%',:clave,'%')) "
                 + " order by e.nombres", Paciente.class);
         query.setParameter("clave", parametro);
@@ -195,5 +197,31 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         query.where(builder.equal(bussinesEntityType.get(Paciente_.nombres), nombres));
         return getSingleResult(query);
         //return  null;
+    }
+
+    public List<Paciente> BuscarPacientePorParametroCorto(String parametro) {
+        TypedQuery<Paciente> query = null;
+        query = em.createNamedQuery("Paciente.buscarPorParametro", Paciente.class);
+        query.setParameter("clave", parametro);
+        return query.getResultList();
+    }
+
+    public List<Paciente> BuscarPacientePorParametro(String parametro) {
+        TypedQuery<Paciente> query = null;
+        query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
+        query.setParameter("clave", parametro);
+        return query.getResultList();
+    }
+
+    public List<Paciente> BuscarPacientePorTodosParametros(String parametro) {
+        TypedQuery<Paciente> query = null;
+        if (Dates.getFormatoFecha(parametro) != null) {
+            query = em.createNamedQuery("Paciente.buscarPorFechaNacimiento", Paciente.class);
+            query.setParameter("clave", Dates.getFormatoFecha(parametro));
+        } else {
+            query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
+            query.setParameter("clave", parametro);
+        }
+        return query.getResultList();
     }
 }

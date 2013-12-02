@@ -23,8 +23,9 @@
             <div class="header-replace">
                 <div class="container">
                     <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{consultaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaMedica.nombre']} 
-                            #{consultaMedicaHome.instance.id}</h2>   
+                        <h3>#{consultaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaMedica.nombre']} 
+                            #{consultaMedicaHome.instance.id} <br/>
+                            #{messages['common.for']} Paciente #{consultaMedicaHome.paciente.nombres} #{consultaMedicaHome.paciente.apellidos}</h3>   
                     </div>
                 </div>
             </div>
@@ -32,6 +33,7 @@
         <ui:define name="content" class="span20">
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false"/>  
                 <p:panel id="consultaM" header="Información de Consulta" toggleable="true" styleClass="span16">
                     <p:panelGrid columns="3">
                         <h:panelGroup layout="block" class="clearfix" >
@@ -48,8 +50,8 @@
                             <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
                             <div class="input">                                                                                                                                                                                          
                                 <pe:timePicker id="horaC" value="#{consultaMedicaHome.instance.horaConsulta}"  label="" 
-                                             disabled="true"  style="width: 50px;" mode="popup">                                            
-                                    
+                                               disabled="true"  style="width: 50px;" mode="popup">                                            
+
                                 </pe:timePicker>  
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.horaConsulta != null}"
                                                 styleClass="validation-status" />                                                        
@@ -70,74 +72,64 @@
                         <div class="container-fluid">   
                             <div class="row-fluid">
                                 <div id="left" class="span8" style="margin-left: -10px;">
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="peso" >#{messages['signosVitales.peso']}</label>
+                                    <p:panelGrid columns="2">
+                                        <label for="peso" class="span3">#{messages['signosVitales.peso']} *</label>
                                         <div class="input"> 
-                                            <p:spinner  id="peso" value="#{consultaMedicaHome.instance.signosVitales.peso}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" Kg" dir="left">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.peso != null}"
-                                                            styleClass="validation-status" />                                                        
+                                            <pe:inputNumber id="peso" value="#{consultaMedicaHome.instance.signosVitales.peso}" required="true" style="width: 190px;" 
+                                                            maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left"  decimalPlaces="2" 
+                                                            disabled="#{not empty consultaMedicaHome.instance.signosVitales.peso}">
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                                                                                                                  
                                         </div>
-                                    </h:panelGroup>  
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="presionArt" >#{messages['signosVitales.presionArt']}</label>
+                                        <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} *</label>
+                                        <div class="input">                                                                                
+                                            <pe:inputNumber  id="presionArtDiag" value="#{consultaMedicaHome.instance.signosVitales.presionArterialDiastolica}" required="true" style="width: 190px;" 
+                                                             rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
+                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.presionArterialDiastolica}">
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                        
+                                        </div>    
+                                        <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} *</label>
                                         <div class="input"> 
-                                            <p:spinner  id="presionArt" value="#{consultaMedicaHome.instance.signosVitales.presionArterial}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" min">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.presionArterial != null}"
-                                                            styleClass="validation-status" />                                                        
-                                        </div>
-                                    </h:panelGroup> 
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="pulso" >#{messages['signosVitales.pulso']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="pulso" value="#{consultaMedicaHome.instance.signosVitales.pulso}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0" suffix=" p/min">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.pulso != null}"
-                                                            styleClass="validation-status" />                                                        
-                                        </div>
-                                    </h:panelGroup> 
+                                            <pe:inputNumber  id="presionArtSis" value="#{consultaMedicaHome.instance.signosVitales.presionArterialSistolica}" required="true" style="width: 190px;" 
+                                                             rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
+                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.presionArterialSistolica}">   
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                                                                                                 
+                                        </div>              
+                                        <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
+                                        <pe:inputNumber  id="pulso" value="#{consultaMedicaHome.instance.signosVitales.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
+                                                         rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" 
+                                                         disabled="#{not empty consultaMedicaHome.instance.signosVitales.pulso}">   
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                        
+                                    </p:panelGrid>                                                                                             
                                 </div>
                                 <div id="left" class="span8"  style="margin-left: -40px; ">
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="frecuenciaResp" >#{messages['signosVitales.frecuenciaResp']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="frecuenciaResp" value="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" min">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria != null}"
-                                                            styleClass="validation-status" />                                                        
+                                    <p:panelGrid columns="2">
+                                        <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
+                                        <div class="input">                                                                                
+                                            <pe:inputNumber  id="frecuenciaResp" value="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}" required="true" style="width: 190px;" 
+                                                             rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" 
+                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}">
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>  
                                         </div>
-                                    </h:panelGroup>
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="talla" >#{messages['signosVitales.talla']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="talla" value="#{consultaMedicaHome.instance.signosVitales.talla}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" mm" style="text-align: left;">
-                                                <p:ajax event="keyup"  update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.talla != null}"
-                                                            styleClass="validation-status" />                                                        
+                                        <label for="talla" class="span3">#{messages['signosVitales.talla']} *</label>
+                                        <div class="input">                                                                                
+                                            <pe:inputNumber id="talla" value="#{consultaMedicaHome.instance.signosVitales.talla}" required="true" style="width: 190px;" 
+                                                            rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0"
+                                                            disabled="#{not empty consultaMedicaHome.instance.signosVitales.talla}">                                            
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                        
                                         </div>
-                                    </h:panelGroup>
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="temperatura" >#{messages['signosVitales.temperatura']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="temperatura" value="#{consultaMedicaHome.instance.signosVitales.temperatura}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" °C">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.signosVitales.temperatura != null}"
-                                                            styleClass="validation-status" />                                                        
-                                        </div>
-                                    </h:panelGroup>  
+                                        <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
+                                        <pe:inputNumber  id="temperatura" value="#{consultaMedicaHome.instance.signosVitales.temperatura}" required="true" style="width: 190px;" 
+                                                         rendered="true" symbol="       mmHg" symbolPosition="rigth" maxValue="90" decimalPlaces="2" 
+                                                         disabled="#{not empty consultaMedicaHome.instance.signosVitales.temperatura}">
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                        
+                                    </p:panelGrid>                                
                                 </div>
                             </div>
                         </div>
@@ -191,7 +183,7 @@
                                         <c:choose>                                                                             
                                             <c:when test="#{(f.name eq 'revisionOrganosYSistemasCM')}">                                                            
                                                 <h:panelGroup id="obraosp" layout="block" class="clearfix">
-                                                    <label for="observ1">#{'Observación Revisión Actual Organos y Sistemas'}</label>
+                                                    <label for="observ1">#{messages['consultaMedica.observacionActOrgySist']}</label>
                                                     <div class="input">
                                                         <p:inputTextarea id="observ1" value="#{consultaMedicaHome.instance.observacionRevisionOS}" styleClass="xLarge span6" required="false" style="width: 650px; height: 90px;" 
                                                                          rendered="true">
@@ -202,7 +194,7 @@
                                             </c:when>
                                             <c:when test="#{(f.name eq 'examenFisicoCM')}">                                                            
                                                 <h:panelGroup id="obEFP" layout="block" class="clearfix">
-                                                    <label for="observ2">#{'Observación de Examen Fisico'}</label>
+                                                    <label for="observ2">#{messages['consultaMedica.observacionExamFis']}</label>
                                                     <div class="input">
                                                         <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" styleClass="xLarge span6" required="false" style="width: 650px; height: 90px;" 
                                                                          rendered="true">
@@ -217,6 +209,16 @@
                             </c:choose>                     
                         </p:tab>
                     </c:forEach>
+                    <p:tab title="#{messages['comun.Indicadores']}" titletip="#{messages['comun.Indicadores.Title']}" rendered="true" >
+                        <p:panel header="Indice Masa Corpal IMC" styleClass="offset 2">
+                            <h:outputText value="#{consultaMedicaHome.inidicadirIMC}">                                
+                            </h:outputText>
+                            <br/>
+                            <br/>
+                            <p:lineChart id="linear" value="#{consultaMedicaHome.linearModel}" legendPosition="e"  
+                                         title="IMC" minY="0" maxY="40" style="height:200px"/>  
+                        </p:panel>            
+                    </p:tab>
                 </p:tabView>             
                 <p:tabView styleClass="span16">
                     <p:tab title="#{messages['consultaMedica.Motivo']}" titletip="#{messages['consultaMedica.Motivo']}" rendered="true" >
@@ -229,6 +231,21 @@
                     </p:tab>
                     <p:tab title="#{messages['consultaMedica.Diagnostico']}" titletip="#{messages['consultaMedica.Diagnostico']}" closable="false" 
                            rendered="true">
+                        <h:panelGroup id="obEFP" layout="block">
+                            <label for="observ2">#{messages['consultaMedica.enfermedades']}</label>
+                            <div class="input">
+                                <p:pickList value="#{consultaMedicaHome.pickListEnfermedades}" var="enfermedad_"  showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" style="width: 50%" 
+                                            itemLabel="#{enfermedad_.code} #{enfermedad_.name}" itemValue="#{enfermedad_}" converter="enfermedadescie10Converter" showCheckbox="true">  
+                                    <f:facet name="sourceCaption">Enfermedades Cie 10</f:facet>
+                                    <f:facet name="targetCaption">Enfermedades que Posee</f:facet>
+                                    <p:ajax event="transfer" listener="#{consultaMedicaHome.onTransfer}" update=":form:growl"/>  
+                                    <p:column style="width: 100%" >
+                                        <h:outputText value="#{enfermedad_.code}&nbsp;&nbsp;#{enfermedad_.name}" 
+                                                      title="#{enfermedad_.description}"/>                                        
+                                    </p:column>
+                                </p:pickList>                                                                                      
+                            </div>
+                        </h:panelGroup> 
                         <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
                                      required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
                     </p:tab>
@@ -239,6 +256,39 @@
                     <p:tab title="#{messages['consultaMedica.Observacion']}" titletip="#{messages['consultaMedica.Observacion']}" closable="false" rendered="true">
                         <glue:output id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
                                      required="false" execute="@this :form:save" render="observacionC" styleClass="span14"/>
+                    </p:tab>
+                </p:tabView>
+                <p:tabView styleClass="span16" rendered="#{consultaMedicaHome.instance.persistent}">
+                    <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
+                        <h:link outcome="/pages/farmacia/receta/recetas" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >
+                            <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
+                            <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
+                        </h:link>
+                        <br/><br/>                        
+                        <p:dataTable id="tablaRecetas" value="#{consultaMedicaHome.instance.recetas}" var="recetaM_" >
+                            <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%">
+                                <p:outputLabel value="#{recetaM_.fecha}">
+                                    <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                                </p:outputLabel>
+                            </p:column> 
+                            <p:column headerText="#{messages['medicamento.Nombre']}" style="width: 7%">
+                                <p:outputLabel value="#{recetaM_.medicaciones.sise()}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{messages['receta.Responsable']} #{messages['receta.emision']}" style="width: 7%">
+                                <p:outputLabel value="#{recetaM_.responsableEmision}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{messages['comun.estado']} #{messages['receta.emision']}" style="width: 7%">
+                                <p:outputLabel value="#{recetaM_.estado}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{'Opción'} #{messages['receta.emision']}" style="width: 7%">
+                                <h:link value="#{messages['common.edit']}" outcome="/pages/farmacia/receta/recetas" >                                
+                                    <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
+                                    <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
+                                    <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
+                                    <f:param name="backView" value="fichaMedica"></f:param>
+                                </h:link>                           
+                            </p:column>
+                        </p:dataTable>
                     </p:tab>
                 </p:tabView>
 

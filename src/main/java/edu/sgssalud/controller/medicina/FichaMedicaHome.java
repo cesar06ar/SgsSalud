@@ -34,7 +34,7 @@ import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
-import edu.sgssalud.service.odontologia.consultaOdontologicaServicio;
+import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.UI;
@@ -81,7 +81,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     @Inject
     private FichaOdontologicaServicio fichaOdonServicio;
     @Inject
-    private consultaOdontologicaServicio consultaOdontService;
+    private ConsultaOdontologicaServicio consultaOdontService;
     @Inject
     private RecetaServicio recetaServicio;
     private Long pacienteId;
@@ -92,8 +92,10 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     private FichaOdontologica fichaOdontologica;
     private ConsultaMedica consultaMedica;
     private ConsultaOdontologica consultaOdont;
-    private List<ConsultaMedica> listaConsultasM = new ArrayList<ConsultaMedica>();
-    private List<ConsultaOdontologica> listaConsultasO = new ArrayList<ConsultaOdontologica>();
+//    private List<ConsultaMedica> listaConsultasM = new ArrayList<ConsultaMedica>();
+//    private List<ConsultaOdontologica> listaConsultasO = new ArrayList<ConsultaOdontologica>();
+    private List<Paciente> listaPacietes = new ArrayList<Paciente>();
+    private List<SignosVitales> listaSignosVitales = new ArrayList<SignosVitales>();
 
     /*<== Métodos get y set para obtener el Id de la clase*/
     public Long getFichaMedicaId() {
@@ -106,8 +108,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
             this.setPaciente(getInstance().getPaciente());
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-            this.setListaConsultasM(consultaMedService.getConsultaMedicaPorHistoriaClinica(historiaClinica));
-            this.setListaConsultasO(consultaOdontService.buscarPorFichaOdontologica(fichaOdontologica));
+            this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
         }
     }
 
@@ -124,8 +125,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         } else {
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-            this.setListaConsultasM(consultaMedService.getConsultaMedicaPorHistoriaClinica(historiaClinica));
-            this.setListaConsultasO(consultaOdontService.buscarPorFichaOdontologica(fichaOdontologica));
+            this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
         }
     }
 
@@ -167,6 +167,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
+        this.setListaPacietes(pacienteS.BuscarPacientePorParametro(parametroBusqueda));
     }
 
     public FichaOdontologica getFichaOdontologica() {
@@ -185,24 +186,22 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         this.consultaOdont = consultaOdont;
     }
 
-    public List<ConsultaOdontologica> getListaConsultasO() {
-        return listaConsultasO;
+    public List<Paciente> getListaPacietes() {
+        return listaPacietes;
     }
 
-    public void setListaConsultasO(List<ConsultaOdontologica> listaConsultasO) {
-        Collections.sort(listaConsultasO);
-        this.listaConsultasO = listaConsultasO;
+    public void setListaPacietes(List<Paciente> listaPacietes) {
+        this.listaPacietes = listaPacietes;
     }
 
-    public List<ConsultaMedica> getListaConsultasM() {
-        Collections.sort(listaConsultasM);
-        return listaConsultasM;
+    public List<SignosVitales> getListaSignosVitales() {
+        return listaSignosVitales;
     }
 
-    public void setListaConsultasM(List<ConsultaMedica> listaConsultasM) {
-        this.listaConsultasM = listaConsultasM;
+    public void setListaSignosVitales(List<SignosVitales> listaSignosVitales) {
+        this.listaSignosVitales = listaSignosVitales;
     }
-        
+
     /*<==....*/
     @TransactionAttribute   //
     public FichaMedica load() {
@@ -238,9 +237,6 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         }
         if (getInstance().isPersistent()) {
             historiaClinica = historiaClinService.buscarPorFichaMedica(getInstance());
-            listaConsultasM = consultaMedService.getConsultaMedicaPorHistoriaClinica(historiaClinica);
-        } else {
-            listaConsultasM = new ArrayList<ConsultaMedica>();
         }
         //getInstance().setFechaApertura(new Date());        
         this.getInstance().setNumeroFicha(this.getGenerarNumeroFicha());  //asignacion automatica de numero de ficha
@@ -256,9 +252,9 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         //fichaMedic.setLastUpdate(now);
         fichaMedic.setActivationTime(now);
         //fichaMedic.setFechaApertura(now);
-        if(identity.isLoggedIn()){
+        if (identity.isLoggedIn()) {
             fichaMedic.setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));    //cambiar atributo a 
-        }        
+        }
         fichaMedic.setType(_type);
         fichaMedic.buildAttributes(bussinesEntityService);  //
 
@@ -328,7 +324,6 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 if (recetaServicio.buscarRecetaPorConsultaMedica(consultaMedica).isEmpty()) {  //verificar si tiene recetas y examenes de laboratorio recetaServicio.buscarRecetaPorConsultaMedica(consultaMedica).isEmpty()
                     boolean delete = consultaMedService.borrarConsultaMedica(consultaMedica);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente la consulta:  " + consultaMedica.getId(), "" + delete));
-                    this.setListaConsultasM(consultaMedService.getConsultaMedicaPorHistoriaClinica(historiaClinica));
                 } else {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Contiene Recetas", ""));
                 }
@@ -345,34 +340,31 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public String buscarPorParametro() {
         //buscar primero por numero de ficha
-        SecurityRules s = new SecurityRules();
+        listaPacietes = new ArrayList<Paciente>();
         String salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true";
-//        if(s.isOdontologo(identity)){
-//            salida = "/pages/odontologia/fichaMedica.xhtml?faces-redirect=true";
-//        }else{
-//            salida = "/pages/medicina/fichaMedica.xhtml?faces-redirect=true";
-//        }       
-        
-        if (!parametroBusqueda.isEmpty() && StringValidations.isDecimal(parametroBusqueda)) {
+        if (!parametroBusqueda.isEmpty()) {
             FichaMedica fichaMedList = fichaMedicaService.getFichaMedicaPorNumeroFicha(Long.parseLong(parametroBusqueda));
             if (fichaMedList != null) {
                 this.setInstance(fichaMedList);
                 this.setPaciente(getInstance().getPaciente());
                 salida += "&fichaMedicaId=" + getInstance().getId();
             } else {
-                Paciente p = pacienteS.buscarPorCedula(parametroBusqueda);
-                if (p != null) {
-                    this.setPaciente(p);
-                    this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
-                    salida += "&pacienteId=" + paciente.getId();
-                } else {
-                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
-                    FacesContext.getCurrentInstance().addMessage("", msg);
-                }
+//                Paciente p = pacienteS.buscarPorCedula(parametroBusqueda);
+//                if (p != null) {
+//                    this.setPaciente(p);
+//                    this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
+//                    salida += "&pacienteId=" + paciente.getId();
+//                } else {
+//                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
+//                    FacesContext.getCurrentInstance().addMessage("", msg);
+//                }
+                salida = null;
+                this.setListaPacietes(pacienteS.BuscarPacientePorParametroCorto(salida));
             }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El parametro de busqueda es incorrecto", " "));
         }
+        this.setParametroBusqueda("");
         return salida;
     }
 
@@ -427,6 +419,40 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsultaMedica(null);
+    }
+
+    public void cargarSignosVitales(List<ConsultaMedica> lcm, List<ConsultaOdontologica> lco) {
+        listaSignosVitales = new ArrayList<SignosVitales>();
+        List<SignosVitales> lsgTemp1 = new ArrayList<SignosVitales>();
+        List<SignosVitales> lsgTemp = new ArrayList<SignosVitales>();
+        if (!lcm.isEmpty()) {
+            for (ConsultaMedica cm : lcm) {
+                if (!lsgTemp.contains(cm.getSignosVitales())) {
+                   lsgTemp.add(cm.getSignosVitales());
+                }
+            }
+        }
+        if (!lco.isEmpty()) {
+            for (ConsultaOdontologica co : lco) {
+                if (!lsgTemp1.contains(co.getSignosVitales())) {
+                    lsgTemp1.add(co.getSignosVitales());
+                }
+            }
+        }
+        if (!lsgTemp.isEmpty() & !lsgTemp1.isEmpty()) {
+            listaSignosVitales.addAll(lsgTemp);
+            lsgTemp = new ArrayList<SignosVitales>();
+            for (SignosVitales sg : lsgTemp1) {                
+                if(listaSignosVitales.contains(sg)){
+                    lsgTemp.add(sg);
+                }
+            }
+            listaSignosVitales.removeAll(lsgTemp);
+        }else if(!lsgTemp.isEmpty() & lsgTemp1.isEmpty()){
+            listaSignosVitales.addAll(lsgTemp);
+        }else if(lsgTemp.isEmpty() & !lsgTemp1.isEmpty()){
+            listaSignosVitales.addAll(lsgTemp1);
+        }
     }
     /*....==>*/
 }

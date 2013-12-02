@@ -35,13 +35,13 @@ import javax.persistence.criteria.Root;
  *
  * @author cesar
  */
-public class consultaOdontologicaServicio extends PersistenceUtil<ConsultaOdontologica> implements Serializable{
+public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdontologica> implements Serializable{
      private static final long serialVersionUID = 234L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(consultaOdontologicaServicio.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaOdontologicaServicio.class);
     @Inject
     private BussinesEntityService bussinesEntityService;
 
-    public consultaOdontologicaServicio() {
+    public ConsultaOdontologicaServicio() {
         super(ConsultaOdontologica.class);
     }
 

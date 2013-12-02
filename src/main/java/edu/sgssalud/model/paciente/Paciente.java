@@ -30,11 +30,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Email;
@@ -49,15 +51,41 @@ import org.jboss.solder.logging.Logger;
 @Table(name = "Paciente")
 @DiscriminatorValue(value = "Pac")
 @PrimaryKeyJoinColumn(name = "id")
-public class Paciente extends BussinesEntity implements Serializable {
+@NamedQueries(value = {
+    @NamedQuery(name = "Paciente.buscarPorParametro",
+            query = "select p from Paciente p where"
+            + " LOWER(p.nombres) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.apellidos) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.cedula) like lower(concat('%',:clave,'%'))"
+            + " ORDER BY p.apellidos"),
+    @NamedQuery(name = "Paciente.buscarPorParametrosTodos",
+            query = "select p from Paciente p where"
+            + " LOWER(p.cedula) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.nombres) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.apellidos) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.email) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.genero) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.nacionalidad) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.direccion) like lower(concat('%',:clave,'%'))"
+            + " ORDER BY p.apellidos"),
+    @NamedQuery(name = "Paciente.buscarPorCedula",
+            query = "select p from Paciente p where"
+            + " LOWER(p.apellidos) like lower(concat('%',:clave,'%'))"),
+    @NamedQuery(name = "Paciente.buscarPorEdad",
+            query = "select p from Paciente p where"
+            + " p.edad = :clave"),
+    @NamedQuery(name = "Paciente.buscarPorFechaNacimiento",
+            query = "select p from Paciente p where"
+            + " p.fechaNacimiento = :clave")})
+public class Paciente extends BussinesEntity implements Serializable, Comparable<Paciente> {
 
     private static Logger log = Logger.getLogger(Paciente.class);
     private static final long serialVersionUID = 1L;
-    
+
     public enum Genero {
 
-        MASCULINO(0), 
-        FEMENINO(1);        
+        MASCULINO(0),
+        FEMENINO(1);
         private int genero;
 
         private Genero(int genero) {
@@ -67,15 +95,15 @@ public class Paciente extends BussinesEntity implements Serializable {
         public int getGenero() {
             return genero;
         }
-        
+
     }
-    
+
     @NotEmpty
     @Column(nullable = false, unique = true)
     private String nombreUsuario;
     @NotEmpty
     @Column(nullable = false)
-    private String clave;     
+    private String clave;
     @NotEmpty
     @Column(nullable = true)
     private String cedula;
@@ -86,10 +114,11 @@ public class Paciente extends BussinesEntity implements Serializable {
     @Column(nullable = true)
     private String nombres;
     @Column(length = 2147483647)
+    @Lob
     @Basic(fetch = FetchType.LAZY)
-    private Byte[] foto;
+    private byte[] foto;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaNacimiento;    
+    private Date fechaNacimiento;
     @Column(length = 25)
     private Integer edad;
     private String direccion;
@@ -100,15 +129,15 @@ public class Paciente extends BussinesEntity implements Serializable {
     @Column(nullable = false, length = 128, unique = false)
     private String email;
     @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
-    @Column(nullable = false)  
+    @Column(nullable = false)
     private Paciente.Genero genero;
     @Column(length = 50)
     private String nacionalidad;
     @Column(length = 50)
     private String profesion;
     @Column(length = 50)
-    private String ocupacion;    
-    
+    private String ocupacion;
+
     //Datos Academicos de Paciente Universitario
     private String area;
     private String carrera;
@@ -118,15 +147,18 @@ public class Paciente extends BussinesEntity implements Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_paciente_keys")
     private Set<String> identityKeys = new HashSet<String>();   //investigar mas... 
-    
+
     @Column
     private boolean confirmed;
     @Column
     private boolean showBootcamp;
-    
+
     private String tipoEstudiante;
 
-    public Paciente() {        
+    @Transient
+    private String rutaFoto;
+
+    public Paciente() {
     }
 
     public String getNombreUsuario() {
@@ -144,7 +176,7 @@ public class Paciente extends BussinesEntity implements Serializable {
     public void setClave(String clave) {
         this.clave = clave;
     }
-     
+
     public String getCedula() {
         return cedula;
     }
@@ -169,11 +201,11 @@ public class Paciente extends BussinesEntity implements Serializable {
         this.nombres = nombres;
     }
 
-    public Byte[] getFoto() {
+    public byte[] getFoto() {
         return foto;
     }
 
-    public void setFoto(Byte[] foto) {
+    public void setFoto(byte[] foto) {
         this.foto = foto;
     }
 
@@ -183,7 +215,7 @@ public class Paciente extends BussinesEntity implements Serializable {
 
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
-        if(this.fechaNacimiento != null){
+        if (this.fechaNacimiento != null) {
             this.setEdad(FechasUtil.calcularEdad(fechaNacimiento));
         }
     }
@@ -299,7 +331,7 @@ public class Paciente extends BussinesEntity implements Serializable {
     public void setTipoEstudiante(String tipoEstudiante) {
         this.tipoEstudiante = tipoEstudiante;
     }
-    
+
     public Set<String> getIdentityKeys() {
         return identityKeys;
     }
@@ -323,24 +355,40 @@ public class Paciente extends BussinesEntity implements Serializable {
     public void setShowBootcamp(boolean showBootcamp) {
         this.showBootcamp = showBootcamp;
     }
-       
-    public String cargarFoto(){
-        if(getFoto() != null){
+
+    public String cargarFoto() {
+        if (getFoto() != null) {
             return getFoto().toString();
-        }else{
+        } else {
             return "/resources/images/paciente.png";
         }
     }
-    
-        
+
+    public String getRutaFoto() {
+        return rutaFoto;
+    }
+
+    public void setRutaFoto(String rutaFoto) {
+        if (rutaFoto != null) {
+            this.rutaFoto = rutaFoto;
+        } else {
+            this.rutaFoto = "/resources/images/paciente.png";
+        }
+    }
+
     @Override
     public String toString() {
         return "edu.sgssalud.model.paciente.Paciente[ "
-        //return Paciente.class.getName()
+                //return Paciente.class.getName()
                 + "id=" + getId() + ","
                 + "nombres=" + getNombres() + ","
                 + "IdentityKeys=" + getIdentityKeys() + ","
                 + " ]";
+    }
+
+    @Override
+    public int compareTo(Paciente o) {
+        return (int) (this.getId() - o.getId());
     }
 //    public void vacio(){
 //        //log.info("Verifica si ingresa a metodo...");

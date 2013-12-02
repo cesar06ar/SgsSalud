@@ -81,11 +81,10 @@ limitations under the License.
                 </h:commandLink>
             </div>
             <p:dataTable id="profileDataTable"  var="profile_" value="#{profileListService}"
-                         paginator="true" rows="10"
-                         paginatorAlwaysVisible="false"
+                         paginator="true" rows="10"                         
                          paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         rowsPerPageTemplate="5,10,15"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                         rowsPerPageTemplate="5,10,20,50,100"
                          lazy="true"
                          selection="#{profileListService.selectedProfile}"
                          rendered="true"

@@ -32,6 +32,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -44,7 +46,7 @@ import org.jboss.solder.logging.Logger;
  */
 @Entity
 public class Receta implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -53,27 +55,27 @@ public class Receta implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
     private String estado;  //el estado puede ser emitido y entregado 
-    
+
     @ManyToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
-    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Medicamento> medicaciones = new ArrayList<Medicamento>();   
-    
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "receta", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
+
     private String indicaciones;
     @ManyToOne(optional = true)
     @JoinColumn(name = "responsableEmision_id")
     private Profile responsableEmision;
     @ManyToOne
     @JoinColumn(name = "responsableEntrega_id")
-    private Profile ResponsableEntrega;   
-    
+    private Profile ResponsableEntrega;
+
        //el usuario responsable de emitir la receta se carga de la consulta medica
-    
     @ManyToOne
     @JoinColumn(name = "consultaMedica_id")
     private ConsultaMedica consultaMedica;
-    
+
     @ManyToOne
     @JoinColumn(name = "consultaOdontologica_id")
     private ConsultaOdontologica consultaOdontologica;
@@ -102,18 +104,6 @@ public class Receta implements Serializable {
         this.paciente = paciente;
     }
 
-    public List<Medicamento> getMedicaciones() {
-        return medicaciones;
-    }
-
-    public void setMedicaciones(List<Medicamento> medicaciones) {        
-        for (Medicamento m : medicaciones) {
-            m.setReceta(this);
-        }
-        this.medicaciones = medicaciones;
-    }
-
-      
     public String getIndicaciones() {
         return indicaciones;
     }
@@ -128,12 +118,6 @@ public class Receta implements Serializable {
 
     public void setConsultaMedica(ConsultaMedica consultaMedica) {
         this.consultaMedica = consultaMedica;
-    }
-
-    public void agregarMedicamento(Medicamento m) {
-        if (!medicaciones.contains(m));
-        m.setReceta(this);
-        medicaciones.add(m);
     }
 
     public String getEstado() {
@@ -158,7 +142,7 @@ public class Receta implements Serializable {
 
     public void setConsultaOdontologica(ConsultaOdontologica consultaOdontologica) {
         this.consultaOdontologica = consultaOdontologica;
-    }  
+    }
 
     public Profile getResponsableEmision() {
         return responsableEmision;
@@ -167,13 +151,37 @@ public class Receta implements Serializable {
     public void setResponsableEmision(Profile responsableEmision) {
         this.responsableEmision = responsableEmision;
     }
-    
-    
-    
+
+    public List<Receta_Medicamento> getListaRecetaMedicamento() {
+        return listaRecetaMedicamento;
+    }
+
+    public void setListaRecetaMedicamento(List<Receta_Medicamento> listaRecetaMedicamento) {
+        for (Receta_Medicamento rm : listaRecetaMedicamento) {
+            rm.setReceta(this);
+        }
+        this.listaRecetaMedicamento = listaRecetaMedicamento;
+    }
+
+    public void agregarRecetaMedicamento(Receta_Medicamento rm) {
+        if (!listaRecetaMedicamento.contains(rm)) {
+            rm.setReceta(this);
+            listaRecetaMedicamento.add(rm);
+        }
+    }
+
+    public List<Medicamento> getMedicamentos() {
+        List<Medicamento> medicamentos = new ArrayList<Medicamento>();
+        for (Receta_Medicamento rm : getListaRecetaMedicamento()) {
+            medicamentos.add(rm.getMedicamento());
+        }
+        return medicamentos;
+    }
+
     public boolean isPersistent() {
         return getId() != null;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -183,7 +191,7 @@ public class Receta implements Serializable {
 
     @Override
     public boolean equals(final Object obj) {
-         if (!(obj instanceof Receta)) {
+        if (!(obj instanceof Receta)) {
             return false;
         }
         Receta other = (Receta) obj;
@@ -197,7 +205,7 @@ public class Receta implements Serializable {
     public String toString() {
         return "edu.sgssalud.model.Property[ "
                 + "id=" + id + ","
-                + "indicaciones=" + indicaciones + ","                
+                + "indicaciones=" + indicaciones + ","
                 + " ]";
     }
 }

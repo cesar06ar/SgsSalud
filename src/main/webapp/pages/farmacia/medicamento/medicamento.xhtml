@@ -47,7 +47,7 @@
                 <glue:input id="numFactura" name="numFactura" type="long" label="#{messages['common.numfactura']}" value="#{medicamentoHome.instance.numeroFactura}" required="true" inlinehelp="#{messages['common.numfactura']}" execute ="@this save" render="numFactura"/>
                 <glue:input id="nombreComercial" name="nombreComercial" type="text" label="#{messages['common.nombrecomercial']}" value="#{medicamentoHome.instance.nombreComercial}" required="true" inlinehelp="#{messages['common.nombrecomercial']}" execute="@this save" render="nombreComercial"/>
                 <glue:input id="nombreGenerico" name="nombreGenerico" type="text" label="#{messages['common.nombregenerico']}" value="#{medicamentoHome.instance.nombreGenerico}" required="true" inlinehelp="#{messages['common.nombregenerico']}" execute="@this save" render="nombreGenerico"/>
-                <glue:input id="unidades" name="unidadadesMedicamento" type="long" label="#{messages['common.unidadadesmedicamento']}" value="#{medicamentoHome.instance.unidades}" required="true" inlinehelp="#{messages['common.unidadadesmedicamento']}" execute="@this save" render="unidades"/>
+                <glue:input id="unidades" name="unidadadesMedicamento" type="long" label="#{messages['common.unidadadesmedicamento']}" value="#{medicamentoHome.instance.unidades}" required="true" inlinehelp="#{messages['common.unidadadesmedicamento']}" numDecimales="0" execute="@this save" render="unidades"/>
                 
                 <h:panelGroup id="pres" layout="block" class="clearfix" >
                     <label for="present" >#{messages['medicamento.presentacion']} *&#160;</label>
@@ -57,6 +57,7 @@
                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
                             <f:selectItem itemLabel="Ampollas" itemValue="Ampollas" />  
                             <f:selectItem itemLabel="Pastillas" itemValue="Pastillas" />  
+                            <f:selectItem itemLabel="Cápsulas" itemValue="Cápsulas" />
                             <f:selectItem itemLabel="Sobres" itemValue="Sobres" />  
                             <f:selectItem itemLabel="Jarabe" itemValue="Jarabe" />                              
                             <f:selectItem itemLabel="Crema" itemValue="Crema" />  
@@ -73,7 +74,7 @@
                 <glue:input id="dirCasaComercial" name="dirCasaComercial" type="text" label="#{messages['common.dircasacomercial']}" value="#{medicamentoHome.instance.dirCasaComercial}" required="false" inlinehelp="#{messages['common.dircasacomercial']}" execute="@this save" render="dirCasaComercial"/>
 
                 <h:panelGroup id="fnp1" layout="block" class="clearfix">
-                    <label for="fechaElaboracion">#{messages['common.fechaelaboracionmedicamento']}</label>
+                    <label for="fechaElaboracion">#{messages['medicamento.fecha.elaboracion']}</label>
                     <div class="input" >
                         <p:calendar  id="fechaElaboracion" locale="es" value="#{medicamentoHome.instance.fechaElaboracion}" styleClass="xLarge" required="true" label="Fecha de Elaboracion" 
                                      rendered="true" disabled="false" navigator="true" showButtonPanel="true" disabledWeekends="false" pattern="dd-MM-yyyy" >
@@ -105,7 +106,7 @@
                     <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary offset2"/>
                     #{' '}
                     <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" onclick="editDlg.hide();"
-                            value="#{messages['common.cancel']}" styleClass="btn primary" inmediate="true">                         
+                            value="#{messages['common.cancel']}" styleClass="btn primary">                         
                     </h:link>
                 </div>
             </h:form>

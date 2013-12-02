@@ -12,6 +12,11 @@
        <view-id value="/pages/home.xhtml"></view-id>
    </url-mapping> 
    
+   <url-mapping id="loggedOffHome">
+       <pattern value="/"></pattern>
+       <view-id value="/pages/loggedOffHome.xhtml"></view-id>
+   </url-mapping> 
+   
    <url-mapping id="homePaciente">
        <pattern value="/paciente"></pattern>
        <view-id value="/pages/homePaciente.xhtml"></view-id>

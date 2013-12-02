@@ -65,11 +65,10 @@
                 </div>
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             paginator="true" rows="10" styleClass="span18" style=""
-                             paginatorAlwaysVisible="false"
+                             paginator="true" rows="20" styleClass="span18"                              
                              paginatorPosition="top"
-                             paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                             rowsPerPageTemplate="5,10,15"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                             rowsPerPageTemplate="5,10,20,50,100"
                              lazy="true"
                              rowKey="#{medicamento_.id}"
                              selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
@@ -110,17 +109,17 @@
 
                     <p:column style="width: 15%; text-align: center;">
                         <f:facet name="header">  
-                            <h:outputText value="#{'Fecha de Ingreso'}" />  
+                            <h:outputText value="#{messages['common.fechacaducidadmedicamento']}" />  
                         </f:facet> 
-                        <h:outputText value="#{medicamento_.fechaIngreso}" >
+                        <h:outputText value="#{medicamento_.fechaCaducidad}" >
                             <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                         </h:outputText>  
                     </p:column>
                     <p:column style="width: 15%; text-align: center;">
                         <f:facet name="header">                               
-                                <h:outputText value="#{messages['common.referenciaMedicamento']}" />  
+                            <h:outputText value="ALERTAS" />  
                         </f:facet> 
-                        <h:outputText value="#{medicamento_.presentacion}" />
+                        <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/>
                     </p:column>
                 </p:dataTable>
             </h:form>

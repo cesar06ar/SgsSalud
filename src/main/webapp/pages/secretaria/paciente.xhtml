@@ -29,7 +29,8 @@
             </div>
         </ui:define>
         <ui:define name="content" class="span20">
-            <h:form id="form">
+            <h:form id="form" enctype="multipart/form-data" >
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="datapersonal" header="#{messages['module.profile.data.personal']}">                    
                     <div class="container-fluid">   
                         <div class="row-fluid">
@@ -39,7 +40,7 @@
                                         <p:commandButton id="cargar" value="Buscar" icon="ui-icon-search" styleClass="btn primary btn-short" title="Buscar Estudiante por Cédula" > 
                                             <!--<p:graphicImage value="/resources/images/buscar.png"/> -->                                            
                                         </p:commandButton>
-                                        <label for="fdni">#{messages['profile.dni']}</label>
+                                        <label for="fdni">#{messages['profile.dni']} *</label>
                                         <div class="input" > 
                                             <h:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">
                                                 <f:validator validatorId="ciValidator" />
@@ -51,8 +52,20 @@
                                     </h:panelGroup>
                                     <glue:input id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pacienteHome.instance.nombres}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn" styleClass="xLarge"/>
                                     <glue:input id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pacienteHome.instance.apellidos}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>                                      
+                                    <h:panelGroup id="eml" layout="block" class="clearfix">
+                                        <label for="email">#{messages['common.email']} *</label>
+                                        <div class="input">
+                                            <h:inputText id="email" value="#{pacienteHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
+                                                <f:validator validatorId="emailValidator" />                                            
+                                                <f:ajax execute="@this" render="eml"  />
+                                            </h:inputText>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.email != null}"
+                                                            styleClass="validation-status" />
+                                            <span class="help-inline"><br/>Dirección de <b>Email</b> valido. <ocp:message forId="email" /></span>
+                                        </div>
+                                    </h:panelGroup> 
                                     <h:panelGroup id="fnp" layout="block" class="clearfix">
-                                        <label for="fnacim">#{messages['common.fecha.nacimiento']}</label>
+                                        <label for="fnacim">#{messages['common.fecha.nacimiento']}*</label>
                                         <div class="input" >
                                             <p:calendar  id="fnacim" value="#{pacienteHome.instance.fechaNacimiento}" styleClass="xLarge" required="false" label="edad" 
                                                          rendered="true" pattern="dd-MM-yyyy" navigator="true" showButtonPanel="true" >
@@ -64,7 +77,7 @@
                                         </div>
                                     </h:panelGroup>
                                     <h:panelGroup id="edadp" layout="block" class="clearfix">
-                                        <label for="edad">#{messages['common.edad']}</label>
+                                        <label for="edad">#{messages['common.edad']} *</label>
                                         <div class="input" >
                                             <p:inputText  id="edad" value="#{pacienteHome.instance.edad}" styleClass="xLarge" required="false" label="edad" 
                                                           rendered="true" disabled="true" title="Edad en años">
@@ -75,39 +88,45 @@
                                             <span class="help-inline"><br/>#{messages['common.edad.inlinehelp']}<ocp:message forId="edad" /></span>
                                         </div>
                                     </h:panelGroup>
+                                    <h:panelGroup layout="block" class="clearfix">
+                                        <label for="genero_" class="control-label">#{messages['comun.genero']} *</label>
+                                        <div class="input">
+                                            <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                                             rendered="true" label="#{messages['comun.genero']}">
+                                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
+                                                <f:selectItems value="#{pacienteHome.listaGeneros}" var="genero" itemLabel="#{genero}" itemValue="#{genero}"/>                          
+                                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                            </p:selectOneMenu>  
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.genero != null}"
+                                                            styleClass="validation-status" />
+                                            <span class="help-inline"><br/>#{messages['comun.genero.lineaAyuda']} <ocp:message forId="genero_" /></span>
+                                        </div>
+                                    </h:panelGroup>
                                     <glue:input id="dir" name="direccion" type="text" label="#{messages['common.dir']}" value="#{pacienteHome.instance.direccion}" required="false" inlinehelp="#{messages['common.dir.inlinehelp']}" execute="@this save" render="dir" />
                                     <glue:input id="telf" name="telefono" type="text" label="#{messages['common.telefono']}" value="#{pacienteHome.instance.telefono}" required="false" inlinehelp="#{messages['common.telefono.inlinehelp']}" execute="@this save" render="telf"/>
                                     <glue:input id="cel" name="celular" type="text" label="#{messages['common.cel']}" value="#{pacienteHome.instance.celular}" required="false" inlinehelp="#{messages['common.cel.inlinehelp']}" execute="@this save" render="cel"/>
-                                    <h:panelGroup id="eml" layout="block" class="clearfix">
-                                        <label for="email">#{messages['common.email']}</label>
-                                        <div class="input">
-                                            <h:inputText id="email" value="#{pacienteHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
-                                                <f:validator validatorId="emailValidator" />                                            
-                                                <f:ajax execute="@this" render="eml"  />
-                                            </h:inputText>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.email != null}"
-                                                            styleClass="validation-status" />
-                                            <span class="help-inline"><br/>Dirección de <b>Email</b> valido. <ocp:message forId="email" /></span>
-                                        </div>
-                                    </h:panelGroup>                                
-                                    <glue:input id="nac_" name="nacionalidad" type="text" label="#{messages['comun.nacionalidad']}" value="#{pacienteHome.instance.nacionalidad}" required="false" inlinehelp="#{messages['comun.nacionalidad.lineaAyuda']}" execute="@this save" render="nac_" />
+
+
                                 </h:panelGroup>
                             </div>
                             <div class="span7" align="left">
-                                <h:panelGroup layout="block" class="clearfix">
-                                    <label for="genero_" class="control-label">#{messages['comun.genero']}</label>
-                                    <div class="input">
-                                        <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
-                                                         rendered="true" label="#{messages['comun.genero']}">
-                                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
-                                            <f:selectItems value="#{pacienteHome.listaGeneros}" var="genero" itemLabel="#{genero}" itemValue="#{genero}"/>                          
-                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                                        </p:selectOneMenu>  
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.genero != null}"
-                                                        styleClass="validation-status" />
-                                        <span class="help-inline"><br/>#{messages['comun.genero.lineaAyuda']} <ocp:message forId="genero_" /></span>
-                                    </div>
-                                </h:panelGroup>
+
+
+                                <div class="span7 columns offset1" >
+                                    <p:fileUpload id="fileImgPro" mode="advanced" fileUploadListener="#{pacienteHome.subirImagen}" dragDropSupport="false"  
+                                                  uploadLabel="Sibir" cancelLabel="Cancelar" label="Elegir"  
+                                                  update="imgFoto messages" sizeLimit="512000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"  >
+                                        
+                                    </p:fileUpload >                                    
+                                    <p:graphicImage id="imgFoto" value="#{pacienteHome.instance.rutaFoto}" 
+                                                    width="105" height="125" style="background-color: #CAD0D2; margin-bottom: -30px; margin-left: 5px; " /> 
+                                    <p:commandButton value="subir" styleClass="span2 offset2" />
+                                </div>
+                                
+                                <p:spacer width="30" height="30" />
+
+                                <glue:input id="nac_" name="nacionalidad" type="text" label="#{messages['comun.nacionalidad']}" value="#{pacienteHome.instance.nacionalidad}" required="false" inlinehelp="#{messages['comun.nacionalidad.lineaAyuda']}" execute="@this save" render="nac_" />
+
                                 <!-- Attributos personalizados del tipo de entidad de negocio-->
                                 <h:panelGroup id="attributes" layout="block" class="clearfix">
                                     <ui:repeat value="#{pacienteHome.instance.findBussinesEntityAttribute('datosPersonalesPaciente')}" var="a" varStatus="status">
@@ -158,7 +177,7 @@
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
                                 <f:selectItems value="#{pacienteHome.tiposEstudiante()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
                                 <p:ajax event="change" update="@parent :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc" partialSubmit="true" rendered="this :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc"/>  
-                                
+
                             </p:selectOneMenu>  
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.tipoEstudiante != null}"
                                             styleClass="validation-status" />
@@ -172,7 +191,7 @@
                         <div class="input">
                             <p:selectOneMenu id="area_" value="#{pacienteHome.instance.area}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false" requiredMessage="false" 
                                              label="#{messages['comun.area']}" rendered="true">
-                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  ItemValue = ""  />  
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
                                 <f:selectItems value="#{pacienteHome.listaAreas()}" var="_area" itemLabel="#{_area}" itemValue="#{_area}"/>                          
                                 <p:ajax event="change" update="@parent" partialSubmit="true"/>
                             </p:selectOneMenu>  
@@ -182,7 +201,7 @@
                         </div>
                     </h:panelGroup>
                     <glue:input id="carrera_" name="carrera" type="text" label="#{messages['comun.carrera']}" value="#{pacienteHome.instance.carrera}" required="false" inlinehelp="#{messages['comun.carrera.lineaAyuda']}" execute="@this save" render="carrera_" />                                    
-                    <glue:input id="modulo_" name="modulo" type="decimal" label="#{messages['comun.modulo']}" value="#{pacienteHome.instance.modulo}" required="false" inlinehelp="#{messages['comun.modulo.lineaAyuda']}" execute="@this save" render="modulo_" />                                    
+                    <glue:input id="modulo_" name="modulo" type="decimal" label="#{messages['comun.modulo']}" value="#{pacienteHome.instance.modulo}" required="false" inlinehelp="#{messages['comun.modulo.lineaAyuda']}" numDecimales="0" execute="@this save" render="modulo_" />                                    
                     <glue:input id="paralelo_" name="paralelo" type="text" label="#{messages['comun.paralelo']}" value="#{pacienteHome.instance.paralelo}" required="false" inlinehelp="#{messages['comun.paralelo.lineaAyuda']}" execute="@this save" render="paralelo_" />                                    
                 </p:panel>
                 <p:panel id="panelDatosAcadEstCol" rendered="true" visible="#{pacienteHome.rendPanelEstCol}"> 

@@ -89,7 +89,7 @@
                             <div class="row">
                                 <c:forEach items="#{ui.getProperties(userProfile)}" var="p" >
                                     <c:choose>
-                                        <c:when test="#{p.type == 'org.eqaula.glue.model.Structure'}">
+                                        <c:when test="#{p.type == 'edu.sgssalud.model.Structure'}">
                                             <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}">
                                                 <div class="span7 columns" style="margin-left: 48px;">
                                                     <div class="well" style="height: 225px; width:370px; margin-bottom: 0px;">

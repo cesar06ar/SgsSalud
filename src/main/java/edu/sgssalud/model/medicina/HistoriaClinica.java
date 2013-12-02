@@ -16,10 +16,13 @@
 package edu.sgssalud.model.medicina;
 
 import edu.sgssalud.model.BussinesEntity;
+import edu.sgssalud.util.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -28,11 +31,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 /**
  *
@@ -46,16 +52,20 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     // la fecha de apertura de la historiaClinica se guarda en (createOn)...
-    
-    //private List <AntecedentesPersonales> antecedentesPersonales;    
-           
+
     @OneToOne
     @JoinColumn(name = "fichaMedica_id")
     private FichaMedica fichaMedica;
-    
-    @OneToMany(mappedBy = "historiaClinica")
+
+    @OneToMany(mappedBy = "historiaClinica", orphanRemoval = true)
     private List<ConsultaMedica> consultas = new ArrayList<ConsultaMedica>();
-   
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "enfCIE10_HC", joinColumns = {
+        @JoinColumn(name = "enfermedadCIE10_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "historiaClin_id", referencedColumnName = "id")})
+    private List<EnfermedadCIE10> enfermedadesCIE10 = new ArrayList<EnfermedadCIE10>();
+
     public FichaMedica getFichaMedica() {
         return fichaMedica;
     }
@@ -65,6 +75,7 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
     }
 
     public List<ConsultaMedica> getConsultas() {
+        Collections.sort(consultas);
         return consultas;
     }
 
@@ -73,13 +84,27 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
             cm.setHistoriaClinica(this);
         }
         this.consultas = consultas;
-    }   
-    
-    public void agregarConsulta(ConsultaMedica c){
-        if(!this.consultas.contains(c)){
+    }
+
+    public List<EnfermedadCIE10> getEnfermedadesCIE10() {
+        Collections.sort(enfermedadesCIE10);
+        return enfermedadesCIE10;
+    }
+
+    public void setEnfermedadesCIE10(List<EnfermedadCIE10> enfermedadesCIE10) {       
+        this.enfermedadesCIE10 = enfermedadesCIE10;
+    }
+
+    public void agregarConsulta(ConsultaMedica c) {
+        if (!this.consultas.contains(c)) {
             c.setHistoriaClinica(this);
             this.consultas.add(c);
         }
-        
+    }
+
+    public void agregarEnfermedad(EnfermedadCIE10 enfermedad) {
+        if(!this.enfermedadesCIE10.contains(enfermedad)){            
+            enfermedadesCIE10.add(enfermedad);
+        }
     }
 }

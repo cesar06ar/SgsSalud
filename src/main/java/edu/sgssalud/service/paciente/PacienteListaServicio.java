@@ -23,6 +23,7 @@ import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +70,9 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     @PostConstruct
     public void init() {
         pacienteServicio.setEntityManager(em);
+        if (resultList.isEmpty() ) {
+           resultList = pacienteServicio.getPacientes(getPageSize(), firstResult);
+        }
     }
 
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
@@ -86,9 +90,9 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 
         QueryData<Paciente> qData = pacienteServicio.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());
-        return qData.getResult();
-
+        this.setResultList(qData.getResult());        
+        Collections.sort(resultList);
+        return qData.getResult();        
     }
 
     /*Métodos que me permiten seleccionar un objeto de la tabla*/
@@ -133,9 +137,10 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     }
 
     public List<Paciente> getResultList() {
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = pacienteServicio.getPacientes(firstResult, firstResult);
-        }
+//        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+//            resultList = pacienteServicio.getPacientes(firstResult, firstResult);
+//        }
+        Collections.sort(resultList);
         return resultList;
     }
 
@@ -157,6 +162,7 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
+        setResultList(pacienteServicio.BuscarPacientePorParametro(parametroBusqueda));
     }    
     
     /*..
@@ -167,6 +173,6 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     }
 
     public void buscarPorParametro() {
-        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro1(parametroBusqueda));
+        this.setResultList(pacienteServicio.BuscarPacientePorTodosParametros(parametroBusqueda));
     }
 }

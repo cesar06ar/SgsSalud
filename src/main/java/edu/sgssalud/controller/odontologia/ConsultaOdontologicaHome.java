@@ -29,7 +29,7 @@ import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.ServiciosMedicosService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
-import edu.sgssalud.service.odontologia.consultaOdontologicaServicio;
+import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
@@ -57,7 +57,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     @Web
     private EntityManager em;
     @Inject
-    private consultaOdontologicaServicio consultaOdontServicio;
+    private ConsultaOdontologicaServicio consultaOdontServicio;
     @Inject
     private FichaMedicaServicio fichaMedicaServicio;
     @Inject

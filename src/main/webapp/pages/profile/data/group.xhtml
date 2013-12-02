@@ -108,7 +108,7 @@
                             <h:panelGroup layout="block" class="clearfix">
                                 <label for="name" class="required">#{messages['common.name']}*</label>
                                 <div class="input">
-                                    <p:inputText name="name" value="#{groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
+                                    <p:inputText id="name" value="#{groupHome.bussinesEntity.name}" styleClass="xLarge span4" required="true" label="#{messages['common.name']}" 
                                                  rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>
                                         <p:ajax event="blur" update="@parent" partialSubmit="true"/>
@@ -121,7 +121,7 @@
                             <h:panelGroup layout="block" class="clearfix">
                                 <label for="code" class="required">#{messages['common.code']}*</label>
                                 <div class="input">
-                                    <p:inputText  name="code" value="#{groupHome.bussinesEntity.code}" styleClass="xLarge span4" required="false" label="#{messages['common.name']}" 
+                                    <p:inputText  id="code" value="#{groupHome.bussinesEntity.code}" styleClass="xLarge span4" required="false" label="#{messages['common.name']}" 
                                                   rendered="true">
                                         <f:validator validatorId="safeTextUTF8Validator"/>                                        
 
@@ -194,7 +194,7 @@
                         <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
                                          action="#{groupHome.deleteBussinessEntity()}" 
                                          update=":form-table:dataTable :form-dialog:messages-dialog"
-                                         ajax="true" pbarocess="@this"  
+                                         ajax="true" process="@this"  
                                          style="margin-top:10px;">  
                         </p:commandButton>  
                         <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  

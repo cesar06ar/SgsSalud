@@ -52,6 +52,8 @@ public class Membership extends DeletableObject<Membership> implements Serializa
         this.bussinesEntity = bussinesEntity;
     }
     
+    
+    
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 31). // two randomly chosen prime numbers

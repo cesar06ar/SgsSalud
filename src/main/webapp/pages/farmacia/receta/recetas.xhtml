@@ -34,6 +34,7 @@
 
         <ui:define name="content" >
             <h:form id="form">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
                     <div class="container-fluid">
                         <div class="row-fluid">
@@ -200,13 +201,6 @@
                     </div>
                 </p:panel>
 
-
-
-
-
-
-
-
                 <p:panelGrid columns="2" >
                     <p:panel header="Medicaciones" styleClass="span8" style="padding-right: 8px; height: 250px" >
                         <p:dataTable id="tablaMedicamentos" var="medicamento" value="#{recetaHome.listaMedicamentosReceta}" styleClass="span5" emptyMessage="No hay medicamentos cargados">  
@@ -234,7 +228,7 @@
                     </p:panel>
                     <p:panel header="Indicaciones" id="Indicac" styleClass="span7" style="padding-right: 13px; height: 250px; font-size:12px">
                         <c:forEach id="Indic" var="indi" items="#{recetaHome.listaIndicaciones}"  >  
-                            <h:outputText value="#{indi}" disabled="true" styleClass="span8" escape="false" />   
+                            <h:outputText value="#{indi}" styleClass="span8" escape="false" />   
 
 
                         </c:forEach>

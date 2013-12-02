@@ -16,6 +16,7 @@
 package edu.sgssalud.util;
 
 import com.google.common.io.Files;
+import edu.sgssalud.model.medicina.HistoriaClinica;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -24,7 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -228,19 +231,31 @@ public class Lists {
     final static String OUTPUT_FILE_NAME = "C:\\Temp\\output.txt";
     final static Charset ENCODING = StandardCharsets.UTF_8;
 
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
         String aFileName = "/home/jlgranda/iaenvirtual/selenium/CrearCurso";
         int MAX = 114;
-        String content = null;
-        File file = null;
-        for (int i = 1; i <= MAX; i++) {
-            content = buildContent(i);
-            aFileName = aFileName + i;
-            file = new File(aFileName);
-            Files.write(content, file, ENCODING);
-            System.out.println(aFileName + " created!");
-            aFileName = "/home/jlgranda/iaenvirtual/selenium/CrearCurso";
+        Date now = Calendar.getInstance().getTime();
+        Date caduca = new Date("22/01/2014");
+//        caduca.setDate(22);
+//        caduca.setMonth(01);
+//        caduca.setYear(2014);
+        if(FechasUtil.getFechaLimite(now, caduca) < 90){
+            System.out.println("ALERTA CADUCIDAD");
+        }else{
+            System.out.println("No caduca ");
         }
+//        String content = null;
+//        File file = null;
+//        for (int i = 1; i <= MAX; i++) {
+//            content = buildContent(i);
+//            aFileName = aFileName + i;
+//            file = new File(aFileName);
+//            Files.write(content, file, ENCODING);
+//            System.out.println(aFileName + " created!");
+//            aFileName = "/home/jlgranda/iaenvirtual/selenium/CrearCurso";
+//        }
+       
+        //System.out.println(h.agregarEnfermedad(c));
 
     }
 

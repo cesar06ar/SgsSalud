@@ -19,6 +19,7 @@ import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.BussinesEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -67,6 +68,7 @@ public class FichaOdontologica extends BussinesEntity implements Serializable {
     }
 
     public List<ConsultaOdontologica> getConsultas() {
+        Collections.sort(consultas);
         return consultas;
     }
 

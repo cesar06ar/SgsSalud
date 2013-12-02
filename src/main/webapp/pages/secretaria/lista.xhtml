@@ -34,10 +34,11 @@
     <ui:define name="content">
         <!--Metadato que se realiza antes de renderizarse la vista-->
         <f:metadata>
-            <f:viewParam name="result" value="#{pacienteListaServicio.firstResult}" />
+            <f:viewParam name="result" value="#{pacienteListaServicio.firstResult}" />            
+            <f:viewParam name="" value="#{pacienteListaServicio.parametroBusqueda}"/>
         </f:metadata>
         <!--Formulario dentro de un contenedor-->
-         <h:form id="form">            
+        <h:form id="form">            
             <!--Opción de mensaje, cuando se realiza una acción-->
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
@@ -63,7 +64,7 @@
                 </div>
                 <div class="span6 offset5" >
                     <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
-                        <p:ajax event="keyup" update="tablaPacientes" listener="#{pacienteListaServicio.buscarPorParametroAutoComplete()}"/>
+                        <p:ajax event="keyup" update="tablaPacientes"/>
                     </p:inputText>
                     &nbsp;
                     <p:commandButton value="Buscar" action="#{pacienteListaServicio.buscarPorParametro()}" update="tablaPacientes" styleClass="btn info"/>                    
@@ -72,12 +73,11 @@
             </div>
 
             <!--tabla de datos-->
-            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio}"
+            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio.resultList}"
                          paginator="true" rows="10" styleClass="span18"
-                         paginatorAlwaysVisible="false"
                          paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
-                         rowsPerPageTemplate="5,10,15"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                         rowsPerPageTemplate="10,20,30,50,100"
                          lazy="true"
                          rowKey="#{paciente_.id}"
                          selection="#{pacienteListaServicio.pacienteSelecionado}"

@@ -1,6 +1,6 @@
 body {
 	background-color: #fff;
-	background-image: url(#{request.contextPath}/resources/images/fondo-bg.jpg);
+	/*background-image: url(#{request.contextPath}/resources/images/fondo-bg.jpg);*/
 	background-repeat: repeat;
 	background-attachment: fixed;
 	background-position: top left;
@@ -32,7 +32,7 @@ body * {
 	height: 86px;
 	padding: 0px 0px 0px 0px;
 	background-color: #fff;
-	background-image: url(#{request.contextPath}/resources/images/cabecera.jpg);
+	/*background-image: url(#{request.contextPath}/resources/images/cabecera.jpg);*/
 	border-bottom: solid 0px #aaa;
 	color: #768492;
 }
@@ -42,7 +42,7 @@ body * {
 	height: 36px;
 	padding: 0px 0px 0px 0px;
 	background-color: #666;
-	background-image: url(#{request.contextPath}/resources/images/cabecera.jpg);
+	/*background-image: url(#{request.contextPath}/resources/images/cabecera.jpg);*/
 	border-bottom: solid 0px #aaa;
 	color: #768492;
 }
@@ -94,12 +94,12 @@ body * {
 	width: 461px;
 	height: 80px;
 	display: block;
-	background: url(#{request.contextPath}/resources/images/logo.png) top left no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/logo.png) top left no-repeat;*/
 	display: block;
 }
 
 #header #menu li #logo:hover,#header #menu .active#logo {
-	background: url(#{request.contextPath}/resources/images/logo.png) bottom left no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/logo.png) bottom left no-repeat;*/
 }
 
 #header #menu li a.active,#header #menu li a:hover {
@@ -115,7 +115,7 @@ body * {
 .logo {
 	width: 366px;
 	height: 80px;
-	background: url(#{request.contextPath}/resources/images/logo.png) center center no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/logo.png) center center no-repeat;*/
 	margin: 10px 0 0 20px;
 	line-height: 30px;
 	display: block;
@@ -538,7 +538,7 @@ div.pagination span.disabled {
 	float: left;
 	padding: 0px;
 	text-align: left;
-	background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;*/
 	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
@@ -574,7 +574,7 @@ div.pagination span.disabled {
 	float: left;
 	padding: 0px 0px 0px;
 	text-align: left;
-	background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;*/
 	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
@@ -610,7 +610,7 @@ div.pagination span.disabled {
 	float: left;
 	padding: 0px 0px 0px;
 	text-align: left;
-	background: url(#{request.contextPath}/resources/images/aulas.jpg) bottom left no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/aulas.jpg) bottom left no-repeat;*/
 	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
@@ -646,7 +646,7 @@ div.pagination span.disabled {
 	float: left;
 	padding: 0px 0px 0px;
 	text-align: left;
-	background: url(#{request.contextPath}/resources/images/redes.jpg) bottom left no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/redes.jpg) bottom left no-repeat;*/
 	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
@@ -707,7 +707,7 @@ div.pagination span.disabled {
 .certificacion {
 	width: 531px;
 	height: 208px;
-	background: url(#{request.contextPath}/resources/images/certificacion.jpg) center center no-repeat;
+	/*background: url(#{request.contextPath}/resources/images/certificacion.jpg) center center no-repeat;*/
 	margin: 10px 0 0 20px;
 	line-height: 30px;
 	display: block;

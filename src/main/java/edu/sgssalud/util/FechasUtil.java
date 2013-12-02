@@ -8,6 +8,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -88,54 +89,38 @@ public class FechasUtil {
         return false;
     }
 
-    public static int getFechaLimite(Date fechaActual, Date fechaPosterior) {
-        if (fechaActual != null && fechaPosterior != null) {
-            Calendar timeMayor = Calendar.getInstance();
+    public static int getFechaLimite(Date fechaActual, Date fechaPosterior) {  //retorna la diferencia en dias
+        long dias = -1;
+        if (fechaActual != null && fechaPosterior != null) {          
+            final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000; //Milisegundos al día 
             Calendar timeMenor = Calendar.getInstance();
-            timeMenor.setTime(fechaActual);
-            timeMayor.setTime(fechaPosterior);
+            timeMenor.setTime(fechaActual);           
 
-            int anio = timeMayor.get(Calendar.YEAR) - timeMenor.get(Calendar.YEAR);
-            int mes = timeMayor.get(Calendar.MONTH) - timeMenor.get(Calendar.MONTH);
-            int dia = timeMayor.get(Calendar.DATE) - timeMenor.get(Calendar.DATE);
-            int dias = 0;
-            //System.out.println("año :" + anio + " mes:" + mes + " dias:" + dia);
-            if (anio > 0) {
-                dias += 365;
-                if (mes > 0) {
-                    dias += (mes * 30);
-                    dias += dia;
-                } else {
-                    dias += dia;
-                }
-            } else if (mes > 0) {
-                dias += (mes * 30);
-                dias += dia;
-            } else if (dia > 0) {
-                dias += dia;
-            }
-
-            return dias;
+            int anio = timeMenor.get(Calendar.YEAR);
+            int mes = timeMenor.get(Calendar.MONTH);
+            int dia = timeMenor.get(Calendar.DATE);
+            
+            Calendar actual = new GregorianCalendar(anio, mes, dia);
+            java.sql.Date fecha = new java.sql.Date(actual.getTimeInMillis());                       
+            dias = (fechaPosterior.getTime() - fecha.getTime())/MILLSECS_PER_DAY;            
         }
-        return 0;
+        return (int) dias;
     }
 
     public static boolean getFormatoFecha(String fecha) {
-         //metodo para validar si la fecha es correcta
-    
+        //metodo para validar si la fecha es correcta
+
         try {
             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd-MMM-yyyy");
-            SimpleDateFormat formatoFecha1 = new SimpleDateFormat("dd-MM-yyyy");        
-            SimpleDateFormat formatoFecha2 = new SimpleDateFormat("dd/MM/yyyy");        
+            SimpleDateFormat formatoFecha1 = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat formatoFecha2 = new SimpleDateFormat("dd/MM/yyyy");
             Date date = formatoFecha.parse(fecha);
             date = formatoFecha1.parse(fecha);
-            date = formatoFecha2.parse(fecha);            
+            date = formatoFecha2.parse(fecha);
         } catch (Exception e) {
             return false;
         }
         return true;
-    
 
-        
     }
 }

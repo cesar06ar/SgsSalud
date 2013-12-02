@@ -36,6 +36,7 @@ limitations under the License.
     <c:set var="validator" value="#{not empty validator ? validator : 'safeTextUTF8Validator'}" />
     <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
     <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
+    <c:set var="numDecimales" value="#{not empty numDecimales ? numDecimales : '2'}" />
     <!-- TODO habilitar o deshabilitar ajax validation -->
     <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
@@ -70,7 +71,7 @@ limitations under the License.
                     </p:selectOneMenu>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Long' or type == 'java.lang.Double' or type == 'java.lang.Float' or type == 'decimal'}">
-                    <pe:inputNumber id="#{name}" value="#{value}" styleClass="xLarge span4" required="#{required}" label="#{label}">  
+                    <pe:inputNumber id="#{name}" value="#{value}" styleClass="xLarge span4" required="#{required}" label="#{label}" decimalPlaces="#{numDecimales}">  
                         <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
                     </pe:inputNumber>  
                     <br/>

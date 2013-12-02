@@ -23,9 +23,11 @@ import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
+import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
+import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +58,10 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
     private HistoriaClinicaServicio hcs;
     @Inject
     private FichaOdontologicaServicio fichaOdonServicio;
+    @Inject
+    private ConsultaMedicaServicio consultaMedSer;
+    @Inject
+    private ConsultaOdontologicaServicio consultaOdontSer;
     private Long fichaMedicaId;
     private HistoriaClinica historiaClinica;
     private FichaOdontologica fichaOdontologica;
@@ -70,6 +76,11 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
 
     public void setSignosVitalesId(Long signosVitales) {
         setId(signosVitales);
+        setConsultaMed(consultaMedSer.getPorSignosVitales(getInstance()));         
+        setConsultaOdont(consultaOdontSer.getPorSignosVitales(getInstance()));
+        servicioMedico = consultaMed != null;
+        servicioDental = consultaOdont != null; 
+        
     }
 
     public Long getFichaMedicaId() {
@@ -156,6 +167,8 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         fms.setEntityManager(em);
         hcs.setEntityManager(em);
         fichaOdonServicio.setEntityManager(em);
+        consultaMedSer.setEntityManager(em);
+        consultaOdontSer.setEntityManager(em);
     }
 
     @Override
@@ -201,12 +214,13 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         String salida = null;
         Date now = Calendar.getInstance().getTime();
         try {
-            if (servicioMedico || servicioDental) {
-                if (getInstance().isPersistent()) {
-                    save(getInstance());
-                    FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getId() + " con éxito");
-                    FacesContext.getCurrentInstance().addMessage("", msg);
-                } else {
+            if (getInstance().isPersistent()) {
+                save(getInstance());
+                FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getId() + " con éxito");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+                salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
+            } else {
+                if (servicioMedico || servicioDental) {
                     create(getInstance());
                     //log.info("crear ");
                     if (servicioMedico) {
@@ -222,11 +236,11 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
                         consultaOdont.setCode("PENDIENTE");
                         save(consultaOdont);
                         salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
-                    } 
+                    }
+                } else {
+                    FacesMessage msg = new FacesMessage("Debe selecionar al menos un servicio");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
                 }
-            } else {
-                FacesMessage msg = new FacesMessage("Debe selecionar al menos un servicio");
-                FacesContext.getCurrentInstance().addMessage("", msg);
             }
 
         } catch (Exception e) {

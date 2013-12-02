@@ -17,17 +17,23 @@ package edu.sgssalud.model.farmacia;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.util.FechasUtil;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 import org.jboss.solder.logging.Logger;
 
 /**
@@ -40,18 +46,18 @@ import org.jboss.solder.logging.Logger;
 @PrimaryKeyJoinColumn(name = "id")
 @NamedQueries(value = {
     @NamedQuery(name = "Medicamento.buscarPorParametro",
-    query = "select e from Medicamento e where"
-    + " LOWER(e.nombreComercial) like lower(concat('%',:clave,'%')) OR"
-    + " LOWER(e.nombreGenerico) like lower(concat('%',:clave,'%')) OR"
-    + " LOWER(e.casaComercialProveedora) like lower(concat('%',:clave,'%'))"
-    + " ORDER BY e.nombreComercial"),
+            query = "select e from Medicamento e where"
+            + " LOWER(e.nombreComercial) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(e.nombreGenerico) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(e.casaComercialProveedora) like lower(concat('%',:clave,'%'))"
+            + " ORDER BY e.nombreComercial"),
     @NamedQuery(name = "Medicamento.buscarPorNumero",
-    query = "select e from Medicamento e where"
-    + " e.numeroFactura = :clave"),
+            query = "select e from Medicamento e where"
+            + " e.numeroFactura = :clave"),
     @NamedQuery(name = "Medicamento.buscarPorFecha",
-    query = "select e from Medicamento e where"
-    + " e.fechaIngreso=:clave  OR"
-    + " e.fechaElaboracion=:clave")})
+            query = "select e from Medicamento e where"
+            + " e.fechaIngreso=:clave  OR"
+            + " e.fechaElaboracion=:clave")})
 public class Medicamento extends BussinesEntity implements Serializable, Comparable<Medicamento> {
 
     private static Logger log = Logger.getLogger(Medicamento.class);
@@ -70,10 +76,12 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCaducidad;
-    @ManyToOne
-    @JoinColumn(name = "receta_id")
-    private Receta receta;
-    
+
+    @Transient
+    private String alerta;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicamento", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
 
     public Medicamento() {
         //this.fechaIngreso = new Date();
@@ -159,22 +167,44 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
         this.fechaCaducidad = fechaCaducidad;
     }
 
-    public Receta getReceta() {
-        return receta;
-    }
-
-    public void setReceta(Receta receta) {
-        this.receta = receta;
-    }   
-
     public String getPresentacion() {
         return presentacion;
     }
 
     public void setPresentacion(String presentacion) {
         this.presentacion = presentacion;
-    }  
-    
+    }
+
+    public String getAlerta() {
+        Date now = Calendar.getInstance().getTime();
+        int dias = FechasUtil.getFechaLimite(now, fechaCaducidad);
+        if (dias >= 0 && dias < 90) {
+            return "ALERTA CADUCIDAD";
+        } else {
+            return "";
+        }
+    }
+
+    public void setAlerta(String alerta) {
+        this.alerta = alerta;
+    }
+
+    public List<Receta_Medicamento> getListaRecetaMedicamento() {
+        return listaRecetaMedicamento;
+    }
+
+    public void setListaRecetaMedicamento(List<Receta_Medicamento> listaRecetaMedicamento) {
+        this.listaRecetaMedicamento = listaRecetaMedicamento;
+    }
+
+    public List<Receta> getRecetas() {
+        List<Receta> recetas = new ArrayList<Receta>();
+        for (Receta_Medicamento rm : getListaRecetaMedicamento()) {
+            recetas.add(rm.getReceta());
+        }
+        return recetas;
+    }
+
     @Override
     public String toString() {
         return "edu.sgssalud.model.farmacia.Medicamento[ "
@@ -183,9 +213,9 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
                 + "nombreGenerico" + getNombreGenerico() + ","
                 + " ]";
     }
-    
+
     @Override
-    public int compareTo(Medicamento o) {      
-        return (int)(this.getId() - o.getId());
+    public int compareTo(Medicamento o) {
+        return (int) (this.getId() - o.getId());
     }
 }

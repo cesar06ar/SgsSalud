@@ -13,8 +13,8 @@
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
-        <f:metadata>
-            <f:viewParam name="id" value="#{profileHome.profileId}" />
+        <f:metadata>            
+            <f:viewParam name="id" value="#{profileHome.profileId}" />                        
             <s:viewAction action="#{profileHome.load}" if="#{conversation.transient}"/>
         </f:metadata>
 
@@ -133,7 +133,7 @@
                     <h:commandButton id="save" action="#{profileHome.saveAjax()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
                     <h:link outcome="/pages/profile/view"
-                            value="#{messages['common.cancel']}" styleClass="btn" immediate="true">
+                            value="#{messages['common.cancel']}" styleClass="btn" >
                         <f:param name="profileId" value="#{profileHome.profileId}"></f:param>
                     </h:link>
                 </div>

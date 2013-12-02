@@ -56,8 +56,7 @@
                         <f:facet name="header">
                             <strong>#{p.label}</strong>#{' '}
                             <h:link outcome="#{p.customForm != null ? p.customForm : '/pages/profile/data/structure'}" styleClass="btn" value="#{messages['common.edit']}" 
-                                    rendered="#{profileHome.editionEnabled and p.type == 'edu.sgssalud.model.Structure'}"
-                                    icon="ui-icon-disk">
+                                    rendered="#{profileHome.editionEnabled and p.type == 'edu.sgssalud.model.Structure'}" >
                                 <f:param name="profileId" value="#{profileHome.instance.id}"/>
                                 <f:param name="structureName" value="#{p.name}"/>
                             </h:link>
