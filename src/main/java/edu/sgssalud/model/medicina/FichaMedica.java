@@ -26,6 +26,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -39,6 +41,13 @@ import javax.persistence.Temporal;
 @Table(name = "FichaMedica")
 @DiscriminatorValue(value = "FM")
 @PrimaryKeyJoinColumn(name = "id")
+@NamedQueries(value = {  
+    @NamedQuery(name = "FichaMedica.buscarPorNumero",
+            query = "select fm from FichaMedica fm where"
+            + " fm.numeroFicha = :clave"),
+     @NamedQuery(name = "FichaMedica.buscarPorFecha",
+            query = "select fm from FichaMedica fm where"           
+            +" fm.fechaApertura=:clave")})
 public class FichaMedica extends BussinesEntity implements Serializable {    
 
     private static final long serialVersionUID = 1L;   

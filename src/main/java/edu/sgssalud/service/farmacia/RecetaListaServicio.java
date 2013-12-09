@@ -18,13 +18,25 @@ package edu.sgssalud.service.farmacia;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
+import edu.sgssalud.util.QueryData;
+import edu.sgssalud.util.QuerySortOrder;
+import edu.sgssalud.util.UI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -46,7 +58,7 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
     private List<Receta> resultList;
     private int primerResult = 0;
     private Receta[] recetasSeleccionados;
-    private Receta recetaSeleccionado;
+    private Receta recetaSeleccionada;
     private String parametroBusqueda;
 
     public RecetaListaServicio() {
@@ -72,6 +84,7 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
 
     public void setPrimerResult(int primerResult) {
         this.primerResult = primerResult;
+        this.resultList = null;
     }
     
        
@@ -85,11 +98,11 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
     }
 
     public Receta getRecetaSeleccionado() {
-        return recetaSeleccionado;
+        return recetaSeleccionada;
     }
 
     public void setRecetaSeleccionado(Receta recetaSeleccionado) {
-        this.recetaSeleccionado = recetaSeleccionado;
+        this.recetaSeleccionada = recetaSeleccionado;
     }
 
     
@@ -97,9 +110,72 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
         return primerResult + this.getPageSize();
     }
 
-    public int obtenerMedicamentoAnterior() {
+    public int obtenerRecetaAnterior() {
         return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
     }
     
     
+    
+      public String getParametroBusqueda() {
+        return parametroBusqueda;
+    }
+
+    public void setParametroBusqueda(String parametroBusqueda) {
+        this.parametroBusqueda = parametroBusqueda;
+        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));                       
+    }   
+    
+//   @Override
+//    public List<Receta> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+//        int end = first + pageSize;
+//
+//        QuerySortOrder order = QuerySortOrder.ASC;
+//        if (sortOrder == SortOrder.DESCENDING) {
+//            order = QuerySortOrder.DESC;
+//        }
+//        Map<String, Object> _filters = new HashMap<String, Object>();
+//        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+//         _filters.putAll(filters);*/
+//
+//        QueryData<Receta> qData = recetaServicio.find(first, end, sortField, order, _filters);
+//        this.setRowCount(qData.getTotalResultCount().intValue());
+//        this.setResultList(qData.getResult());        
+//        
+//        return qData.getResult();        
+//    }
+
+    @PostConstruct
+    public void init() {
+        recetaServicio.setEntityManager(em);        
+        if (resultList.isEmpty() ) {
+           resultList = recetaServicio.obtenerRecetas(this.getPageSize(), primerResult);
+        }
+    }
+
+//    @Override
+//    public Medicamento getRowData(String nombre) {
+//        return recetaServicio.buscarRecetaPorPaciente(nombre);
+//    }
+
+//    @Override
+//    public Object getRowKey(Receta entity) {
+//        return entity.getPaciente().getNombres();
+//    }
+
+    public void onRowSelect(SelectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("Receta") + " " + UI.getMessages("common.selected"), ((Receta) event.getObject()).getPaciente().getNombres());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.unselected"), ((Receta) event.getObject()).getPaciente().getNombres());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+        this.setRecetaSeleccionado(null);
+    }    
+
+    public void buscarPorParametro() {
+        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));               
+    }
 }
+
+

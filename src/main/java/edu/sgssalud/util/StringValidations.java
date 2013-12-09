@@ -35,6 +35,7 @@ import edu.sgssalud.model.odontologia.Diente;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.sound.midi.Soundbank;
 
 public class StringValidations {
 
@@ -221,10 +222,54 @@ public class StringValidations {
         } else {
             for (String s : imagenes) {
                 if (s.contains(".png") || s.contains(".jpg") || s.contains(".gif")) {
-                    System.out.println(ruta+s);
+                    System.out.println(ruta + s);
                 }
-                
+
             }
         }
+        StringValidations sv =new StringValidations();
+//        boolean resp = sv.validadorCedula("1722404042");
+        System.out.println(sv.validadorCedula("1722404042"));
+    }
+
+    public boolean validadorCedula(String cedula) {
+        if (cedula.length() == 10) {
+            String wced = cedula.substring(0, 9);
+            String verif = cedula.substring(9, 10);
+            double wd = 0;
+            double wc = 0;
+            double wa = 0;
+            double wb = 0;
+
+            for (int i = 0; i <= wced.length() - 1; i = i + 2) {
+                wa = Double.parseDouble(wced.substring(i, i + 1));
+                wb = wa * 2;
+                wc = wb;
+                if (wb > 9) {
+                    wc = wb - 9;
+                }
+                wd = wd + wc;
+            }
+
+            for (int i = 1; i <= wced.length() - 1; i = i + 2) {
+                wa = Double.parseDouble(wced.substring(i, i + 1));
+                wd = wd + wa;
+            }
+            double wn;
+            wn = wd / 10;
+            double wn2 = Math.ceil(wn);
+            wn2 = wn2 * 10;
+            double digit = wn2 - wd;
+
+            if (digit != Double.parseDouble(verif)) {
+                return false;
+            }else{
+                return true;
+            }
+
+        }else {
+            return false;
+        }
+
     }
 }
