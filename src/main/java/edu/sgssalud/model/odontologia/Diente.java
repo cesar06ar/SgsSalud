@@ -16,12 +16,16 @@
 package edu.sgssalud.model.odontologia;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -41,7 +45,10 @@ public class Diente implements Serializable, Comparable<Diente> {
     @ManyToOne
     @JoinColumn(name = "odontograma_id")
     private Odontograma odontograma;
-
+    
+    @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)    
+    private List<Tratamiento> tratamientos;
+    
     public Diente() {
     }
 
@@ -99,6 +106,24 @@ public class Diente implements Serializable, Comparable<Diente> {
     public void setOdontograma(Odontograma odontograma) {
         this.odontograma = odontograma;
     }    
+
+    public List<Tratamiento> getTratamientos() {
+        return tratamientos;
+    }
+
+    public void setTratamientos(List<Tratamiento> tratamientos) {
+        for (Tratamiento t : tratamientos) {
+            t.setDiente(this);
+        }
+        this.tratamientos = tratamientos;
+    }
+    
+    public void agregarTratamiento(Tratamiento t){
+        if(!tratamientos.contains(t)){
+            t.setDiente(this);
+            tratamientos.add(t);
+        }
+    }
     
     @Override
     public int hashCode() {

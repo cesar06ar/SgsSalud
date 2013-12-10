@@ -23,27 +23,13 @@ limitations under the License.
                 template="/WEB-INF/view/templates/glue.xhtml">
     <ui:param name="title" value="#{messages['common.profile']} - #{profileHome.instance.username}" />
     <ui:define name="header-replace">
-        <div class="hea">            
-            <div class="container">
-                <div class="span9 columns">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{messages['module.profile.profiles']}</h2>   
-                    </div>                    
+        <div class="header-replace">
+            <div class="container-header" >
+                <div class="row lf row-title" >
+                    <h2>#{messages['module.profile.profiles']}</h2>                      
                 </div> 
-                <div class="span4 columns offset3">
-                    <h:form id="control">  
-                        <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>  
-                        <br/>
-                        <br/>                        
-
-
-                    </h:form>
-                </div>
-            </div> 
-        </div>             
+            </div>
+        </div>            
     </ui:define>
     <ui:define name="content">
 
@@ -77,8 +63,11 @@ limitations under the License.
                     <f:param name="backView" value="listProfile"></f:param>
                 </h:link>
                 #{' '}
-                <h:commandLink id="button-print" value="#{messages['common.print']}" actionListener="#{profileReport.createPdf()}" styleClass="btn"> 
-                </h:commandLink>
+                <h:commandButton value="Export " action="#{reportListProfile.render1}" />#{' '}
+                <h:commandButton value="Export(with Apache Velocity)" action="#{reportListProfile.render}" />#{' '}
+                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                        outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary" style="float: right;">                                
+                </h:link>
             </div>
             <p:dataTable id="profileDataTable"  var="profile_" value="#{profileListService}"
                          paginator="true" rows="10"                         

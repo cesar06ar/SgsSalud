@@ -139,8 +139,8 @@
    
    <!-- Vistas de Medicamento-->  
    <url-mapping id="receta">
-      <pattern value="/farmacia/receta"></pattern>
-      <view-id value="/pages/farmacia/receta/receta.xhtml"></view-id>       
+      <pattern value="/farmacia/recetas"></pattern>
+      <view-id value="/pages/farmacia/receta/recetas.xhtml"></view-id>       
    </url-mapping>
    
    <!-- Vistas del Módulo de Medicina-->
@@ -164,7 +164,11 @@
    <url-mapping id="SignosVitales">
       <pattern value="/enfermeria/signosVitales"></pattern>
       <view-id value="/pages/depSalud/enfermeria/signosVitales.xhtml"></view-id>       
-   </url-mapping> 
+   </url-mapping>
+   <url-mapping id="enfermedadcie10">
+      <pattern value="/medicina/enfermedadcie10"></pattern>
+      <view-id value="/pages/depSalud/medicina/enfermedadescie10.xhtml"></view-id>       
+   </url-mapping>  
    
     <!-- Vistas del Módulo de Odontología-->   
    <url-mapping id="FichaOdontologica">

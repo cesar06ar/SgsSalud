@@ -20,8 +20,8 @@
         </f:metadata>
         <ui:define name="header-replace">
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
+                <div class="container-header" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
                         <h2>#{consultaOdontHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaOdontologica.nombre']}
                             #{consultaOdontHome.instance.id}</h2>   
                     </div>
@@ -47,8 +47,8 @@
                             <label for="horaC" >#{messages['consultaMedica.horaConsulta']}</label>
                             <div class="input"> 
                                 <pe:timePicker id="horaC" value="#{consultaOdontHome.instance.horaConsulta}"  label="" 
-                                             disabled="true"  style="width: 50px;" mode="popup">                                            
-                                    
+                                               disabled="true"  style="width: 50px;" mode="popup">                                            
+
                                 </pe:timePicker>                            
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.horaConsulta != null}"
                                                 styleClass="validation-status" />                                                        
@@ -80,63 +80,64 @@
                                                             styleClass="validation-status" />                                                        
                                         </div>
                                     </h:panelGroup>  
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="presionArt" >#{messages['signosVitales.presionArt']}</label>
+                                    <p:panelGrid columns="2">
+                                        <label for="peso" class="span3">#{messages['signosVitales.peso']} *</label>
                                         <div class="input"> 
-                                            <p:spinner  id="presionArt" value="#{consultaOdontHome.instance.signosVitales.presionArterial}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" min" disabled="true">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.signosVitales.presionArterial != null}"
-                                                            styleClass="validation-status" />                                                        
+                                            <pe:inputNumber id="peso" value="#{consultaOdontHome.instance.signosVitales.peso}" required="true" style="width: 190px;" 
+                                                            maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left"  decimalPlaces="2" 
+                                                            disabled="#{not empty consultaOdontHome.instance.signosVitales.peso}">
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                                                                                                                  
                                         </div>
-                                    </h:panelGroup> 
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="pulso" >#{messages['signosVitales.pulso']}</label>
+                                        <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} *</label>
+                                        <div class="input">                                                                                
+                                            <pe:inputNumber  id="presionArtDiag" value="#{consultaOdontHome.instance.signosVitales.presionArterialDiastolica}" required="true" style="width: 190px;" 
+                                                             rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
+                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialDiastolica}">
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                        
+                                        </div>    
+                                        <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} *</label>
                                         <div class="input"> 
-                                            <p:spinner  id="pulso" value="#{consultaOdontHome.instance.signosVitales.pulso}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0" suffix=" p/min" disabled="true">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.signosVitales.pulso != null}"
-                                                            styleClass="validation-status" />                                                        
-                                        </div>
-                                    </h:panelGroup> 
+                                            <pe:inputNumber  id="presionArtSis" value="#{consultaOdontHome.instance.signosVitales.presionArterialSistolica}" required="true" style="width: 190px;" 
+                                                             rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
+                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialSistolica}">   
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                                                                                                 
+                                        </div>              
+                                        <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
+                                        <pe:inputNumber  id="pulso" value="#{consultaOdontHome.instance.signosVitales.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
+                                                         rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" 
+                                                         disabled="#{not empty consultaOdontHome.instance.signosVitales.pulso}">   
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                        
+                                    </p:panelGrid>  
                                 </div>
                                 <div id="left" class="span8"  style="margin-left: -40px; ">
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="frecuenciaResp" >#{messages['signosVitales.frecuenciaResp']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="frecuenciaResp" value="#{consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" min" disabled="true">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria != null}"
-                                                            styleClass="validation-status" />                                                        
+                                    <p:panelGrid columns="2">
+                                        <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
+                                        <div class="input">                                                                                
+                                            <pe:inputNumber  id="frecuenciaResp" value="#{consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}" required="true" style="width: 190px;" 
+                                                             rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" 
+                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}">
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>  
                                         </div>
-                                    </h:panelGroup>
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="talla" >#{messages['signosVitales.talla']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="talla" value="#{consultaOdontHome.instance.signosVitales.talla}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" mm" disabled="true" dir="lrt">
-                                                <p:ajax event="keyup"  update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.signosVitales.talla != null}"
-                                                            styleClass="validation-status" />                                                        
+                                        <label for="talla" class="span3">#{messages['signosVitales.talla']} *</label>
+                                        <div class="input">                                                                                
+                                            <pe:inputNumber id="talla" value="#{consultaOdontHome.instance.signosVitales.talla}" required="true" style="width: 190px;" 
+                                                            rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0"
+                                                            disabled="#{not empty consultaOdontHome.instance.signosVitales.talla}">                                            
+                                                <p:ajax event="blur" update="@parent" process="@this"/>  
+                                            </pe:inputNumber>                                        
                                         </div>
-                                    </h:panelGroup>
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="temperatura" >#{messages['signosVitales.temperatura']}</label>
-                                        <div class="input"> 
-                                            <p:spinner  id="temperatura" value="#{consultaOdontHome.instance.signosVitales.temperatura}" styleClass="xLarge" required="true" 
-                                                        rendered="true" min="0"  stepFactor="0.25" suffix=" °C" disabled="true">
-                                                <p:ajax event="keyup" update="@parent :form:save" process="@this"/>  
-                                            </p:spinner>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.signosVitales.temperatura != null}"
-                                                            styleClass="validation-status" />                                                        
-                                        </div>
-                                    </h:panelGroup>  
+                                        <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
+                                        <pe:inputNumber  id="temperatura" value="#{consultaOdontHome.instance.signosVitales.temperatura}" required="true" style="width: 190px;" 
+                                                         rendered="true" symbol="       mmHg" symbolPosition="rigth" maxValue="90" decimalPlaces="2" 
+                                                         disabled="#{not empty consultaOdontHome.instance.signosVitales.temperatura}">
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>                                        
+                                    </p:panelGrid> 
                                 </div>
                             </div>
                         </div>
@@ -305,7 +306,7 @@
                                  paginator="true"
                                  rows="10" editable="true" selectionMode="single"
                                  selection="#{consultaOdontHome.tratamiento}"  rowKey="#{tratam_.id}" >                        
-                                          
+
                         <p:column headerText="Fecha realizada">
                             <h:outputText value="#{tratam_.fechaRelizacion}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>

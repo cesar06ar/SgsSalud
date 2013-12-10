@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2012 jlgranda.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+    >
+    <style type="text/css">
+        .ui-selectonemenu label.ui-selectonemenu-label {
+            padding-right: 28px;
+            text-align: left;
+        }
+    </style>
+    <c:set var="id" value="#{not empty id ? id : (not empty name ? name : action)}" />
+    <c:set var="required" value="#{not empty required and required}" />
+    <c:set var="render" value="#{not empty render ? 'panel-group-'.concat(render) : (not empty id ? 'panel-group-'.concat(id) : 'panel-group-'.concat(mame))}" />
+
+    <c:set var="validator" value="#{not empty validator ? validator : 'safeTextUTF8Validator'}" />
+    <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
+    <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
+    <c:set var="numDecimales" value="#{not empty numDecimales ? numDecimales : '2'}" />
+    <c:set var="diente" value="#{not empty diente ? diente : null}" />
+    <!-- TODO habilitar o deshabilitar ajax validation 
+    <label for="#{id}" class="#{(not empty required and required) ? 'required' : ''}" style="width: 0.07%; height: 0.08%; margin: -10px -5px 10px 5px;">#{label} #{(not empty required and required) ? '*&#160;' : ''}</label> -->   
+    <h:panelGroup id="panel-group-#{id}">        
+        <ui:param name="carieC1" value="false"/>
+        <ui:param name="carieC2" value="false"/>
+        <ui:param name="carieC3" value="false"/>
+        <ui:param name="carieC4" value="false"/>
+        <ui:param name="carieC5" value="false"/>        
+        <ui:param name="obturacionPc1" value="false"/>
+        <ui:param name="obturacionPc2" value="false"/>
+        <ui:param name="obturacionPc3" value="true"/>
+        <ui:param name="obturacionPc4" value="false"/>
+        <ui:param name="obturacionPc5" value="false"/>
+        <ui:param name="obturacionDefc1" value="false"/>
+        <ui:param name="obturacionDefc2" value="false"/>
+        <ui:param name="obturacionDefc3" value="false"/>
+        <ui:param name="obturacionDefc4" value="false"/>
+        <ui:param name="obturacionDefc5" value="false"/>
+        <ui:param name="sellanteNec" value="false"/>
+        <ui:param name="sellanteRea" value="false"/>        
+        <ui:param name="endodonciaReal" value="false"/>
+        <ui:param name="endodonciaNec" value="false"/>
+        <ui:param name="corona" value="false"/>
+        <ui:param name="extraccionIn" value="false"/>
+        <ui:param name="ausenciaPDS" value="false"/>
+        <ui:param name="lineaCentro" value="false"/>
+        <ui:param name="protesisFijaInit" value="true"/>
+        <ui:param name="protesisFijaEnd" value="false"/>
+        <ui:param name="protesisParcialInit" value="false"/>
+        <ui:param name="protesisParcialEnd" value="false"/>
+
+        <ui:repeat value="#{diente.tratamientos}" var="t">
+            <c:choose>
+                <c:when test="#{t.name == messages['tratamiento.carie']}">
+                    <c:choose>
+                        <c:when test="#{t.c1 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{carieC1}"/>
+                        </c:when>
+                        <c:when test="#{t.c2 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{carieC2}"/>
+                        </c:when>
+                        <c:when test="#{t.c3 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{carieC2}"/>
+                        </c:when>
+                        <c:when test="#{t.c4 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{carieC3}"/>
+                        </c:when>
+                        <c:when test="#{t.c5 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{carieC5}"/>
+                        </c:when>
+                        <c:otherwise>
+                        </c:otherwise>
+                    </c:choose>                    
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.obturacionProvicional']}">
+                    <c:choose>
+                        <c:when test="#{t.c1 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionPc1}"/>
+                        </c:when>
+                        <c:when test="#{t.c2 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionPc2}"/>
+                        </c:when>
+                        <c:when test="#{t.c3 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionPc3}"/>
+                        </c:when>
+                        <c:when test="#{t.c4 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionPc4}"/>
+                        </c:when>
+                        <c:when test="#{t.c5 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionPc5}"/>
+                        </c:when>
+                        <c:otherwise>
+                        </c:otherwise>
+                    </c:choose>
+                </c:when>
+                <c:when test="#{t.name == 'carie'}">
+
+                </c:when>
+                <c:otherwise>
+
+                </c:otherwise>
+            </c:choose>        
+        </ui:repeat>
+        <p:commandLink onclick="#{onclick}" ajax="true" title="#{title}">  
+            <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 7px 0 0 -4px;"
+                            rendered="true" />
+            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                            rendered="${carieC1}" />
+            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                            rendered="${carieC2}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${carieC3}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${carieC4}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 1px 0 0 -55px;"
+                            rendered="${carieC5}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionPc1}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionPc2}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionPc3}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionPc4}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionPc5}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionDefc1}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionDefc2}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionDefc3}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionDefc4}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${obturacionDefc5}"/>            
+            <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${sellanteNec}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${sellanteRea}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${corona}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${endodonciaNec}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaRealizadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${endodonciaReal}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/extraccionIndicadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${extraccionIn}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiesaDentalS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${ausenciaPDS}"/>
+
+            <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${lineaCentro}"/>            
+            <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${protesisFijaInit}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaFin.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${protesisFijaEnd}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${protesisParcialInit}"/>
+            <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                            rendered="${protesisParcialEnd}"/>
+            <p:spacer width="0"/>
+
+            <f:setPropertyActionListener value="#{origen}" target="#{destino}"/>
+            <p:ajax process="@this" update="#{actualizar}" rendered="#{render}"/>
+        </p:commandLink>                        
+    </h:panelGroup>  
+</ui:composition>

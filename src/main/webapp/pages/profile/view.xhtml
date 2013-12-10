@@ -19,8 +19,8 @@
         <ui:param name="title" value="#{messages['common.profile']} - #{profileHome.instance.username}" />
         <ui:define name="header-replace">
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
+                <div class="container-header">
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%; padding-top: 1%" >
                         <div class="span2 columns">
                             <h:link outcome="profile" title="${profileHome.instance.fullName}">
                                 <ocp:gravatar email="${profileHome.instance.email}" size="90" updatable="false" />

@@ -38,7 +38,7 @@ public class Odontograma implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String observacion;
-    @OneToMany(mappedBy = "odontograma", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "odontograma", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Diente> dientes;
 
     /*..Metodos de la clase..*/

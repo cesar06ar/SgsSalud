@@ -60,7 +60,7 @@ limitations under the License.
                     <!--<span>#{inlinehelp}</span>-->
                 </c:when>
                 <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
-                    <h:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" style="width: 400px; height: 100px;" >
+                    <h:inputTextarea value="#{value}" id="#{name}" style="width: 50%; height: 80px;" required="#{required}" label="#{label}"  >
                         <f:ajax execute="#{execute}" render="#{render}"  />
                     </h:inputTextarea>
                 </c:when>
@@ -77,7 +77,10 @@ limitations under the License.
                     <br/>
                 </c:when>
                 <c:otherwise>
-                    <h:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
+                    <!--<h:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
+                        <f:ajax execute="#{execute}" render="#{render}"  />
+                    </h:inputText>-->
+                    <h:inputText value="#{value}" id="#{name}" style="width: 30%; height: 20%" required="#{required}" label="#{label}">
                         <f:ajax execute="#{execute}" render="#{render}"  />
                     </h:inputText>
                 </c:otherwise>

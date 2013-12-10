@@ -105,14 +105,16 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
         return query.getResultList();
     }
 
-     public List<Medicamento> buscarTodos() {
-        try {
-            return findAll(Medicamento.class);
-        } catch (Exception e) {
-            log.info("error no encontro nada " + e.getMessage());
-            return null;
-        }
+    public List<Medicamento> buscarTodos() {
+        return findAll(Medicamento.class);
     }
+    
+    public List<Medicamento> buscarPorStockDisponible() {
+        String consulta = "select m from Medicamento m where m.unidades > 0";
+        TypedQuery<Medicamento> query = em.createQuery(consulta, Medicamento.class);        
+        return query.getResultList();
+    }
+
     public boolean esNombreDisponible(String nombre) {
         try {
             Medicamento med = buscarPorNombreMed(nombre);

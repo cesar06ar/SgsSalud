@@ -95,15 +95,15 @@ section>.row {
 #masthead,#footer {
     background-color: #000000;
     background-repeat: no-repeat;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#004D9F),
-        to(#049cd9) );
-    background-image: -webkit-linear-gradient(#004D9F, #049cd9);
-    background-image: -moz-linear-gradient(#004D9F, #049cd9);
-    background-image: -o-linear-gradient(top, #004D9F, #049cd9);
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#004D9F),
-        to(#049cd9) );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#004D9F',
-        endColorstr='#049cd9', GradientType=0 ); /* IE8 and down */
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#377179),
+        to(#222222) );
+    background-image: -webkit-linear-gradient(#377179, #222222);
+    background-image: -moz-linear-gradient(#377179, #222222);
+    background-image: -o-linear-gradient(top, #377179, #222222);
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#377179),
+        to(#222222) );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#377179',
+        endColorstr='#222222', GradientType=0 ); /* IE8 and down */
 }
 
 #masthead div.inner,#footer div.inner {
@@ -120,7 +120,7 @@ section>.row {
 }
 
 #masthead p a,#footer p a {
-    color: #2727c5;
+    color: #adf6c1;
 }
 
 #masthead {
@@ -226,7 +226,7 @@ div.quickstart form textarea {
     margin: 50px 0 0;    
     padding: 20px 0;
     position: relative;
-    text-shadow: 0 1px 0 #049cd9;
+    text-shadow: 0 1px 0 #222222;
 }
 
 #footer p {
@@ -441,7 +441,9 @@ h1.header span {
 .header-replace{
     width: 100%; 
     background-color: #adf6c1;      
-    margin-bottom: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1.2;    
 }
 
 .ui-icon-buscar{    

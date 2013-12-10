@@ -12,22 +12,10 @@
 
     <ui:define name="header-replace">
         <div class="header-replace">            
-            <div class="container">
-                <div class="span9 columns">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{titulo}</h2>   
-                    </div>                    
-                </div> 
-                <!--Div para boton de regreso a inicio-->
-                <div class="span4 columns offset3">
-                    <h:form id="control">  
-                        <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>  
-                        <br/>                                             
-                    </h:form>
-                </div>
+            <div class="container-header">                
+                <div class="row lf row-title" >                    
+                    <h2>#{titulo}</h2>    
+                </div>                 
             </div> 
         </div>             
     </ui:define>
@@ -43,8 +31,8 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
             <!--Botones de admin-->
-            <div class="admin-actions span17">
-                <div class="span6 ">
+            <div class="admin-actions ">
+                
                     <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="paciente" styleClass="btn success">
                         <f:param name="pacienteId"></f:param>
                         <f:param name="backView" value="lista"></f:param>
@@ -61,8 +49,8 @@
                         <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
-                </div>
-                <div class="span6 offset5" >
+                
+                <div style="float: right">
                     <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                         <p:ajax event="keyup" update="tablaPacientes"/>
                     </p:inputText>
@@ -74,7 +62,7 @@
 
             <!--tabla de datos-->
             <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio.resultList}"
-                         paginator="true" rows="10" styleClass="span18"
+                         paginator="true" rows="10" 
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"

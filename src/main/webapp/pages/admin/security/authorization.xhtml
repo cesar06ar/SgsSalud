@@ -14,21 +14,11 @@
 
         <ui:define name="header-replace">            
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <div class="span9 columns">   
-                            <div class="row fl" style="margin-top: 5px;">
-                                <h3>#{not empty securityHome.username ? messages['common.authorize'] : ''}
-                                    #{messages['common.permissions']} #{messages['common.for']}
-                                    #{not empty securityHome.username ? securityHome.username : '' }</h3>     
-                            </div>                        
-                        </div>
-                        <div class="span4 columns offset3">
-                            <h:form id="control">                                                         
-                                <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']} " rendered="#{true}" outcome="/pages/admin/listProfile.xhtml?faces-redirect=true" styleClass="btn secondary">
-                                </h:link>                            
-                            </h:form>
-                        </div>
+                <div class="container-header" >
+                    <div class="row lf row-title" >                        
+                        <h3>#{not empty securityHome.username ? messages['common.authorize'] : ''}
+                            #{messages['common.permissions']} #{messages['common.for']}
+                            #{not empty securityHome.username ? securityHome.username : '' }</h3>     
                     </div>     
                 </div>
             </div>
@@ -56,16 +46,21 @@
                     </div>   
                 </h:panelGroup>                
                 <h3>#{messages['security.assignedgroups']}</h3>
-                <div class="offset6" style="background-color: #d0f9cf">
+                <div class="admin-actions" >
                     <p:commandButton id="button-delete" value="#{messages['common.remove.gropoAsignado']}" type="button" styleClass="btn"
                                      onclick="deletedDlg.show();" rendered="true" disabled="#{empty securityHome.groupSelected}" 
                                      ajax="true">                                                                
                     </p:commandButton>                      
                     &nbsp;
                     <h:link value="#{messages['common.admin']} #{messages['security.group']}" rendered="#{true}" 
-                            outcome="/pages/admin/security/list" styleClass="btn">                                          
+                            outcome="/pages/admin/security/list" styleClass="btn" >
                     </h:link>
+                    #{' '}
+                    <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']} " rendered="#{true}" 
+                            outcome="/pages/admin/listProfile.xhtml?faces-redirect=true" styleClass="btn secondary" style="float: right;">
+                    </h:link> 
                 </div>
+                
                 <p:dataTable id="groupTable" var="group1" value="#{securityHome.findGroups()}"
                              editable="true" rendered="true" rowKey="#{group1.name}"
                              paginator="true" rows="10" selection="#{securityHome.groupSelected}"

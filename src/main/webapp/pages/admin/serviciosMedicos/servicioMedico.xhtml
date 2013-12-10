@@ -17,8 +17,8 @@
 
         <ui:define name="header-replace">
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
                         <h3>#{serviciosMedicosHome.servicioId != null? messages['common.edit'] : messages['common.add']} 
                             #{'Servicio Médico '}#{serviciosMedicosHome.instance.nombre}</h3>   
                     </div>
@@ -30,7 +30,7 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
                 <glue:input id="cate" name="categoria" type="text" label="#{messages['servicioMedico.categoria']}" value="#{serviciosMedicosHome.instance.categoria}" required="true" inlinehelp="#{messages['servicioMedico.categoria.lineaAyuda']}" execute="@this save zonas" render="cate" validator="">                    
                 </glue:input>                
-                 <h:panelGroup layout="block" class="clearfix" rendered="true">
+                <h:panelGroup layout="block" class="clearfix" rendered="true">
                     <label for="imagen1" >#{messages['servicioMedico.imagen']}  </label>
                     <div class="input">
                         <p:selectOneMenu id="imagen1" value="#{serviciosMedicosHome.instance.rutaImg}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true"                                           
@@ -60,7 +60,7 @@
                     </div>
                 </h:panelGroup>
 
-               
+
                 <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{serviciosMedicosHome.instance.descripcion}" inlinehelp="#{messages['servicioMedico.descripcion.lineaAyuda']}" execute="@this save" render="description"/>                                
                 <div class="actions">
 

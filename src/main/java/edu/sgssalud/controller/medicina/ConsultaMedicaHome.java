@@ -347,8 +347,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         linearModel = new CartesianChartModel();
         ChartSeries serieImc = new ChartSeries();
         serieImc.setLabel("Indice Masa Corporal = " + getInidicadirIMC());
-        serieImc.set("BAJO PESO", 15);
-        serieImc.set("NORMAL", 20);
+        serieImc.set("BAJO PESO", 0);
+        serieImc.set("NORMAL", 18.5);
         serieImc.set("SOBRE PESO", 25);
         serieImc.set("OBESIDAD", 30);
         linearModel.addSeries(serieImc);
