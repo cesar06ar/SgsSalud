@@ -61,10 +61,8 @@ limitations under the License.
                         disabled="#{empty  profileListService.selectedProfile}">
                     <f:param name="username" value="#{profileListService.selectedProfile.username}"></f:param>
                     <f:param name="backView" value="listProfile"></f:param>
-                </h:link>
-                #{' '}
-                <h:commandButton value="Export " action="#{reportListProfile.render1}" />#{' '}
-                <h:commandButton value="Export(with Apache Velocity)" action="#{reportListProfile.render}" />#{' '}
+                </h:link>              
+
                 <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
                         outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary" style="float: right;">                                
                 </h:link>
@@ -119,9 +117,8 @@ limitations under the License.
                 <p:panel>
                     <h:outputText value="Exportar Datos" />  
                     <br/>
-                    <h:commandLink >  
-                        <p:graphicImage value="/resources/images/pdf.png" />  
-                        <p:dataExporter type="pdf" target="profileDataTable" fileName="profiles" class="stext"/>  
+                    <h:commandLink action="#{reporteListas.renderProfile()}" styleClass="btn">                    
+                        <p:graphicImage value="/resources/images/pdf.png" />                          
                     </h:commandLink>
                     #{''}
                     <h:commandLink >  

@@ -20,14 +20,295 @@
         </ui:define>
         <ui:define name="content">
             <h:form id="form" >
-                <div class="admin">
-                    <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary"  ajax="true" immediate="true">
-                        <p:ajax  process="@this" update=":form:result" rendered=":form:result"/>
-                    </p:commandButton>                    
-                </div>
 
-                <br/>
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                <br/>
+                <div class="admin">
+                    <p:commandLink id="save" value="#{messages['common.save']}" 
+                                   styleClass="btn primary"  ajax="true" update="@form">
+                        <f:setPropertyActionListener value="true" target="#{galleryController.boleano}"/>
+                        <p:ajax  process="@this" update=":form:out" rendered=":form:panel :form:out"/>
+                    </p:commandLink>                    
+                </div>
+                <p:outputLabel  id="out" value="#{galleryController.boleano}"></p:outputLabel>
+                <br/>
+                <p:panel id="panel" rendered="#{galleryController.boleano}" header="panel">
+                    <p:outputLabel value="#{galleryController.entero}"></p:outputLabel>
+                </p:panel>
+                <br/>
+
+                <h:panelGroup id="panel-group-" style="margin-bottom: 10px;">       
+
+                    <ui:param name="carieC1" value="true"/>
+                    <ui:param name="carieC2" value="false"/>
+                    <ui:param name="carieC3" value="false"/>
+                    <ui:param name="carieC4" value="false"/>
+                    <ui:param name="carieC5" value="false"/>        
+                    <ui:param name="obturacionPc1" value="false"/>
+                    <ui:param name="obturacionPc2" value="false"/>
+                    <ui:param name="obturacionPc3" value="false"/>
+                    <ui:param name="obturacionPc4" value="false"/>
+                    <ui:param name="obturacionPc5" value="false"/>
+                    <ui:param name="obturacionDefc1" value="false"/>
+                    <ui:param name="obturacionDefc2" value="false"/>
+                    <ui:param name="obturacionDefc3" value="false"/>
+                    <ui:param name="obturacionDefc4" value="false"/>
+                    <ui:param name="obturacionDefc5" value="false"/>
+                    <ui:param name="sellanteNec" value="false"/>
+                    <ui:param name="sellanteRea" value="false"/>        
+                    <ui:param name="endodonciaReal" value="false"/>
+                    <ui:param name="endodonciaNec" value="false"/>
+                    <ui:param name="corona" value="false"/>
+                    <ui:param name="extraccionIn" value="false"/>
+                    <ui:param name="ausenciaPDS" value="false"/>
+                    <ui:param name="lineaCentro" value="false"/>
+                    <ui:param name="protesisFijaInit" value="true"/>
+                    <ui:param name="protesisFijaEnd" value="false"/>
+                    <ui:param name="protesisParcialInit" value="false"/>
+                    <ui:param name="protesisParcialEnd" value="false"/>
+
+
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 7px 0 0px 10px;"
+                                    rendered="true" />
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0px 0 0 -55px;" 
+                                    rendered="${carieC1}" />
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                    rendered="${carieC2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC5}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc1}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc5}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc1}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc5}"/>            
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${sellanteNec}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${sellanteRea}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${corona}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${endodonciaNec}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaRealizadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${endodonciaReal}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/extraccionIndicadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${extraccionIn}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiesaDentalS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${ausenciaPDS}"/>
+
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${lineaCentro}"/>            
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisFijaInit}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaFin.gif" width="55" height="65" style="margin: 0px 0 0 -55px;"
+                                    rendered="${protesisFijaEnd}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisParcialInit}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisParcialEnd}"/>
+                    <p:spacer width="0"/>                    
+                    <p:selectBooleanCheckbox value="false" style="margin: 0px 2px 0px -37px; " />   
+                </h:panelGroup>
+                <h:panelGroup >   
+                    <ui:param name="carieC1" value="false"/>
+                    <ui:param name="carieC2" value="false"/>
+                    <ui:param name="carieC3" value="false"/>
+                    <ui:param name="carieC4" value="false"/>
+                    <ui:param name="carieC5" value="false"/>        
+                    <ui:param name="obturacionPc1" value="true"/>
+                    <ui:param name="obturacionPc2" value="false"/>
+                    <ui:param name="obturacionPc3" value="false"/>
+                    <ui:param name="obturacionPc4" value="true"/>
+                    <ui:param name="obturacionPc5" value="false"/>
+                    <ui:param name="obturacionDefc1" value="false"/>
+                    <ui:param name="obturacionDefc2" value="false"/>
+                    <ui:param name="obturacionDefc3" value="true"/>
+                    <ui:param name="obturacionDefc4" value="false"/>
+                    <ui:param name="obturacionDefc5" value="false"/>
+                    <ui:param name="sellanteNec" value="false"/>
+                    <ui:param name="sellanteRea" value="false"/>        
+                    <ui:param name="endodonciaReal" value="false"/>
+                    <ui:param name="endodonciaNec" value="true"/>
+                    <ui:param name="corona" value="false"/>
+                    <ui:param name="extraccionIn" value="false"/>
+                    <ui:param name="ausenciaPDS" value="false"/>
+                    <ui:param name="lineaCentro" value="true"/>
+                    <ui:param name="protesisFijaInit" value="false"/>
+                    <ui:param name="protesisFijaEnd" value="false"/>
+                    <ui:param name="protesisParcialInit" value="false"/>
+                    <ui:param name="protesisParcialEnd" value="false"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 7px 0 0px 17px;"
+                                    rendered="true" />
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0px 0 0 -55px;" 
+                                    rendered="${carieC1}" />
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                    rendered="${carieC2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC5}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc1}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc5}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc1}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc5}"/>            
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${sellanteNec}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${sellanteRea}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${corona}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${endodonciaNec}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaRealizadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${endodonciaReal}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/extraccionIndicadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${extraccionIn}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiesaDentalS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${ausenciaPDS}"/>
+
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${lineaCentro}"/>            
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisFijaInit}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaFin.gif" width="55" height="65" style="margin: 0px 0 0 -55px;"
+                                    rendered="${protesisFijaEnd}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisParcialInit}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisParcialEnd}"/>
+                    <p:spacer width="0"/>  
+                    <p:selectBooleanCheckbox value="false" style="margin: 0px 2px 0px -37px; " />   
+                </h:panelGroup>                
+                <h:panelGroup id="panel-group-" style="margin-bottom: 10px;">        
+                    <ui:param name="carieC1" value="true"/>
+                    <ui:param name="carieC2" value="true"/>
+                    <ui:param name="carieC3" value="true"/>
+                    <ui:param name="carieC4" value="true"/>
+                    <ui:param name="carieC5" value="true"/>        
+                    <ui:param name="obturacionPc1" value="false"/>
+                    <ui:param name="obturacionPc2" value="false"/>
+                    <ui:param name="obturacionPc3" value="false"/>
+                    <ui:param name="obturacionPc4" value="false"/>
+                    <ui:param name="obturacionPc5" value="false"/>
+                    <ui:param name="obturacionDefc1" value="false"/>
+                    <ui:param name="obturacionDefc2" value="false"/>
+                    <ui:param name="obturacionDefc3" value="false"/>
+                    <ui:param name="obturacionDefc4" value="false"/>
+                    <ui:param name="obturacionDefc5" value="false"/>
+                    <ui:param name="sellanteNec" value="false"/>
+                    <ui:param name="sellanteRea" value="false"/>        
+                    <ui:param name="endodonciaReal" value="false"/>
+                    <ui:param name="endodonciaNec" value="false"/>
+                    <ui:param name="corona" value="false"/>
+                    <ui:param name="extraccionIn" value="false"/>
+                    <ui:param name="ausenciaPDS" value="false"/>
+                    <ui:param name="lineaCentro" value="false"/>
+                    <ui:param name="protesisFijaInit" value="false"/>
+                    <ui:param name="protesisFijaEnd" value="true"/>
+                    <ui:param name="protesisParcialInit" value="false"/>
+                    <ui:param name="protesisParcialEnd" value="false"/>
+
+
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 7px 0 0px 17px;"
+                                    rendered="true" />
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                    rendered="${carieC1}" />
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                    rendered="${carieC2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${carieC5}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc1}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionPc5}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc1}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc2}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc3}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc4}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionDefinitivaSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${obturacionDefc5}"/>            
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${sellanteNec}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${sellanteRea}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${corona}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${endodonciaNec}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaRealizadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${endodonciaReal}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/extraccionIndicadaS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${extraccionIn}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiesaDentalS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${ausenciaPDS}"/>
+
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${lineaCentro}"/>            
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisFijaInit}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaFin.gif" width="55" height="65" style="margin: 0px 0 0 -55px;"
+                                    rendered="${protesisFijaEnd}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisParcialInit}"/>
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                    rendered="${protesisParcialEnd}"/>
+                    <p:spacer width="0"/>
+                </h:panelGroup>
+                <h:panelGroup >                    
+                    <p:selectBooleanCheckbox value="false" style="margin: 0px 2px 0 -36px;" />   
+                </h:panelGroup> 
+                <br/>
                 <h:panelGroup id="dnip" layout="block" class="clearfix">
                     <label for="fdni">#{messages['profile.dni']}</label>
                     <div class="input" >
@@ -42,7 +323,7 @@
                     </div>
                 </h:panelGroup> 
                 <glue:input id="result1" name="resultado" type="textarea" label="#{'Resultado'}" value="#{testWebService.result}" required="false" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="result1" />
-                
+
                 <p:inputTextarea id="result" value="#{testWebService.result}"/>
                 <!--
                 <h:panelGroup id="pasw" layout="block" class="clearfix">

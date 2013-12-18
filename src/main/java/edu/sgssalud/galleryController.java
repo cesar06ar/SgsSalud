@@ -37,6 +37,7 @@ public class galleryController implements Serializable {
     private String cadena;
     private Date fecha;
     private Long enteroL;
+    private boolean boleano;
     
     @PostConstruct
     public void init() {
@@ -94,5 +95,18 @@ public class galleryController implements Serializable {
     public void setEnteroL(Long enteroL) {
         this.enteroL = enteroL;
     } 
+
+    public boolean isBoleano() {
+        return boleano;
+    }
+
+    public void setBoleano(boolean boleano) {
+        this.boleano = boleano;
+    }
     
+    public void update(boolean ban){
+        setBoleano(ban);
+        setEntero(1);
+        setCadena("valor");
+    }
 }

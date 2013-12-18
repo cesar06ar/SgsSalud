@@ -23,9 +23,9 @@
         </ui:define>
 
         <ui:define name="topnav-title">            
-            <h:link outcome="/pages/home" value="&nbsp;${sitename}" dir="rtl">   
-                <img src="#{resource['sgsSalud_32x32.ico']}" dir="lrt"/>
-            </h:link>
+            <h:link outcome="/pages/home" value="${sitename}" dir="rtl">
+                <img src="#{resource['sgsSalud_32x32.ico']}" width="25" height="20" style="margin-bottom: -4px"/>
+            </h:link>  
         </ui:define>
 
         <ui:define name="topnav-left">
@@ -70,21 +70,36 @@
                 <c:choose>
                     <c:when test="#{account.isUserPaciente()}">
                         <li>
-                            <h:link outcome="/pages/paciente/view" value="#{identity.user.key}">
+                            <h:link outcome="/pages/paciente/view" value="#{userPaciente.nombres} #{userPaciente.apellidos}">
                                 <f:param name="pacienteId" value="#{account.loggedId}"/>
                             </h:link>
                         </li>
                     </c:when>
                     <c:when test="#{account.isUserProfile()}">                       
                         <li>
-                            <h:link outcome="/pages/profile/profile" value="#{identity.user.key}">
+                            <h:link outcome="/pages/profile/profile" value="#{userProfile.fullName}">
                                 <f:param name="profileId" value="#{account.loggedId}"/>
                             </h:link>
-                        </li> 
+                        </li>
+                        <li class="dropdown">
+                            <a href="" class="dropdown" data-toggle="dropdown" >
+                                <h:graphicImage value="/resources/images/config1.png" width="30" height="25" style="margin: -4px 0 -10px 0;"/>
+                            </a>                                                                                  
+                            <ul class="dropdown-menu">                                
+                                <li><h:link outcome="/pages/reset" value="Cambiar Contraseña">                                        
+                                    </h:link>                                    
+                                </li>
+                                <li><h:link outcome="/pages/temas" value="Cambiar Tema">                                        
+                                    </h:link>
+                                </li>                              
+                            </ul>
+                        </li>
                     </c:when>
                 </c:choose>
                 <li class="divider"></li>
-                <li><h:outputLink value="${request.contextPath}/logout" rendered="#{identity.loggedIn}">#{messages['common.logout']}</h:outputLink></li>                
+                <li><h:outputLink value="${request.contextPath}/logout" rendered="#{identity.loggedIn}" title="#{messages['common.logout']}">
+                        <h:graphicImage value="/resources/images/logout.png" width="30" height="25" style="margin: -4px 0 -9px 0;"/>
+                    </h:outputLink></li>                
             </h:panelGroup>
 
         </ui:define>
@@ -99,18 +114,18 @@
 
         <ui:define name="sidebar">
             <h:panelGroup rendered="true" >                
-                <p:panel  header="Panel de Administracion" toggleable="true" rendered="#{account.tienePermiso('ADMIN')}" style="margin-right: -7%; font-size: 8;">
-                    <h:panelGroup  rendered="#{account.tienePermiso('ADMIN')}" style="margin-right: -7%">
+                <p:panel  header="Panel de Administracion" toggleable="true" rendered="true" style="font-size: 9; width: 115%">
+                    <h:panelGroup  rendered="#{account.tienePermiso('ADMIN')}" >
                         <h:link value="#{messages['module.BussinesEntity']}" rendered="true" 
                                 outcome="/pages/admin/bussinesentitytype/list">
-                            <f:param name="result"></f:param>
-                            <f:param name="typeName" value="edu.sgssalud.model.BussinesEntityType"></f:param>
+                            <!--<f:param name="result"></f:param>
+                            <f:param name="typeName" value="edu.sgssalud.model.BussinesEntityType"></f:param>-->
                         </h:link>
                         <br />
                         <h:link value="#{messages['module.setting']}" rendered="#{true}" 
                                 outcome="/pages/admin/setting/list">
-                            <f:param name="result"></f:param>
-                            <f:param name="typeName" value="edu.sgssalud.model.config.Setting"></f:param>
+                            <!--<f:param name="result"></f:param>
+                            <f:param name="typeName" value="edu.sgssalud.model.config.Setting"></f:param>-->
                         </h:link>
                         <br />
                         <h:link value="#{messages['servicioMedico.nombre']}" rendered="#{true}" 
@@ -121,7 +136,7 @@
                         <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
                                 outcome="/pages/admin/listProfile">
                             <f:param name="result"></f:param>
-                            <f:param name="typeName" value="edu.sgssalud.model.profile.Profile"></f:param>
+                            <!--<f:param name="typeName" value="edu.sgssalud.model.profile.Profile"></f:param>-->
                         </h:link>
                         <br />
                         <h:link value="#{messages['security.group']}" rendered="#{true}" 
@@ -166,9 +181,9 @@
                                 outcome="/pages/depSalud/fichaMedica">                    
                         </h:link> 
                         <br />  
-                        <h:link value="#{messages['curaciones']}" rendered="#{true}" 
+                        <!--<h:link value="#{messages['curaciones']}" rendered="#{true}" 
                                 outcome="#">                    
-                        </h:link>                    
+                        </h:link>-->                    
                         <br />
                     </h:panelGroup>
                     <h:panelGroup  rendered="#{account.tienePermiso('LABORATORISTAS')}" style="margin-right: -7%">                    

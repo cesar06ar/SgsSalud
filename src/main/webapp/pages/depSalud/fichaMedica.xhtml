@@ -265,13 +265,18 @@
                     <br/>    
                     <p:dataTable id="tablaSigVit" value="#{fichaMedicaHome.listaSignosVitales}" var="signosVit_" >
 
+                        <p:column headerText="Id" style="width: 15%">
+                            <p:outputLabel value="#{signosVit_.id}" >
+                                <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
                         <p:column headerText="#{messages['consultaMedica.fechaConsulta']}" style="width: 15%">
                             <p:outputLabel value="#{signosVit_.fechaActual}" >
                                 <f:convertDateTime pattern="dd-MMM-yyyy"/>
                             </p:outputLabel>
                         </p:column>
-                        <p:column headerText="#{messages['signosVitales.presionArt']}" style="width: 30%">
-                            <h:outputText value="#{signosVit_.presionArterialSistolica}" />&nbsp;&nbsp;
+                        <p:column headerText="#{messages['signosVitales.presionArt']}" style="width: 20%">
+                            <h:outputText value="#{signosVit_.presionArterialSistolica}" />&nbsp;&nbsp;&nbsp;&nbsp;
                             <h:outputText value="#{signosVit_.presionArterialDiastolica}" />
                         </p:column>
                         <p:column headerText="#{messages['signosVitales.pulso']}" style="width: 20%">
@@ -366,10 +371,7 @@
                         </p:column>                                                    
                         <p:column headerText="#{messages['consultaMedica.motivo']}" style="width: 35%">
                             <h:outputText value="#{consultaO_.motivoConsulta}" styleClass="span3"/>
-                        </p:column>                        
-                        <p:column headerText="#{messages['tratamiento.label']}" style="width: 15%">
-                            <h:outputText value="#{consultaO_.tratamientoDientes.size}" styleClass="span2"/>
-                        </p:column> 
+                        </p:column>                                                
                         <p:column headerText="#{messages['comun.estado']}" style="width: 10%">
                             <h:outputText value="#{consultaO_.code}" />
                         </p:column>

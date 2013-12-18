@@ -177,7 +177,7 @@
             </exclusions>
         </dependency>
 
-        <!-- Dependencia para Web Service  -->                                                 
+        <!-- Dependencia para Web Service  -->                                                
         
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
@@ -237,13 +237,13 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.2.2</version>
+            <version>1.3</version>
         </dependency>
  
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.2</version>
+            <version>2.4</version>
         </dependency>
         <!--Fin librerias para subir imagenes-->
         
@@ -503,7 +503,7 @@
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
         </dependency>
-        
+        <!--
         <dependency>
             <groupId>org.jboss.seam.reports</groupId>
             <artifactId>seam-reports-api</artifactId>
@@ -522,14 +522,13 @@
                     <artifactId>dom4j</artifactId>  
                 </exclusion>  
             </exclusions>  
-        </dependency>
+        </dependency>-->
         
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
-            <version>4.5.0</version>
-            <scope>compile</scope>
-            <exclusions>
+            <version>5.5.0</version>            
+            <!--<exclusions>
                 <exclusion>
                     <artifactId>dom4j</artifactId>
                     <groupId>dom4j</groupId>
@@ -542,7 +541,7 @@
                     <artifactId>bcprov-jdk14</artifactId>
                     <groupId>bouncycastle</groupId>
                 </exclusion>
-            </exclusions>
+            </exclusions>-->
         </dependency>     
     </dependencies>
 

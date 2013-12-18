@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "", propOrder = {
     "cedula"
 })
-@XmlRootElement(name = "sgaws_datos_estudiante")
+@XmlRootElement(name = "result")
 public class SgawsDatosEstudiante {
 
     @XmlElement(required = true)

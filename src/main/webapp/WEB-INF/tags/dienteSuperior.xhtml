@@ -38,10 +38,16 @@ limitations under the License.
     <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
     <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
     <c:set var="numDecimales" value="#{not empty numDecimales ? numDecimales : '2'}" />
-    <c:set var="diente" value="#{not empty diente ? diente : null}" />
+    <c:set var="diente" value="#{not empty diente ? diente : null}" />    
+    <c:set var="update" value="#{not empty update ? update : null}" />
+    <c:set var="tratamientos" value="#{not empty tratamientos ? odontogramaHome.getMostrarTratamientos(diente) : null}" />
     <!-- TODO habilitar o deshabilitar ajax validation 
+    <c:set var="onclick" value="#{not empty onclick ? onclick : null}" />
+    <c:set var="action" value="#{not empty action ? action : null}" />
+    <c:set var="actionListener" value="#{not empty actionListener ? actionListener : null}" />
+    <c:set var="check" value="#{not empty check ? check : false}" />
     <label for="#{id}" class="#{(not empty required and required) ? 'required' : ''}" style="width: 0.07%; height: 0.08%; margin: -10px -5px 10px 5px;">#{label} #{(not empty required and required) ? '*&#160;' : ''}</label> -->   
-    <h:panelGroup id="panel-group-#{id}">        
+    <h:panelGroup id="panel-group-#{id}" >        
         <ui:param name="carieC1" value="false"/>
         <ui:param name="carieC2" value="false"/>
         <ui:param name="carieC3" value="false"/>
@@ -49,7 +55,7 @@ limitations under the License.
         <ui:param name="carieC5" value="false"/>        
         <ui:param name="obturacionPc1" value="false"/>
         <ui:param name="obturacionPc2" value="false"/>
-        <ui:param name="obturacionPc3" value="true"/>
+        <ui:param name="obturacionPc3" value="false"/>
         <ui:param name="obturacionPc4" value="false"/>
         <ui:param name="obturacionPc5" value="false"/>
         <ui:param name="obturacionDefc1" value="false"/>
@@ -65,16 +71,16 @@ limitations under the License.
         <ui:param name="extraccionIn" value="false"/>
         <ui:param name="ausenciaPDS" value="false"/>
         <ui:param name="lineaCentro" value="false"/>
-        <ui:param name="protesisFijaInit" value="true"/>
+        <ui:param name="protesisFijaInit" value="false"/>
         <ui:param name="protesisFijaEnd" value="false"/>
         <ui:param name="protesisParcialInit" value="false"/>
         <ui:param name="protesisParcialEnd" value="false"/>
 
-        <ui:repeat value="#{diente.tratamientos}" var="t">
+        <ui:repeat value="#{tratamientos}" var="t">
             <c:choose>
                 <c:when test="#{t.name == messages['tratamiento.carie']}">
                     <c:choose>
-                        <c:when test="#{t.c1 == true}">
+                        <c:when test="#{t.c1 == true}" >
                             <f:setPropertyActionListener value="#{true}" target="#{carieC1}"/>
                         </c:when>
                         <c:when test="#{t.c2 == true}">
@@ -114,16 +120,57 @@ limitations under the License.
                         </c:otherwise>
                     </c:choose>
                 </c:when>
-                <c:when test="#{t.name == 'carie'}">
-
+                <c:when test="#{t.name == messages['tratamiento.obturacionDefinitiva']}">
+                    <c:choose>
+                        <c:when test="#{t.c1 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionDefc1}"/>
+                        </c:when>
+                        <c:when test="#{t.c2 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionDefc2}"/>
+                        </c:when>
+                        <c:when test="#{t.c3 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionDefc3}"/>
+                        </c:when>
+                        <c:when test="#{t.c4 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionDefc4}"/>
+                        </c:when>
+                        <c:when test="#{t.c5 == true}">
+                            <f:setPropertyActionListener value="#{true}" target="#{obturacionDefc5}"/>
+                        </c:when>
+                        <c:otherwise>
+                        </c:otherwise>
+                    </c:choose>
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.corona']}">
+                    <f:setPropertyActionListener value="#{true}" target="#{corona}"/>
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.sellanateNecesario']}">                    
+                    <c:set var="sellanteNec" value="#{true}" />
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.sellanateRealizado']}">                    
+                    <c:set var="sellanteRea" value="#{true}" />
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.endodonciaNecesaria']}">                    
+                    <c:set var="endodonciaNec" value="#{true}" />
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.endodonciaRealizada']}">                    
+                    <c:set var="endodonciaReal" value="#{true}" />
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.extraccionIndicada']}">
+                    <f:setPropertyActionListener value="#{true}" target="#{extraccionIn}"/>
+                    <c:set var="sellanteRea" value="#{true}" />
+                </c:when>
+                <c:when test="#{t.name == messages['tratamiento.ausenciaPiezaDental']}">
+                    <f:setPropertyActionListener value="#{true}" target="#{ausenciaPDS}"/>
                 </c:when>
                 <c:otherwise>
 
                 </c:otherwise>
             </c:choose>        
         </ui:repeat>
-        <p:commandLink onclick="#{onclick}" ajax="true" title="#{title}">  
-            <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 7px 0 0 -4px;"
+        <p:commandLink onclick="#{onclick}" ajax="true" title="#{title}" update="#{update}" 
+                       action="#{action}">  
+            <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 5px 0 0px 10px;"
                             rendered="true" />
             <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
                             rendered="${carieC1}" />
@@ -133,7 +180,7 @@ limitations under the License.
                             rendered="${carieC3}"/>
             <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
                             rendered="${carieC4}"/>
-            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 1px 0 0 -55px;"
+            <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
                             rendered="${carieC5}"/>
             <p:graphicImage value="/resources/tratamientoDentales/superior/obturacionProvicionalSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
                             rendered="${obturacionPc1}"/>
@@ -169,7 +216,6 @@ limitations under the License.
                             rendered="${extraccionIn}"/>
             <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiesaDentalS.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
                             rendered="${ausenciaPDS}"/>
-
             <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
                             rendered="${lineaCentro}"/>            
             <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
@@ -181,9 +227,11 @@ limitations under the License.
             <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
                             rendered="${protesisParcialEnd}"/>
             <p:spacer width="0"/>
-
-            <f:setPropertyActionListener value="#{origen}" target="#{destino}"/>
+            <!--<f:setPropertyActionListener value="#{origen}" target="#{destino}"/>-->
             <p:ajax process="@this" update="#{actualizar}" rendered="#{render}"/>
-        </p:commandLink>                        
-    </h:panelGroup>  
+        </p:commandLink> 
+        <p:selectBooleanCheckbox value="#{check}" style="margin: 0px 2px 0 -38px;" >            
+            <p:ajax process="@this" update="#{actualizar}" rendered="#{render}" listener="#{listener}"/>
+        </p:selectBooleanCheckbox>   
+    </h:panelGroup>      
 </ui:composition>

@@ -573,10 +573,10 @@ public class InitializeDatabase {
 
             //Lista de atributos de Tipos de entidades de negocio
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildStructureTypeProperty("alergiasFichaMedica", "ALERGIAS", "Información Ficha Medica", "/pages/medicina/fichaMedica", 1L));
-            attributes.add(buildStructureTypeProperty("habitosFichaMedica", "HÁBITOS", "Información Ficha Medica", "/pages/medicina/fichaMedica", 2L));
-            attributes.add(buildStructureTypeProperty("antecedentesPersonalesFichaMedica", "ANTECEDENTES PERSONALES", "Información Ficha Medica", "/pages/medicina/fichaMedica", 3L));
-            attributes.add(buildStructureTypeProperty("antecedentesFamiliaresFichaMedica", "ANTECEDENTES FAMILIARES", "Información Ficha Medica", "/pages/paciente/paciente", 4L));
+            attributes.add(buildStructureTypeProperty("alergiasFichaMedica", "ALERGIAS", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 1L));
+            attributes.add(buildStructureTypeProperty("habitosFichaMedica", "HÁBITOS", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 2L));
+            attributes.add(buildStructureTypeProperty("antecedentesPersonalesFichaMedica", "ANTECEDENTES PERSONALES", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 3L));
+            attributes.add(buildStructureTypeProperty("antecedentesFamiliaresFichaMedica", "ANTECEDENTES FAMILIARES", "Información Ficha Medica", "/pages/depSalud/paciente", 4L));
             //Agregar atributos
             structure.setProperties(attributes);
 
@@ -984,23 +984,23 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("consultaOdontEF", "piel", Boolean.class.getName(), "", false, "Piel", "", false, 1L));
-            attributes.add(buildProperty("consultaOdontEF", "tejidoMuscular", Boolean.class.getName(), "", false, "Tejido muscular", "", false, 2L));
-            attributes.add(buildProperty("consultaOdontEF", "puntosDolorosos", Boolean.class.getName(), "", false, "Puntos dolorosos", "", false, 3L));
-            attributes.add(buildProperty("consultaOdontEF", "pisoBoca", Boolean.class.getName(), "", false, "Piso de la boca", "", false, 4L));
-            attributes.add(buildProperty("consultaOdontEF", "galndulaSalival", Boolean.class.getName(), "", false, "Glándulas salivales", "", false, 5L));
-            attributes.add(buildProperty("consultaOdontEF", "oclusion", Boolean.class.getName(), "", false, "Oclusión", "", false, 6L));
-            attributes.add(buildProperty("consultaOdontEF", "labios", Boolean.class.getName(), "", false, "Labios", "", false, 7L));
-            attributes.add(buildProperty("consultaOdontEF", "atm", Boolean.class.getName(), "", false, "A.T.M", "", false, 8L));
-            attributes.add(buildProperty("consultaOdontEF", "lengua", Boolean.class.getName(), "", false, "Lengua", "", false, 9L));
-            attributes.add(buildProperty("consultaOdontEF", "carrillos", Boolean.class.getName(), "", false, "Carrillos", "", false, 10L));
-            attributes.add(buildProperty("consultaOdontEF", "maxSuperior", Boolean.class.getName(), "", false, "Max. Superior", "", false, 11L));
-            attributes.add(buildProperty("consultaOdontEF", "posicionMaxilar", Boolean.class.getName(), "", false, "Mal posición Maxilar", "", false, 12L));
-            attributes.add(buildProperty("consultaOdontEF", "gangliosLinfaticos", Boolean.class.getName(), "", false, "Ganglios Linfáticos", "", false, 13L));
-            attributes.add(buildProperty("consultaOdontEF", "organosSentidos", Boolean.class.getName(), "", false, "Órganos de los Sentidos", "", false, 14L));
-            attributes.add(buildProperty("consultaOdontEF", "paladar", Boolean.class.getName(), "", false, "Paladar", "", false, 15L));
-            attributes.add(buildProperty("consultaOdontEF", "encia", Boolean.class.getName(), "", false, "Encía", "", false, 16L));
-            attributes.add(buildProperty("consultaOdontEF", "maxInferior", Boolean.class.getName(), "", false, "Max. inferior", "", false, 17L));
+            attributes.add(buildProperty("consultaOdontEF", "piel", Boolean.class.getName(), "", false, "1. Piel", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 1L));
+            attributes.add(buildProperty("consultaOdontEF", "tejidoMuscular", Boolean.class.getName(), "", false, "2. Tejido muscular", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 2L));
+            attributes.add(buildProperty("consultaOdontEF", "puntosDolorosos", Boolean.class.getName(), "", false, "3. Puntos dolorosos", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 3L));
+            attributes.add(buildProperty("consultaOdontEF", "pisoBoca", Boolean.class.getName(), "", false, "4. Piso de la boca", "", false, 4L));
+            attributes.add(buildProperty("consultaOdontEF", "galndulaSalival", Boolean.class.getName(), "", false, "5. Glándulas salivales", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 5L));
+            attributes.add(buildProperty("consultaOdontEF", "oclusion", Boolean.class.getName(), "", false, "6. Oclusión", "(Sin marcar [] = Sin Patologia <br/> marcado [x] = Con Patologia)", false, 6L));
+            attributes.add(buildProperty("consultaOdontEF", "labios", Boolean.class.getName(), "", false, "7. Labios", "", false, 7L));
+            attributes.add(buildProperty("consultaOdontEF", "atm", Boolean.class.getName(), "", false, "8. A.T.M", "", false, 8L));
+            attributes.add(buildProperty("consultaOdontEF", "lengua", Boolean.class.getName(), "", false, "9. Lengua", "", false, 9L));
+            attributes.add(buildProperty("consultaOdontEF", "carrillos", Boolean.class.getName(), "", false, "10. Carrillos", "", false, 10L));
+            attributes.add(buildProperty("consultaOdontEF", "maxSuperior", Boolean.class.getName(), "", false, "11. Max. Superior", "Maxilar Superior", false, 11L));
+            attributes.add(buildProperty("consultaOdontEF", "posicionMaxilar", Boolean.class.getName(), "", false, "12. Mal posición Maxilar", "", false, 12L));
+            attributes.add(buildProperty("consultaOdontEF", "gangliosLinfaticos", Boolean.class.getName(), "", false, "13. Ganglios Linfáticos", "", false, 13L));
+            attributes.add(buildProperty("consultaOdontEF", "organosSentidos", Boolean.class.getName(), "", false, "14. Órganos de los Sentidos", "", false, 14L));
+            attributes.add(buildProperty("consultaOdontEF", "paladar", Boolean.class.getName(), "", false, "15. Paladar", "", false, 15L));
+            attributes.add(buildProperty("consultaOdontEF", "encia", Boolean.class.getName(), "", false, "16. Encía", "", false, 16L));
+            attributes.add(buildProperty("consultaOdontEF", "maxInferior", Boolean.class.getName(), "", false, "17. Max. inferior", "Maxilar Inferior", false, 17L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -1034,11 +1034,11 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("consultaOdontED", "malFormacionesDent", Boolean.class.getName(), "", false, "Mal formación dentarias", "", false, 1L));
-            attributes.add(buildProperty("consultaOdontED", "desgastes", Boolean.class.getName(), "", false, "Desgastes", "", false, 2L));
-            attributes.add(buildProperty("consultaOdontED", "pigmentaciones", Boolean.class.getName(), "", false, "Pigmentaciones", "", false, 3L));
-            attributes.add(buildProperty("consultaOdontED", "malPosicionDent", Boolean.class.getName(), "", false, "Mal posición dentarias", "", false, 4L));
-            attributes.add(buildProperty("consultaOdontED", "patologiaPopular", Boolean.class.getName(), "", false, "Patología popular", "", false, 5L));
+            attributes.add(buildProperty("consultaOdontED", "malFormacionesDent", Boolean.class.getName(), "", false, "1. Mal formación dentarias", "", false, 1L));
+            attributes.add(buildProperty("consultaOdontED", "desgastes", Boolean.class.getName(), "", false, "2. Desgastes", "", false, 2L));
+            attributes.add(buildProperty("consultaOdontED", "pigmentaciones", Boolean.class.getName(), "", false, "3. Pigmentaciones", "", false, 3L));
+            attributes.add(buildProperty("consultaOdontED", "malPosicionDent", Boolean.class.getName(), "", false, "4. Mal posición dentarias", "", false, 4L));
+            attributes.add(buildProperty("consultaOdontED", "patologiaPopular", Boolean.class.getName(), "", false, "5. Patología popular", "", false, 5L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -1072,9 +1072,9 @@ public class InitializeDatabase {
 
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
-            attributes.add(buildProperty("consultaOdontED", "placaBacteriana", Boolean.class.getName(), "", false, "Placa bacteriana", "", false, 1L));
-            attributes.add(buildProperty("consultaOdontED", "materiaAlba", Boolean.class.getName(), "", false, "Materia alba", "", false, 2L));
-            attributes.add(buildProperty("consultaOdontED", "calculo", Boolean.class.getName(), "", false, "Cálculo", "", false, 3L));
+            attributes.add(buildProperty("consultaOdontED", "placaBacteriana", Boolean.class.getName(), "", false, "1. Placa bacteriana", "", false, 1L));
+            attributes.add(buildProperty("consultaOdontED", "materiaAlba", Boolean.class.getName(), "", false, "2. Materia alba", "", false, 2L));
+            attributes.add(buildProperty("consultaOdontED", "calculo", Boolean.class.getName(), "", false, "3. Cálculo", "", false, 3L));
 
             //Agregar atributos
             structure.setProperties(attributes);

@@ -15,13 +15,11 @@
  */
 package edu.sgssalud.controller.reportes;
 
+import com.smartics.common.action.report.JasperReportAction;
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
-import edu.sgssalud.service.ProfileListService;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import edu.sgssalud.service.paciente.PacienteServicio;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,77 +31,58 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-
-import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.jboss.seam.mail.templating.velocity.CDIVelocityContext;
-import org.jboss.seam.mail.templating.velocity.VelocityTemplate;
-import org.jboss.seam.reports.Report;
-import org.jboss.seam.reports.ReportCompiler;
-import org.jboss.seam.reports.ReportDefinition;
-import org.jboss.seam.reports.ReportRenderer;
-import org.jboss.seam.reports.exceptions.ReportException;
-import org.jboss.seam.reports.jasper.annotations.Jasper;
-import org.jboss.seam.reports.output.PDF;
-import org.jboss.solder.resourceLoader.ResourceProvider;
+import javax.servlet.ServletContext;
 
 /**
  *
  * @author cesar
  */
 @RequestScoped
-@Named(value = "reportListProfile")
-public class ReportListProfile {
+@Named(value = "reporteListas")
+public class ReporteListas {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ReportListProfile.class);
+    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ReporteListas.class);
 
-    @Inject
-    private ResourceProvider resourceProvider;
-
-    @Inject
-    FacesContext facesContext;
-
-    @Inject
-    transient CDIVelocityContext velocityContext;
-
-    @Inject
-    @Jasper
-    private transient ReportCompiler compiler;
-    // @Inject
-    // @XLS
-    // @Jasper
-    // private transient ReportRenderer xslRenderer;
-    @Inject
-    @PDF
-    @Jasper
-    private transient ReportRenderer pdfRenderer;
-
-    @Inject
-    private ProfileListService profileListService;
+    private static final String REPORTE_USUARIOS = "Reporte";  //nombre del reporte .jasper   
+    private static final String REPORTE_PACIENTES = "pacientes";
 
     @Inject
     @Web
     private EntityManager em;
+    
+    @Inject
+    private ProfileService profileService;
+    @Inject
+    private PacienteServicio pacienteServicio;
+    
+    @Inject
+    JasperReportAction JasperReportAction;
 
     /**
      * Default constructor.
      */
-    public ReportListProfile() {
+    public ReporteListas() {
     }
 
     @PostConstruct
-    public void init(){
-        profileListService.setEntityManager(em);
+    public void init() {
+        profileService.setEntityManager(em);
+        pacienteServicio.setEntityManager(em);
+    }
+
+    private String getRealPath(String path) {
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        return context.getRealPath(path);
     }
     
+    /*
     public void render() {
         if (log.isDebugEnabled()) {
             log.debug("export as pdf");
         }
         final String mimeType = "application/pdf";
         final String attachFileName = "usuarios.pdf";
-        final String reportTemplate = "/reportes/contancts1.jrxml";
+        final String reportTemplate = "/reportes/Reporte.jasper";
 
         if (log.isDebugEnabled()) {
             log.debug("mimeType@" + mimeType);
@@ -118,7 +97,8 @@ public class ReportListProfile {
 
         InputStream sourceTemplate = resourceProvider
                 .loadResourceStream(reportTemplate);
-        
+        String pathTemplate = getRealPath(reportTemplate);
+
         Map<String, Object> _values = new HashMap<String, Object>();
         _values.put("contacts", profileListService);
         _values.put("usd", "$");
@@ -133,11 +113,13 @@ public class ReportListProfile {
         ReportDefinition report;
         try {
             report = compiler.compile(new ByteArrayInputStream(stringReport
-                    .getBytes("UTF-8")));
+                                .getBytes("UTF-8")));
+            //JasperPrint reporte = JasperFillManager.fillReport(sourceTemplate, _values, new JREmptyDataSource());
             Report reportInstance = report.fill(new JREmptyDataSource(), null);
 
             pdfRenderer.render(reportInstance,
                     externalContext.getResponseOutputStream());
+            //JasperExportManager.exportReportToPdf(reporte);
         } catch (ReportException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
@@ -149,7 +131,7 @@ public class ReportListProfile {
         facesContext.responseComplete();
 
     }
-
+    
     public void render1() {
         if (log.isDebugEnabled()) {
             log.debug("export as pdf without apache velocity");
@@ -191,4 +173,42 @@ public class ReportListProfile {
 
         facesContext.responseComplete();
     }
+    
+    */
+    public void renderProfile() {
+        
+        final String attachFileName = "usuarios.pdf";        
+
+        //parametros 
+//        Map<String, Object> _values = new HashMap<String, Object>();
+//        _values.put("contacts", profileListService);
+//        _values.put("usd", "$");
+
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_USUARIOS, profileService.findAll(), null, attachFileName);
+
+        if (log.isDebugEnabled()) {
+            log.debug("export as pdf");
+        }    
+    }
+    
+    public void renderPacientes() {
+        
+        final String attachFileName = "pacientes.pdf";        
+        List<Paciente> pacientes = pacienteServicio.getPacientes();
+        //parametros 
+        Map<String, Object> _values = new HashMap<String, Object>();
+        _values.put("numeroPacientes", pacientes.size());
+        //_values.put("numeroPacientes", pacientes.size());
+        _values.put("usd", "$");
+
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_PACIENTES, pacientes, _values, attachFileName);
+
+        if (log.isDebugEnabled()) {
+            log.debug("export as pdf");
+        }     
+
+    }
+    
 }

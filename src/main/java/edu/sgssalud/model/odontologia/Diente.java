@@ -26,6 +26,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  *
@@ -41,7 +42,8 @@ public class Diente implements Serializable, Comparable<Diente> {
     private String nombre;
     private int posicion;  
     private int cuadrante;
-    private String rutaIcon;
+    @Transient
+    private boolean select;
     @ManyToOne
     @JoinColumn(name = "odontograma_id")
     private Odontograma odontograma;
@@ -52,11 +54,10 @@ public class Diente implements Serializable, Comparable<Diente> {
     public Diente() {
     }
 
-    public Diente(String nombre, int posicion, int cuadrante, String rutaIcon) {
+    public Diente(String nombre, int posicion, int cuadrante) {
         this.nombre = nombre;
         this.posicion = posicion;
-        this.cuadrante = cuadrante;
-        this.rutaIcon = rutaIcon;
+        this.cuadrante = cuadrante;        
     }   
     
     public Long getId() {
@@ -91,13 +92,13 @@ public class Diente implements Serializable, Comparable<Diente> {
         this.cuadrante = cuadrante;
     }   
 
-    public String getRutaIcon() {
-        return rutaIcon;
+    public boolean isSelect() {
+        return select;
     }
 
-    public void setRutaIcon(String rutaIcon) {
-        this.rutaIcon = rutaIcon;
-    }  
+    public void setSelect(boolean select) {
+        this.select = select;
+    } 
         
     public Odontograma getOdontograma() {
         return odontograma;
@@ -155,8 +156,7 @@ public class Diente implements Serializable, Comparable<Diente> {
                 + "id=" + id + ","
                 + "nombre=" + nombre + ","
                 + "posicion=" + posicion + ","
-                + "cuadrante=" + cuadrante + ","
-                + "rutaIcon=" + rutaIcon + ","
+                + "cuadrante=" + cuadrante + ","                
                 + " ]";
     }
 

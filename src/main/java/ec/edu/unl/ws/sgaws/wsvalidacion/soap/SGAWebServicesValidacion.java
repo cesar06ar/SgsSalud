@@ -17,7 +17,7 @@ import javax.xml.ws.Service;
  * 
  */
 @WebServiceClient(name = "SGAWebServicesValidacion", 
-                  wsdlLocation = "file:/home/cesar/wsdls/validacion.wsdl",
+                  wsdlLocation = "file:/home/cesar/servidores/jboss-as-7.2.0.Alpha1-SNAPSHOT/wsdls/validacion.wsdl",
                   targetNamespace = "http://ws.unl.edu.ec/sgaws/wsvalidacion/soap/") 
 public class SGAWebServicesValidacion extends Service {
 
@@ -28,11 +28,11 @@ public class SGAWebServicesValidacion extends Service {
     static {
         URL url = null;
         try {
-            url = new URL("file:/home/cesar/wsdls/validacion.wsdl");
+            url = new URL("file:/home/cesar/servidores/jboss-as-7.2.0.Alpha1-SNAPSHOT/wsdls/validacion.wsdl");
         } catch (MalformedURLException e) {
             java.util.logging.Logger.getLogger(SGAWebServicesValidacion.class.getName())
                 .log(java.util.logging.Level.INFO, 
-                     "Can not initialize the default wsdl from {0}", "file:/home/cesar/wsdls/validacion.wsdl");
+                     "Can not initialize the default wsdl from {0}", "file:/home/cesar/servidores/jboss-as-7.2.0.Alpha1-SNAPSHOT/wsdls/validacion.wsdl");
         }
         WSDL_LOCATION = url;
     }

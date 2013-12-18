@@ -13,18 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.sgssalud.model.odontologia;
 
-import edu.sgssalud.model.farmacia.Receta;
+package edu.sgssalud.model;
+
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -32,19 +33,59 @@ import javax.persistence.Table;
  * @author cesar
  */
 @Entity
-@Table(name = "Odontograma")
-public class Odontograma implements Serializable {
-
+@Table(name = "Photos")
+@NamedQueries(value = {
+    @NamedQuery(name = "Photos.buscarPorPacienteId",
+            query = "select p.foto from Paciente p where p.id = :id")})
+public class Photos implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    private String observacion;
-    @OneToMany(mappedBy = "odontograma", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Diente> dientes;
+    private String name;
+    
+    @Column(name= "_size")
+    private long size;
+        
+    private String contentType;
+    
+    @Column(length = 2147483647)    
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] photo;
 
-    /*..Metodos de la clase..*/
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }   
+        
     public Long getId() {
         return id;
     }
@@ -52,36 +93,8 @@ public class Odontograma implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }
-
-    public List<Diente> getDientes() {
-        return dientes;
-    }
-
-    public void setDientes(List<Diente> dientes) {
-        for (Diente d : dientes) {
-            d.setOdontograma(this);
-        }
-        this.dientes = dientes;
-    }
-
-    public void agregarDiente(Diente d) {
-        if (!this.dientes.contains(d)) {
-            d.setOdontograma(this);
-            this.dientes.add(d);
-        }
-    }
-
-    public boolean isPersistent() {
-        return getId() != null;
-    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -93,10 +106,10 @@ public class Odontograma implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Odontograma)) {
+        if (!(object instanceof Photos)) {
             return false;
         }
-        Odontograma other = (Odontograma) object;
+        Photos other = (Photos) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -105,6 +118,7 @@ public class Odontograma implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.odontologia.Odontograma[ id=" + id + " ]";
+        return "edu.sgssalud.model.Fotos[ id=" + id + " ]";
     }
+    
 }

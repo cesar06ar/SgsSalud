@@ -55,11 +55,11 @@ public class Tratamiento implements Serializable {
     private boolean c4;
     private boolean c5;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "diente_id")
     private Diente diente;
     
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "consultaOdontologica_id")
     private ConsultaOdontologica consultaOdontologica;  
         

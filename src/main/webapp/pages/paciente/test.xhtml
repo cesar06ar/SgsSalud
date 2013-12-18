@@ -48,8 +48,8 @@
 
                 <p:inputTextarea id="result" value="#{testWebService.result}" styleClass="offset3"/>
                 <div class="admin offset3">
-                    <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary"  ajax="true" >
-                        <p:ajax  rendered=":form:result" update=":form:result" />
+                    <p:commandButton id="save" action="#{testWebService.cargar()}" value="#{messages['common.save']}" styleClass="btn primary"  ajax="true" immediate="true" update="@form">
+                        <!--<p:ajax  rendered=":form:result" update=":form:result" />-->
                     </p:commandButton>                    
                 </div>
 

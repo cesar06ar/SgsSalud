@@ -15,6 +15,7 @@
  */
 package edu.sgssalud.service.paciente;
 
+import edu.sgssalud.model.Photos;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.paciente.Paciente_;
 import edu.sgssalud.service.BussinesEntityService;
@@ -176,6 +177,19 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         Root<Paciente> paciente = query.from(Paciente.class);
         query.where(builder.equal(paciente.get(Paciente_.cedula), cedula));
         return getSingleResult(query);
+    }
+    
+    public Photos buscarFotoPorPaciente(Long id) {
+        System.out.println("Ingreso a buscar foto por paciente ____________");
+        TypedQuery<Photos> query = em.createQuery("SELECT p.foto FROM Paciente p WHERE p.id = :id", Photos.class);
+        query.setParameter("id", id);
+        Photos result = query.getSingleResult();
+        System.out.println("Ingreso a buscar foto por paciente 1____________");
+        return result;
+//        CriteriaBuilder builder = getCriteriaBuilder();
+//        CriteriaQuery<Paciente> query = builder.createQuery(Paciente.class);
+//        Root<Paciente> paciente = query.from(Paciente.class);
+//        query.where(builder.equal(paciente.get(Paciente_.cedula), cedula));        
     }
 
     public boolean isDireccionEmailDisponoble(String email) {

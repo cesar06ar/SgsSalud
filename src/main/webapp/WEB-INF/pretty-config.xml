@@ -213,6 +213,12 @@
         <pattern value="/error" />
         <view-id value="/pages/error.xhtml" />
     </url-mapping>
+    
     <!-- End Exception Mappings -->
+    
+    <url-mapping id="changePassword">
+      <pattern value="/reset"></pattern>
+      <view-id value="/pages/reset.xhtml"></view-id>                              
+   </url-mapping>
 
 </pretty-config>

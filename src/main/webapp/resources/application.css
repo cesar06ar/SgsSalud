@@ -433,7 +433,7 @@ h1.header {
 
 h1.header span {
     color: #E9F1F4;
-    font-size: 70%;
+    font-size: 80%;
     font-weight: normal;
     text-shadow: none;
 }
@@ -443,7 +443,7 @@ h1.header span {
     background-color: #adf6c1;      
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 1.2;    
+    margin-bottom: 1.2%;    
 }
 
 .ui-icon-buscar{    

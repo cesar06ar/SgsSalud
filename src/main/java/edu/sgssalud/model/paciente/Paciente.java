@@ -16,12 +16,14 @@
 package edu.sgssalud.model.paciente;
 
 import edu.sgssalud.model.BussinesEntity;
+import edu.sgssalud.model.Photos;
 import edu.sgssalud.util.FechasUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -30,9 +32,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -113,10 +117,10 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     @NotEmpty
     @Column(nullable = true)
     private String nombres;
-    @Column(length = 2147483647)
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private byte[] foto;
+    //@Lob  no usar si tiene postgres    
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "foto_id")
+    private Photos foto;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaNacimiento;
     @Column(length = 25)
@@ -201,13 +205,13 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
         this.nombres = nombres;
     }
 
-    public byte[] getFoto() {
+    public Photos getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(Photos foto) {
         this.foto = foto;
-    }
+    }   
 
     public Date getFechaNacimiento() {
         return fechaNacimiento;

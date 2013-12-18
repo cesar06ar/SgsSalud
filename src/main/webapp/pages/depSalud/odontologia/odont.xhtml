@@ -29,8 +29,27 @@
                 </div>
             </div>
         </ui:define>
+        <ui:define name="content-pre">
+            <h:form id="form_pre" rendered="#{not odontogramaHome.instance.persistent}">
+                <h3>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{' Odontograma'} 
+                    #{odontogramaHome.nombreOdont}</h3> 
+                <div class="admin-actions" style="padding-right: 0%;">
+                    <p:commandButton id="saveNew" action="#{odontogramaHome.guardar()}" value="#{messages['common.save']}" 
+                                     styleClass="btn success offset4" update=":form">
+                        <p:ajax process="@this" update=":form" rendered=":form" />
+                    </p:commandButton>
+
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
+                            value="#{messages['common.cancel']}" styleClass="btn success" >
+                        <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
+                        <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
+                    </h:link>
+                </div>
+            </h:form>                
+        </ui:define>
         <ui:define name="content" >
-            <h:form id="form" >                
+            <h:form id="form" rendered="#{odontogramaHome.instance.persistent}">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="odont" header="Odontograma" styleClass="span16" style="margin-top: -1.7%">
                     <ui:param name="_tab" value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"/>
@@ -39,77 +58,240 @@
                     <h:outputText style="margin: 0 0 0 4.8%;"
                                   value="&nbsp;&nbsp;21#{_tab}&nbsp;22#{_tab}23#{_tab}24#{_tab}&nbsp;25#{_tab}26#{_tab}27#{_tab}28"/><br/>   
 
-                    <h:panelGroup id="odontC1" style="margin-left: 2%">
-                        <sgs:denteS id="d18"  onclick="editDlg.show();" title="#{odontogramaHome.diente18.nombre} #{odontogramaHome.diente18.posicion}" 
-                                    origen="#{odontogramaHome.diente18}" destino="#{odontogramaHome.selectDient}" 
-                                    actualizar=":edit-dialog" render=":edit-dialog" >
-                        </sgs:denteS>                           
-                        <sgs:denteS id="d17"  onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente17.nombre} #{odontogramaHome.diente17.posicion}"
+                    <h:panelGroup id="odontC1" style="margin-left: 0.5%">
+                        <sgs:denteS id="d18"  title="#{odontogramaHome.diente18.nombre} #{odontogramaHome.diente18.posicion}" 
+                                    check="#{odontogramaHome.diente18.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente18}" destino="#{odontogramaHome.selectDient}"                                                                         
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                            
+                        </sgs:denteS>
+                        <sgs:denteS id="d17" title="#{odontogramaHome.diente17.nombre} #{odontogramaHome.diente17.posicion}"
+                                    check="#{odontogramaHome.diente17.select}" actionListener="#{odontogramaHome.actualizar()}"
                                     origen="#{odontogramaHome.diente17}" destino="#{odontogramaHome.selectDient}" 
-                                    actualizar=":edit-dialog" render=":edit-dialog" >
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                            
+                        </sgs:denteS>   
+                        <sgs:denteS id="d16"  title="#{odontogramaHome.diente16.nombre} #{odontogramaHome.diente16.posicion}"
+                                    check="#{odontogramaHome.diente16.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente16}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                            
                         </sgs:denteS>
-                        <sgs:denteS id="d16"  onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente16.nombre} #{odontogramaHome.diente16.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente16}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d15" title="#{odontogramaHome.diente15.nombre} #{odontogramaHome.diente15.posicion}"
+                                    check="#{odontogramaHome.diente15.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente15}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                              
                         </sgs:denteS>
-                        <sgs:denteS id="d15" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente15.nombre} #{odontogramaHome.diente15.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente15}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d14" title="#{odontogramaHome.diente14.nombre} #{odontogramaHome.diente14.posicion}"
+                                    check="#{odontogramaHome.diente14.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente14}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                                                       
                         </sgs:denteS>
-                        <sgs:denteS id="d14" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente14.nombre} #{odontogramaHome.diente14.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente14}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d13" title="#{odontogramaHome.diente13.nombre} #{odontogramaHome.diente13.posicion}"
+                                    check="#{odontogramaHome.diente13.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente13}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">  
                         </sgs:denteS>
-                        <sgs:denteS id="d13" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente13.nombre} #{odontogramaHome.diente13.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente13}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d12" title="#{odontogramaHome.diente12.nombre} #{odontogramaHome.diente12.posicion}"
+                                    check="#{odontogramaHome.diente12.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente12}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">
                         </sgs:denteS>
-                        <sgs:denteS id="d12" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente12.nombre} #{odontogramaHome.diente12.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente12}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
-                        </sgs:denteS>
-                        <sgs:denteS id="d11" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente11.nombre} #{odontogramaHome.diente11.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente11}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d11" title="#{odontogramaHome.diente11.nombre} #{odontogramaHome.diente11.posicion}" diente="#{odontogramaHome.diente11}" tratamientos="#{odontogramaHome.diente11.tratamientos}"
+                                    check="#{odontogramaHome.diente11.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente11}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">
                         </sgs:denteS>
                     </h:panelGroup>                                
                     <p:spacer width="10" height=""/>
                     <h:panelGroup id="odontC2">
-                        <sgs:denteS id="d21"  onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente21.nombre} #{odontogramaHome.diente21.posicion}"
+                        <sgs:denteS id="d21" title="#{odontogramaHome.diente21.nombre} #{odontogramaHome.diente21.posicion}"
+                                    check="#{odontogramaHome.diente21.select}" actionListener="#{odontogramaHome.actualizar()}"
                                     origen="#{odontogramaHome.diente21}" destino="#{odontogramaHome.selectDient}" 
-                                    actualizar=":edit-dialog" render=":edit-dialog" >                            
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                            
                         </sgs:denteS>                           
-                        <sgs:denteS id="d22"  onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente22.nombre} #{odontogramaHome.diente22.posicion}"
+                        <sgs:denteS id="d22" title="#{odontogramaHome.diente22.nombre} #{odontogramaHome.diente22.posicion}"
+                                    check="#{odontogramaHome.diente22.select}" actionListener="#{odontogramaHome.actualizar()}"
                                     origen="#{odontogramaHome.diente22}" destino="#{odontogramaHome.selectDient}" 
-                                    actualizar=":edit-dialog" render=":edit-dialog" >
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones"> 
                         </sgs:denteS>
-                        <sgs:denteS id="d23"  onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente23.nombre} #{odontogramaHome.diente23.posicion}"
-                                    origen="#{odontogramaHome.diente22}" destino="#{odontogramaHome.selectDient}" 
-                                    actualizar=":edit-dialog" render=":edit-dialog" >
+                        <sgs:denteS id="d23" title="#{odontogramaHome.diente23.nombre} #{odontogramaHome.diente23.posicion}"
+                                    check="#{odontogramaHome.diente23.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente23}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones"> 
                         </sgs:denteS>
-                        <sgs:denteS id="d24" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente24.nombre} #{odontogramaHome.diente24.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente24}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+
+                        <sgs:denteS id="d24" title="#{odontogramaHome.diente24.nombre} #{odontogramaHome.diente24.posicion}"
+                                    check="#{odontogramaHome.diente24.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente24}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                             
                         </sgs:denteS>
-                        <sgs:denteS id="d25" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente24.nombre} #{odontogramaHome.diente25.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente25}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d25" title="#{odontogramaHome.diente25.nombre} #{odontogramaHome.diente25.posicion}"
+                                    check="#{odontogramaHome.diente25.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente25}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones"> 
                         </sgs:denteS>
-                        <sgs:denteS id="d26" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente26.nombre} #{odontogramaHome.diente26.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente26}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d26" title="#{odontogramaHome.diente26.nombre} #{odontogramaHome.diente26.posicion}"
+                                    check="#{odontogramaHome.diente26.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente26}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones"> 
                         </sgs:denteS>
-                        <sgs:denteS id="d27" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente27.nombre} #{odontogramaHome.diente27.posicion}"> 
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente27}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d27" title="#{odontogramaHome.diente27.nombre} #{odontogramaHome.diente27.posicion}"
+                                    check="#{odontogramaHome.diente27.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente27}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones"> 
                         </sgs:denteS>
-                        <sgs:denteS id="d28" onclick="editDlg.show();" update="edit-dialog" title="#{odontogramaHome.diente28.nombre} #{odontogramaHome.diente28.posicion}">
-                            <f:setPropertyActionListener value="#{odontogramaHome.diente28}" target="#{odontogramaHome.selectDient}"/>
-                            <p:ajax process="@this" update=":edit-dialog" />
+                        <sgs:denteS id="d28" title="#{odontogramaHome.diente28.nombre} #{odontogramaHome.diente28.posicion}"
+                                    check="#{odontogramaHome.diente28.select}" actionListener="#{odontogramaHome.actualizar()}"
+                                    origen="#{odontogramaHome.diente28}" destino="#{odontogramaHome.selectDient}" 
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                             
                         </sgs:denteS>
                     </h:panelGroup>
                 </p:panel>         
+                <p:panel id="opciones" header="Opciones" styleClass="span16">
+                    <div class="container-fluid">   
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <br/>                                
+                                <p:commandLink title="#{messages['tratamiento.carie']}" action="#{odontogramaHome.mostrarPanel(2)}"
+                                               styleClass="btn" ajax="true" update="@form" >
+                                    <p:graphicImage value="/resources/tratamientoDentales/carie.gif" width="25" height="30" />
+                                    <f:setPropertyActionListener value="/resources/odontograma/caries.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.carie']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel2}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel2" rendered=":form:opciones:panel2"/>                                    
+                                </p:commandLink>   
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink title="#{messages['tratamiento.obturacionProvicional']}" action="#{odontogramaHome.mostrarPanel(2)}"
+                                               styleClass="btn" ajax="true" update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/obturacionProvicional.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/obturacion_provicional.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.obturacionProvicional']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel2" rendered=":form:opciones:panel2"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.obturacionDefinitiva']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(2)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/obturacionDefinitiva.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/obturacion_definitiva.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.obturacionDefinitiva']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel2" rendered=":form:opciones:panel2"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.sellanateNecesario']}" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               styleClass="btn" update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="25" height="30" />
+                                    <f:setPropertyActionListener value="/resources/odontograma/sellante_necesario.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.sellanateNecesario']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="true" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>                                  
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.sellanateRealizado']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/sellante_realizado.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.sellanateRealizado']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="true" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.corona']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/corona.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.corona']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.endodonciaNecesaria']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/endodoncia_necesaria.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.endodonciaNecesaria']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.endodonciaRealizada']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaRealizadaS.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/endodoncia_realizada.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.endodonciaRealizada']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.extraccionIndicada']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/extraccionIndicadaS.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/extraccion_indicada.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.extraccionIndicada']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
+                                <p:commandLink ajax="true" title="#{messages['tratamiento.ausenciaPiezaDental']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
+                                               update="@form">
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiezaDentalS.gif" width="25" height="30"  />
+                                    <f:setPropertyActionListener value="/resources/odontograma/ausencia_pieza_dental.png" target="#{odontogramaHome.ruta}"/>
+                                    <f:setPropertyActionListener value="#{messages['tratamiento.extraccionIndicada']}" target="#{odontogramaHome.nombreTratamiento}"/>
+                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
+                                    <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
+                                </p:commandLink>
+                            </div>
+                            <div class="span10" >        
+                                <h:outputText value="#{odontogramaHome.nombreDiente}"/>
+                                <br/>
+                                <p:panel id="panel1" rendered="#{odontogramaHome.panel1}" header="#{odontogramaHome.nombreTratamiento}" >                                 
 
+                                    <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>
+                                    <br/> 
+                                    <h:panelGroup class="clearfix" layout="block" >
+                                        <label for="procedimient">#{messages['tratamiento.procedimiento']}</label>
+                                        <div class="input">
+                                            <h:inputTextarea id="procedimient" value="#{odontogramaHome.tratamiento.procedimiento}"  style="width: 90%; height: 80px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
+                                                <f:ajax execute="@this" render="save1"  />
+                                            </h:inputTextarea>
+                                        </div>
+                                    </h:panelGroup>
+                                </p:panel>                                                        
+                                <p:panel id="panel2" rendered="#{odontogramaHome.panel2}" header="#{odontogramaHome.nombreTratamiento}" >                                  
+
+                                    <!--Tratamientos que se realizan a partes del diente-->
+                                    <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>
+                                    <h3>Hola mundo</h3>
+                                    <br/>
+                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c1}" label="Cuadrante Superior"/>  
+                                    <br/>
+                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c4}" label="Cuadrante Izquierdo" />  
+                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c5}" label="Cuadrante Centro" />                                      
+                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c2}" label="Cuadrante Derecho" />  
+                                    <br/>
+                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c3}" label="Cuadrante Inferior" />  
+                                    <br/> 
+                                    <h:panelGroup class="clearfix" layout="block" style="margin-left: -40px">
+                                        <label for="procedimient1">#{messages['tratamiento.procedimiento']}</label>
+                                        <div class="input">
+                                            <h:inputTextarea id="procedimient1" value="#{odontogramaHome.tratamiento.procedimiento}"  style="width: 90%; height: 80px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
+                                                <f:ajax execute="@this" render="save1"  />
+                                            </h:inputTextarea>
+                                        </div>
+                                    </h:panelGroup>
+                                </p:panel>                                                                
+                            </div>
+                        </div>                            
+                    </div>
+
+                    <div class="admin-actions">
+                        <p:commandButton id="save1" value="#{messages['common.add']} #{messages['tratamiento.nombre']}" rendered="true"
+                                         action="#{odontogramaHome.guardarTratamiento()}" immediate="true"
+                                         ajax="true" styleClass="btn primary offset2" 
+                                         style="margin-top:10px;" icon="ui-icon-disk">
+                            <p:ajax process="@this" rendered=":form:odot" update="@parent :edit-dialog :form:odont :form:tablaTratamientos"/>
+                        </p:commandButton>                        
+                    </div> 
+                </p:panel>            
                 <p:panel id="tratam" header="Tratamientos" styleClass="span16">
                     <p:dataTable id="tablaTratamientos" value="#{odontogramaHome.listaTratamient}" var="tratam_" 
                                  paginator="true"
@@ -150,136 +332,7 @@
                     <!--<h3> #{messages['common.for']} </h3>-->
                     <h:outputText value="#{messages['common.new']} #{messages['tratamiento.nombre']} a diente seleccionado #{odontogramaHome.selectDient.nombre} #{odontogramaHome.selectDient.posicion}" styleClass="offset2"/>
 
-                    <div class="container-fluid">   
-                        <div class="row-fluid">
-                            <div class="span3">
-                                <br/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.carie']}" styleClass="btn" >
-                                    <p:graphicImage value="/resources/tratamientoDentales/carie.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/caries.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.carie']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="true" target="#{odontogramaHome.panel2}"/>
-                                    <p:ajax process="@this" update=":form-dialog:panel2" rendered=":form-dialog:panel2"/>
-                                </p:commandLink>    
-                                <p:spacer  width="3" height="15"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.obturacionProvicional']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/obturacionProvicional.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/obturacion_provicional.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.obturacionProvicional']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel2}"/>
-                                    <p:ajax process="@this" update="panel2" rendered="panel2"/>
-                                </p:commandLink>
-                                <p:spacer  width="3" height="9"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.obturacionDefinitiva']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/obturacionDefinitiva.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/obturacion_definitava.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.obturacionDefinitiva']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel2}"/>
-                                    <p:ajax process="@this" update="panel2" rendered="panel2"/>
-                                </p:commandLink>
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.sellanateNecesario']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/sellante_necesario.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.sellanateNecesario']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="true" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update=":form-dialog:panel1" rendered=":form-dialog:panel1"/>
-                                </p:commandLink>
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.sellanateRealizado']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/sellante_realizado.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.sellanateRealizado']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="true" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update=":form-dialog:panel1" rendered=":form-dialog:panel1"/>
-                                </p:commandLink>
-                              
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.corona']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/corona.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.corona']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update="panel1" rendered="panel1"/>
-                                </p:commandLink>
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.endodonciaNecesaria']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/endodoncia_necesaria.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.endodonciaNecesaria']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update="panel1" rendered="panel1"/>
-                                </p:commandLink>
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.endodonciaRealizada']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaRealizaS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/endodoncia_realizada.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.endodonciaRealizada']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update="panel1" rendered="panel1"/>
-                                </p:commandLink>
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.extraccionIndicada']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/extraccionIndicadaS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/extraccion_indicada.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.extraccionIndicada']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update="panel1" rendered="panel1"/>
-                                </p:commandLink>
-                                <p:spacer  width="4" height="5"/>
-                                <p:commandLink ajax="true" title="#{messages['tratamiento.ausenciaPiezaDental']}" styleClass="btn">
-                                    <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiezaDentalS.gif" width="35" height="40" />
-                                    <f:setPropertyActionListener value="/resources/odontograma/ausencia_pieza_dental.png" target="#{odontogramaHome.ruta}"/>
-                                    <f:setPropertyActionListener value="#{messages['tratamiento.extraccionIndicada']}" target="#{odontogramaHome.nombreTratamiento}"/>
-                                    <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
-                                    <p:ajax process="@this" update=":form-dialog:panel2" rendered=":form-dialog:panel2" partialSubmit="true"/>
-                                </p:commandLink>
-                            </div>
-                            <div class="span7" >        
-                                <br/>
-                                <p:panel id="panel1" rendered="true" header="#{odontogramaHome.nombreTratamiento}" visible="#{odontogramaHome.panel1}">
-                                    <f:facet name="" />
-                                    <!--Tratamientos que se realizan a todo el diente rendered="#{odontogramaHome.panel1}"-->
-                                    <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>
-                                </p:panel>                                                        
-                                <p:panel id="panel2" rendered="true" header="#{odontogramaHome.nombreTratamiento}" visible="true">                                  
 
-                                    <!--Tratamientos que se realizan a partes del diente-->
-                                    <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>
-                                    <br/>
-                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c1}" label="Cuadrante Superior"/>  
-                                    <br/>
-                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c4}" label="Cuadrante Izquierdo" />  
-                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c5}" label="Cuadrante Centro" />                                      
-                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c2}" label="Cuadrante Derecho" />  
-                                    <br/>
-                                    <p:selectBooleanCheckbox value="#{odontogramaHome.tratamiento.c3}" label="Cuadrante Inferior" />  
-                                </p:panel>
-                                <br/> 
-                                <h:panelGroup class="clearfix" layout="block" style="margin-left: -40px">
-                                    <label for="procedimient">#{messages['tratamiento.procedimiento']}</label>
-                                    <div class="input">
-                                        <h:inputTextarea id="procedimient" value="#{odontogramaHome.tratamiento.procedimiento}"  style="width: 90%; height: 80px;" required="true" label="#{messages['tratamiento.procedimiento']}"  >
-                                            <f:ajax execute="@this" render="save1"  />
-                                        </h:inputTextarea>
-                                    </div>
-                                </h:panelGroup>                                
-                            </div>
-                        </div>                            
-                    </div>
-                     
-                    <div class="admin-actions">
-                        <p:commandButton id="save1" value="#{messages['common.save']}" rendered="true"
-                                         action="#{odontogramaHome.guardarTratamiento()}" immediate="true"
-                                         ajax="true" styleClass="btn primary offset2" 
-                                         style="margin-top:10px;" icon="ui-icon-disk">
-                            <p:ajax process="@this" rendered=":form:odot" update="@parent :edit-dialog :form:odont :form:tablaTratamientos"/>
-                        </p:commandButton>
-                        #{' '}                     
-                        <p:commandButton type="button" value="#{messages['common.cancel']}" style="margin-top:10px;" 
-                                         rendered="true" onclick="editDlg.hide();"                                      
-                                         styleClass="btn"/>  
-                    </div> 
                 </h:form>
             </p:dialog> 
         </ui:define>

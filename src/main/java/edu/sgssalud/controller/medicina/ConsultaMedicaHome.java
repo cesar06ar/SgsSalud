@@ -318,7 +318,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public String getInidicadirIMC() {
+    public String getInidicadorIMC() {
         if (paciente.getEdad() < 5) {
             int peso = (paciente.getEdad() * 2) + 8;
             return "Peso del Niño = " + peso;
@@ -346,7 +346,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     public void crearModeloLineal() {
         linearModel = new CartesianChartModel();
         ChartSeries serieImc = new ChartSeries();
-        serieImc.setLabel("Indice Masa Corporal = " + getInidicadirIMC());
+        serieImc.setLabel("Indice Masa Corporal = " + getInidicadorIMC());
         serieImc.set("BAJO PESO", 0);
         serieImc.set("NORMAL", 18.5);
         serieImc.set("SOBRE PESO", 25);
