@@ -154,7 +154,7 @@
       <action>#{account.loadPages}</action>             
    </url-mapping>
    <url-mapping id="FichaMedicaLista">
-      <pattern value="listaFichaMedica"></pattern>
+      <pattern value="/listaFichaMedica"></pattern>
       <view-id value="/pages/depSalud/listaFichaMedica.xhtml"></view-id>      
    </url-mapping>
    <url-mapping id="AgendaMedica">
@@ -166,8 +166,8 @@
       <view-id value="/pages/depSalud/medicina/consultaMedica.xhtml"></view-id>       
    </url-mapping> 
    <url-mapping id="ListaConsultaMedica">
-      <pattern value="/medicina/listaConsulta"></pattern>
-      <view-id value="/pages/medicina/listaConsulta.xhtml"></view-id>       
+      <pattern value="/listaConsultaMedica"></pattern>
+      <view-id value="/pages/depSalud/medicina/listaConsultas.xhtml"></view-id>       
    </url-mapping>   
    <url-mapping id="SignosVitales">
       <pattern value="/enfermeria/signosVitales"></pattern>
@@ -184,8 +184,8 @@
       <view-id value="/pages/depSalud/odontologia/consultaOdontologica.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="ListaConsultaOdontologica">
-      <pattern value="/odontologia/listaConsultaOdontologica"></pattern>
-      <view-id value="/pages/odontologia/listaConsultaOdontologica.xhtml"></view-id>       
+      <pattern value="/listaConsultaOdontologica"></pattern>
+      <view-id value="/pages/depSalud/odontologia/listaConsultaOdontologica.xhtml"></view-id>       
    </url-mapping>   
    <url-mapping id="AgendaOdontologica">
       <pattern value="/odontologia/agendaOdontologica"></pattern>

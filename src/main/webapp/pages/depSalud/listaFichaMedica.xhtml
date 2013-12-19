@@ -91,11 +91,11 @@
                         update=":form:button-edit :form:messages :form:button-abrirFM"/>
 
                 <!--Columnas para mostrar en la tabla-->
-                <p:column sortBy="#{fichaMedica_.id}" style="width: 15%; text-align: center;">
+                <p:column sortBy="#{fichaMedica_.numeroFicha}" style="width: 15%; text-align: center;">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['fichaMedica.id']}" />  
+                        <h:outputText value="#{messages['fichaMedica.numero']}" />  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.id}" />
+                    <h:outputText value="#{fichaMedica_.numeroFicha}" />
                 </p:column>
                 <p:column sortBy="#{fichaMedica_.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
@@ -122,6 +122,20 @@
                     <h:outputText value="#{fichaMedica_.lastUpdate}" />
                 </p:column>
             </p:dataTable>
+            <h:panelGrid id="export" class="columns" >
+                <p:panel>
+                    <h:outputText value="Exportar Datos" />  
+                    <br/>
+                    <h:commandLink action="#{reporteListas.renderFichasMedicas()}" >                    
+                        <p:graphicImage value="/resources/images/pdf.png" />                          
+                    </h:commandLink>
+                    #{''}
+                    <h:commandLink >  
+                        <p:graphicImage value="/resources/images/xls1.png" />  
+                        <p:dataExporter type="xls" target="tablaFichasMedicas" fileName="FichasMedicas"/>  
+                    </h:commandLink>
+                </p:panel>
+            </h:panelGrid>
         </h:form>
     </ui:define>
 </ui:composition>

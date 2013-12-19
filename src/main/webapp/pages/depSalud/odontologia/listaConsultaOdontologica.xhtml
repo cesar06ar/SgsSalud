@@ -96,24 +96,24 @@
                     </f:facet> 
                     <h:outputText value="#{consultaOdontologica_.id}" />
                 </p:column>
-                <!--<p:column sortBy="#{consultaOdontologica_.d}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.id}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['fichaMedica.id']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.id}" />
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.id}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" />
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.nombres}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.apellidos}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.surname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" />
-                </p:column> -->
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.apellidos}" />
+                </p:column> 
                 <p:column sortBy="#{consultaOdontologica_.fechaConsulta}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.fechaConsulta']}" />  

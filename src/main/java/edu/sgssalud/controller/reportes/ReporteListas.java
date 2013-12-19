@@ -17,8 +17,10 @@ package edu.sgssalud.controller.reportes;
 
 import com.smartics.common.action.report.JasperReportAction;
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
+import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +47,7 @@ public class ReporteListas {
 
     private static final String REPORTE_USUARIOS = "Reporte";  //nombre del reporte .jasper   
     private static final String REPORTE_PACIENTES = "pacientes";
+    private static final String REPORTE_FICHASMEDICAS = "listaFichasM";
 
     @Inject
     @Web
@@ -54,6 +57,8 @@ public class ReporteListas {
     private ProfileService profileService;
     @Inject
     private PacienteServicio pacienteServicio;
+    @Inject
+    private FichaMedicaServicio fichaMedicaServicio;
     
     @Inject
     JasperReportAction JasperReportAction;
@@ -68,6 +73,7 @@ public class ReporteListas {
     public void init() {
         profileService.setEntityManager(em);
         pacienteServicio.setEntityManager(em);
+        fichaMedicaServicio.setEntityManager(em);
     }
 
     private String getRealPath(String path) {
@@ -211,4 +217,22 @@ public class ReporteListas {
 
     }
     
+     public void renderFichasMedicas() {
+        
+        final String attachFileName = "fichasMedicas.pdf";        
+        List<FichaMedica> fichasMed = fichaMedicaServicio.getFichasMedicas();
+        //parametros 
+        Map<String, Object> _values = new HashMap<String, Object>();
+        _values.put("numeroFicha", fichasMed.size());
+        //_values.put("numeroPacientes", pacientes.size());
+        _values.put("usd", "$");
+
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_FICHASMEDICAS, fichasMed, _values, attachFileName);
+
+        if (log.isDebugEnabled()) {
+            log.debug("export as pdf");
+        }     
+
+    }
 }
