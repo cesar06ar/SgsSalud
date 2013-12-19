@@ -229,7 +229,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     }
 
     public List<Medicamento> getListaMedicamentosStock() {
-        return medicamentosServicio.buscarTodos(); //controlar los medicamentos en stock
+        return medicamentosServicio.buscarPorStockDisponible(); //controlar los medicamentos en stock
     }
 
     public void setListaMedicamentosStock(List<Medicamento> listaMedicamentosStock) {
@@ -398,27 +398,31 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                 if (consultaMedica.isPersistent()) {  //falta consulta Odontologica
                     //getInstance().setMedicaciones(listaMedicamentosReceta);                
                     getInstance().setConsultaMedica(consultaMedica);
+                    getInstance().setPaciente(paciente);
+                    getInstance().setConsultaOdontologica(null);
                     create(getInstance());
                     for (Medicamento m : listaMedicamentosReceta) {
                         recetaMedicamento = new Receta_Medicamento();
                         recetaMedicamento.setMedicamento(m);
                         recetaMedicamento.setCantidad(m.getUnidades());
+                        save(recetaMedicamento);
+                        update();
+                        save(m);
                         getInstance().agregarRecetaMedicamento(recetaMedicamento);
                     }
                     String indicaciones = listaIndicaciones.toString();
                     getInstance().setIndicaciones(indicaciones.substring(1, indicaciones.length() - 1));
-
                     getInstance().setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
                     save(getInstance());
-                    for (Medicamento m : listaMedicamentosStock) {
-                        for (Receta_Medicamento rm : getInstance().getListaRecetaMedicamento()) {
-                            if (m.equals(rm.getMedicamento())) {
-                                int c = m.getUnidades();
-                                m.setUnidades(c - rm.getCantidad());
-                                save(m);
-                            }
-                        }
-                    }
+//                    for (Medicamento m : listaMedicamentosStock) {
+//                        for (Receta_Medicamento rm : getInstance().getListaRecetaMedicamento()) {
+//                            if (m.equals(rm.getMedicamento())) {
+//                                int c = m.getUnidades();
+//                                m.setUnidades(c - rm.getCantidad());
+//                                save(m);
+//                            }
+//                        }
+//                    }
                     FacesMessage msg = new FacesMessage("Se envió la receta: " + getInstance().getId() + " con éxito");
                     FacesContext.getCurrentInstance().addMessage("", msg);
                 } else {
@@ -427,11 +431,11 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                 }
             }
         } catch (Exception e) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Debe cargar una consulta Primero", "");
+            FacesMessage msg = new FacesMessage("Error al guardar la receta");
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
 
-        return "/pages/farmacia/receta/lista.xhtml?faces-redirect=true";
+        return "/pages/depSalud" + getBackView() + "?faces-redirect=true";
     }
 
     public void cargarIndicacion() {
@@ -445,6 +449,9 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
             inicioIndicacion = "Aplicar ";
         } else if ("Pastillas".equals(presentacion)) {
             unidadesDosis.add("Pastilla/s");
+            inicioIndicacion = "Tomar ";
+        } else if ("Capsulas".equals(presentacion)) {
+            unidadesDosis.add("Cápsula/s");
             inicioIndicacion = "Tomar ";
         } else if ("Sobres".equals(presentacion)) {
             unidadesDosis.add("Sobre/s");
@@ -467,20 +474,26 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void cargarMedicamentoAReceta() {
 
-        this.actualizarStockMedicamento(unidadesMedicacion);
-//        if (!listaMedicamentosReceta.contains(medicamentoSeleccionado)) {
-        Medicamento medic = medicamentoSeleccionado;
-        medic.setUnidades(unidadesMedicacion);
-        listaMedicamentosReceta.add(medic);
-        String indicacion = medicamentoSeleccionado.getNombreComercial().toUpperCase() + ": " + inicioIndicacion + " " + dosis + " " + unidadDosis
-                + " cada " + tiempoToma + " " + unidadTiempoToma + "<br/>" + "durante " + duracionTratamiento + " " + unidadDuracionTratamiento + "<br/>" + "<br/>";
+        //this.actualizarStockMedicamento(unidadesMedicacion);
+        if (medicamentoSeleccionado != null) {            
+            //Medicamento medic = getMedicamentoSeleccionado();
+            setMedicamento(medicamentoSeleccionado);
+            getMedicamento().setUnidades(medicamentoSeleccionado.getUnidades() - unidadesMedicacion);
+            listaMedicamentosReceta.add(getMedicamento());
+            for(Medicamento med : listaMedicamentosReceta){
+                if(med.equals(medicamentoSeleccionado)){
+                    med.setUnidades(unidadesMedicacion);
+                }
+            }
+            String indicacion = medicamento.getNombreComercial().toUpperCase() + " " + unidadesMedicacion + " ) "+ medicamento.getPresentacion() +"): " + inicioIndicacion + " " + dosis + " " + unidadDosis
+                    + " cada " + tiempoToma + " " + unidadTiempoToma + "<br/>" + "durante " + duracionTratamiento + " " + unidadDuracionTratamiento + "<br/>" + "<br/>";
 
-        listaIndicaciones.add(indicacion);
-        this.reiniciar();
-//        } else {
-//            this.reiniciar();
-//        }
-
+            listaIndicaciones.add(indicacion);
+            this.reiniciar();
+        }else{
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar un medicamento", "");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }        
     }
 
     public void eliminarMedicamentoReceta(Medicamento med) {
@@ -525,6 +538,6 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         unidadTiempoToma = null;
         duracionTratamiento = 0;
         unidadDuracionTratamiento = null;
-
+        presentacion = "";
     }
 }

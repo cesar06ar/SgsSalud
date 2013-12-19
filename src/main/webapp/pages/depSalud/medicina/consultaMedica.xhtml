@@ -21,8 +21,8 @@
 
         <ui:define name="header-replace">
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
                         <h3>#{consultaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaMedica.nombre']} 
                             #{consultaMedicaHome.instance.id} <br/>
                             #{messages['common.for']} Paciente #{consultaMedicaHome.paciente.nombres} #{consultaMedicaHome.paciente.apellidos}</h3>   
@@ -30,13 +30,13 @@
                 </div>
             </div>
         </ui:define>
-        <ui:define name="content" class="span20">
+        <ui:define name="content">
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <p:growl id="growl" showDetail="true" sticky="true" escape="false"/>  
-                <p:panel id="consultaM" header="Información de Consulta" toggleable="true" styleClass="span16">
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="300"/>  
+                <p:panel id="consultaM" header="Información de Consulta" toggleable="true" >
                     <p:panelGrid columns="3">
-                        <h:panelGroup layout="block" class="clearfix" >
+                        <h:panelGroup layout="block" >
                             <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
                             <div class="input">                                                         
                                 <p:calendar id="fechaC" value="#{consultaMedicaHome.instance.fechaConsulta}"  label="" dir="rtl"
@@ -46,7 +46,7 @@
                                                 styleClass="validation-status" />                                                        
                             </div>
                         </h:panelGroup>
-                        <h:panelGroup layout="block" class="clearfix" >
+                        <h:panelGroup layout="block" >
                             <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
                             <div class="input">                                                                                                                                                                                          
                                 <pe:timePicker id="horaC" value="#{consultaMedicaHome.instance.horaConsulta}"  label="" 
@@ -57,7 +57,7 @@
                                                 styleClass="validation-status" />                                                        
                             </div>
                         </h:panelGroup> 
-                        <h:panelGroup layout="block" class="clearfix" >
+                        <h:panelGroup layout="block"  >
                             <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
                             <div class="input">                                                                                         
                                 <pe:timePicker id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}" />
@@ -67,7 +67,7 @@
                         </h:panelGroup>
                     </p:panelGrid>
                 </p:panel>
-                <p:tabView styleClass="span16">
+                <p:tabView >
                     <p:tab title="#{messages['signosVitales.Nombre']}" titletip="#{messages['signosVitales.Nombre']}" >
                         <div class="container-fluid">   
                             <div class="row-fluid">
@@ -135,7 +135,7 @@
                         </div>
                     </p:tab>                 
                     <c:forEach items="#{ui.getProperties(consultaMedicaHome.instance)}" var="f" >                                            
-                        <p:tab title="#{f.label}" titletip="#{f.helpInline}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}" titleStyleClass="clearfix">
+                        <p:tab title="#{f.label}" titletip="#{f.helpInline}" closable="false" rendered="#{!account.tienePermiso('ENFERMEROS')}" >
                             <c:choose>
                                 <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">                                
                                     <ui:repeat value="#{consultaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">                                        
@@ -178,14 +178,14 @@
                                             </div>
                                         </h:panelGroup> 
                                     </ui:repeat>
-                                    <br/><br/>                                    
-                                    <div class="span14" style="padding-top: 10px;">                                
+                                    <br/>                                   
+                                    <div style="width: 95%; margin-top: 5%; ">                                
                                         <c:choose>                                                                             
                                             <c:when test="#{(f.name eq 'revisionOrganosYSistemasCM')}">                                                            
                                                 <h:panelGroup id="obraosp" layout="block" class="clearfix">
                                                     <label for="observ1">#{messages['consultaMedica.observacionActOrgySist']}</label>
                                                     <div class="input">
-                                                        <p:inputTextarea id="observ1" value="#{consultaMedicaHome.instance.observacionRevisionOS}" styleClass="xLarge span6" required="false" style="width: 650px; height: 90px;" 
+                                                        <p:inputTextarea id="observ1" value="#{consultaMedicaHome.instance.observacionRevisionOS}" styleClass="xLarge " required="false" style="width: 70%; height: 90px;" 
                                                                          rendered="true">
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </p:inputTextarea>                                              
@@ -196,7 +196,7 @@
                                                 <h:panelGroup id="obEFP" layout="block" class="clearfix">
                                                     <label for="observ2">#{messages['consultaMedica.observacionExamFis']}</label>
                                                     <div class="input">
-                                                        <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" styleClass="xLarge span6" required="false" style="width: 650px; height: 90px;" 
+                                                        <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" required="false" style="width: 70%; height: 90px;" 
                                                                          rendered="true">
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </p:inputTextarea>                                                                                                 
@@ -211,23 +211,23 @@
                     </c:forEach>
                     <p:tab title="#{messages['comun.Indicadores']}" titletip="#{messages['comun.Indicadores.Title']}" rendered="true" >
                         <p:panel header="Indice Masa Corpal IMC" styleClass="offset 2">
-                            <h:outputText value="#{consultaMedicaHome.inidicadirIMC}">                                
+                            <h:outputText value="#{consultaMedicaHome.inidicadorIMC}">                                
                             </h:outputText>
                             <br/>
-                            <br/>
+                            <br/>                            
                             <p:lineChart id="linear" value="#{consultaMedicaHome.linearModel}" legendPosition="e"  
-                                         title="IMC" minY="0" maxY="40" style="height:200px"/>  
-                        </p:panel>            
+                                         title="IMC" minY="0" maxY="40" style="height: 180px; width: 90%"/>                              
+                        </p:panel>
                     </p:tab>
                 </p:tabView>             
-                <p:tabView styleClass="span16">
+                <p:tabView >
                     <p:tab title="#{messages['consultaMedica.Motivo']}" titletip="#{messages['consultaMedica.Motivo']}" rendered="true" >
-                        <glue:output id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
-                                     required="false" execute="@this :form:save" render="motivoC" styleClass="span13"/>                
+                        <glue:input id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
+                                    required="false" execute="@this :form:save" render="motivoC" helpinline=""/>                
                     </p:tab>                    
                     <p:tab title="#{messages['consultaMedica.Enfermedad']}" titletip="#{messages['consultaMedica.Enfermedad.tip']}" closable="false" rendered="true">
-                        <glue:output id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadActual']}" value="#{consultaMedicaHome.instance.enfermedadActual}" 
-                                     required="false" execute="@this :form:save" render="enfermedadAct" styleClass="span13"/>
+                        <glue:input id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadActual']}" value="#{consultaMedicaHome.instance.enfermedadActual}" 
+                                    required="false" execute="@this :form:save" render="enfermedadAct" helpinline=""/>
                     </p:tab>
                     <p:tab title="#{messages['consultaMedica.Diagnostico']}" titletip="#{messages['consultaMedica.Diagnostico']}" closable="false" 
                            rendered="true">
@@ -246,23 +246,24 @@
                                 </p:pickList>                                                                                      
                             </div>
                         </h:panelGroup> 
-                        <glue:output id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
-                                     required="false" execute="@this :form:save" render="diagnostico" styleClass="span14"/>
+                        <glue:input id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
+                                    required="false" execute="@this :form:save" render="diagnostico" helpinline=""/>
                     </p:tab>
                     <p:tab title="#{messages['tratamiento.Nombre']}" titletip="#{messages['tratamiento.Nombre']}" closable="false" rendered="true">                           
-                        <glue:output id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.Tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
-                                     required="false" execute="@this :form:save" render="tratamiento" styleClass="span14"/>
+                        <glue:input id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.Tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
+                                    required="false" execute="@this :form:save" render="tratamiento" helpinline=""/>
                     </p:tab>
                     <p:tab title="#{messages['consultaMedica.Observacion']}" titletip="#{messages['consultaMedica.Observacion']}" closable="false" rendered="true">
-                        <glue:output id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
-                                     required="false" execute="@this :form:save" render="observacionC" styleClass="span14"/>
+                        <glue:input id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
+                                    required="false" execute="@this :form:save" render="observacionC" helpinline=""/>
                     </p:tab>
                 </p:tabView>
-                <p:tabView styleClass="span16" rendered="#{consultaMedicaHome.instance.persistent}">
+                <p:tabView  rendered="#{consultaMedicaHome.instance.persistent}">
                     <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
                         <h:link outcome="/pages/farmacia/receta/recetas" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >
                             <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                             <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
+                            <f:param name="backView" value="/medicina/consultaMedica"></f:param>
                         </h:link>
                         <br/><br/>                        
                         <p:dataTable id="tablaRecetas" value="#{consultaMedicaHome.instance.recetas}" var="recetaM_" >
@@ -285,7 +286,7 @@
                                     <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                                     <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
                                     <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
-                                    <f:param name="backView" value="fichaMedica"></f:param>
+                                    <f:param name="backView" value="/medicina/consultaMedica"></f:param>
                                 </h:link>                           
                             </p:column>
                         </p:dataTable>
@@ -293,8 +294,9 @@
                 </p:tabView>
 
 
-                <div class="admin-actions span15" style="padding-right: 50px;">
-                    <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                <div class="admin-actions" style="padding-right: 50px;">
+                    <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" 
+                                     update=":form:growl" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >

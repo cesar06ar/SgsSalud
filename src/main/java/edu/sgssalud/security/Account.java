@@ -20,6 +20,7 @@ import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.security.authorization.SecurityRules;
 import edu.sgssalud.service.paciente.PacienteServicio;
+import javax.enterprise.context.SessionScoped;
 
 import org.jboss.seam.security.Identity;
 
@@ -29,7 +30,8 @@ import org.jboss.seam.security.Identity;
  *
  */
 @Named("account")
-@RequestScoped
+//@RequestScoped
+@SessionScoped
 public class Account implements Serializable {
 
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(Account.class);
@@ -53,7 +55,7 @@ public class Account implements Serializable {
 
     @Produces
     @LoggedIn
-    @RequestScoped
+    @SessionScoped
     @Named("userPaciente")
     public Paciente getLoggedPaciente() {
         if (identity.isLoggedIn() && !loggedIn1.isPersistent()) {
@@ -70,7 +72,8 @@ public class Account implements Serializable {
 
     @Produces
     @LoggedIn
-    @RequestScoped
+    //@RequestScoped
+    @SessionScoped
     @Named("userProfile")
     public Profile getLoggedIn() {
         if (identity.isLoggedIn() && !loggedIn.isPersistent()) {

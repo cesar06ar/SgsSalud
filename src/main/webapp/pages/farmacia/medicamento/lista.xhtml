@@ -5,28 +5,29 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:composition template="/WEB-INF/view/templates/glueHome.xhtml">
         <ui:define name="header-replace" >
-            <div class="header-replace">            
-                <div class="container">
-                    <div class="span9 columns">
-                        <div class="row fl" style="margin-top: 5px;">
-                            <h2>#{messages['medicamento.admin']}</h2>   
-                        </div>                    
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
+                        <div class="span9 columns">
+                            <div class="row fl" style="margin-top: 5px;">
+                                <h2>#{messages['medicamento.admin']}</h2>   
+                            </div>                    
+                        </div> 
+                        <!--Div para boton de regreso a inicio-->
+                        <div class="span4 columns offset3">
+                            <h:form id="control">  
+                                <br/>
+                                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                        outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
+                                </h:link>  
+                                <br/>                                             
+                            </h:form>
+                        </div>
                     </div> 
-                    <!--Div para boton de regreso a inicio-->
-                    <div class="span4 columns offset3">
-                        <h:form id="control">  
-                            <br/>
-                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                    outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                            </h:link>  
-                            <br/>                                             
-                        </h:form>
-                    </div>
-                </div> 
-            </div>   
-
+                </div>   
+            </div>            
         </ui:define>
 
         <ui:define name="content">           
@@ -42,31 +43,29 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
                 <!--Botones de admin-->
-                <div class="admin-actions span17">
-                    <div class="span6 ">
-                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="medicamento" styleClass="btn primary">
-                            <f:param name="pacienteId"></f:param>
-                            <f:param name="backView" value="lista"></f:param>
-                        </h:link>
-                        #{' '}
-                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
-                                disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
-                            <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
-                            <f:param name="backView" value="lista"></f:param>
-                        </h:link>
-                    </div>
-                    <div class="span6 offset5" >
+                <div class="admin-actions">
+
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="medicamento" styleClass="btn primary">
+                        <f:param name="pacienteId"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
+                            disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
+                        <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
+                    <h:panelGroup style="float: right">
                         <p:inputText id="criterioBuscar" size ="25" value="#{medicamentoListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                             <p:ajax event="keyup" update="tablaMedicamentos"/>
                         </p:inputText>
                         &nbsp;
                         <p:commandButton value="Buscar" action="#{medicamentoListaServicio.buscarPorParametro()}" update="tablaMedicamentos" styleClass="btn info"/>                    
-                    </div>
+                    </h:panelGroup>
                 </div>
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             paginator="true" rows="20" styleClass="span18"                              
-                             paginatorPosition="top"
+                             paginator="true" rows="20"  paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100"
                              lazy="true"

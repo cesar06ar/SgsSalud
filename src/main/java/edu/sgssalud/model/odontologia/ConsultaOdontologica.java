@@ -63,6 +63,8 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private String diagnostico;
     private String diagnosticoRadiografico;
     private String observacion;
+    private String observacionExamenDentario;
+    private String observacionExamenFisico;
     @ManyToOne
     @JoinColumn(name = "fichaOdontologica_id")
     private FichaOdontologica fichaOdontologica;
@@ -71,8 +73,8 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private SignosVitales signosVitales;
     @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
-    @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Tratamiento> tratamientoDientes = new ArrayList<Tratamiento>();
+//    @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<Tratamiento> tratamientoDientes = new ArrayList<Tratamiento>();
 
     public Date getFechaConsulta() {
         return fechaConsulta;
@@ -165,16 +167,16 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
         this.recetas = recetas;
     }
 
-    public List<Tratamiento> getTratamientoDientes() {
-        return tratamientoDientes;
-    }
-
-    public void setTratamientoDientes(List<Tratamiento> tratamientoDientes) {
-        for (Tratamiento td : tratamientoDientes) {
-            td.setConsultaOdontologica(this);
-        }
-        this.tratamientoDientes = tratamientoDientes;
-    }
+//    public List<Tratamiento> getTratamientoDientes() {
+//        return tratamientoDientes;
+//    }
+//
+//    public void setTratamientoDientes(List<Tratamiento> tratamientoDientes) {
+//        for (Tratamiento td : tratamientoDientes) {
+//            td.setConsultaOdontologica(this);
+//        }
+//        this.tratamientoDientes = tratamientoDientes;
+//    }
 
     public String getObservacion() {
         return observacion;
@@ -182,6 +184,22 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    } 
+
+    public String getObservacionExamenDentario() {
+        return observacionExamenDentario;
+    }
+
+    public void setObservacionExamenDentario(String observacionExamenDentario) {
+        this.observacionExamenDentario = observacionExamenDentario;
+    }
+
+    public String getObservacionExamenFisico() {
+        return observacionExamenFisico;
+    }
+
+    public void setObservacionExamenFisico(String observacionExamenFisico) {
+        this.observacionExamenFisico = observacionExamenFisico;
     } 
         
     public void agregarReceta(Receta r) {
@@ -191,12 +209,12 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
         }
     }
 
-    public void agregarTratamiento(Tratamiento t) {
-        if (!this.tratamientoDientes.contains(t)) {
-            t.setConsultaOdontologica(this);
-            this.tratamientoDientes.add(t);
-        }
-    }
+//    public void agregarTratamiento(Tratamiento t) {
+//        if (!this.tratamientoDientes.contains(t)) {
+//            t.setConsultaOdontologica(this);
+//            this.tratamientoDientes.add(t);
+//        }
+//    }
 
     @Override
     public int compareTo(ConsultaOdontologica o) {

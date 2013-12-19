@@ -43,7 +43,7 @@ limitations under the License.
     <c:set var="prefix" value="#{not empty prefix ? prefix : 1}" />    
     <!-- TODO habilitar o deshabilitar ajax validation -->
     <h:panelGroup id="panel-group-#{id}" layout="block" class="#{styleClass}">
-        <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
+        <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label} #{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">
             <c:choose>
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">

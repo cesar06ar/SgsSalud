@@ -34,7 +34,7 @@
             <h:outputScript library="js" name="calendar_es.js" />
             <h:outputScript library="primefaces" name="jquery/jquery.js" />
             <!--<h:outputScript name="jquery-1.7.js"/>-->
-             <!--Our customizations -->
+            <!--Our customizations -->
             <h:outputStylesheet name="application.css" />
             <h:outputStylesheet name="css/odontograma.css" />
             <h:outputScript name="application.js" />
@@ -66,7 +66,7 @@
                 </div>
             </ui:insert>
 
-            <div style="min-height: 100%;">
+            <div id="contentAll"  style="min-height: 100%;">
 
                 <div style="padding-top: 40px;"></div>
 
@@ -78,30 +78,32 @@
                     </div>
                 </ui:insert>
 
-                <div class="container">
-                    <ocp:messages id="messages" globalOnly="true" />
-                    <script type="text/javascript">
-                        $(document).ready(function() {
-                            $('#messages\\:messages li').attr("data-alert", "alert");
-                            $('#messages\\:messages li').append('<a href="#" class="close">×</a>');
-                            $('.alert-message').alert();
-                            $('.alert-message').click().alert('close');
-                        });
-                    </script>
-                </div>
+                <div class="container-fluid" style="padding-bottom: 148px;">
+                    <div class="row-fluid">
+                        <div class="span3" style="margin: 0 -2% 0 0.3%">
+                                    <ui:insert name="sidebar" />  
+                        </div>
+                        <div class="container-content" style="float: right;">
+                            <div class="container-content">
+                                <ocp:messages id="messages" globalOnly="true" />
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#messages\\:messages li').attr("data-alert", "alert");
+                                        $('#messages\\:messages li').append('<a href="#" class="close">×</a>');
+                                        $('.alert-message').alert();
+                                        $('.alert-message').click().alert('close');
+                                    });
+                                </script>
+                            </div>
 
-                <div class="container">
-                    <ui:insert name="content-pre" />
-                </div>
+                            <div class="container-content">
+                                <ui:insert name="content-pre" />
+                            </div>
 
-                <div class="container" style="padding-bottom: 150px;">
-
-                    <div class="sidebar">
-                        <ui:insert name="sidebar" />
-                    </div>
-
-                    <div class="content">
-                        <ui:insert name="content" />
+                            <div class="content" >
+                                <ui:insert name="content" />
+                            </div>
+                        </div>
                     </div>
                     <div style="clear: none;"></div>
                 </div>

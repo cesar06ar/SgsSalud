@@ -113,8 +113,8 @@ div#request {
 }
 
 .content {
-    margin: 5 0 0 0px;
-    height: 760px;
+    margin: 5px 0 0 0;
+    height: 80%;
     background-color: #FFFFFF;
     color: #000000;
     overflow: auto;

@@ -19,6 +19,7 @@ import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.servicios.Servicio;
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 /**
  *
@@ -44,13 +46,20 @@ public class Tratamiento implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaRelizacion;    
     private String nombre;
-    private String procedimiento;       
+    private String procedimiento; 
+    @Transient
+    private String ruta;
+    private boolean c1;
+    private boolean c2;
+    private boolean c3;
+    private boolean c4;
+    private boolean c5;
     
     @ManyToOne()
     @JoinColumn(name = "diente_id")
     private Diente diente;
     
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "consultaOdontologica_id")
     private ConsultaOdontologica consultaOdontologica;  
         
@@ -58,6 +67,20 @@ public class Tratamiento implements Serializable {
     @JoinColumn(name = "servicioDisponible_id")
     private Servicio servicioDisponible;
 
+    public Tratamiento(){
+        
+    }
+    
+    public Tratamiento(String nombre, String ruta, boolean c1, boolean c2, boolean c3, boolean c4, boolean c5) {
+        this.nombre = nombre;
+        this.ruta = ruta;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
+    }
+        
     public Long getId() {
         return id;
     }
@@ -82,6 +105,54 @@ public class Tratamiento implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public boolean isC1() {
+        return c1;
+    }
+
+    public void setC1(boolean c1) {
+        this.c1 = c1;
+    }
+
+    public boolean isC2() {
+        return c2;
+    }
+
+    public void setC2(boolean c2) {
+        this.c2 = c2;
+    }
+
+    public boolean isC3() {
+        return c3;
+    }
+
+    public void setC3(boolean c3) {
+        this.c3 = c3;
+    }
+
+    public boolean isC4() {
+        return c4;
+    }
+
+    public void setC4(boolean c4) {
+        this.c4 = c4;
+    }
+
+    public boolean isC5() {
+        return c5;
+    }
+
+    public void setC5(boolean c5) {
+        this.c5 = c5;
+    }  
+        
     public String getProcedimiento() {
         return procedimiento;
     }
@@ -112,8 +183,8 @@ public class Tratamiento implements Serializable {
 
     public void setServicioDisponible(Servicio servicioDisponible) {
         this.servicioDisponible = servicioDisponible;
-    }
-
+    }    
+    
     public boolean isPersistent() {
         return getId() != null;
     }

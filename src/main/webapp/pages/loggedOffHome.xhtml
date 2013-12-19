@@ -10,8 +10,8 @@
         <ui:param name="title" value="#{messages['app.name']}, #{messages['app.logo']}" />
         <ui:define name="header-replace">
             <div class="header-replace" >
-                <div class="container">
-                    <div class="row fl" style="margin-top: 15px; margin-left: 0%">
+                <div class="container-header" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%; padding-top: 1%" >
                         <div class="span2 columns">                           
 
                         </div>
@@ -25,18 +25,18 @@
             </div>     
         </ui:define>
 
-        <ui:define name="nav-header">
+        <!--<ui:define name="nav-header">
             <ul class="nav nav-pills">
                 <li class="btn-success"><a href="#">Home</a></li>
                 <li><a href="#">Projects</a></li>
                 <li><a href="#">Services</a></li>
                 <li><a href="#">Downloads</a></li>
             </ul>            
-        </ui:define>
+        </ui:define>-->
 
         <ui:define name="image_gallery">
             <center> 
-                <p:galleria value="#{galleryController.images}" var="image" panelWidth="700" panelHeight="300" showCaption="true">  
+                <p:galleria value="#{galleryController.images}" var="image" showCaption="true" panelWidth="800" panelHeight="280" >  
                     <p:graphicImage value="/resources/images/#{image}" alt="Image Description for #{image}" title="#{image}"/>  
                 </p:galleria> 
             </center>
@@ -48,7 +48,7 @@
 
             </div>            
 
-            <div class="info" style="background-color: #00FFCC; margin: auto; margin-top: 5%; width: 100%; ">
+            <div class="info" style="background-color: #00FFCC; margin: auto; margin-top: 5%; width: 121%; ">
                 <center>
                     <div class="admin-actions" >                            
                         <h:link value="#{messages['common.alreadyaccount']}" outcome="/pages/login" class="btn primary large">

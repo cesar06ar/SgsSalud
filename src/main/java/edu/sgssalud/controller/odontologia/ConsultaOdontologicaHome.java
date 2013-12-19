@@ -117,7 +117,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
     public void setServicio(Servicio servicio) {
         this.servicio = servicio;
-        diente.setRutaIcon(servicio.getRutaImg());
+        //diente.setRutaIcon(servicio.getRutaImg());
     }
 
     public SignosVitales getSignosVitales() {
@@ -241,7 +241,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         fichaOdontServicio.setEntityManager(em);
         profileS.setEntityManager(em);
         serviciosMedicosS.setEntityManager(em);
-        
+
         if (getInstance().isPersistent()) {
             this.IniciarDientes();
             Odontograma o = new Odontograma();
@@ -292,7 +292,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         getInstance().setLastUpdate(now);
         try {
             if (getInstance().isPersistent()) {
-                getInstance().setCode("REALIZADA"); 
+                getInstance().setCode("REALIZADA");
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 getInstance().getSignosVitales().setFechaActual(now);
                 save(getInstance());
@@ -314,10 +314,46 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     @TransactionAttribute
     public void guardarTratamiento() {
         log.info("valor diente: " + diente);
-        diente.setRutaIcon(servicio.getRutaImg());
+//        diente.setRutaIcon(servicio.getRutaImg());
 //        tratamiento.setFechaRelizacion(new Date());
 //        tratamientos.add(tratamiento);
         this.actualizarDiente(diente);
+    }
+
+    @TransactionAttribute
+    public String agregarOdontograma(int odont) {
+        String salida = null;
+        Odontograma odontog = new Odontograma();
+        //odontog.setDientes(this.agregarDientes());
+        try {
+            if (odont == 1) {  //inicial
+                create(odontog);
+                fichaOdontolog.setOdontogramaInicial(odontog);
+                save(odontog);
+                save(fichaOdontolog);
+                salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaOdontId=" + getInstance().getId()
+                        + "&odontogramaId=" + odontog.getId()
+                        + "&backView=consultaOdontologica"
+                        + "&tipo=1";
+            } else {  //Evolutivo
+                create(odontog);
+                fichaOdontolog.setOdontograma(odontog);
+                save(odontog);
+                save(fichaOdontolog);
+                salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaOdontId=" + getInstance().getId()
+                        + "&odontogramaId=" + odontog.getId()
+                        + "&backView=consultaOdontologica"
+                        + "&tipo=0";
+            }
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage("Error", "al crear odontograma");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        return salida;        
     }
 
     public void upload() {
@@ -343,55 +379,55 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                 String p = "" + i + j;
                 if (i == 1) {
                     if (j == 1 || j == 2) {
-                        listaDientesC1.add(new Diente("Incisivo", Integer.parseInt(p), i, ruta));
+                        listaDientesC1.add(new Diente("Incisivo", Integer.parseInt(p), i));
                     }
                     if (j == 3) {
-                        listaDientesC1.add(new Diente("Canino", Integer.parseInt(p), i, ruta));
+                        listaDientesC1.add(new Diente("Canino", Integer.parseInt(p), i));
                     }
                     if (j == 4 || j == 5) {
-                        listaDientesC1.add(new Diente("Premolar", Integer.parseInt(p), i, ruta));
+                        listaDientesC1.add(new Diente("Premolar", Integer.parseInt(p), i));
                     }
                     if (j == 6 || j == 7 || j == 8) {
-                        listaDientesC1.add(new Diente("Molar", Integer.parseInt(p), i, ruta));
+                        listaDientesC1.add(new Diente("Molar", Integer.parseInt(p), i));
                     }
                 } else if (i == 2) {
                     if (j == 1 || j == 2) {
-                        listaDientesC2.add(new Diente("Incisivo", Integer.parseInt(p), i, ruta));
+                        listaDientesC2.add(new Diente("Incisivo", Integer.parseInt(p), i));
                     }
                     if (j == 3) {
-                        listaDientesC2.add(new Diente("Canino", Integer.parseInt(p), i, ruta));
+                        listaDientesC2.add(new Diente("Canino", Integer.parseInt(p), i));
                     }
                     if (j == 4 || j == 5) {
-                        listaDientesC2.add(new Diente("Premolar", Integer.parseInt(p), i, ruta));
+                        listaDientesC2.add(new Diente("Premolar", Integer.parseInt(p), i));
                     }
                     if (j == 6 || j == 7 || j == 8) {
-                        listaDientesC2.add(new Diente("Molar", Integer.parseInt(p), i, ruta));
+                        listaDientesC2.add(new Diente("Molar", Integer.parseInt(p), i));
                     }
                 } else if (i == 3) {
                     if (j == 1 || j == 2) {
-                        listaDientesC3.add(new Diente("Incisivo", Integer.parseInt(p), i, ruta));
+                        listaDientesC3.add(new Diente("Incisivo", Integer.parseInt(p), i));
                     }
                     if (j == 3) {
-                        listaDientesC3.add(new Diente("Canino", Integer.parseInt(p), i, ruta));
+                        listaDientesC3.add(new Diente("Canino", Integer.parseInt(p), i));
                     }
                     if (j == 4 || j == 5) {
-                        listaDientesC3.add(new Diente("Premolar", Integer.parseInt(p), i, ruta));
+                        listaDientesC3.add(new Diente("Premolar", Integer.parseInt(p), i));
                     }
                     if (j == 6 || j == 7 || j == 8) {
-                        listaDientesC3.add(new Diente("Molar", Integer.parseInt(p), i, ruta));
+                        listaDientesC3.add(new Diente("Molar", Integer.parseInt(p), i));
                     }
                 } else if (i == 4) {
                     if (j == 1 || j == 2) {
-                        listaDientesC4.add(new Diente("Incisivo", Integer.parseInt(p), i, ruta));
+                        listaDientesC4.add(new Diente("Incisivo", Integer.parseInt(p), i));
                     }
                     if (j == 3) {
-                        listaDientesC4.add(new Diente("Canino", Integer.parseInt(p), i, ruta));
+                        listaDientesC4.add(new Diente("Canino", Integer.parseInt(p), i));
                     }
                     if (j == 4 || j == 5) {
-                        listaDientesC4.add(new Diente("Premolar", Integer.parseInt(p), i, ruta));
+                        listaDientesC4.add(new Diente("Premolar", Integer.parseInt(p), i));
                     }
                     if (j == 6 || j == 7 || j == 8) {
-                        listaDientesC4.add(new Diente("Molar", Integer.parseInt(p), i, ruta));
+                        listaDientesC4.add(new Diente("Molar", Integer.parseInt(p), i));
                     }
                 }
             }
@@ -425,4 +461,27 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             }
         }
     }
+
+    public List<Diente> agregarDientes() {
+        List<Diente> dientes = new ArrayList<Diente>();
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 8; j++) {
+                String p = "" + i + j;
+                if (j == 1 || j == 2) {
+                    dientes.add(new Diente("Incisivo", Integer.parseInt(p), i));
+                }
+                if (j == 3) {
+                    dientes.add(new Diente("Canino", Integer.parseInt(p), i));
+                }
+                if (j == 4 || j == 5) {
+                    dientes.add(new Diente("Premolar", Integer.parseInt(p), i));
+                }
+                if (j == 6 || j == 7 || j == 8) {
+                    dientes.add(new Diente("Molar", Integer.parseInt(p), i));
+                }
+            }
+        }
+        return dientes;
+    }
+
 }

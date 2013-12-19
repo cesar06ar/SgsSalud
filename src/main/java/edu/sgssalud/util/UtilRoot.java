@@ -33,6 +33,11 @@
 */
 package edu.sgssalud.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 /**
  * A handle so that Arquillian can add all packages/sub-packages.
  * 
@@ -42,5 +47,21 @@ package edu.sgssalud.util;
  */
 public class UtilRoot
 {
+    public static final byte[] getConverter(File f){
+        File file = f;
 
+         byte[] b = new byte[(int) file.length()];
+         try {
+               FileInputStream fileInputStream = new FileInputStream(file);
+               fileInputStream.read(b);               
+          } catch (FileNotFoundException e) {
+                     // System.out.println("File Not Found.");
+                      e.printStackTrace();
+          }
+          catch (IOException e1) {
+                   //System.out.println("Error Reading The File.");
+                    e1.printStackTrace();
+          }
+         return b;
+    }
 }

@@ -72,39 +72,43 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     private int tipo;  //se refiere al otontograma 0 es el inicial 1 es el evolutivo
     private String nombreOdont;
     private String nombreDiente;
-    private static String ruta = "/resources/odontograma/diente.png";
-    private Diente diente11 = new Diente("Incisivo", 11, 1, ruta);
-    private Diente diente12 = new Diente("Incisivo", 12, 1, ruta);
-    private Diente diente13 = new Diente("Canino", 13, 1, ruta);
-    private Diente diente14 = new Diente("Premolar", 14, 1, ruta);
-    private Diente diente15 = new Diente("Premolar", 15, 1, ruta);
-    private Diente diente16 = new Diente("Molar", 16, 1, ruta);
-    private Diente diente17 = new Diente("Molar", 17, 1, ruta);
-    private Diente diente18 = new Diente("Molar", 18, 1, ruta);
-    private Diente diente21 = new Diente("Incisivo", 21, 2, ruta);
-    private Diente diente22 = new Diente("Incisivo", 22, 2, ruta);
-    private Diente diente23 = new Diente("Canino", 23, 2, ruta);
-    private Diente diente24 = new Diente("Premolar", 24, 2, ruta);
-    private Diente diente25 = new Diente("Premolar", 25, 2, ruta);
-    private Diente diente26 = new Diente("Molar", 26, 2, ruta);
-    private Diente diente27 = new Diente("Molar", 27, 2, ruta);
-    private Diente diente28 = new Diente("Molar", 28, 2, ruta);
-    private Diente diente31 = new Diente("Incisivo", 31, 3, ruta);
-    private Diente diente32 = new Diente("Incisivo", 32, 3, ruta);
-    private Diente diente33 = new Diente("Canino", 33, 3, ruta);
-    private Diente diente34 = new Diente("Premolar", 34, 3, ruta);
-    private Diente diente35 = new Diente("Premolar", 35, 3, ruta);
-    private Diente diente36 = new Diente("Molar", 36, 3, ruta);
-    private Diente diente37 = new Diente("Molar", 37, 3, ruta);
-    private Diente diente38 = new Diente("Molar", 38, 3, ruta);
-    private Diente diente41 = new Diente("Incisivo", 41, 4, ruta);
-    private Diente diente42 = new Diente("Incisivo", 42, 4, ruta);
-    private Diente diente43 = new Diente("Canino", 43, 4, ruta);
-    private Diente diente44 = new Diente("Premolar", 44, 4, ruta);
-    private Diente diente45 = new Diente("Premolar", 45, 4, ruta);
-    private Diente diente46 = new Diente("Molar", 46, 4, ruta);
-    private Diente diente47 = new Diente("Molar", 47, 4, ruta);
-    private Diente diente48 = new Diente("Molar", 48, 4, ruta);
+    private String nombreTratamiento;
+    private String ruta;
+    private boolean panel1 = false;
+    private boolean panel2 = false;
+    private boolean panel3 = false;
+    private Diente diente11;
+    private Diente diente12;
+    private Diente diente13;
+    private Diente diente14;
+    private Diente diente15;
+    private Diente diente16;
+    private Diente diente17;
+    private Diente diente18;
+    private Diente diente21;
+    private Diente diente22;
+    private Diente diente23;
+    private Diente diente24;
+    private Diente diente25;
+    private Diente diente26;
+    private Diente diente27;
+    private Diente diente28;
+    private Diente diente31;
+    private Diente diente32;
+    private Diente diente33;
+    private Diente diente34;
+    private Diente diente35;
+    private Diente diente36;
+    private Diente diente37;
+    private Diente diente38;
+    private Diente diente41;
+    private Diente diente42;
+    private Diente diente43;
+    private Diente diente44;
+    private Diente diente45;
+    private Diente diente46;
+    private Diente diente47;
+    private Diente diente48;
     private Diente selectDient;
     private FichaOdontologica fichaOdont;
     private ConsultaOdontologica consultaOdont;
@@ -145,7 +149,12 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         serviciosMedicosS.setEntityManager(em);
         selectDient = new Diente();
         tratamiento = new Tratamiento();
-        
+
+        if (!getInstance().isPersistent()) {
+            getInstance().setDientes(crearDientes());
+        }
+
+        this.actualizarDientes(getInstance().getDientes());
 
     }
 
@@ -167,17 +176,32 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     @TransactionAttribute
     public String guardar() {
+        String salida = null;
         Date now = Calendar.getInstance().getTime();
         try {
             if (getInstance().isPersistent()) {
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getId() + " con éxito");
+                FacesMessage msg = new FacesMessage("Se actualizo Odontograma: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
                 create(getInstance());
-                save(getInstance());
-                FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getId() + " con éxito");
+                if (tipo == 0) {                    
+                    getInstance().setObservacion("Odontograma Inicial");
+                    fichaOdont.setOdontogramaInicial(getInstance());
+                } else {
+                    getInstance().setObservacion("Odontograma Evolutivo");
+                    fichaOdont.setOdontograma(getInstance());                    
+                }                
+                save(getInstance());                
+                save(fichaOdont);
+                FacesMessage msg = new FacesMessage("Se creo nuevo Odontograma: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                 salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaOdontId=" + getConsultaOdontId()
+                        + "&odontogramaId=" + getInstance().getId()
+                        + "&backView=consultaOdontologica"
+                        + "&tipo=1";
             }
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
@@ -196,27 +220,38 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     public void guardarTratamiento() {
         log.info("valor diente: " + selectDient);
         Date now = Calendar.getInstance().getTime();
-        if (servicio.isTodasZonas()) {
-            //cambiar imagen del diente... 
-        }
-        selectDient.setRutaIcon(servicio.getRutaImg());
-        try {
-//            save(selectDient);            
-            tratamiento.setNombre(servicio.getNombre());            
-            tratamiento.setServicioDisponible(servicio);
-            tratamiento.setFechaRelizacion(now);
-            tratamiento.setDiente(selectDient);
-            tratamiento.setConsultaOdontologica(consultaOdont);
-            save(tratamiento);
-            getListaTratamient().add(tratamiento);
-            this.actualizarDiente(selectDient);
-            log.info("guardo con exito ");
-        } catch (Exception e) {
-            log.info("Error guardar");
-        }
-        servicio = new Servicio();
-        tratamiento = new Tratamiento();
 
+//        try {
+//          save(selectDient);                        
+        //tratamiento.setServicioDisponible(servicio);
+        tratamiento.setFechaRelizacion(now);
+        tratamiento.setDiente(selectDient);
+        tratamiento.setConsultaOdontologica(consultaOdont);
+        tratamiento.setNombre(nombreTratamiento);
+        selectDient.agregarTratamiento(tratamiento);
+        if (getInstance().isPersistent()) {
+            getInstance().agregarDiente(selectDient);
+            create(selectDient);
+            create(tratamiento);
+        } else {
+            persistirOdontograma();
+            getInstance().agregarDiente(selectDient);
+            save(getInstance());
+            create(selectDient);
+            create(tratamiento);
+        }
+        save(selectDient);
+        save(tratamiento);
+        getListaTratamient().add(tratamiento);
+
+        this.actualizarDiente(selectDient);
+        log.info("guardo con exito ");
+//        } catch (Exception e) {
+//            log.info("Error guardar");
+//        }
+
+        tratamiento = new Tratamiento();
+        selectDient = new Diente();
     }
 
     public Long getFichaMedicaId() {
@@ -264,10 +299,10 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     public void setTipo(int tipo) {
         this.tipo = tipo;
-        if(tipo == 0){
+        if (tipo == 0) {
             this.setNombreOdont("Inicial");
-        }else{
-            this.setNombreOdont("Evolutivo");            
+        } else {
+            this.setNombreOdont("Evolutivo");
         }
     }
 
@@ -278,7 +313,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     public void setSelectDient(Diente selectDient) {
         //log.info("setSelecDiente");
         this.selectDient = selectDient;
-        this.setNombreDiente(this.selectDient.getNombre()+ this.selectDient.getPosicion());
+        this.setNombreDiente(this.selectDient.getNombre() + this.selectDient.getPosicion());
     }
 
     public Diente getDiente11() {
@@ -568,7 +603,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     public void setListaTratamient(List<Tratamiento> listaTratamient) {
         this.listaTratamient = listaTratamient;
-    }      
+    }
 
     public String getNombreOdont() {
         //return (selectDient.getNombre() + " " + selectDient.getPosicion());
@@ -586,7 +621,49 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     public void setNombreDiente(String nombreDiente) {
         this.nombreDiente = nombreDiente;
     }
-    
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public boolean isPanel1() {
+        return panel1;
+    }
+
+    public void setPanel1(boolean panel1) {
+        this.panel1 = panel1;
+    }
+
+    public boolean isPanel2() {
+        return panel2;
+    }
+
+    public void setPanel2(boolean panel2) {
+        this.panel2 = panel2;
+    }
+
+    public boolean isPanel3() {
+        return panel3;
+    }
+
+    public void setPanel3(boolean panel3) {
+        this.panel3 = panel3;
+    }
+
+    public void actualizarDientes(List<Diente> dientes) {
+        for (Diente d : dientes) {
+            actualizarDiente(d);
+        }
+    }
+
+    public void actualizar() {
+        selectDient = new Diente();
+    }
+
     public void actualizarDiente(Diente d) {
         //log.info("actualizar diente: ");
         if (d.getPosicion() == 11) {
@@ -656,16 +733,63 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         }
     }
 
-    //metodos de seleccion de primefaces     
-//    public void onRowSelect(SelectEvent event) {
-//        FacesMessage msg = new FacesMessage(UI.getMessages("Tratamiento") + " " + UI.getMessages("common.selected"), ((Tratamiento) event.getObject()).getNombre());
-//        FacesContext.getCurrentInstance().addMessage("", msg);
-//    }
-//
-//    public void onRowUnselect(UnselectEvent event) {
-//        FacesMessage msg = new FacesMessage(UI.getMessages("Tratamiento") + " " + UI.getMessages("common.unselected"), ((Tratamiento) event.getObject()).getNombre());
-//        FacesContext.getCurrentInstance().addMessage("", msg);
-//        this.setTratamiento(null);
-//    }
+    public void persistirOdontograma() {
+        if (!getInstance().isPersistent()) {
+            create(getInstance());
+            //getInstance().setDientes(crearDientes());
+            //actualizarDientes(getInstance().getDientes());
+        }
+    }
 
+    public List<Diente> crearDientes() {
+        List<Diente> listaDientes = new ArrayList<Diente>();
+
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 8; j++) {
+                String p = "" + i + j;
+                if (j == 1 || j == 2) {
+                    listaDientes.add(new Diente("Incisivo", Integer.parseInt(p), i));
+                }
+                if (j == 3) {
+                    listaDientes.add(new Diente("Canino", Integer.parseInt(p), i));
+                }
+                if (j == 4 || j == 5) {
+                    listaDientes.add(new Diente("Premolar", Integer.parseInt(p), i));
+                }
+                if (j == 6 || j == 7 || j == 8) {
+                    listaDientes.add(new Diente("Molar", Integer.parseInt(p), i));
+                }
+            }
+        }
+        return listaDientes;
+    }
+    
+    public List<Tratamiento> getMostrarTratamientos(Diente d){
+        return d.getTratamientos();
+    } 
+
+    public String getNombreTratamiento() {
+        return nombreTratamiento;
+    }
+
+    public void setNombreTratamiento(String nombreTratamiento) {
+        this.nombreTratamiento = nombreTratamiento;
+    }
+
+    public void mostrarPanel(int n) {
+        tratamiento = new Tratamiento();
+        if (n == 1) {
+            setPanel1(true);
+            setPanel2(false);
+            setPanel3(false);
+        } else if (n == 2) {
+            setPanel1(false);
+            setPanel2(true);
+            setPanel3(false);
+        } else {
+            setPanel1(false);
+            setPanel2(false);
+            setPanel3(true);
+        }
+    }
 }

@@ -40,6 +40,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -64,6 +65,7 @@ import org.primefaces.model.UploadedFile;
  */
 @Named
 @ViewScoped
+//@ConversationScoped
 public class PacienteHome extends BussinesEntityHome<Paciente> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
@@ -342,13 +344,13 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         this.tipoEstudiante = tipoEstudiante;
         getInstance().setTipoEstudiante(this.tipoEstudiante);
 
-        log.info("fijar tipo estudiante : " + getInstance().getTipoEstudiante());
+        //log.info("fijar tipo estudiante : " + getInstance().getTipoEstudiante());
         if (!getInstance().getTipoEstudiante().isEmpty()) {
             if (getInstance().getTipoEstudiante().equals("Universitario")) {
                 this.setRendPanelEstCol(false);
                 this.setRendPanelEstEsc(false);
                 this.setRendPanelEstUni(true);
-                log.info("TES---  Uniersitario " + rendPanelEstUni);
+                //log.info("TES---  Uniersitario " + rendPanelEstUni);
             } else if ("Colegio".equals(getInstance().getTipoEstudiante())) {
                 this.setRendPanelEstUni(false);
                 this.setRendPanelEstEsc(false);
@@ -373,18 +375,38 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
-    public void subirImagen(FileUploadEvent event) {
-        if (file != null) {
-            try {
-                getInstance().setFoto(event.getFile().getContents());
-                getInstance().setRutaFoto(Strings.guardarImagenEnFicheroTemporal(getInstance().getFoto(), event.getFile().getFileName()));
-                FacesMessage msg = new FacesMessage("Ok", "Fichero " + event.getFile().getFileName() + " subido correctamente.");                
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            } catch (Exception e) {
-                FacesMessage msg = new FacesMessage("Error", "Al subir fichero");
-                msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-            }
+    private Photos buildPhoto(UploadedFile file) {
+        if (getInstance().getFoto() != null) {
+            Photos foto = getInstance().getFoto();
+            foto.setPhoto(file.getContents());
+            foto.setName(file.getFileName());
+            foto.setContentType(file.getContentType());
+            foto.setSize(file.getSize());
+            return foto;
+        } else {
+            Photos foto = new Photos();
+            foto.setPhoto(file.getContents());
+            foto.setName(file.getFileName());
+            foto.setContentType(file.getContentType());
+            foto.setSize(file.getSize());
+            return foto;
         }
+
+    }
+
+    public void subirImagen(FileUploadEvent event) {
+        //if (file != null) {
+        //System.out.println("Ingreso a subir Imagen_______________________________________________________________");
+        try {
+            getInstance().setFoto(buildPhoto(event.getFile()));
+            //getInstance().setRutaFoto(Strings.guardarImagenEnFicheroTemporal(getInstance().getFoto(), event.getFile().getFileName()));
+            FacesMessage msg = new FacesMessage("Ok", "Fichero " + event.getFile().getFileName() + " subido correctamente.");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        } catch (Exception e) {
+            FacesMessage msg = new FacesMessage("Error", "Al subir fichero");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        //}
     }
 }

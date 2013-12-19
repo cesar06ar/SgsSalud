@@ -19,8 +19,8 @@
         <ui:param name="title" value="#{not empty securityGroupHome.managed ? messages['common.edit'] : messages['common.add']} #{empty securityGroupHome.managed ? securityGroupHome.instance.name : messages['security.group']}" />
         <ui:define name="header-replace">
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
                         <h3>#{not empty securityGroupHome.managed ? messages['common.edit'] : messages['common.add']} #{empty securityGroupHome.managed ? securityGroupHome.instance.name : messages['security.group']}</h3>   
                     </div>
                 </div>

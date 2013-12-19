@@ -55,6 +55,11 @@ import edu.sgssalud.model.BussinesEntityAttribute;
 import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.service.BussinesEntityService;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Named("ui")
 @RequestScoped
@@ -193,6 +198,6 @@ public class UI {
         }
 
         return cleaned;
-    }
-    
+    }      
+        
 }

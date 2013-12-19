@@ -53,7 +53,7 @@
                     <label for="present" >#{messages['medicamento.presentacion']} *&#160;</label>
                     <div class="input" >
                         <p:selectOneMenu id="present" value="#{medicamentoHome.instance.presentacion}" converter="#{omnifaces.SelectItemsConverter}" required="true"
-                                         effect="fade" var="m" style="width:200px" >  
+                                         effect="fade" var="m" styleClass="xLarge" >  
                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
                             <f:selectItem itemLabel="Ampollas" itemValue="Ampollas" />  
                             <f:selectItem itemLabel="Pastillas" itemValue="Pastillas" />  

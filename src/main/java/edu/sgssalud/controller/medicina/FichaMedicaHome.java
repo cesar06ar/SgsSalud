@@ -428,7 +428,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         if (!lcm.isEmpty()) {
             for (ConsultaMedica cm : lcm) {
                 if (!lsgTemp.contains(cm.getSignosVitales())) {
-                   lsgTemp.add(cm.getSignosVitales());
+                    lsgTemp.add(cm.getSignosVitales());
                 }
             }
         }
@@ -440,17 +440,25 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
             }
         }
         if (!lsgTemp.isEmpty() & !lsgTemp1.isEmpty()) {
-            listaSignosVitales.addAll(lsgTemp);
-            lsgTemp = new ArrayList<SignosVitales>();
-            for (SignosVitales sg : lsgTemp1) {                
-                if(listaSignosVitales.contains(sg)){
-                    lsgTemp.add(sg);
+            listaSignosVitales = new ArrayList<SignosVitales>();
+            List<SignosVitales> listasg = new ArrayList<SignosVitales>();
+            lsgTemp.addAll(lsgTemp1);
+            System.out.println("Ingreso 1 ========= " );
+            //lsgTemp = new ArrayList<SignosVitales>();
+            for (SignosVitales sv : lsgTemp) {
+                //listaSignosVitales.add(sv);
+                if (!listasg.contains(sv)) {
+                    listasg.add(sv);
+                    System.out.println("Ingreso=========2 " +sv.getId());
+                } else {
+                    //listaSignosVitales.add(sv);
+                    System.out.println("Ingreso=========3 " +sv.getId());
                 }
             }
-            listaSignosVitales.removeAll(lsgTemp);
-        }else if(!lsgTemp.isEmpty() & lsgTemp1.isEmpty()){
+            listaSignosVitales.addAll(listasg);
+        } else if (!lsgTemp.isEmpty() & lsgTemp1.isEmpty()) {
             listaSignosVitales.addAll(lsgTemp);
-        }else if(lsgTemp.isEmpty() & !lsgTemp1.isEmpty()){
+        } else if (lsgTemp.isEmpty() & !lsgTemp1.isEmpty()) {
             listaSignosVitales.addAll(lsgTemp1);
         }
     }

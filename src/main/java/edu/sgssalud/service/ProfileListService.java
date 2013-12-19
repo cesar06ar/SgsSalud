@@ -44,7 +44,7 @@ import org.primefaces.model.SortOrder;
  * @author cesar
  */
 @Named
-@ViewScoped
+@RequestScoped
 public class ProfileListService extends LazyDataModel<Profile> {
 
     private static Logger log = Logger.getLogger(ProfileListService.class);
@@ -162,4 +162,12 @@ public class ProfileListService extends LazyDataModel<Profile> {
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setSelectedProfile(null);
     }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }    
 }

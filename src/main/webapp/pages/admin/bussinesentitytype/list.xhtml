@@ -24,22 +24,12 @@ limitations under the License.
     <ui:param name="title" value="#{messages['module.BussinesEntityTypes']}" />
     <ui:define name="header-replace">
         <div class="header-replace">
-            <div class="container">
-                <div class="span9 columns">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{messages['module.BussinesEntity']}</h2>   
-                    </div>                    
-                </div> 
-                <div class="span4 columns offset3">
-                    <h:form id="control">  
-                        <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>                            
-                    </h:form>
-                </div>
-            </div>   
-        </div>             
+            <div class="container-header">                
+                <div class="row lf row-title" >
+                    <h2>#{messages['module.BussinesEntity']}</h2>   
+                </div>                    
+            </div>
+        </div>                    
     </ui:define>
     <ui:define name="content">
         <f:metadata>
@@ -58,6 +48,10 @@ limitations under the License.
                         disabled="#{bussinesEntityTypeListService.selectedBussinesEntityType == null}" >
                     <f:param name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
+                </h:link>
+                #{' '}
+                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                        outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary" style="float: right;">
                 </h:link>
             </div>           
             <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"

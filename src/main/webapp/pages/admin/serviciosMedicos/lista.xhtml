@@ -14,13 +14,9 @@
 
     <ui:define name="header-replace">
         <div class="header-replace">
-            <div class="container">
-                <div class="row fl" style="margin-top: 5px;">
-                    <div class="span9 columns">   
-                        <div class="row fl" style="margin-top: 5px;">
-                            <h2>#{'Servicios Médicos'}</h2>   
-                        </div>
-                    </div>
+            <div class="container-header" >
+                <div class="row lf row-title" >
+                    <h2>#{'Servicios Médicos'}</h2>   
                 </div>                
             </div>
         </div>
@@ -44,7 +40,6 @@
                                  onclick="deletedDlg.show();" 
                                  immediate="true" disabled="#{empty servicioMedListS.selectedServicio.id}"
                                  update="form-dialog-confirm-delete" />
-
             </div>
             <!--   -->
             <p:dataTable id="serviciosMedTable" var="servicio_" value="#{servicioMedListS}" paginator="true" rows="10" 

@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+           <!-- <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
+            <f:viewParam name="backView" value="#{pacienteHome.backView}" />-->
+        </f:metadata>
+
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
+                        <h2>#{'Enfermedades Cie 10'}</h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="content" class="span20">
+            <h:form id="form">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />   
+                <glue:input id="code" name="codigo" type="text" label="#{messages['common.code']}" value="#{enfermedadesCieHome.instance.code}" required="true" inlinehelp="" execute="@this save" render="code"/>
+                <glue:input id="name" name="nombre" type="text" label="#{messages['common.name']}" value="#{enfermedadesCieHome.instance.name}" required="true" inlinehelp="" execute="@this save" render="name"/>
+                <glue:input id="description" name="descrip" type="text" label="Categoria" value="#{enfermedadesCieHome.instance.description}" required="false" inlinehelp="" execute="@this save" render="description"/>
+                <div class="admin-actions ">
+                    <p:commandButton id="save" action="#{enfermedadesCieHome.guardar()}" value="#{messages['common.save']}" 
+                                     update="tablaEnf" styleClass="btn primary offset2"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/home.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                    </h:link>
+                </div>
+                <p:dataTable id="tablaEnf" value="#{enfermedadesCieHome.listaEnfermedades}" var="enfcie10">
+
+                    <p:column headerText="#{messages['common.code']}">
+                        <h:outputText value="#{enfcie10.code}"/>
+                    </p:column>                       
+                    <p:column headerText="#{messages['common.name']}">
+                        <h:outputText value="#{enfcie10.name}"/>
+                    </p:column>                       
+                    <p:column headerText="#{messages['common.description']}">
+                        <h:outputText value="#{enfcie10.description}"/>
+                    </p:column>                       
+                    <p:column headerText="Opción">
+                        <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"
+                                       onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                                       style="width: 20px; height: 10px;">                                                        
+                            <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
+                            <f:setPropertyActionListener value="#{enfcie10}" target="#{enfermedadesCieHome.enfermedad}"/>
+                            <p:ajax process="@this" update=":cancel-dialog" />
+                        </p:commandLink>
+                    </p:column>                       
+                </p:dataTable>
+            </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
+                                     action="#{enfermedadesCieHome.borrar()}" update=":form:tablaEnf"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>                
+

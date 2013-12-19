@@ -39,10 +39,10 @@ public class Receta_Medicamento implements Serializable {
     
     private int cantidad;
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private Receta receta;    
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private Medicamento medicamento;
 
     public Long getId() {

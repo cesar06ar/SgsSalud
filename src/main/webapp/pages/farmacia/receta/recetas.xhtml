@@ -9,7 +9,7 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:glue="http://eqaula.org/jsf/facelets"      
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
@@ -23,8 +23,8 @@
 
         <ui:define name="header-replace">
             <div class="header-replace">
-                <div class="container">
-                    <div class="row fl" style="margin-top: 5px;">
+                <div class="container-header" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
                         <h2>#{recetaHome.recetaId == null? 'Nueva Receta:': 'editar'}
                             #{recetaHome.paciente.nombres}</h2>
                     </div>
@@ -39,6 +39,7 @@
                     <div class="container-fluid">
                         <div class="row-fluid">
                             <div class="span7">
+                                
                                 <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{recetaHome.fichaMedica.numeroFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{recetaHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{recetaHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
@@ -65,10 +66,10 @@
                     <div class="container-fluid">
                         <div class="row-fluid">
                             <div class="span7">                               
-                                <h:panelGroup layout="block" styleClass="clearfix" style="">
+                                <h:panelGroup layout="block" styleClass="clearfix" >
                                     <label for="medic" style="width: 30px;">#{messages['medicamento.nombre']}</label>
                                     <div class="input" style="margin-left: 100px;">
-                                        <p:selectOneMenu id="medic" value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:150px" converter="#{omnifaces.SelectItemsConverter}" required="true"
+                                        <p:selectOneMenu id="medic" value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:150px" converter="#{omnifaces.SelectItemsConverter}" required="false"
                                                          effect="fade" var="m" style="width:200px"  filter="true" filterMatchMode="contains" >
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
                                             <f:selectItems value="#{recetaHome.listaMedicamentosStock}" var="medicamento" itemLabel="#{medicamento.nombreComercial} ( #{medicamento.unidades} uds.)" itemValue="#{medicamento}"
@@ -87,7 +88,7 @@
                                 <h:panelGroup layout="block" >
                                     <label for="unidadesMedicacion" style="width: 30px;">#{messages['receta.unidadesMedicacion']}</label>
                                     <div class="input" style="margin-left: 100px;">
-                                        <pe:inputNumber  id="unidadesMedicacion" style="width: 55px;" required="false" value="#{recetaHome.unidadesMedicacion}"
+                                        <pe:inputNumber  id="unidadesMedicacion" style="width: 55px;" required="true" value="#{recetaHome.unidadesMedicacion}"
                                                          rendered="true" decimalPlaces="0" >
                                             <p:ajax event="blur" process="@this"/>
                                         </pe:inputNumber>
@@ -103,7 +104,7 @@
                                 <h:panelGroup layout="block"   >
                                     <label for="dosis" >#{messages['receta.dosis']} </label>
                                     <div class="input">
-                                        <pe:inputNumber  id="dosis" style="width: 50px;" required="true" value="#{recetaHome.dosis}"
+                                        <pe:inputNumber  id="dosis" style="width: 50px;" required="false" value="#{recetaHome.dosis}"
                                                          rendered="true" decimalPlaces="0">
                                             <p:ajax event="blur" update="@parent" />
                                         </pe:inputNumber>
@@ -127,7 +128,7 @@
                                 <h:panelGroup layout="block" >
                                     <label for="tiempoToma" style="margin-top: 15px">#{messages['receta.tiempoToma']}</label>
                                     <div class="input">
-                                        <pe:inputNumber  id="tiempoToma" value="#{recetaHome.tiempoToma}" required="true" style="width: 50px;"
+                                        <pe:inputNumber  id="tiempoToma" value="#{recetaHome.tiempoToma}" required="false" style="width: 50px;"
                                                          rendered="true" decimalPlaces="0">
                                             <p:ajax event="blur" update="@parent"/>
                                         </pe:inputNumber>
@@ -158,7 +159,7 @@
                                 <h:panelGroup layout="block" class="clearfix"  >
                                     <label style="margin-top: -5px" for="duracionTratamiento" >#{messages['receta.duracionTratamiento']}</label>
                                     <div class="input">
-                                        <pe:inputNumber  id="duracionTratamiento" value="#{recetaHome.duracionTratamiento}" required="true" style="width: 50px;"
+                                        <pe:inputNumber  id="duracionTratamiento" value="#{recetaHome.duracionTratamiento}" required="false" style="width: 50px;"
                                                          rendered="true" decimalPlaces="0" >
                                             <p:ajax event="blur" update="@parent"/>
                                         </pe:inputNumber>
@@ -169,7 +170,7 @@
                                 </h:panelGroup> 
                                 <h:panelGroup layout="block" style="margin: -40px 0 0 100px;" >
                                     <div class="input" >
-                                        <p:selectOneMenu id="unidadesDuracionTratamiento" value="#{recetaHome.unidadDuracionTratamiento}" converter="#{omnifaces.SelectItemsConverter}" required="true"
+                                        <p:selectOneMenu id="unidadesDuracionTratamiento" value="#{recetaHome.unidadDuracionTratamiento}" converter="#{omnifaces.SelectItemsConverter}" required="false"
                                                          effect="fade" var="m" style="width:150px" >
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
                                             <f:selectItem itemLabel="días" itemValue="día/s" />
@@ -188,7 +189,7 @@
                                 <br/>
                                 <p:commandButton id="btnMedicacion" value="#{messages['receta.cargar.medicamento']}" 
                                                  action="#{recetaHome.cargarMedicamentoAReceta()}" styleClass="offset3" 
-                                                 ajax="true"  update=":form:tablaMedicamentos :form:Indicac :form:medic
+                                                 ajax="true"  update=":form:tablaMedicamentos :form:Indicac :form:medic :form:messages
                                                  :form:unidadesMedicacion :form:present :form:dosis :form:unidadesDosis1 
                                                  :form:tiempoToma :form:unidadesToma :form:duracionTratamiento :form:unidadesDuracionTratamiento" >
                                     <p:ajax process="@this" rendered=":form:tablaMedicamentos :form:Indicac :form:medic 
@@ -203,22 +204,22 @@
 
                 <p:panelGrid columns="2" >
                     <p:panel header="Medicaciones" styleClass="span8" style="padding-right: 8px; height: 250px" >
-                        <p:dataTable id="tablaMedicamentos" var="medicamento" value="#{recetaHome.listaMedicamentosReceta}" styleClass="span5" emptyMessage="No hay medicamentos cargados">  
+                        <p:dataTable id="tablaMedicamentos" var="medicamento_" value="#{recetaHome.listaMedicamentosReceta}" styleClass="span5" emptyMessage="No hay medicamentos cargados">  
 
                             <p:column headerText="Nombre Comercial" style="width:6px; font-size:12px">  
-                                <h:outputText value="#{medicamento.nombreComercial}" />  
+                                <h:outputText value="#{medicamento_.nombreComercial}" />  
                             </p:column>
 
                             <p:column headerText="Nombre Genérico" style="width:6px; font-size:12px">  
-                                <h:outputText value="#{medicamento.nombreGenerico}" />  
+                                <h:outputText value="#{medicamento_.nombreGenerico}" />  
                             </p:column>
 
                             <p:column headerText="Cantidad" style="width:6px; font-size:12px">  
-                                <h:outputText value="#{medicamento.unidades}" />  
+                                <h:outputText value="#{medicamento_.unidades}" />  
                             </p:column>
 
                             <p:column headerText="Opcion" style="width:5px; font-size:12px">  
-                                <p:commandLink value="Eliminar" update=":form:tablaMedicamentos :form:Indicac" process=":form:medic" action="#{recetaHome.eliminarMedicamentoReceta(medicamento)}">  
+                                <p:commandLink value="Eliminar" update=":form:tablaMedicamentos :form:Indicac" process="@this" action="#{recetaHome.eliminarMedicamentoReceta(medicamento)}">  
 
                                 </p:commandLink> 
                             </p:column>  
@@ -237,7 +238,8 @@
 
 
                 <div class="span17 admin-actions">
-                    <p:commandButton id="save" action="#{recetaHome.guardarReceta()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                    <p:commandButton id="save" action="#{recetaHome.guardarReceta()}" value="#{messages['common.save']}" 
+                                     update=":form:messages" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/secretaria/lista.xhtml?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn primary" >

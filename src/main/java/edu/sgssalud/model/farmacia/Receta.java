@@ -169,6 +169,14 @@ public class Receta implements Serializable {
             listaRecetaMedicamento.add(rm);
         }
     }
+    
+//    public void agregarMedicamento(Medicamento med) {
+//        for(Receta_Medicamento rm : listaRecetaMedicamento){
+//            if(!rm.getMedicamento().equals(med)){
+//                
+//            }
+//        }
+//    }
 
     public List<Medicamento> getMedicamentos() {
         List<Medicamento> medicamentos = new ArrayList<Medicamento>();

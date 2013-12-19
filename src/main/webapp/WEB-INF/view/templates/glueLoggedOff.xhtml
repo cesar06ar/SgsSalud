@@ -46,7 +46,9 @@
         </ui:define>
 
         <ui:define name="topnav-title">
-            <h:link outcome="/pages/home" value="${sitename}" />
+            <h:link outcome="/pages/home" value="${sitename}" dir="rtl">
+                <img src="#{resource['sgsSalud_32x32.ico']}" dir="lrt" width="25" height="20" style="margin-bottom: -5px"/>
+            </h:link>  
         </ui:define>
 
         <ui:define name="topnav-left">
@@ -91,23 +93,36 @@
                 <c:choose>
                     <c:when test="#{account.isUserPaciente()}">
                         <li>
-                            <h:link outcome="/pages/paciente/view" value="#{credentials.username}">
+                            <h:link outcome="/pages/paciente/view" value="#{userPaciente.nombres} #{userPaciente.apellidos}">
                                 <f:param name="pacienteId" value="#{account.loggedId}"/>
                             </h:link>
                         </li>
                     </c:when>
                     <c:when test="#{account.isUserProfile()}">                       
                         <li>
-                            <h:link outcome="/pages/profile/profile" value="#{credentials.username}">
+                            <h:link outcome="/pages/profile/profile" value="#{userProfile.fullName}">
                                 <f:param name="profileId" value="#{account.loggedId}"/>
                             </h:link>
-                        </li> 
+                        </li>
+                        <li class="dropdown">
+                            <a href="" class="dropdown" data-toggle="dropdown" >
+                                <h:graphicImage value="/resources/images/config1.png" width="30" height="25" style="margin: -4px 0 -10px 0;"/>
+                            </a>                                                                                  
+                            <ul class="dropdown-menu">                                
+                                <li><h:link outcome="/pages/reset" value="Cambiar Contraseña">                                        
+                                    </h:link>                                    
+                                </li>
+                                <li><h:link outcome="/pages/temas" value="Cambiar Tema">                                        
+                                    </h:link>
+                                </li>                              
+                            </ul>
+                        </li>
                     </c:when>
                 </c:choose>
                 <li>
                     <h:outputLink value="${request.contextPath}/logout">#{messages['common.logout']}
                         <span class="mini-icon mini-icon-logout"></span>
-                    </h:outputLink>
+                    </h:outputLink>                    
                 </li>
             </h:panelGroup>
         </ui:define>        

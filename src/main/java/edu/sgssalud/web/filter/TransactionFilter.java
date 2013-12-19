@@ -72,7 +72,7 @@ public class TransactionFilter implements Filter {
         response.setCharacterEncoding("UTF-8");
         try {
             if (!(Status.STATUS_NO_TRANSACTION == tx.getStatus())) {
-                log.warn("Transaction was still associated with request.");
+                //log.warn("Transaction was still associated with request.");
                 tx.rollback();
             }
         } catch (SystemException e) {

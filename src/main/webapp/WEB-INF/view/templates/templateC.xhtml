@@ -5,7 +5,7 @@
         xmlns:a4j="http://richfaces.org/a4j"
         xmlns:p="http://primefaces.prime.com.tr/ui"
         xmlns:rich="http://richfaces.org/rich">
-    
+
 
     <h:outputText value='&lt;!DOCTYPE html&gt;' escape="false" />
 
@@ -66,27 +66,24 @@
             <div style="padding-top: 40px;"></div>
             <!--<div class="container">
                 <div class="span17">   -->
-                    <ui:insert name="header-replace">
-                        <div id="header" class="container">
-                            <div class="fl"><ui:insert name="header" /></div>
-                            <div class="fr"><ui:insert name="header-right" /></div>
-                            <div style="clear:both;"></div>
-                        </div>
-                    </ui:insert>
-               <!-- </div>
-            </div>-->
+            <ui:insert name="header-replace">
+                <div id="header" class="container">
+                    <div class="fl"><ui:insert name="header" /></div>
+                    <div class="fr"><ui:insert name="header-right" /></div>
+                    <div style="clear:both;"></div>
+                </div>
+            </ui:insert>
+            <!-- </div>
+         </div>-->
 
-            <div class="container-fluid">          	
-
+            <div class="container-fluid">
                 <div class="row-fluid">
                     <!--Sidebar-->
-                    <div class="span4">
-                        <div class="sidebar">
-                            <!--<div class="well sidebar-nav">                                    
-                                <ui:insert name="sidebar"></ui:insert>
-                            </div>                    -->                   
-                        </div> 
-                    </div>    
+                    <div class="sidebar">
+                        <div class="well sidebar-nav">                                    
+                            <ui:insert name="sidebar"></ui:insert>
+                        </div>             
+                    </div> 
                     <!--Content-->              
                     <div class="span17">
                         <div id="messages">
