@@ -116,7 +116,7 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.unselected"), ((FichaMedica) event.getObject()).getPaciente().getNombres());
         FacesContext.getCurrentInstance().addMessage("", msg);
-        this.setFichaMedicSeleccionado(null);
+        this.setFichaMedicSeleccionada(null);
     }
     /*.............*/
 
@@ -150,17 +150,25 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
         this.resultList = resultList;
     }
 
+    public FichaMedica getFichaMedicSeleccionada() {
+        return fichaMedicSeleccionada;
+    }
+
+    public void setFichaMedicSeleccionada(FichaMedica fichaMedicSeleccionada) {
+        this.fichaMedicSeleccionada = fichaMedicSeleccionada;
+    }
+
+   
     
     
-    
-//    public String getParametroBusqueda() {
-//        return parametroBusqueda;
-//    }
-//
-//    public void setParametroBusqueda(String parametroBusqueda) {
-//        this.parametroBusqueda = parametroBusqueda;
-//        setResultList(cms.getConsultaMedicaPorId(parametroBusqueda));
-//    }    
+    public String getParametroBusqueda() {
+        return parametroBusqueda;
+    }
+
+    public void setParametroBusqueda(String parametroBusqueda) {
+        this.parametroBusqueda = parametroBusqueda;
+        
+    }    
     
     /*..
      * Busca de la base de datos pacientes segun el parametro ingresado
@@ -173,13 +181,7 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
 //        this.setResultList(cms.BuscarPacientePorTodosParametros(parametroBusqueda));
 //    }
 
-    public FichaMedica getFichaMedicSeleccionado() {
-        return fichaMedicSeleccionada;
-    }
-
-    public void setFichaMedicSeleccionado(FichaMedica fichaMedicSeleccionado) {
-        this.fichaMedicSeleccionada = fichaMedicSeleccionado;
-    }
+    
     
     public void buscarFichaMedicaPorParametro() {
         this.setResultList(fms.BuscarFichaMedicaPorParametro(parametroBusqueda));

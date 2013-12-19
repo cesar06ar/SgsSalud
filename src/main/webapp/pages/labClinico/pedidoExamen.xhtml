@@ -29,9 +29,38 @@
             </div>
         </ui:define>
         <ui:define name="content" class="span20">
+
+
+            <p:growl id="growl" showDetail="true" />  
+
+            <p:fieldset legend="Urulogicos" toggleable="true" toggleSpeed="500">  
+                <p:ajax event="toggle" listener="#{PedidoExamanLaboratorioHome.handleToggle}" update="growl" />  
+                <h:panelGrid columns="2" cellpadding="10">  
+
+                    <p:dialog header="Selected Values" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
+                        <p:outputPanel id="display">  
+                            <p:dataList value="Orina" var="option">  
+                                #{option}  
+                            </p:dataList>  
+
+                           
+                        </p:outputPanel>  
+                    </p:dialog>  
+
+
+
+                </h:panelGrid>  
+            </p:fieldset>  
+
+
+
+
+
+
+
             <h:form id="form">
-                
-               
+
+
                 <div class="admin-actions ">
                     <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;

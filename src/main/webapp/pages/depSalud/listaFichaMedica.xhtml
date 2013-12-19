@@ -43,15 +43,15 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
             <!--Botones de admin-->
-            <div class="admin-actions span17">
-                <div class="span6 ">
+            <div class="admin-actions ">
+                <div>
                     <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
                         <f:param name="fichaMedicaId"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                     #{' '}
                     <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn" 
-                            disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada }">
+                            disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
                         <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
@@ -62,7 +62,7 @@
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                 </div>
-                <div class="span6 offset5" >
+                <div style="float: right; margin-top: -3%">
                     <p:inputText id="criterioBuscar" size ="25" value="#{fichaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                         <p:ajax event="keyup" update="tablaFichasMedicas"/>
                     </p:inputText>
@@ -74,14 +74,14 @@
 
             <!--tabla de datos-->
             <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"
-                         paginator="true" rows="10" styleClass="span18"
+                         paginator="true" rows="10" 
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"
                          lazy="true"
                          rowKey="#{fichaMedica_.id}"
-                         selection="#{fichaMedicaListaServicio.fichaMedicSeleccionada;
-}"
+                         selection="#{fichaMedicaListaServicio.fichaMedicSeleccionada}"                          
+
                          rendered="true"
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica-->
@@ -97,17 +97,17 @@
                     </f:facet> 
                     <h:outputText value="#{fichaMedica_.id}" />
                 </p:column>
-                <p:column sortBy="#{fichaMedica_.nombres}" style="text-align: center;">
+                <p:column sortBy="#{fichaMedica_.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.nombres}" />
+                    <h:outputText value="#{fichaMedica_.paciente.nombres}" />
                 </p:column>
-                <p:column sortBy="#{fichaMedica_.apellidos}" style="text-align: center;">
+                <p:column sortBy="#{fichaMedica_.paciente.apellidos}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.surname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.apellidos}" />
+                    <h:outputText value="#{fichaMedica_.paciente.apellidos}" />
                 </p:column>
                 <p:column sortBy="#{fichaMedica_.fechaApertura}" style="text-align: center;">
                     <f:facet name="header">  
@@ -115,11 +115,11 @@
                     </f:facet> 
                     <h:outputText value="#{fichaMedica_.fechaApertura}" />
                 </p:column>
-                <p:column sortBy="#{fichaMedica_.fechaActualizacion}" style="text-align: center;">
+                <p:column sortBy="#{fichaMedica_.lastUpdate}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['fichaMedica.ultimaActualización']}" />  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.fechaActualizacion}" />
+                    <h:outputText value="#{fichaMedica_.lastUpdate}" />
                 </p:column>
             </p:dataTable>
         </h:form>

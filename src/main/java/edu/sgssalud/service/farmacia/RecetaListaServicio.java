@@ -97,15 +97,14 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
         this.recetasSeleccionados = recetasSeleccionados;
     }
 
-    public Receta getRecetaSeleccionado() {
+    public Receta getRecetaSeleccionada() {
         return recetaSeleccionada;
     }
 
-    public void setRecetaSeleccionado(Receta recetaSeleccionado) {
-        this.recetaSeleccionada = recetaSeleccionado;
+    public void setRecetaSeleccionada(Receta recetaSeleccionada) {
+        this.recetaSeleccionada = recetaSeleccionada;
     }
-
-    
+       
     public int obtenerSiguienteResultado() {
         return primerResult + this.getPageSize();
     }
@@ -170,7 +169,7 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.unselected"), ((Receta) event.getObject()).getPaciente().getNombres());
         FacesContext.getCurrentInstance().addMessage("", msg);
-        this.setRecetaSeleccionado(null);
+        this.setRecetaSeleccionada(null);
     }    
 
     public void buscarPorParametro() {

@@ -19,15 +19,7 @@
                     </div>                    
                 </div> 
                 <!--Div para boton de regreso a inicio-->
-                <div class="span4 columns offset3">
-                    <h:form id="control">  
-                        <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>  
-                        <br/>                                             
-                    </h:form>
-                </div>
+                
             </div> 
         </div>             
     </ui:define>
@@ -96,17 +88,23 @@
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.id}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.nombres}" style="text-align: center;">
+                 <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.id}" style="text-align: center;">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['fichaMedica.id']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.id}" />
+                </p:column>
+                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.nombres}" />
+                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.apellidos}" style="text-align: center;">
+                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.surname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.apellidos}" />
+                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" />
                 </p:column>
                 <p:column sortBy="#{consultaMedica_.fechaConsulta}" style="text-align: center;">
                     <f:facet name="header">  

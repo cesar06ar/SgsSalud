@@ -137,10 +137,14 @@
       <view-id value="/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
    </url-mapping>
    
-   <!-- Vistas de Medicamento-->  
+   <!-- Vistas de Receta-->  
    <url-mapping id="receta">
       <pattern value="/farmacia/receta"></pattern>
       <view-id value="/pages/farmacia/receta/receta.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="RecetaLista">
+      <pattern value="/listaReceta"></pattern>
+      <view-id value="/pages/farmacia/receta/listaReceta.xhtml"></view-id>     
    </url-mapping>
    
    <!-- Vistas del Módulo de Medicina-->
@@ -148,6 +152,10 @@
       <pattern value="/fichaMedica"></pattern>
       <view-id value="/pages/depSalud/fichaMedica.xhtml"></view-id>             
       <action>#{account.loadPages}</action>             
+   </url-mapping>
+   <url-mapping id="FichaMedicaLista">
+      <pattern value="listaFichaMedica"></pattern>
+      <view-id value="/pages/depSalud/listaFichaMedica.xhtml"></view-id>      
    </url-mapping>
    <url-mapping id="AgendaMedica">
       <pattern value="/medicina/agendaMedica"></pattern>
@@ -171,6 +179,10 @@
       <pattern value="/odontologia/consultaOdontologica"></pattern>
       <view-id value="/pages/depSalud/odontologia/consultaOdontologica.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="ListaConsultaOdontologica">
+      <pattern value="/odontologia/listaConsultaOdontologica"></pattern>
+      <view-id value="/pages/odontologia/listaConsultaOdontologica.xhtml"></view-id>       
+   </url-mapping>   
    <url-mapping id="AgendaOdontologica">
       <pattern value="/odontologia/agendaOdontologica"></pattern>
       <view-id value="/pages/depSalud/odontologia/agenda.xhtml"></view-id>       

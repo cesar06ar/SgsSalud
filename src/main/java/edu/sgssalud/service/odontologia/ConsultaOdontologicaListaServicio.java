@@ -156,6 +156,14 @@ public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdo
         this.consulOdontSeleccionada = consulOdontSeleccionada;
     }
 
+    public String getParametroBusqueda() {
+        return parametroBusqueda;
+    }
+
+    public void setParametroBusqueda(String parametroBusqueda) {
+        this.parametroBusqueda = parametroBusqueda;
+    }
+
    
     
 }

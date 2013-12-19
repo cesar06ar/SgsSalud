@@ -118,7 +118,7 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.unselected"), ((ConsultaMedica) event.getObject()).getEnfermedadActual());
         FacesContext.getCurrentInstance().addMessage("", msg);
-        this.setConsulMedicSeleccionado(null);
+        this.setConsulMedicSeleccionada(null);
     }
     /*.............*/
 
@@ -156,19 +156,18 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
         return consulMedicSeleccionada;
     }
 
-    public void setConsulMedicSeleccionado(ConsultaMedica consulMedicSeleccionada) {
+    public void setConsulMedicSeleccionada(ConsultaMedica consulMedicSeleccionada) {
         this.consulMedicSeleccionada = consulMedicSeleccionada;
     }
     
     
-//    public String getParametroBusqueda() {
-//        return parametroBusqueda;
-//    }
-//
-//    public void setParametroBusqueda(String parametroBusqueda) {
-//        this.parametroBusqueda = parametroBusqueda;
-//        setResultList(cms.getConsultaMedicaPorId(parametroBusqueda));
-//    }    
+    public String getParametroBusqueda() {
+        return parametroBusqueda;
+    }
+
+    public void setParametroBusqueda(String parametroBusqueda) {
+        this.parametroBusqueda = parametroBusqueda;        
+    }    
     
     /*..
      * Busca de la base de datos pacientes segun el parametro ingresado
