@@ -41,7 +41,7 @@
         <seam.mail.version>3.1.1.Final</seam.mail.version>
         <seam-reports-version>3.1.0.Final</seam-reports-version>  
         <primefaces.theme.version>1.0.10</primefaces.theme.version>
-        
+        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
     </properties>
 
 
@@ -504,7 +504,7 @@
             <artifactId>velocity</artifactId>
         </dependency>
         
-        <dependency>
+        <!--<dependency>
             <groupId>org.jboss.seam.reports</groupId>
             <artifactId>seam-reports-api</artifactId>
             <version>${seam-reports-version}</version>
@@ -522,7 +522,7 @@
                     <artifactId>dom4j</artifactId>  
                 </exclusion>  
             </exclusions>  
-        </dependency>
+        </dependency> -->
         
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
