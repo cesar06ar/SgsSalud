@@ -95,31 +95,36 @@
                     <f:facet name="header">  
                         <h:outputText value="#{messages['fichaMedica.numero']}" />  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.numeroFicha}" />
+                    <h:outputText value="#{fichaMedica_.numeroFicha}"/>
                 </p:column>
                 <p:column sortBy="#{fichaMedica_.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['common.firstname']}" />  
+                        <h:outputText value="#{messages['common.firstname']}"/>  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.paciente.nombres}" />
+                    <h:outputText value="#{fichaMedica_.paciente.nombres}"/>
                 </p:column>
                 <p:column sortBy="#{fichaMedica_.paciente.apellidos}" style="text-align: center;">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['common.surname']}" />  
+                        <h:outputText value="#{messages['common.surname']}"/>  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.paciente.apellidos}" />
+                    <h:outputText value="#{fichaMedica_.paciente.apellidos}"/>
                 </p:column>
                 <p:column sortBy="#{fichaMedica_.fechaApertura}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['fichaMedica.fechaApertura']}" />  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.fechaApertura}" />
+                    <h:outputText value="#{fichaMedica_.fechaApertura}">
+                        <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                    </h:outputText>                    
                 </p:column>
                 <p:column sortBy="#{fichaMedica_.lastUpdate}" style="text-align: center;">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['fichaMedica.ultimaActualización']}" />  
+                        <h:outputText value="#{messages['fichaMedica.ultimaActualización']}"/>  
                     </f:facet> 
-                    <h:outputText value="#{fichaMedica_.lastUpdate}" />
+                    <h:outputText value="#{fichaMedica_.lastUpdate}" >                                 
+                        <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                    </h:outputText>
+                    
                 </p:column>
             </p:dataTable>
             <h:panelGrid id="export" class="columns" >

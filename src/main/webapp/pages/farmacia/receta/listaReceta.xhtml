@@ -103,7 +103,10 @@
                         <f:facet name="header">  
                             <h:outputText value="#{messages['fechaReceta.fechaEmision']}" />  
                         </f:facet> 
-                        <h:outputText value="#{receta_.fecha}" />
+                        <h:outputText value="#{receta_.fecha}" >
+                            <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                        </h:outputText>
+                        
                     </p:column>
 
                     <p:column sortBy="#{receta_.responsableEmision}" style="text-align: center;">

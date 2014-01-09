@@ -17,10 +17,12 @@ package edu.sgssalud.controller.reportes;
 
 import com.smartics.common.action.report.JasperReportAction;
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
+import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +50,7 @@ public class ReporteListas {
     private static final String REPORTE_USUARIOS = "Reporte";  //nombre del reporte .jasper   
     private static final String REPORTE_PACIENTES = "pacientes";
     private static final String REPORTE_FICHASMEDICAS = "listaFichasM";
+    private static final String REPORTE_CONSULTASMEDICAS = "listaConsultasMedicas";
 
     @Inject
     @Web
@@ -59,6 +62,8 @@ public class ReporteListas {
     private PacienteServicio pacienteServicio;
     @Inject
     private FichaMedicaServicio fichaMedicaServicio;
+    @Inject
+    private ConsultaMedicaServicio consultaMedicaServicio;
     
     @Inject
     JasperReportAction JasperReportAction;
@@ -74,6 +79,7 @@ public class ReporteListas {
         profileService.setEntityManager(em);
         pacienteServicio.setEntityManager(em);
         fichaMedicaServicio.setEntityManager(em);
+        consultaMedicaServicio.setEntityManager(em);
     }
 
     private String getRealPath(String path) {
@@ -223,12 +229,30 @@ public class ReporteListas {
         List<FichaMedica> fichasMed = fichaMedicaServicio.getFichasMedicas();
         //parametros 
         Map<String, Object> _values = new HashMap<String, Object>();
-        _values.put("numeroFicha", fichasMed.size());
+        _values.put("numeroFichas", fichasMed.size());
         //_values.put("numeroPacientes", pacientes.size());
         _values.put("usd", "$");
 
         //Exportar a pdf 
         JasperReportAction.exportToPdf(REPORTE_FICHASMEDICAS, fichasMed, _values, attachFileName);
+
+        if (log.isDebugEnabled()) {
+            log.debug("export as pdf");
+        }     
+
+    }
+     
+     public void renderConsultasMedicas() {
+        
+        final String attachFileName = "consultasMedicas.pdf";        
+        List<ConsultaMedica> consultMed = consultaMedicaServicio.getConsulasMedicas();
+        //parametros 
+        Map<String, Object> _values = new HashMap<String, Object>();
+        
+        
+
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_CONSULTASMEDICAS , consultMed, _values, attachFileName);
 
         if (log.isDebugEnabled()) {
             log.debug("export as pdf");

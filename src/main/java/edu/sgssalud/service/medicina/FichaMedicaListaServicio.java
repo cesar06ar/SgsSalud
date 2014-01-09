@@ -139,10 +139,9 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
     }
 
     public List<FichaMedica> getResultList() {
-       if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = fms.getFichasMedicas(this.getPageSize(), primerResult);
-        }
-        
+//       if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+//            resultList = fms.getFichasMedicas(this.getPageSize(), primerResult);
+//        }        
         return resultList;
     }
 
@@ -156,18 +155,14 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
 
     public void setFichaMedicSeleccionada(FichaMedica fichaMedicSeleccionada) {
         this.fichaMedicSeleccionada = fichaMedicSeleccionada;
-    }
-
-   
-    
-    
+    } 
+        
     public String getParametroBusqueda() {
         return parametroBusqueda;
     }
 
     public void setParametroBusqueda(String parametroBusqueda) {
-        this.parametroBusqueda = parametroBusqueda;
-        
+        this.parametroBusqueda = parametroBusqueda;        
     }    
     
     /*..

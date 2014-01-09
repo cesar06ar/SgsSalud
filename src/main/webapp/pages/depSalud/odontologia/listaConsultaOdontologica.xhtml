@@ -96,11 +96,11 @@
                     </f:facet> 
                     <h:outputText value="#{consultaOdontologica_.id}" />
                 </p:column>
-                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.id}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.numeroFicha}" style="text-align: center;">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['fichaMedica.id']}" />  
+                        <h:outputText value="#{messages['fichaMedica.numero']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.id}" />
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.numeroFicha}" />
                 </p:column>
                 <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
@@ -118,7 +118,9 @@
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.fechaConsulta']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaOdontologica_.fechaConsulta}" />
+                    <h:outputText value="#{consultaOdontologica_.fechaConsulta}">
+                        <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                    </h:outputText>
                 </p:column>
                 <p:column sortBy="#{consultaOdontologica_.responsable}" style="text-align: center;">
                     <f:facet name="header">  
