@@ -19,15 +19,23 @@
                     </div>                    
                 </div> 
                 <!--Div para boton de regreso a inicio-->
-                
+                <div class="span4 columns offset3">
+                    <h:form id="control">  
+                        <br/>
+                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
+                        </h:link>  
+                        <br/>                                             
+                    </h:form>
+                </div>
             </div> 
         </div>             
     </ui:define>
     <ui:define name="content">
         <!--Metadato que se realiza antes de renderizarse la vista-->
         <f:metadata>
-            <f:viewParam name="result" value="#{consultaMedicaListaServicio.firstResult}" />            
-            <f:viewParam name="" value="#{consultaMedicaListaServicio.parametroBusqueda}"/>
+            <f:viewParam name="result" value="#{consultaOdontologicaListaServicio.firstResult}" />            
+            <f:viewParam name="" value="#{consultaOdontologicaListaServicio.parametroBusqueda}"/>
         </f:metadata>
         <!--Formulario dentro de un contenedor-->
         <h:form id="form">            
@@ -37,26 +45,26 @@
             <!--Botones de admin-->
             <div class="admin-actions span17">
                 <div class="span6 ">
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success">
-                        <f:param name="consultaMedicaId"></f:param>
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaOdontologica" styleClass="btn success">
+                        <f:param name="consultaOdontologicaId"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                     #{' '}
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn" 
-                            disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
-                        <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaOdontologica" styleClass="btn" 
+                            disabled="#{empty consultaOdontologicaListaServicio.consulOdontSeleccionada}">
+                        <f:param name="fichaOdontologicaId" value="#{consultaOdontologicaListaServicio.consulOdontSeleccionada.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                     #{' '}
-                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn" 
-                            disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
-                        <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
+                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn" 
+                            disabled="#{empty consultaOdontologicaListaServicio.consulOdontSeleccionada}">
+                        <f:param name="consultaOdontologicaId" value="#{consultaOdontologicaListaServicio.consulOdontSeleccionada.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                 </div>
                 <div class="span6 offset5" >
-                    <p:inputText id="criterioBuscar" size ="25" value="#{consultaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
-                        <p:ajax event="keyup" update="tablaConsultasMedicas"/>
+                    <p:inputText id="criterioBuscar" size ="25" value="#{consultaOdontologicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
+                        <p:ajax event="keyup" update="tablaConsultasOdontologicas"/>
                     </p:inputText>
                     &nbsp;
                                    
@@ -65,77 +73,63 @@
             </div>
 
             <!--tabla de datos-->
-            <p:dataTable id="tablaConsultasMedicas"  var="consultaMedica_" value="#{consultaMedicaListaServicio.resultList}"
+            <p:dataTable id="tablaConsultasOdontologicas"  var="consultaOdontologica_" value="#{consultaOdontologicaListaServicio.resultList}"
                          paginator="true" rows="10" styleClass="span18"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"
                          lazy="true"
-                         rowKey="#{consultaMedica_.id}"
-                         selection="#{consultaMedicaListaServicio.consulMedicSeleccionada}"
+                         rowKey="#{consultaOdontologica_.id}"
+                         selection="#{consultaOdontologicaListaServicio.consulOdontSeleccionada}"
                          rendered="true"
                          selectionMode="single">
-                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Consulta Medica-->
-                <p:ajax event="rowSelect" listener="#{consultaMedicaListaServicio.onRowSelect}"   
+                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Consulta Odontologica-->
+                <p:ajax event="rowSelect" listener="#{consultaOdontologicaListaServicio.onRowSelect}"   
                         update=":form:button-edit :form:messages :form:button-abrirFM"/>                 
-                <p:ajax event="rowUnselect" listener="#{consultaMedicaListaServicio.onRowUnselect}" 
+                <p:ajax event="rowUnselect" listener="#{consultaOdontologicaListaServicio.onRowUnselect}" 
                         update=":form:button-edit :form:messages :form:button-abrirFM"/>
 
                 <!--Columnas para mostrar en la tabla-->
-                <p:column sortBy="#{consultaMedica_.id}" style="width: 15%; text-align: center;">
+               <p:column sortBy="#{consultaOdontologica_.id}" style="width: 15%; text-align: center;">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['consultaMedica.id']}" />  
+                        <h:outputText value="#{messages['consultaOdontologica.id']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.id}" />
+                    <h:outputText value="#{consultaOdontologica_.id}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.numeroFicha}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['fichaMedica.numero']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" />
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.numeroFicha}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.nombres}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" />
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.nombres}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.apellidos}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.surname']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" />
-                </p:column>
-                <p:column sortBy="#{consultaMedica_.fechaConsulta}" style="text-align: center;">
+                    <h:outputText value="#{consultaOdontologica_.fichaOdontologica.fichaMedica.paciente.apellidos}" />
+                </p:column> 
+                <p:column sortBy="#{consultaOdontologica_.fechaConsulta}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.fechaConsulta']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.fechaConsulta}">
+                    <h:outputText value="#{consultaOdontologica_.fechaConsulta}">
                         <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                     </h:outputText>
-                    
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.responsable}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.responsable}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.medicoResponsable']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.responsable}" />
-                </p:column>
+                    <h:outputText value="#{consultaOdontologica_.responsable}" />
+                </p:column>                           
+                
             </p:dataTable>
-            <h:panelGrid id="export" class="columns" >
-                <p:panel>
-                    <h:outputText value="Exportar Datos" />  
-                    <br/>
-                    <h:commandLink action="#{reporteListas.renderConsultasMedicas()}" >                    
-                        <p:graphicImage value="/resources/images/pdf.png" />                          
-                    </h:commandLink>
-                    #{''}
-                    <h:commandLink >  
-                        <p:graphicImage value="/resources/images/xls1.png" />  
-                        <p:dataExporter type="xls" target="tablaConsultasMedicas" fileName="ConsultasMedicas"/>  
-                    </h:commandLink>
-                </p:panel>
-            </h:panelGrid>
         </h:form>
     </ui:define>
 </ui:composition>

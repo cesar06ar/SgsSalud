@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <ui:define name="header-replace" >
+            <div class="header-replace">            
+                <div class="container">
+                    <div class="span9 columns">
+                        <div class="row fl" style="margin-top: 5px;">
+                            <h2>#{messages['receta.admin']}</h2>   
+                        </div>                    
+                    </div> 
+                    <!--Div para boton de regreso a inicio-->
+                    <div class="span4 columns offset3">
+                        <h:form id="control">  
+                            <br/>
+                            <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
+                                    outcome="/pages/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
+                            </h:link>  
+                            <br/>                                             
+                        </h:form>
+                    </div>
+                </div> 
+            </div>   
+
+        </ui:define>
+
+        <ui:define name="content">           
+            <!--Metadato que se realiza antes de renderizarse la vista-->
+            <f:metadata>
+                <f:viewParam name="pacienteId" value="#{RecetaHome.pacienteId}" />
+                <f:viewParam name="consultaMedicaId" value="#{Receta.consultaMedicaId}" />
+                <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
+            </f:metadata>
+            <!--Formulario dentro de un contenedor-->
+            <h:form id="form">            
+                <!--Opción de mensaje, cuando se realiza una acción dfghdh-->
+                <!--para mostrar mensaje de componentes seleccionados y errores si fuera el caso-->
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+                <!--Botones de admin-->
+                <div class="admin-actions span17">
+                    <div class="span6 ">
+                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="receta" styleClass="btn primary">
+                            <f:param name="pacienteId"></f:param>
+                            <f:param name="backView" value="lista"></f:param>
+                        </h:link>
+                        #{' '}
+                        <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="medicamento" styleClass="btn" 
+                                disabled="#{empty recetaListaServicio.recetaSeleccionada }">
+                            <f:param name="recetaId" value="#{recetaListaServicio.recetaSeleccionada.id}"></f:param>
+                            <f:param name="backView" value="lista"></f:param>
+                        </h:link>
+                    </div>
+                    <div class="span6 offset5" >
+                        <p:inputText id="criterioBuscar" size ="25" value="#{recetaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
+                            <p:ajax event="keyup" update="tablaRecetas"/>
+                        </p:inputText>
+                        &nbsp;
+                        <p:commandButton value="Buscar" action="#{recetaListaServicio.buscarPorParametro()}" update="tablaRecetas" styleClass="btn info"/>                    
+                    </div>
+                </div>
+
+                <p:dataTable id="tablaRecetas"  var="receta_" value="#{recetaListaServicio.resultList}"
+                             paginator="true" rows="20" styleClass="span18"                              
+                             paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                             rowsPerPageTemplate="5,10,20,50,100"
+                             lazy="true"
+                             rowKey="#{receta_.id}"
+                             selection="#{recetaListaServicio.recetaSeleccionada}"
+                             rendered="true"
+                             selectionMode="single">
+                    <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
+                    <p:ajax event="rowSelect" listener="#{recetaListaServicio.onRowSelect}"
+                            update=":form:button-edit :form:messages "/>   
+                    <p:ajax event="rowUnselect" listener="#{recetaListaServicio.onRowUnselect}" update=":form:button-edit :form:messages"/>
+                    <!--Columnas para mostrar en la tabla-->
+
+                    <p:column sortBy="#{receta_.id}" style="width: 10%; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{'Id Receta'}" />  
+                        </f:facet>  
+                        <h:outputText value="#{receta_.id}" />                        
+                    </p:column>
+                    <p:column sortBy="#{receta_.paciente.nombres}" style="text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['common.firstname']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{receta_.paciente.nombres}" />
+                    </p:column>
+                    <p:column sortBy="#{receta_.paciente.apellidos}" style="text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['common.surname']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{receta_.paciente.apellidos}" />
+                    </p:column>
+                    <p:column sortBy="#{receta_.fecha}" style="text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['fechaReceta.fechaEmision']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{receta_.fecha}" >
+                            <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
+                        </h:outputText>
+                        
+                    </p:column>
+
+                    <p:column sortBy="#{receta_.responsableEmision}" style="text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['receta.responsableEmision']}" />  
+                        </f:facet>                         
+                        <h:outputText value="#{receta_.responsableEmision}" />                            
+                    </p:column>
+
+                    <p:column sortBy="#{receta_.responsableEntrega}" style="text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="#{'receta.responsableEntrega'}" />  
+                        </f:facet> 
+                        <h:outputText value="#{receta_.responsableEntrega}" />
+                    </p:column>
+
+                    
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>
+

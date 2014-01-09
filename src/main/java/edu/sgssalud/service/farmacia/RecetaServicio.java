@@ -20,12 +20,14 @@ import edu.sgssalud.model.farmacia.Receta_;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.BussinesEntityService;
+import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -92,20 +94,22 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         }
     }
 
-//    public List<Receta> BuscarRecetasPorParametro1(String parametro) {
-//        TypedQuery<Receta> query = null;
-//        if (Dates.getFormatoFecha(parametro) != null) {
-//            query = em.createNamedQuery("Receta.buscarPorFecha", Receta.class);
-//            query.setParameter("clave", Dates.getFormatoFecha(parametro));
-//        } else {
-//            query = em.createNamedQuery("Receta.buscarPorPaciente", Receta.class);
-//            query.setParameter("clave", Paciente.getNombres(parametro));
-//        } else {
+    public List<Receta> BuscarRecetasPorParametro(String parametro) {
+        TypedQuery<Receta> query = null;
+        if (Dates.getFormatoFecha(parametro) != null) {
+            query = em.createNamedQuery("Receta.buscarPorFecha", Receta.class);
+            query.setParameter("clave", Dates.getFormatoFecha(parametro));
+        } else {
+            query = em.createNamedQuery("Receta.buscarPorPaciente", Receta.class);
+            query.setParameter("clave", parametro);
+        } 
+//        else if{
 //            query = em.createNamedQuery("Receta.buscarPorConsulta", Receta.class);
-//            query.setParameter("clave", Consulta (parametro));
+//            query.setParameter("clave",parametro);
+//            
 //        }
-//        return query.getResultList();
-//    }
+        return query.getResultList();
+    }
     
 
     

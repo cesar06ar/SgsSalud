@@ -21,6 +21,7 @@ import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.medicina.SignosVitales_;
 import edu.sgssalud.service.BussinesEntityService;
+import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -101,6 +103,7 @@ public class ConsultaMedicaServicio extends PersistenceUtil<ConsultaMedica> impl
         return getSingleResult(query);
     }
     
+   
     public boolean borrarConsultaMedica(ConsultaMedica cm){
         try {
             log.info(" --> Borrar Consulta : " + cm.getId());
