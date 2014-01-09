@@ -301,11 +301,22 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         getInstance().setShowBootcamp(true);
         create(getInstance());
         setPacienteId(getInstance().getId());
+        
+        //crear seguridad de paciente
+//        try {
+//            org.picketlink.idm.api.Group group = security.getPersistenceManager().findGroup("PACIENTE", "GROUP");
+//            security.getRelationshipManager().associateUser(group, user);            
+//        } catch (Exception e) {
+//        }        
+        
         wire();
 //        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
 //                Paciente.class.getName()));
 //        getInstance()
 //                .buildAttributes(bussinesEntityService);
+        
+        
+        
         save(getInstance()); //Actualizar estructura de datos  
     }
 
@@ -377,6 +388,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     private Photos buildPhoto(UploadedFile file) {
         if (getInstance().getFoto() != null) {
+            System.out.println("Ingreso a Actualizar Imagen:.........======================");
             Photos foto = getInstance().getFoto();
             foto.setPhoto(file.getContents());
             foto.setName(file.getFileName());
@@ -384,6 +396,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             foto.setSize(file.getSize());
             return foto;
         } else {
+            System.out.println("Ingreso a subir Imagen:.......................===========");
             Photos foto = new Photos();
             foto.setPhoto(file.getContents());
             foto.setName(file.getFileName());
@@ -396,10 +409,9 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     public void subirImagen(FileUploadEvent event) {
         //if (file != null) {
-        //System.out.println("Ingreso a subir Imagen_______________________________________________________________");
+        System.out.println("Ingreso a subir Imagen_________________________________________________");
         try {
-            getInstance().setFoto(buildPhoto(event.getFile()));
-            //getInstance().setRutaFoto(Strings.guardarImagenEnFicheroTemporal(getInstance().getFoto(), event.getFile().getFileName()));
+            getInstance().setFoto(buildPhoto(event.getFile()));            
             FacesMessage msg = new FacesMessage("Ok", "Fichero " + event.getFile().getFileName() + " subido correctamente.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception e) {

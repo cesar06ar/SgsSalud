@@ -180,6 +180,7 @@ public class InitializeDatabase {
             g = session.getPersistenceManager().createGroup("SECRETARIA", "GROUP");
             g = session.getPersistenceManager().createGroup("FARMACEUTICOS", "GROUP");
             g = session.getPersistenceManager().createGroup("LABORATORISTAS", "GROUP");
+            g = session.getPersistenceManager().createGroup("PACIENTE", "GROUP");
         }
 
         bussinesEntityType = query.getSingleResult();
@@ -189,7 +190,7 @@ public class InitializeDatabase {
             session.getAttributesManager().addAttribute(u, "email", "cesar06ar@hotmail.com");
             members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
-            //session.getRelationshipManager().associateUser(g, u);             
+            session.getRelationshipManager().associateUser(g, u);             
 
             p = new Profile();
             p.setEmail("sgssalud@unl.edu");

@@ -15,40 +15,35 @@
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>            
             <f:viewParam name="id" value="#{profileHome.profileId}" />                        
-            <s:viewAction action="#{profileHome.load}" if="#{conversation.transient}"/>
+            <!--<s:viewAction action="# {profileHome.load}" if="# {conversation.transient}"/> -->
         </f:metadata>
 
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container-header" >
-                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
-                        <div class="span2 columns">                            
-
-                            <h:link outcome="/pages/profile/profile" title="${profileHome.instance.fullName}">
-                                <ocp:gravatar email="${profileHome.instance.email}" size="90" updatable="false" />
-                                <f:param name="profileId" value="#{profileHome.instance.id}"/>
-                            </h:link>
-                        </div>
-                        <div class="span7 columns">
-                            <h2>#{messages['common.edit']} #{profileHome.instance.fullName}</h2>
-                            <br/>
-                            <p><span style="">#{profileHome.instance.code}</span>
-                                <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
-                                <br/>                                
-                            </p>
-                        </div>
-
-                        <div class="span4 columns offset3">
-                            <h:form id="control">
-                                <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
-                                                 rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
-                                                 update=":control :summary">
-                                </p:commandButton>                            
-                            </h:form>
-                        </div>
-
+                    <div class="row lf row-title" >                      
+                        <h:link outcome="/pages/profile/profile" title="${profileHome.instance.fullName}">
+                            <ocp:gravatar email="${profileHome.instance.email}" size="90" updatable="false" />
+                            <f:param name="profileId" value="#{profileHome.instance.id}"/>
+                        </h:link>                        
+                        <h2>#{messages['common.edit']} #{profileHome.instance.fullName}</h2>
+                        <br/>
+                        <p><span style="">#{profileHome.instance.code}</span>
+                            <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
+                            <br/>                                
+                        </p>
                     </div>
-                </div></div>             
+                    <div class="span4 columns offset3">
+                        <h:form id="control">
+                            <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
+                                             rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
+                                             update=":control :summary">
+                            </p:commandButton>                            
+                        </h:form>
+                    </div>
+
+                </div>
+            </div></div>             
         </ui:define>
         <ui:define name="content">             
 
@@ -81,11 +76,7 @@
                                         styleClass="validation-status" />
                         <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
                     </div>
-                </h:panelGroup>
-                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
-                <s:validateForm id="signupValidator" validatorId="signupValidator" />
-
-
+                </h:panelGroup>              
 
                 <!-- Attributos personalizados -->
                 <h:panelGroup id="attributes" layout="block" class="clearfix">
@@ -114,13 +105,13 @@
                                                  rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                 </p:inputTextarea>
-                                <!-- TODO add support for boolean
-                                <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
-                                    <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
-                                                             rendered="#{a.property.type eq 'java.lang.Boolean'}">
-                                        <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                    </p:selectBooleanCheckbox>
-                                </p:panel>
+                                <!--TODO add support for boolean
+                               <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                   <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
+                                                            rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                       <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                   </p:selectBooleanCheckbox>
+                               </p:panel>
                                 -->
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{a.value != null}"
                                                 styleClass="validation-status" />

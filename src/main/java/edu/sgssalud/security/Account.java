@@ -52,6 +52,7 @@ public class Account implements Serializable {
         pacienteS.setEntityManager(em);
     }
     Paciente loggedIn1 = new Paciente();
+    Profile loggedIn = new Profile();
 
     @Produces
     @LoggedIn
@@ -68,7 +69,6 @@ public class Account implements Serializable {
         }
         return loggedIn1;
     }
-    Profile loggedIn = new Profile();
 
     @Produces
     @LoggedIn
@@ -137,7 +137,7 @@ public class Account implements Serializable {
 
     public boolean isUserPaciente() {
 
-        if (identity.isLoggedIn() && !loggedIn.isPersistent()) {
+        if (identity.isLoggedIn()) {
             try {
                 boolean valor = pacienteS.getPacientePorIdentityKey(identity.getUser().getKey()) != null;
                 return valor;
@@ -184,16 +184,16 @@ public class Account implements Serializable {
     }
 
     public boolean isRenderView() {
-        SecurityRules s = new SecurityRules();        
+        SecurityRules s = new SecurityRules();
         if (s.isMedico(identity) || s.isOdontologo(identity) || s.isEnfermero(identity)) {
             return true;
         } else {
             return false;
         }
     }
-    
-    public String loadPages(){
-        if(identity.isLoggedIn()){
+
+    public String loadPages() {
+        if (identity.isLoggedIn()) {
             //return "/pages/depSalud/fichaMedica.xhtml";
             return null;
         }

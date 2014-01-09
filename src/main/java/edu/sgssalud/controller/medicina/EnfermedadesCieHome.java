@@ -128,6 +128,7 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getName() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                
                 salida = "";
             } else {
                 create(getInstance());
@@ -137,6 +138,7 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 createInstance();
                 this.setListaEnfermedades(enfcie10service.getEnfermedadesCIE10());
+                setInstance(new EnfermedadCIE10());
             }
 
         } catch (Exception e) {
@@ -149,16 +151,16 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
     @Transactional
     public String borrar() {
         try {
-            if (getInstance() == null) {
+            if (enfermedad == null) {
                 throw new NullPointerException("property is null");
             }
-            if (getInstance().isPersistent() && getInstance().getHistoriasClinicas().isEmpty() ) {                
+            if (enfermedad.isPersistent() && getInstance().getHistoriasClinicas().isEmpty() ) {                
                 delete(getInstance());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
 
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede borrar esta enfermedad" + getInstance().getName(), ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede borrar esta enfermedad " + getInstance().getName(), ""));
                 RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente                    
             }
 

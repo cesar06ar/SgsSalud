@@ -8,7 +8,6 @@ package edu.sgssalud.util;
 //import com.smartics.common.dao.CrudService;
 //import com.smartics.common.dao.QueryParameter;
 //import com.smartics.lotcar.common.model.Attachment;
-
 import edu.sgssalud.model.Photos;
 import edu.sgssalud.service.generic.CrudService;
 import edu.sgssalud.service.generic.QueryParameter;
@@ -84,21 +83,33 @@ public class ImageViewer implements Serializable {
     public StreamedContent getPacienteFoto() {
         //StreamedContent sc = null;
         FacesContext context = FacesContext.getCurrentInstance();
-
+        //String pacienteSdtr = context.getExternalContext().getRequestParameterMap().get("pacienteId");
+        //if (!pacienteSdtr.equals("null")) {
         if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 
             //System.out.println("=== getPhoto PhaseId.RENDER_RESPONSE : ");
             // So, we're rendering the HTML. Return a stub StreamedContent so that it will generate right URL.
-            File file = new File(getRealPath("/resources/images/paciente.png"));
-            byte[] data = UtilRoot.getConverter(file);
-            InputStream dbStream = new ByteArrayInputStream(data);            
-            return new DefaultStreamedContent(dbStream, new MimetypesFileTypeMap().getContentType(file));
+            /*File file = new File(getRealPath("/resources/images/paciente.png"));
+             byte[] data = UtilRoot.getConverter(file);
+             InputStream dbStream = new ByteArrayInputStream(data);            
+             return new DefaultStreamedContent(dbStream, new MimetypesFileTypeMap().getContentType(file));*/
+            return new DefaultStreamedContent();
         } else {
             // So, browser is requesting the image. Return a real StreamedContent with the image bytes.
-            String pacienteSdtr = context.getExternalContext().getRequestParameterMap().get("pacienteId");
-            Long pacienteId = Long.valueOf(pacienteSdtr);
-            return showPacienteFoto(pacienteId);             
+            String pacienteSdtr1 = context.getExternalContext().getRequestParameterMap().get("pacienteId");
+            if (!pacienteSdtr1.equals("null")) {
+                Long pacienteId = Long.valueOf(pacienteSdtr1);
+                return showPacienteFoto(pacienteId);
+            } else {
+                return new DefaultStreamedContent();
+            }
+
         }
+//        }else{
+//            System.out.println("=== getPhoto PhaseId.RENDER_RESPONSE : ");
+//            return new DefaultStreamedContent();
+//        }
+
     }
 
     private String getRealPath(String path) {

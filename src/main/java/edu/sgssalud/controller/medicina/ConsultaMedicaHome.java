@@ -319,28 +319,32 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     }
 
     public String getInidicadorIMC() {
-        if (paciente.getEdad() < 5) {
-            int peso = (paciente.getEdad() * 2) + 8;
-            return "Peso del Niño = " + peso;
-        } else if (paciente.getEdad() == 5 && paciente.getEdad() <= 10) {
-            int peso = (paciente.getEdad() * 3) + 3;
-            return "Peso del Niño = " + peso;
-        } else if (paciente.getEdad() >= 15) {
-            double tallam = (getInstance().getSignosVitales().getTalla() / 100) * (getInstance().getSignosVitales().getTalla() / 100);
-            double imc = getInstance().getSignosVitales().getPeso() / tallam;
-            String indicador = String.valueOf(imc);
-            indicador = indicador.substring(0, 6);
-            if (imc < 18.5) {
-                return "Bajo de Peso. IMC ( " + indicador + " )";
-            } else if (imc >= 18.5 && imc <= 24.99) {
-                return "Normal . IMC ( " + indicador + " )";
-            } else if (imc >= 25 && imc <= 29.99) {
-                return "Sobre Peso . IMC ( " + indicador + " )";
-            } else if (imc > 30) {
-                return "Obesidad. IMC ( " + indicador + " )";
+        if (getInstance().isPersistent()) {
+            if (paciente.getEdad() < 5) {
+                int peso = (paciente.getEdad() * 2) + 8;
+                return "Peso del Niño = " + peso;
+            } else if (paciente.getEdad() == 5 && paciente.getEdad() <= 10) {
+                int peso = (paciente.getEdad() * 3) + 3;
+                return "Peso del Niño = " + peso;
+            } else if (paciente.getEdad() >= 15) {
+                double tallam = (getInstance().getSignosVitales().getTalla() / 100) * (getInstance().getSignosVitales().getTalla() / 100);
+                double imc = getInstance().getSignosVitales().getPeso() / tallam;
+                String indicador = String.valueOf(imc);
+                indicador = indicador.substring(0, 6);
+                if (imc < 18.5) {
+                    return "Bajo de Peso. IMC ( " + indicador + " )";
+                } else if (imc >= 18.5 && imc <= 24.99) {
+                    return "Normal . IMC ( " + indicador + " )";
+                } else if (imc >= 25 && imc <= 29.99) {
+                    return "Sobre Peso . IMC ( " + indicador + " )";
+                } else if (imc > 30) {
+                    return "Obesidad. IMC ( " + indicador + " )";
+                }
             }
+            return "";
+        } else {
+            return "";
         }
-        return "";
     }
 
     public void crearModeloLineal() {

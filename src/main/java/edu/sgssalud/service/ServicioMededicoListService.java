@@ -143,7 +143,7 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
             if (selectedServicio == null) {
                 throw new NullPointerException("Servicio is null");
             }
-            if (selectedServicio.isPersistent() && servicioMedS.buscarPorServicio(selectedServicio).isEmpty()) {                
+            if (selectedServicio.isPersistent() ) {                
                 servicioMedS.borrarEntidad(selectedServicio.getId());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + selectedServicio.getNombre(), ""));                
             } else {

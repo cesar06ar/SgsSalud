@@ -89,11 +89,11 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
         }
     }
     
-    public List<Tratamiento> buscarPorServicio(Servicio serv) {
-        CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);
-        Root<Tratamiento> entity = query.from(Tratamiento.class);
-        query.where(builder.equal(entity.get(Tratamiento_.servicioDisponible), serv));
-        return getResultList(query);
-    }
+//    public List<Tratamiento> buscarPorServicio(Servicio serv) {
+//        CriteriaBuilder builder = getCriteriaBuilder();
+//        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);
+//        Root<Tratamiento> entity = query.from(Tratamiento.class);
+//        query.where(builder.equal(entity.get(Tratamiento_.servicioDisponible), serv));
+//        return getResultList(query);
+//    }
 }

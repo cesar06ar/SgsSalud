@@ -77,13 +77,13 @@ public class TratamientoServicio extends PersistenceUtil<Tratamiento> implements
         return getResultList(query);
     }    
     
-    public List<Tratamiento> buscarPorServicioOdontologico(Servicio servicioOdontDisponible) {
-        CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);
-        Root<Tratamiento> entity = query.from(Tratamiento.class);
-        query.where(builder.equal(entity.get(Tratamiento_.servicioDisponible), servicioOdontDisponible));      
-        return getResultList(query);
-    }
+//    public List<Tratamiento> buscarPorServicioOdontologico(Servicio servicioOdontDisponible) {
+//        CriteriaBuilder builder = getCriteriaBuilder();
+//        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);
+//        Root<Tratamiento> entity = query.from(Tratamiento.class);
+//        query.where(builder.equal(entity.get(Tratamiento_.servicioDisponible), servicioOdontDisponible));      
+//        return getResultList(query);
+//    }
 
     
 }

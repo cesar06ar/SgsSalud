@@ -18,9 +18,17 @@ package edu.sgssalud.model.odontologia;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.servicios.Servicio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,50 +45,54 @@ import javax.persistence.Transient;
  */
 @Entity
 public class Tratamiento implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaRelizacion;    
+    private Date fechaRealizacion;
     private String nombre;
-    private String procedimiento; 
+    private String procedimiento;
     @Transient
     private String ruta;
-    private boolean c1;
-    private boolean c2;
-    private boolean c3;
-    private boolean c4;
-    private boolean c5;
-    
+    /*
+     private boolean c1;
+     private boolean c2;
+     private boolean c3;
+     private boolean c4;
+     private boolean c5;*/
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "tratamiento_cuadrante")
+    @Column(length = 25)
+    private Set<String> cuadrante = new HashSet<String>();
+
     @ManyToOne()
     @JoinColumn(name = "diente_id")
     private Diente diente;
-    
+
     @ManyToOne()
     @JoinColumn(name = "consultaOdontologica_id")
-    private ConsultaOdontologica consultaOdontologica;  
-        
-    @ManyToOne()
-    @JoinColumn(name = "servicioDisponible_id")
-    private Servicio servicioDisponible;
+    private ConsultaOdontologica consultaOdontologica;
 
-    public Tratamiento(){
-        
+//    @ManyToOne()
+//    @JoinColumn(name = "servicioDisponible_id")
+//    private Servicio servicioDisponible;
+    public Tratamiento() {
+
     }
-    
-    public Tratamiento(String nombre, String ruta, boolean c1, boolean c2, boolean c3, boolean c4, boolean c5) {
+
+    public Tratamiento(String nombre, String ruta) {
         this.nombre = nombre;
         this.ruta = ruta;
-        this.c1 = c1;
-        this.c2 = c2;
-        this.c3 = c3;
-        this.c4 = c4;
-        this.c5 = c5;
+//        this.c1 = c1;
+//        this.c2 = c2;
+//        this.c3 = c3;
+//        this.c4 = c4;
+//        this.c5 = c5;
     }
-        
+
     public Long getId() {
         return id;
     }
@@ -89,12 +101,12 @@ public class Tratamiento implements Serializable {
         this.id = id;
     }
 
-    public Date getFechaRelizacion() {
-        return fechaRelizacion;
+    public Date getFechaRealizacion() {
+        return fechaRealizacion;
     }
 
-    public void setFechaRelizacion(Date fechaRelizacion) {
-        this.fechaRelizacion = fechaRelizacion;
+    public void setFechaRealizacion(Date fechaRealizacion) {
+        this.fechaRealizacion = fechaRealizacion;
     }
 
     public String getNombre() {
@@ -113,53 +125,13 @@ public class Tratamiento implements Serializable {
         this.ruta = ruta;
     }
 
-    public boolean isC1() {
-        return c1;
-    }
-
-    public void setC1(boolean c1) {
-        this.c1 = c1;
-    }
-
-    public boolean isC2() {
-        return c2;
-    }
-
-    public void setC2(boolean c2) {
-        this.c2 = c2;
-    }
-
-    public boolean isC3() {
-        return c3;
-    }
-
-    public void setC3(boolean c3) {
-        this.c3 = c3;
-    }
-
-    public boolean isC4() {
-        return c4;
-    }
-
-    public void setC4(boolean c4) {
-        this.c4 = c4;
-    }
-
-    public boolean isC5() {
-        return c5;
-    }
-
-    public void setC5(boolean c5) {
-        this.c5 = c5;
-    }  
-        
     public String getProcedimiento() {
         return procedimiento;
     }
 
     public void setProcedimiento(String procedimiento) {
         this.procedimiento = procedimiento;
-    }   
+    }
 
     public Diente getDiente() {
         return diente;
@@ -167,7 +139,7 @@ public class Tratamiento implements Serializable {
 
     public void setDiente(Diente diente) {
         this.diente = diente;
-    }   
+    }
 
     public ConsultaOdontologica getConsultaOdontologica() {
         return consultaOdontologica;
@@ -177,18 +149,33 @@ public class Tratamiento implements Serializable {
         this.consultaOdontologica = consultaOdontologica;
     }
 
-    public Servicio getServicioDisponible() {
-        return servicioDisponible;
+    public Set<String> getCuadrante() {
+        return cuadrante;
     }
 
-    public void setServicioDisponible(Servicio servicioDisponible) {
-        this.servicioDisponible = servicioDisponible;
-    }    
-    
+    public void setCuadrante(Set<String> cuadrante) {
+        this.cuadrante = cuadrante;
+    }
+
+    public List<String> getCuandrantes() {        
+        if(!getCuadrante().isEmpty()){
+            return new ArrayList<String>(getCuadrante());
+        }else{
+            return null;
+        }        
+    }
+//    public Servicio getServicioDisponible() {
+//        return servicioDisponible;
+//    }
+//
+//    public void setServicioDisponible(Servicio servicioDisponible) {
+//        this.servicioDisponible = servicioDisponible;
+//    }    
+
     public boolean isPersistent() {
         return getId() != null;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -213,5 +200,5 @@ public class Tratamiento implements Serializable {
     public String toString() {
         return "edu.sgssalud.model.odontologia.Tratamiento[ id=" + id + " ]";
     }
-    
+
 }

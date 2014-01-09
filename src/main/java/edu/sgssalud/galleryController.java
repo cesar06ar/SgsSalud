@@ -18,7 +18,9 @@ package edu.sgssalud;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Named;
@@ -38,7 +40,8 @@ public class galleryController implements Serializable {
     private Date fecha;
     private Long enteroL;
     private boolean boleano;
-    
+    private Set<String> cuadrante = new HashSet<String>();
+
     @PostConstruct
     public void init() {
         images = new ArrayList<String>();
@@ -46,6 +49,12 @@ public class galleryController implements Serializable {
         for (int i = 0; i <= 1; i++) {
             images.add("img" + i + ".jpg");
         }
+
+        cuadrante.add("c1");
+        cuadrante.add("c2");
+        cuadrante.add("c3");
+        cuadrante.add("c4");
+        
     }
 
     public List<String> getImages() {
@@ -54,7 +63,7 @@ public class galleryController implements Serializable {
 
     public void setImages(List<String> images) {
         this.images = images;
-    }  
+    }
 
     public Integer getEntero() {
         return entero;
@@ -94,7 +103,7 @@ public class galleryController implements Serializable {
 
     public void setEnteroL(Long enteroL) {
         this.enteroL = enteroL;
-    } 
+    }
 
     public boolean isBoleano() {
         return boleano;
@@ -103,8 +112,20 @@ public class galleryController implements Serializable {
     public void setBoleano(boolean boleano) {
         this.boleano = boleano;
     }
-    
-    public void update(boolean ban){
+
+    public Set<String> getCuadrante() {
+        return cuadrante;
+    }
+
+    public void setCuadrante(Set<String> cuadrante) {
+        this.cuadrante = cuadrante;
+    }
+
+    public List<String> cuandrantes() {
+        return new ArrayList<String>(getCuadrante());
+    }
+
+    public void update(boolean ban) {
         setBoleano(ban);
         setEntero(1);
         setCadena("valor");

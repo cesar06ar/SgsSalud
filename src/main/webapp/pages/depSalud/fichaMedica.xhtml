@@ -19,7 +19,7 @@
             <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
         </f:metadata>
 
-        <ui:define name="header-replace" > <!--rendered="#{identity.loggedIn and account.renderView}"-->
+        <ui:define name="header-replace" > <!--rendered="# {identity.loggedIn and account.renderView}"-->
             <h:panelGroup  rendered="#{identity.loggedIn and account.renderView}">
                 <div class="header-replace">
                     <div class="container-header" >
@@ -301,7 +301,9 @@
                 <p:panel id="consultasM" header="#{'CONSULTAS MÉDICAS'}" toggleable="true"  toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('MEDICOS')}">                    
                     <div class="admin-actions">
-                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn success" >
+                        <h:link rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" 
+                                title="#{messages['common.add']} #{messages['consultaMedica.nombre']}">
+                            <p:graphicImage value="/resources/images/consultaMed.png" width="30" height="30"/>
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="fichaMedica"></f:param>
                         </h:link>                        

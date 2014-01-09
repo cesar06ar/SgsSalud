@@ -4,8 +4,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       template="/WEB-INF/view/templates/glue.xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:f="http://java.sun.com/jsf/core"      
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui"      
       xmlns:pe="http://primefaces.org/ui/extensions"
@@ -100,7 +99,7 @@
                                         <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
                                         <pe:inputNumber  id="pulso" value="#{consultaMedicaHome.instance.signosVitales.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
                                                          rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" 
-                                                         disabled="#{not empty consultaMedicaHome.instance.signosVitales.pulso}">   
+                                                         disabled="#{consultaMedicaHome.instance.signosVitales.pulso != 0}">   
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </p:panelGrid>                                                                                             

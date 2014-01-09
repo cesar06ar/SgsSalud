@@ -87,7 +87,7 @@ public class Authentication {
             log.info("Nombre usuario: " + credencials.getUsername());
             pacienteServic.setEntityManager(em);
             if (pacienteServic.getPacientePorIdentityKey(identity.getUser().getKey()) != null) {
-                String result = "/pages/homePaciente.xhtml";
+                String result = "/pages/home.xhtml";
                 navigation.handleNavigation(context, null, result + "?faces-redirect=true");
             } else {
                 String result = "/pages/home.xhtml";

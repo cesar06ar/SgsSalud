@@ -77,6 +77,11 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     private boolean panel1 = false;
     private boolean panel2 = false;
     private boolean panel3 = false;
+    private boolean c1 = false;
+    private boolean c2 = false;
+    private boolean c3 = false;
+    private boolean c4 = false;
+    private boolean c5 = false;
     private Diente diente11;
     private Diente diente12;
     private Diente diente13;
@@ -114,6 +119,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     private ConsultaOdontologica consultaOdont;
     private Servicio servicio;
     private Tratamiento tratamiento;
+    private List<Diente> listaDientes = new ArrayList<Diente>();
     private List<Servicio> listaServicios = new ArrayList<Servicio>();
     private List<Tratamiento> listaTratamient = new ArrayList<Tratamiento>();
 
@@ -152,6 +158,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
         if (!getInstance().isPersistent()) {
             getInstance().setDientes(crearDientes());
+            //getInstance().getDientes().size();
         }
 
         this.actualizarDientes(getInstance().getDientes());
@@ -185,18 +192,18 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
                 create(getInstance());
-                if (tipo == 0) {                    
+                if (tipo == 0) {
                     getInstance().setObservacion("Odontograma Inicial");
                     fichaOdont.setOdontogramaInicial(getInstance());
                 } else {
                     getInstance().setObservacion("Odontograma Evolutivo");
-                    fichaOdont.setOdontograma(getInstance());                    
-                }                
-                save(getInstance());                
+                    fichaOdont.setOdontograma(getInstance());
+                }
+                save(getInstance());
                 save(fichaOdont);
                 FacesMessage msg = new FacesMessage("Se creo nuevo Odontograma: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-                 salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+                salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
                         + "&fichaMedicaId=" + getFichaMedicaId()
                         + "&consultaOdontId=" + getConsultaOdontId()
                         + "&odontogramaId=" + getInstance().getId()
@@ -207,7 +214,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
-        return null;
+        return salida;
     }
 
     @Transactional
@@ -218,38 +225,27 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     @TransactionAttribute
     public void guardarTratamiento() {
-        log.info("valor diente: " + selectDient);
+        System.out.println("valor diente: ____________---"+nombreTratamiento);
         Date now = Calendar.getInstance().getTime();
-
-//        try {
-//          save(selectDient);                        
+                     
         //tratamiento.setServicioDisponible(servicio);
-        tratamiento.setFechaRelizacion(now);
-        tratamiento.setDiente(selectDient);
-        tratamiento.setConsultaOdontologica(consultaOdont);
-        tratamiento.setNombre(nombreTratamiento);
-        selectDient.agregarTratamiento(tratamiento);
-        if (getInstance().isPersistent()) {
-            getInstance().agregarDiente(selectDient);
-            create(selectDient);
-            create(tratamiento);
-        } else {
-            persistirOdontograma();
-            getInstance().agregarDiente(selectDient);
-            save(getInstance());
-            create(selectDient);
-            create(tratamiento);
-        }
-        save(selectDient);
-        save(tratamiento);
-        getListaTratamient().add(tratamiento);
-
-        this.actualizarDiente(selectDient);
-        log.info("guardo con exito ");
-//        } catch (Exception e) {
-//            log.info("Error guardar");
-//        }
-
+        tratamiento.setFechaRealizacion(now);
+        //tratamiento.setDiente(selectDient);        
+        tratamiento.setNombre(getNombreTratamiento());
+        this.agregarCuadrante(tratamiento);  //cuando los tratamientos se aplican a las partes del diente
+        //tratamiento.setConsultaOdontologica(consultaOdont);      
+        //falta agregar responsable
+        this.cargarDientesSeleccionados();
+        for (Diente diente : listaDientes) {
+            //tratamiento.setDiente(diente);
+            diente.agregarTratamiento(tratamiento);            
+            getListaTratamient().add(tratamiento);
+            this.actualizarDiente(diente);
+            save(tratamiento);
+        }              
+        save(consultaOdont);
+        System.out.println("guardo con exito ");
+        
         tratamiento = new Tratamiento();
         selectDient = new Diente();
     }
@@ -590,7 +586,8 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     }
 
     public List<Servicio> getListaServicios() {
-        return serviciosMedicosS.todosServicios("ODONTOLOGIA");
+        //return serviciosMedicosS.todosServicios("ODONTOLOGIA");
+        return null;
     }
 
     public void setListaServicios(List<Servicio> listaServicios) {
@@ -603,6 +600,14 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     public void setListaTratamient(List<Tratamiento> listaTratamient) {
         this.listaTratamient = listaTratamient;
+    }
+
+    public List<Diente> getListaDientes() {
+        return listaDientes;
+    }
+
+    public void setListaDientes(List<Diente> listaDientes) {
+        this.listaDientes = listaDientes;
     }
 
     public String getNombreOdont() {
@@ -654,6 +659,46 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         this.panel3 = panel3;
     }
 
+    public boolean isC1() {
+        return c1;
+    }
+
+    public void setC1(boolean c1) {
+        this.c1 = c1;
+    }
+
+    public boolean isC2() {
+        return c2;
+    }
+
+    public void setC2(boolean c2) {
+        this.c2 = c2;
+    }
+
+    public boolean isC3() {
+        return c3;
+    }
+
+    public void setC3(boolean c3) {
+        this.c3 = c3;
+    }
+
+    public boolean isC4() {
+        return c4;
+    }
+
+    public void setC4(boolean c4) {
+        this.c4 = c4;
+    }
+
+    public boolean isC5() {
+        return c5;
+    }
+
+    public void setC5(boolean c5) {
+        this.c5 = c5;
+    }
+
     public void actualizarDientes(List<Diente> dientes) {
         for (Diente d : dientes) {
             actualizarDiente(d);
@@ -668,38 +713,55 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         //log.info("actualizar diente: ");
         if (d.getPosicion() == 11) {
             setDiente11(d);
+            getDiente11().setId(d.getId());
         } else if (d.getPosicion() == 12) {
             setDiente12(d);
+            getDiente12().setId(d.getId());
         } else if (d.getPosicion() == 13) {
             setDiente13(d);
+            getDiente13().setId(d.getId());
         } else if (d.getPosicion() == 14) {
             setDiente14(d);
-        } else if (d.getPosicion() == 15) {
+            getDiente14().setId(d.getId());
+        } else if (d.getPosicion() == 15) {            
             setDiente15(d);
+            getDiente15().setId(d.getId());
         } else if (d.getPosicion() == 16) {
             setDiente16(d);
+            getDiente16().setId(d.getId());
         } else if (d.getPosicion() == 17) {
             setDiente17(d);
+            getDiente17().setId(d.getId());
         } else if (d.getPosicion() == 18) {
             setDiente18(d);
+            getDiente18().setId(d.getId());
         } else if (d.getPosicion() == 21) {
             setDiente21(d);
+            getDiente21().setId(d.getId());
         } else if (d.getPosicion() == 22) {
             setDiente22(d);
+            getDiente22().setId(d.getId());
         } else if (d.getPosicion() == 23) {
             setDiente23(d);
+            getDiente23().setId(d.getId());
         } else if (d.getPosicion() == 24) {
             setDiente24(d);
+            getDiente24().setId(d.getId());
         } else if (d.getPosicion() == 25) {
             setDiente25(d);
+            getDiente25().setId(d.getId());
         } else if (d.getPosicion() == 26) {
             setDiente26(d);
+            getDiente26().setId(d.getId());
         } else if (d.getPosicion() == 27) {
             setDiente27(d);
+            getDiente27().setId(d.getId());
         } else if (d.getPosicion() == 28) {
             setDiente28(d);
+            getDiente28().setId(d.getId());
         } else if (d.getPosicion() == 31) {
             setDiente31(d);
+            getDiente21().setId(d.getId());  ///continuar
         } else if (d.getPosicion() == 32) {
             setDiente32(d);
         } else if (d.getPosicion() == 33) {
@@ -763,10 +825,10 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         }
         return listaDientes;
     }
-    
-    public List<Tratamiento> getMostrarTratamientos(Diente d){
+
+    public List<Tratamiento> getMostrarTratamientos(Diente d) {
         return d.getTratamientos();
-    } 
+    }
 
     public String getNombreTratamiento() {
         return nombreTratamiento;
@@ -790,6 +852,95 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
             setPanel1(false);
             setPanel2(false);
             setPanel3(true);
+        }
+    }
+
+    public void agregarCuadrante(Tratamiento t) {
+        if (c1) {
+            t.getCuadrante().add("c1");
+        }
+        if (c2) {
+            t.getCuadrante().add("c2");
+        }
+        if (c3) {
+            t.getCuadrante().add("c3");
+        }
+        if (c4) {
+            t.getCuadrante().add("c4");
+        }
+        if (c5) {
+            t.getCuadrante().add("c5");
+        }
+
+        c1 = c2 = c3 = c4 = c5 = false;
+    }
+
+    public void cargarDientesSeleccionados() {
+        listaDientes = new ArrayList<Diente>();
+        if (diente11.isSelect()) {
+            listaDientes.add(diente11);
+        } else if (diente12.isSelect()) {
+            listaDientes.add(diente12);
+        } else if (diente13.isSelect()) {
+            listaDientes.add(diente13);
+        } else if (diente14.isSelect()) {
+            listaDientes.add(diente14);
+        } else if (diente15.isSelect()) {
+            listaDientes.add(diente15);
+        } else if (diente16.isSelect()) {
+            listaDientes.add(diente16);
+        } else if (diente17.isSelect()) {
+            listaDientes.add(diente17);
+        } else if (diente18.isSelect()) {
+            listaDientes.add(diente18);
+        } else if (diente21.isSelect()) {
+            listaDientes.add(diente21);
+        } else if (diente22.isSelect()) {
+            listaDientes.add(diente22);
+        } else if (diente23.isSelect()) {
+            listaDientes.add(diente23);
+        } else if (diente24.isSelect()) {
+            listaDientes.add(diente24);
+        } else if (diente25.isSelect()) {
+            listaDientes.add(diente25);
+        } else if (diente26.isSelect()) {
+            listaDientes.add(diente26);
+        } else if (diente27.isSelect()) {
+            listaDientes.add(diente27);
+        } else if (diente28.isSelect()) {
+            listaDientes.add(diente28);
+        } else if (diente31.isSelect()) {
+            listaDientes.add(diente31);
+        } else if (diente32.isSelect()) {
+            listaDientes.add(diente32);
+        } else if (diente33.isSelect()) {
+            listaDientes.add(diente33);
+        } else if (diente34.isSelect()) {
+            listaDientes.add(diente34);
+        } else if (diente35.isSelect()) {
+            listaDientes.add(diente35);
+        } else if (diente36.isSelect()) {
+            listaDientes.add(diente36);
+        } else if (diente37.isSelect()) {
+            listaDientes.add(diente37);
+        } else if (diente38.isSelect()) {
+            listaDientes.add(diente38);
+        }  else if (diente41.isSelect()) {
+            listaDientes.add(diente41);
+        } else if (diente42.isSelect()) {
+            listaDientes.add(diente42);
+        } else if (diente43.isSelect()) {
+            listaDientes.add(diente43);
+        } else if (diente44.isSelect()) {
+            listaDientes.add(diente44);
+        } else if (diente45.isSelect()) {
+            listaDientes.add(diente45);
+        } else if (diente46.isSelect()) {
+            listaDientes.add(diente46);
+        } else if (diente47.isSelect()) {
+            listaDientes.add(diente47);
+        } else if (diente48.isSelect()) {
+            listaDientes.add(diente48);
         }
     }
 }

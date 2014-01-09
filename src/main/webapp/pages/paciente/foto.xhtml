@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"            
+      xmlns:p="http://primefaces.org/ui"          
+      xmlns:glue="http://eqaula.org/jsf/facelets"      
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
+            <f:viewParam name="backView" value="#{pacienteHome.backView}" />
+        </f:metadata>
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h3>Agregar o Editar Foto de #{pacienteHome.instance.nombres} 
+                            #{pacienteHome.instance.apellidos} 
+                        </h3>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
+        <ui:define name="sidebar">
+            <p:panel  header="Panel de Administracion">
+                <h:link value="Datos de Paciente" rendered="#{true}" 
+                        outcome="/pages/paciente/view">
+                    <f:param name="pacienteId" value="#{pacienteHome.pacienteId}"/>
+                </h:link>
+                <br/>
+                <h:link value="Modificar Foto" rendered="#{true}" 
+                        outcome="/pages/paciente/foto">
+                    <f:param name="pacienteId" value="#{pacienteHome.pacienteId}"/>
+                </h:link>
+            </p:panel>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="form1" >   
+                <br/>
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+
+                <h:form id="formular1" enctype="multipart/form-data">  
+                    <p:fileUpload id="fileImg" mode="advanced" fileUploadListener="#{pacienteHome.subirImagen}" dragDropSupport="false"  
+                                  uploadLabel="Subir" cancelLabel="Cancelar" label="Elegir"  process="@parent" multiple="false" 
+                                  sizeLimit="512000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" >                                      
+                    </p:fileUpload>       
+                </h:form>
+                <div class="admin-actions ">
+                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary" >                    
+                    </p:commandButton>  
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/home.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                    </h:link>
+                </div>
+
+            </h:form>
+        </ui:define>             
+    </ui:composition>
+</html>
+

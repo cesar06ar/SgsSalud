@@ -71,9 +71,9 @@ public interface SecureViewConfig {
         @ViewPattern("/pages/labClinico/*")
         @Laboratorista        
         LABORATORISTA,
-        @ViewPattern("/pages/paciente/*")
+        @ViewPattern("/pages/paciente/*") //seguridad para mostrar vistas de pacientes
         @Paciente        
-        PACIENTE,
+        PACIENTE,             
         @ViewPattern("/pages/*")
         @AccessDeniedView("/pages/denied.xhtml")
         @LoginView("/pages/login.xhtml")

@@ -38,6 +38,7 @@ import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.UI;
+import edu.sgssalud.util.UtilRoot;
 import java.io.Serializable;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -442,19 +443,8 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         if (!lsgTemp.isEmpty() & !lsgTemp1.isEmpty()) {
             listaSignosVitales = new ArrayList<SignosVitales>();
             List<SignosVitales> listasg = new ArrayList<SignosVitales>();
-            lsgTemp.addAll(lsgTemp1);
-            System.out.println("Ingreso 1 ========= " );
-            //lsgTemp = new ArrayList<SignosVitales>();
-            for (SignosVitales sv : lsgTemp) {
-                //listaSignosVitales.add(sv);
-                if (!listasg.contains(sv)) {
-                    listasg.add(sv);
-                    System.out.println("Ingreso=========2 " +sv.getId());
-                } else {
-                    //listaSignosVitales.add(sv);
-                    System.out.println("Ingreso=========3 " +sv.getId());
-                }
-            }
+            //lsgTemp.addAll(lsgTemp1);    
+            listasg = UtilRoot.getFilter(lsgTemp, lsgTemp1);
             listaSignosVitales.addAll(listasg);
         } else if (!lsgTemp.isEmpty() & lsgTemp1.isEmpty()) {
             listaSignosVitales.addAll(lsgTemp);

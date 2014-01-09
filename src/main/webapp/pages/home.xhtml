@@ -83,15 +83,11 @@
                 <br/>
                 <p:panel header="Módulo de Administración del Sistema" toggleable="true" rendered="#{account.tienePermiso('ADMIN')}">
                     <h:link value="#{messages['module.BussinesEntity']}" rendered="true" 
-                            outcome="/pages/admin/bussinesentitytype/list">
-                        <f:param name="result"></f:param>
-                        <f:param name="typeName" value="edu.sgssalud.model.BussinesEntityType"></f:param>
+                            outcome="/pages/admin/bussinesentitytype/list">                        
                     </h:link>
                     <br />
                     <h:link value="#{messages['module.setting']}" rendered="#{true}" 
                             outcome="/pages/admin/setting/list">
-                        <f:param name="result"></f:param>
-                        <f:param name="typeName" value="edu.sgssalud.model.config.Setting"></f:param>
                     </h:link>
                     <br />
                     <h:link value="#{messages['servicioMedico.nombre']}" rendered="#{true}" 
@@ -101,9 +97,7 @@
                     <br />               
                     <p:panel header="Administrar Perfiles de Usuario" toggleable="true" >
                         <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
-                                outcome="/pages/admin/listProfile">
-                            <f:param name="result"></f:param>
-                            <f:param name="typeName" value="edu.sgssalud.model.profile.Profile"></f:param>
+                                outcome="/pages/admin/listProfile">                            
                         </h:link>
                         <br />
                         <h:link value="#{messages['security.group']}" rendered="#{true}" 

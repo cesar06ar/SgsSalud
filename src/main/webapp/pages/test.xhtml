@@ -6,7 +6,8 @@
       xmlns:p="http://primefaces.org/ui"          
       xmlns:glue="http://eqaula.org/jsf/facelets"      
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
 
         <ui:define name="header-replace">
@@ -327,14 +328,38 @@
                 <p:inputTextarea id="result" value="#{testWebService.result}"/>
                 <!--
                 <h:panelGroup id="pasw" layout="block" class="clearfix">
-                    <label for="clave">#{'contraseña'}</label>
+                    <label for="clave"># {'contraseña'}</label>
                     <div class="input" >
-                        <p:password id="dni" value="#{testWebService.clave}" styleClass="xLarge" required="false" label="#{'contraseña'}">                                                     
+                        <p:password id="dni" value="# {testWebService.clave}" styleClass="xLarge" required="false" label="#{'contraseña'}">                                                     
                             <f:ajax execute="@this" render="pasw"  />
                         </p:password>
                         <br/>                                                 
                     </div>
-                </h:panelGroup>     -->        
+                </h:panelGroup>     -->    
+                <br/>
+                <ui:param name="ban1" value="false"/>
+                <ui:param name="ban2" value="false"/>
+                <c:forEach items="#{galleryController.cuandrantes}" var="cc">                
+                    <c:choose>
+                        <c:when test="#{cc == 'c1'}" >                            
+                            <c:set var="ban1" value="#{true}"/>                            
+                            <h:outputText value="#{cc}"/>                            
+                        </c:when>
+                        <c:when test="${cc == 'c2'}" >                            
+                            <c:set var="ban2" value="#{true}"/>
+                            <h:outputText value="#{cc}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <h:outputText value="#{cc}"/>
+                        </c:otherwise>
+                    </c:choose>
+                </c:forEach>
+                <br/>
+                <h:outputText value="${ban1}"/><br/>
+                <h:outputText value="hola" rendered="${ban1}"/>
+                <p:selectBooleanCheckbox  value="${ban1}"/>
+                <p:selectBooleanCheckbox  value="${ban2}"/>
+                <p:graphicImage value="/resources/images/buscar.png" rendered="${ban1}"/>
             </h:form>
         </ui:define>             
     </ui:composition>
