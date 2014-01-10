@@ -105,7 +105,7 @@ public class JasperReportAction implements Serializable{
             Map<String, Object> parameters, String outputFileName) {
         
         String pathTemplate = buildRealPathFromReportFileName(sourceReportFile);
-        //LOGGER.log(Level.INFO, "----> pathTemplate {0}", pathTemplate);
+        LOGGER.log(Level.INFO, "----> pathTemplate {0}", pathTemplate);
         
         FacesContext context = FacesContext.getCurrentInstance();
 //        InputStream reportStream =

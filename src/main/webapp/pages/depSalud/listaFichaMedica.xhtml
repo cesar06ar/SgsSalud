@@ -45,7 +45,7 @@
             <!--Botones de admin-->
             <div class="admin-actions ">
                 <div>
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
+                    <h:link value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
                         <f:param name="fichaMedicaId"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
@@ -54,26 +54,20 @@
                             disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
                         <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
-                    </h:link>
-                    #{' '}
-                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/fichaMedica" styleClass="btn" 
-                            disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
-                        <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link>
+                    </h:link>                  
                 </div>
                 <div style="float: right; margin-top: -3%">
                     <p:inputText id="criterioBuscar" size ="25" value="#{fichaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                         <p:ajax event="keyup" update="tablaFichasMedicas"/>
                     </p:inputText>
                     &nbsp;
-                    <p:commandButton value="Buscar" action="#{fichaMedicaListaServicio.buscarPorParametro()}" update="tablaFichasMedicas" styleClass="btn info"/>                    
+                    <p:commandButton value="Buscar" action="#{fichaMedicaListaServicio.buscarFichaMedicaPorParametro()}" update="tablaFichasMedicas" styleClass="btn info"/>                    
                     <br/>
                 </div>             
             </div>
 
             <!--tabla de datos-->
-            <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"
+            <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio}"
                          paginator="true" rows="10" 
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
@@ -86,9 +80,9 @@
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica-->
                 <p:ajax event="rowSelect" listener="#{fichaMedicaListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:messages :form:button-abrirFM"/>                 
+                        update=":form:button-edit :form:messages "/>                 
                 <p:ajax event="rowUnselect" listener="#{fichaMedicaListaServicio.onRowUnselect}" 
-                        update=":form:button-edit :form:messages :form:button-abrirFM"/>
+                        update=":form:button-edit :form:messages"/>
 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{fichaMedica_.numeroFicha}" style="width: 15%; text-align: center;">

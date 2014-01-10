@@ -32,18 +32,18 @@
                             <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
                             <br/>                                
                         </p>
-                    </div>
-                    <div class="span4 columns offset3">
-                        <h:form id="control">
-                            <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
-                                             rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
-                                             update=":control :summary">
-                            </p:commandButton>                            
-                        </h:form>
-                    </div>
 
+                        <div class="span4 columns offset3">
+                            <h:form id="control">
+                                <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
+                                                 rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
+                                                 update=":control :summary">
+                                </p:commandButton>                            
+                            </h:form>
+                        </div>
+                    </div>
                 </div>
-            </div></div>             
+            </div>
         </ui:define>
         <ui:define name="content">             
 

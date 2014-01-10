@@ -236,14 +236,16 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         //tratamiento.setConsultaOdontologica(consultaOdont);      
         //falta agregar responsable
         this.cargarDientesSeleccionados();
+        System.out.println("bandera 1:__________________"); 
         for (Diente diente : listaDientes) {
             //tratamiento.setDiente(diente);
             diente.agregarTratamiento(tratamiento);            
             getListaTratamient().add(tratamiento);
             this.actualizarDiente(diente);
             save(tratamiento);
+            System.out.println("bandera 2:__________________"); 
         }              
-        save(consultaOdont);
+        //save(consultaOdont);
         System.out.println("guardo con exito ");
         
         tratamiento = new Tratamiento();
