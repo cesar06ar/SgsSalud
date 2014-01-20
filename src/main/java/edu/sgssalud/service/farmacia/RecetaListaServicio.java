@@ -121,7 +121,7 @@ public class RecetaListaServicio extends LazyDataModel<Medicamento>{
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));                       
+//        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));                       
     }   
     
 //   @Override

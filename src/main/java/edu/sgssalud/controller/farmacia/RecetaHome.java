@@ -357,7 +357,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         //prellenado estable para cualquier clase 
         Date now = Calendar.getInstance().getTime();
         Receta receta = new Receta();
-        receta.setFecha(now);
+        receta.setFechaEmision(now);
         receta.setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
         //receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
         return receta;
