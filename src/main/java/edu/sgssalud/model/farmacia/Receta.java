@@ -119,6 +119,14 @@ public class Receta implements Serializable {
         this.fechaEntrega = fechaEntrega;
     } 
 
+    public Date getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Date fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    } 
+
     public Paciente getPaciente() {
         return paciente;
     }

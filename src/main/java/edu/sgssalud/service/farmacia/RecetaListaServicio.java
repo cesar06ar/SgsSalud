@@ -124,8 +124,27 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));
-    }
+//        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));                       
+    }   
+    
+//   @Override
+//    public List<Receta> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+//        int end = first + pageSize;
+//
+//        QuerySortOrder order = QuerySortOrder.ASC;
+//        if (sortOrder == SortOrder.DESCENDING) {
+//            order = QuerySortOrder.DESC;
+//        }
+//        Map<String, Object> _filters = new HashMap<String, Object>();
+//        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+//         _filters.putAll(filters);*/
+//
+//        QueryData<Receta> qData = recetaServicio.find(first, end, sortField, order, _filters);
+//        this.setRowCount(qData.getTotalResultCount().intValue());
+//        this.setResultList(qData.getResult());        
+//        
+//        return qData.getResult();        
+//    }
 
     public List<String> getListaIndicaciones() {
         return listaIndicaciones;
