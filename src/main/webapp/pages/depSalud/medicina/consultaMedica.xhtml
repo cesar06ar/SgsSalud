@@ -266,7 +266,7 @@
                         <br/><br/>                        
                         <p:dataTable id="tablaRecetas" value="#{consultaMedicaHome.instance.recetas}" var="recetaM_" >
                             <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%">
-                                <p:outputLabel value="#{recetaM_.fecha}">
+                                <p:outputLabel value="#{recetaM_.fechaEmision}">
                                     <f:convertDateTime pattern="dd-MMM-yyyy"/>
                                 </p:outputLabel>
                             </p:column>                             

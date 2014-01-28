@@ -47,10 +47,10 @@
                                 <h:panelGroup layout="block" class="clearfix" >
                                     <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
                                     <div class="input">
-                                        <p:calendar id="fafm" value="#{recetaHome.instance.fecha}"  label="#{messages['fechaReceta.fechaEmision']}"
+                                        <p:calendar id="fafm" value="#{recetaHome.instance.fechaEmision}"  label="#{messages['fechaReceta.fechaEmision']}"
                                                     disabled="true" pattern="dd-MMM-yyyy">
                                         </p:calendar>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.instance.fecha != null}"
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.instance.fechaEmision != null}"
                                                         styleClass="validation-status" />
                                     </div>
                                 </h:panelGroup>
