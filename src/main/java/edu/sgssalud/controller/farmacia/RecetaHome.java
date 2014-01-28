@@ -315,16 +315,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         Date now = Calendar.getInstance().getTime();
         String salida = "/pages/depSalud" + getBackView() + "?faces-redirect=true";
         try {
-            if (getInstance().isPersistent()) {
-                //getInstance().setMedicaciones(listaMedicamentosReceta);            
-//                recetaMedicamento = new Receta_Medicamento();
-//                for (Receta_Medicamento rec_med: this.listaRecetaMed) {
-//                    recetaMedicamento = new Receta_Medicamento();
-//                    recetaMedicamento.setMedicamento(m);
-//                    recetaMedicamento.setCantidad(m.getUnidades());
-//                    getInstance().agregarRecetaMedicamento(recetaMedicamento);
-//                    //create(recetaMedicamento);
-//                }
+            if (getInstance().isPersistent()) {                
                 save(getInstance());
                 for (Medicamento m : listaMedicamentosStock) {
                     for (Receta_Medicamento rm : getInstance().getListaRecetaMedicamento()) {
@@ -347,19 +338,16 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     getInstance().setMedicaciones(Lists.listToString(listaMedicaciones));
                     //getInstance().setResponsableEmision();
                     for (Receta_Medicamento recetaMed : listaRecetaMed) {
-                        int cantidad = recetaMed.getMedicamento().getUnidades() - recetaMed.getCantidad();
-                        System.out.println("Cantidad______" + cantidad);
+                        int cantidad = recetaMed.getMedicamento().getUnidades() - recetaMed.getCantidad();                        
                         Medicamento medicament = recetaMed.getMedicamento();
                         medicament.setUnidades(cantidad);
-                        save(medicament);
-                        System.out.println("Actualiza Medicamento______" + medicament.toString());
+                        save(medicament);                        
                     }
-                    getInstance().setListaRecetaMedicamento(listaRecetaMed);
-                    System.out.println("ANTES de Guardar RECETA _____" + listaRecetaMed.toString());
+                    getInstance().setListaRecetaMedicamento(listaRecetaMed);                    
                     create(getInstance());
                     getInstance().setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
                     save(getInstance());
-                    System.out.println("Guardo RECETA con_____" + getInstance().toString());
+                    System.out.println("Guardo RECETA CON EXITO_____" + getInstance().toString());
                     FacesMessage msg = new FacesMessage("Se envió la receta: " + getInstance().getId() + " con éxito");
                     FacesContext.getCurrentInstance().addMessage("", msg);
                     salida += "consultaMedicaId= " + getConsultaMedicaId()
@@ -396,14 +384,13 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
             Receta_Medicamento recetaMed = new Receta_Medicamento();
             recetaMed.setCantidad(unidadesMedicacion);
             if (medicamentoSeleccionado.isPersistent()) {  //controla si esa receta tiene o no medicamentos de farmacia                
-                System.out.println("MEdicameto _ " + medicamentoSeleccionado.toString());
+                //System.out.println("MEdicameto _ " + medicamentoSeleccionado.toString());
                 //if (this.noContieneMedicamento(medicamentoSeleccionado)) {                    
                 if (!this.contieneMedicamento(nombreMedic)) {
-                    recetaMed.setMedicamento(medicamentoSeleccionado);
-                    System.out.println("RECETA Medicameto ___" + recetaMed.toString());
+                    recetaMed.setMedicamento(medicamentoSeleccionado);                    
                     String med = nombreMedic + " # " + this.getUnidadesMedicacion() + " \n ";
                     this.getListaRecetaMed().add(recetaMed);
-                    System.out.println("RECETA Medicameto ___" + getListaRecetaMed().toString());
+                    
                     this.getListaMedicaciones().add(med);
                     this.getListaIndicaciones().add(indicacion + " \n ");
                     System.out.println(med);
