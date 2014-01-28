@@ -339,7 +339,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
             } else {
                 if (consultaMedica.isPersistent() && paciente.isPersistent()) {  //falta consulta Odontologica
                     //getInstance().setMedicaciones(listaMedicamentosReceta);                
-                    getInstance().setFecha(now);
+                    getInstance().setFechaEmision(now);
                     getInstance().setEstado("Emitida");
                     getInstance().setConsultaMedica(consultaMedica);
                     getInstance().setPaciente(paciente);

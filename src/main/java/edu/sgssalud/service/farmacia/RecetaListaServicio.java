@@ -23,7 +23,9 @@ import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -219,17 +221,18 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     }
     
     public void entregarReceta(){
+        
         System.out.println("Actualizado correctamente :________________ ");
+        Date now = Calendar.getInstance().getTime();
         this.recetaSeleccionada.setEstado("Entregada");
-        System.out.println("Actualizado correctamente :________________ 1");
+        this.recetaSeleccionada.setFechaEntrega(now);
         this.recetaSeleccionada.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));        
-        System.out.println("Actualizado correctamente :________________ 3"+recetaSeleccionada.toString());
+        
         if (recetaSeleccionada.isPersistent()) {
         //    em.getTransaction().begin();
             em.merge(recetaSeleccionada);
           //  em.getTransaction().commit();
-        }
-        System.out.println("Actualizado correctamente :________________ 4");
+        }        
         FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado" , "");
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
