@@ -63,7 +63,9 @@ public class Receta implements Serializable {
     //private static Logger log = Logger.getLogger(Receta.class);
     private static final long serialVersionUID = 3L;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fecha;
+    private Date fechaEmision;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaEntrega;
     private String estado;  //el estado puede ser emitido y entregado 
 
     @ManyToOne
@@ -101,13 +103,21 @@ public class Receta implements Serializable {
         this.id = id;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaEmision() {
+        return fechaEmision;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
+
+    public Date getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Date fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    } 
 
     public Paciente getPaciente() {
         return paciente;

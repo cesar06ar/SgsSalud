@@ -70,7 +70,7 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta> query = builder.createQuery(Receta.class);
         Root<Receta> bussinesEntityType = query.from(Receta.class);
-        query.where(builder.equal(bussinesEntityType.get(Receta_.fecha), fecha));
+        query.where(builder.equal(bussinesEntityType.get(Receta_.fechaEmision), fecha));
         return getSingleResult(query);
 
     }

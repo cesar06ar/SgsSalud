@@ -223,7 +223,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
     public List<Paciente> BuscarPacientePorParametro(String parametro) {
         TypedQuery<Paciente> query = null;
         query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
-        query.setParameter("clave", parametro);
+        query.setParameter("clave", parametro);     
         return query.getResultList();
     }
 
@@ -232,10 +232,17 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         if (Dates.getFormatoFecha(parametro) != null) {
             query = em.createNamedQuery("Paciente.buscarPorFechaNacimiento", Paciente.class);
             query.setParameter("clave", Dates.getFormatoFecha(parametro));
-        } else {
+        } else if (StringValidations.isDecimal(parametro)) {
+            query = em.createNamedQuery("Paciente.buscarPorEdad", Paciente.class);
+            query.setParameter("clave", Integer.parseInt(parametro));                
+        } else { 
             query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
             query.setParameter("clave", parametro);
         }
         return query.getResultList();
+        
+        
     }
+    
+    
 }

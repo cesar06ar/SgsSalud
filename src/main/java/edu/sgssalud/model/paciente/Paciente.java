@@ -70,7 +70,7 @@ import org.jboss.solder.logging.Logger;
             + " LOWER(p.email) like lower(concat('%',:clave,'%')) OR"
             + " LOWER(p.genero) like lower(concat('%',:clave,'%')) OR"
             + " LOWER(p.nacionalidad) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.direccion) like lower(concat('%',:clave,'%'))"
+            + " LOWER(p.direccion) like lower(concat('%',:clave,'%'))"            
             + " ORDER BY p.apellidos"),
     @NamedQuery(name = "Paciente.buscarPorCedula",
             query = "select p from Paciente p where"
