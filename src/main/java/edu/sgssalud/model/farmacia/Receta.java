@@ -109,15 +109,7 @@ public class Receta implements Serializable {
 
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
-    }
-
-    public Date getFechaEntrega() {
-        return fechaEntrega;
-    }
-
-    public void setFechaEntrega(Date fechaEntrega) {
-        this.fechaEntrega = fechaEntrega;
-    }      
+    }     
 
     public Date getFechaEntrega() {
         return fechaEntrega;
