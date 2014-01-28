@@ -115,14 +115,14 @@
                         <f:facet name="header">  
                             <h:outputText value="#{messages['receta.responsableEmision']}" />  
                         </f:facet>                         
-                        <h:outputText value="#{receta_.responsableEmision}" />                            
+                        <h:outputText value="#{receta_.responsableEmision.fullName}" />                            
                     </p:column>
 
                     <p:column sortBy="#{receta_.responsableEntrega}" style="text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['receta.responsableEntrega']}" />  
                         </f:facet> 
-                        <h:outputText value="#{receta_.responsableEntrega}" />
+                        <h:outputText value="#{receta_.responsableEntrega.fullName}" />                        
                     </p:column>
                     <p:column sortBy="#{receta_.estado}" style="text-align: center;">
                         <f:facet name="header">  
