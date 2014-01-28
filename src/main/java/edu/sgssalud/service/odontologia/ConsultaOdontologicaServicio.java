@@ -19,6 +19,7 @@ package edu.sgssalud.service.odontologia;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.medicina.SignosVitales_;
 import edu.sgssalud.model.odontologia.*;
+import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
@@ -27,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -96,6 +98,19 @@ public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdonto
         Root<SignosVitales> entity = query.from(SignosVitales.class);
         query.where(builder.equal(entity.get(SignosVitales_.id), consultaMed.getSignosVitales().getId()));
         return getSingleResult(query);
+    }
+    
+    public List<Tratamiento> getTratamientosPorConsulta(Long consultaOdontId, Long odontId){
+//        CriteriaBuilder builder = getCriteriaBuilder();
+//        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);
+//        Root<Tratamiento> entity = query.from(Tratamiento.class);
+//        query.where(builder.equal(entity.get(Tratamiento_.consultaOdontologica), consultaOdont));
+//        return getResultList(query);
+        TypedQuery<Tratamiento> query = null;
+        query = em.createNamedQuery("Tratamiento.buscarPorOdontogramaYConsulta", Tratamiento.class);
+        query.setParameter("odontogramaId", odontId);
+        //query.setParameter("consultaOdontId", consultaOdontId);
+        return query.getResultList();
     }
 
 }

@@ -34,7 +34,7 @@ import javax.persistence.Table;
 public class Receta_Medicamento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     private int cantidad;
@@ -99,7 +99,11 @@ public class Receta_Medicamento implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.farmacia.Receta_Medicamento[ id=" + id + " ]";
+        return "edu.sgssalud.model.farmacia.Receta_Medicamento[" 
+                + " id = " + id 
+                + " cantidad = " + cantidad 
+                + " medicamento_id = " + medicamento.getId()
+                + " ]";
     }
     
 }

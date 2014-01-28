@@ -141,6 +141,7 @@
    <url-mapping id="receta">
       <pattern value="/farmacia/receta"></pattern>
       <view-id value="/pages/farmacia/receta/receta.xhtml"></view-id>       
+      <action>#{account.loadPages}</action>
    </url-mapping>
    <url-mapping id="RecetaLista">
       <pattern value="/listaReceta"></pattern>

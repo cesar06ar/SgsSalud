@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"      
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="recetaId" value="#{recetaHome.recetaId}" />
+            <f:viewParam name="pacienteId" value="#{recetaHome.pacienteId}" />
+            <f:viewParam name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}" />
+            <f:viewParam name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />            
+            <f:viewParam name="backView" value="#{recetaHome.backView}" />
+        </f:metadata>
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{recetaHome.recetaId == null? 'Nueva Receta para:': 'Editar Receta para:'}
+                            #{recetaHome.paciente.nombres}</h2>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+
+        <ui:define name="content" >
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" life="6000" />
+                <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                    <div class="container-fluid">
+                        <div class="row-fluid">
+                            <div class="span7">
+                                <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{recetaHome.fichaMedica.numeroFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{recetaHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{recetaHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+
+                            </div>
+                            <div class="span7" align="left">
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
+                                    <div class="input">
+                                        <p:calendar id="fafm" value="#{recetaHome.instance.fecha}"  label="#{messages['fechaReceta.fechaEmision']}"
+                                                    disabled="true" pattern="dd-MMM-yyyy">
+                                        </p:calendar>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.instance.fecha != null}"
+                                                        styleClass="validation-status" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <p:panel id="panelPrescripcion" header="Ingreso de datos" >
+                    <div class="container-fluid">
+                        <div class="row-fluid">
+                            <div class="span7" style="margin-right: 3%; margin-left: 10px;">
+                                <!--Datos de Medicación-->   
+                                <h:panelGroup layout="block">
+                                    <label for="medicamentoDisponible" style="width: 35px; margin-top: -5px">#{messages['medicamento.nombre']}*</label>
+                                    <div class="input" style="margin-left: 100px;">
+                                        <p:inputText  id="medicamentoDisponible" required="false" value="#{recetaHome.nombreMedic}"
+                                                      rendered="true" style="width: 250px;">                                            
+                                            <p:ajax event="blur" update="@this" rendered="save"/>
+                                        </p:inputText>
+                                        <!--<h:graphicImage value="# {resource['success.gif']}" rendered="# {recetaHome.unidadesMedicacion != null}"
+                                                        styleClass="validation-status" />-->
+                                    </div>
+                                    <div id="btnBuscarMed" style="margin: -30px -5px 0 170px;"> 
+                                        <p:commandLink id="cargarMedicamento" styleClass="btn" title="Buscar Medicamento Disponible" actionListener="#{recetaHome.reiniciar()}"
+                                                       style="margin-left: 195px; height: 17px" ajax="true"> 
+                                            <p:graphicImage value="/resources/images/medicamento.png" width="25" height="20"/>                                            
+                                            <p:ajax process="@this" update=":form:medicamentoDisponible :form:Indicacion save" rendered="save"/>
+                                        </p:commandLink>                                           
+                                    </div>
+                                    <p:overlayPanel id="medPanel" for="cargarMedicamento" hideEffect="fade" dynamic="false" widgetVar="dialogMedicamet" style="margin-left: -20%;">
+                                        <p:dataTable id="tablaMedicamentos" var="medicamento_" value="#{recetaHome.listaMedicamentosStock}" emptyMessage="No hay medicamentos cargados"
+                                                     paginator="true" rows="10" rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single">
+
+                                            <p:ajax event="rowSelect" listener="#{recetaHome.onRowSelect}"   
+                                                    update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos" oncomplete="dialogMedicamet.hide();" />  
+                                            <p:ajax event="rowUnselect" listener="#{recetaHome.onRowUnselect}" update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos"/>
+
+                                            <p:column headerText="Nombre Comercial" style="width:6px; font-size:12px">  
+                                                <h:outputText value="#{medicamento_.nombreComercial}" />  
+                                            </p:column>
+
+                                            <p:column headerText="Nombre Genérico" style="width:6px; font-size:12px">  
+                                                <h:outputText value="#{medicamento_.nombreGenerico}" />  
+                                            </p:column>
+
+                                            <p:column headerText="Cantidad" style="width:6px; font-size:12px">  
+                                                <h:outputText value="#{medicamento_.unidades}" />  
+                                            </p:column>
+                                            <p:column headerText="ALERTAS" style="width: 15%; text-align: center; font-size:11px">                            
+                                                <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/>
+                                            </p:column>
+
+                                        </p:dataTable>                                       
+                                    </p:overlayPanel>                                    
+                                </h:panelGroup>
+                                <br/>
+                                <h:panelGroup layout="block" >
+                                    <label for="unidadesMedicacion" style="width: 35px; margin-left: -1px;">#{messages['receta.unidadesMedicacion']}*</label>
+                                    <div class="input" style="margin-left: 100px;">
+                                        <pe:inputNumber  id="unidadesMedicacion" style="width: 70px;" required="false" value="#{recetaHome.unidadesMedicacion}"
+                                                         rendered="true" decimalPlaces="0" >
+                                            <p:ajax event="blur" process="@this"/>
+                                        </pe:inputNumber>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.unidadesMedicacion != null}"
+                                                        styleClass="validation-status" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                            <div class="span7">
+                                <h:panelGroup layout="block" >
+                                    <label for="Indicacion" style="width: 40px; margin: -5px 0 0 10px;">#{messages['receta.indicaciones']}*</label>
+                                    <br/>
+                                    <div class="input" style="margin: 10px 0 0 10px; ">
+                                        <h:inputTextarea  id="Indicacion" style="width: 95%; height: 90px;" required="false" value="#{recetaHome.indicacion}"
+                                                          rendered="true" styleClass="xLarge">
+                                            <p:ajax event="blur" process="@this" rendered="save"  />
+                                        </h:inputTextarea>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.indicacion != null}"
+                                                        styleClass="validation-status" />
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <div class="admin-actions">
+                    <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}" 
+                                     styleClass="btn primary" update="@form" style="margin-left: 25%">
+                        <p:ajax process="@this" update=":form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId"/>
+                    </p:commandButton>
+                    &nbsp;
+                    <p:commandButton id="clear" action="#{recetaHome.reiniciar()}" value="Limpiar" 
+                                     styleClass="btn primary" >
+                        <p:ajax process="@this" update=":form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
+                                rendered=":form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId"/>
+                    </p:commandButton>
+                </div>
+                <p:panel id="recetasId" header="Receta">
+                    <div class="container-fluid">
+                        <div class="row-fluid">
+                            <div class="span7" style="margin-right: 3%;">
+                                <p:panel header="Medicación" >
+                                    <c:forEach items="#{recetaHome.listaMedicaciones}" var="indi">
+                                        <h:outputText value="#{indi}" styleClass="span7" escape="false" />
+                                        <br/>
+                                        <br/>
+                                    </c:forEach>
+                                </p:panel>                                 
+                            </div>
+                            <div class="span7" >
+                                <p:panel header="Indicaciones">
+                                    <c:forEach items="#{recetaHome.listaIndicaciones}" var="indi">
+                                        <h:outputText value="#{indi}" styleClass="span7" escape="false" />   
+                                        <br/><br/>
+                                    </c:forEach>
+                                </p:panel>                                
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <div class="admin-actions">
+                    <p:commandButton id="enviar" action="#{recetaHome.guardarReceta()}" value="#{messages['common.submit']}" 
+                                     update=":form:messages" styleClass="btn primary" style="margin-left: 32%"/>
+                    &nbsp;
+                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true"
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >
+                        <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
+                    </h:link>
+                </div>
+            </h:form>            
+        </ui:define>
+    </ui:composition>
+</html>
+

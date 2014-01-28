@@ -52,7 +52,7 @@ public class BussinesEntityAttribute implements Serializable, Comparable<Bussine
 
     private static final long serialVersionUID = 7807041724651919898L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne(cascade = CascadeType.ALL)
     private BussinesEntity bussinesEntity;

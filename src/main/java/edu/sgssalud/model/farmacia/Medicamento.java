@@ -80,7 +80,7 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     @Transient
     private String alerta;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicamento", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicamento", fetch = FetchType.LAZY)
     private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
 
     public Medicamento() {

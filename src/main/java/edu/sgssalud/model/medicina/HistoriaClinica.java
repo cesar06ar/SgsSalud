@@ -62,8 +62,8 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "enfCIE10_HC", joinColumns = {
-        @JoinColumn(name = "enfermedadCIE10_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "historiaClin_id", referencedColumnName = "id")})
+        @JoinColumn(name = "historiaClin_id", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "enfermedadCIE10_id", referencedColumnName = "id")})
     private List<EnfermedadCIE10> enfermedadesCIE10 = new ArrayList<EnfermedadCIE10>();
 
     public FichaMedica getFichaMedica() {

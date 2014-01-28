@@ -100,21 +100,21 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
     
     @Override
     public Object getRowKey(FichaMedica entity) {
-        return entity.getPaciente().getNombres();
+        return entity.getId();
     }
-//
-//    @Override
-//    public FichaMedica getRowData(Long id) {
-//        return fms.getFichaMedicaPorId(id);
-//    }
+
+    @Override
+    public FichaMedica getRowData(String rowKey) {
+        return fms.getFichaMedicaPorId(Long.parseLong(rowKey));
+    }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.selected"), ((FichaMedica) event.getObject()).getPaciente().getNombres());
+        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.selected"), ((FichaMedica) event.getObject()).getNumeroFicha().toString());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.unselected"), ((FichaMedica) event.getObject()).getPaciente().getNombres());
+        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.unselected"), ((FichaMedica) event.getObject()).getNumeroFicha().toString());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setFichaMedicSeleccionada(null);
     }

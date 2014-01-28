@@ -45,7 +45,7 @@
             <!--Botones de admin-->
             <div class="admin-actions ">
                 <div>
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
+                    <h:link value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
                         <f:param name="fichaMedicaId"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
@@ -69,7 +69,7 @@
             </div>
 
             <!--tabla de datos-->
-            <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"
+            <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio}"
                          paginator="true" rows="10" 
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "

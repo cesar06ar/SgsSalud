@@ -35,8 +35,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.jboss.solder.logging.Logger;
 
@@ -45,12 +48,19 @@ import org.jboss.solder.logging.Logger;
  * @author tania
  */
 @Entity
+@Table(name = "Receta")
+@NamedQueries(value = {
+    @NamedQuery(name = "Receta.buscarPorId",
+            query = "select r FROM Receta r "
+            + " WHERE r.id = :recetaId"            
+            + " ORDER BY r.id")
+    })
 public class Receta implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private static Logger log = Logger.getLogger(Receta.class);
+    //private static Logger log = Logger.getLogger(Receta.class);
     private static final long serialVersionUID = 3L;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEmision;
@@ -64,11 +74,14 @@ public class Receta implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receta", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
-
+    
+    private String medicaciones;
     private String indicaciones;
+    
     @ManyToOne(optional = true)
     @JoinColumn(name = "responsableEmision_id")
     private Profile responsableEmision;
+    
     @ManyToOne
     @JoinColumn(name = "responsableEntrega_id")
     private Profile ResponsableEntrega;
@@ -96,7 +109,7 @@ public class Receta implements Serializable {
 
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
-    }
+    }     
 
     public Date getFechaEntrega() {
         return fechaEntrega;
@@ -114,6 +127,14 @@ public class Receta implements Serializable {
         this.paciente = paciente;
     }
 
+    public String getMedicaciones() {
+        return medicaciones;
+    }
+
+    public void setMedicaciones(String medicaciones) {
+        this.medicaciones = medicaciones;
+    } 
+        
     public String getIndicaciones() {
         return indicaciones;
     }
@@ -179,14 +200,6 @@ public class Receta implements Serializable {
             listaRecetaMedicamento.add(rm);
         }
     }
-    
-//    public void agregarMedicamento(Medicamento med) {
-//        for(Receta_Medicamento rm : listaRecetaMedicamento){
-//            if(!rm.getMedicamento().equals(med)){
-//                
-//            }
-//        }
-//    }
 
     public List<Medicamento> getMedicamentos() {
         List<Medicamento> medicamentos = new ArrayList<Medicamento>();
@@ -209,19 +222,19 @@ public class Receta implements Serializable {
 
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Receta)) {
-            return false;
-        }
-        Receta other = (Receta) obj;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
+//        if (!(obj instanceof Receta)) {
+//            return false;
+//        }
+//        Receta other = (Receta) obj;
+//        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+//            return false;
+//        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.Property[ "
+        return "edu.sgssalud.model.farmacia.Receta[ "
                 + "id=" + id + ","
                 + "indicaciones=" + indicaciones + ","
                 + " ]";

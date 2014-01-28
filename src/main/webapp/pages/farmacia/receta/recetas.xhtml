@@ -72,7 +72,7 @@
                                         <p:selectOneMenu id="medic" value="#{recetaHome.medicamentoSeleccionado}" panelStyle="width:150px" converter="#{omnifaces.SelectItemsConverter}" required="false"
                                                          effect="fade" var="m" style="width:200px"  filter="true" filterMatchMode="contains" >
                                             <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
-                                            <f:selectItems value="#{recetaHome.listaMedicamentosStock}" var="medicamento" itemLabel="#{medicamento.nombreComercial} ( #{medicamento.unidades} uds.)" itemValue="#{medicamento}"
+                                            <f:selectItems value="#{recetaHome.listaMedicamentosStock}" var="medicament_" itemLabel="#{medicament_.nombreComercial} ( #{medicament_.unidades} uds.)" itemValue="#{medicament_}"
                                                            rendered="true"/>
                                             <p:column>
                                                 #{m.unidades}
@@ -81,7 +81,7 @@
                                                 #{m.nombreComercial}
                                             </p:column>
                                             <f:converter converterId="convertidorDeMedicamento"/>
-                                            <p:ajax event="change" update="@parent, :form:present :form:unidadesDosis1" partialSubmit="true" rendered=":form:present" />
+                                            <p:ajax event="change" update="@this, :form:present :form:unidadesDosis1" partialSubmit="true" rendered=":form:present" />
                                         </p:selectOneMenu>
                                     </div>
                                 </h:panelGroup>
