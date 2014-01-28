@@ -12,10 +12,11 @@
       xmlns:glue="http://eqaula.org/jsf/facelets"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
-    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+    <ui:composition  template="/WEB-INF/view/templates/profile-active.xhtml">
         <f:metadata>            
             <f:viewParam name="id" value="#{profileHome.profileId}" />                        
-            <!--<s:viewAction action="# {profileHome.load}" if="# {conversation.transient}"/> -->
+            <f:viewParam name="structureName" value="#{profileHome.structureName}" />  
+            <!--<s:viewAction action="# {profileHome.load}" if="# {conversation.transient}"/>-->
         </f:metadata>
 
         <ui:define name="header-replace">
@@ -27,20 +28,11 @@
                             <f:param name="profileId" value="#{profileHome.instance.id}"/>
                         </h:link>                        
                         <h2>#{messages['common.edit']} #{profileHome.instance.fullName}</h2>
-                        <br/>
+                        
                         <p><span style="">#{profileHome.instance.code}</span>
                             <span><h:outputText id="email" value="#{profileHome.instance.email}" rendered="#{!profileHome.instance.emailSecret}"/></span>
                             <br/>                                
                         </p>
-
-                        <div class="span4 columns offset3">
-                            <h:form id="control">
-                                <p:commandButton value="#{messages['common.editionEnabled']}"  actionListener="#{profileHome.commuteEdition()}" 
-                                                 rendered="#{not profileHome.editionEnabled}" styleClass="btn primary"
-                                                 update=":control :summary">
-                                </p:commandButton>                            
-                            </h:form>
-                        </div>
                     </div>
                 </div>
             </div>

@@ -36,11 +36,11 @@ import javax.persistence.criteria.Root;
  *
  * @author tania
  */
-public class RecetaServicio extends PersistenceUtil<Receta> implements Serializable{
-    
+public class RecetaServicio extends PersistenceUtil<Receta> implements Serializable {
+
     private static final long serialVersionUID = 11L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
-    
+
     public RecetaServicio() {
         super(Receta.class);
     }
@@ -49,7 +49,7 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
+
     public Receta buscarRecetaPorId(final Long id) {
         return (Receta) findById(Receta.class, id);
     }
@@ -65,26 +65,25 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         query.where(builder.equal(bussinesEntityType.get(Receta_.paciente), paciente));
         return getSingleResult(query);
     }
-    
-    
-    public Receta buscarRecetaPorFecha (final Date fecha) throws NoResultException {
+
+    public Receta buscarRecetaPorFecha(final Date fecha) throws NoResultException {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta> query = builder.createQuery(Receta.class);
         Root<Receta> bussinesEntityType = query.from(Receta.class);
         query.where(builder.equal(bussinesEntityType.get(Receta_.fecha), fecha));
         return getSingleResult(query);
-        
-    } 
-    
-    public List<Receta> buscarRecetaPorConsultaMedica(final ConsultaMedica consulMedica ) throws NoResultException {
+
+    }
+
+    public List<Receta> buscarRecetaPorConsultaMedica(final ConsultaMedica consulMedica) throws NoResultException {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta> query = builder.createQuery(Receta.class);
         Root<Receta> bussinesEntityType = query.from(Receta.class);
         query.where(builder.equal(bussinesEntityType.get(Receta_.consultaMedica), consulMedica));
         return getResultList(query);
-        
-    } 
-    
+
+    }
+
     public List<Receta> buscarTodos() {
         try {
             return findAll(Receta.class);
@@ -102,7 +101,7 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         } else {
             query = em.createNamedQuery("Receta.buscarPorPaciente", Receta.class);
             query.setParameter("clave", parametro);
-        } 
+        }
 //        else if{
 //            query = em.createNamedQuery("Receta.buscarPorConsulta", Receta.class);
 //            query.setParameter("clave",parametro);
@@ -110,7 +109,14 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
 //        }
         return query.getResultList();
     }
-    
 
-    
+    public void guardarReceta(Receta r) {
+        if (r.isPersistent()) {
+            getEntityManager().getTransaction().begin();
+            getEntityManager().merge(r);
+            getEntityManager().getTransaction().commit();
+        }
+        System.out.println("Actualizado correctamente:________________");
+    }
+
 }

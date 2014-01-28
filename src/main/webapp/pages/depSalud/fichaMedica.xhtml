@@ -46,36 +46,36 @@
                     <h:panelGroup >
                         <h:inputText id="buscar" value="#{fichaMedicaHome.parametroBusqueda}" styleClass="span5" required="true" label="" >                                                                                
                             <p:ajax process="@this" update=":form" listener="#{fichaMedicaHome.buscarPorParametro()}"/>   
-                        </h:inputText> 
-                        <p:overlayPanel id="carPanel" for="cargarPaciente" hideEffect="fade" dynamic="true">
-                            <p:dataTable id="tablaPacient" value="#{fichaMedicaHome.listaPacietes}" var="paciente_">
-                                <p:column headerText="#{messages['profile.dni']}">
-                                    <h:outputText value="#{paciente_.cedula}" />
-                                </p:column >
-                                <p:column headerText="#{messages['common.surname']}">
-                                    <h:outputText value="#{paciente_.apellidos}" />
-                                </p:column >
-                                <p:column headerText="#{messages['common.firstname']}">
-                                    <h:outputText value="#{paciente_.nombres}" />
-                                </p:column >                                
-                                <p:column headerText="#{messages['common.edad']}">
-                                    <h:outputText value="#{paciente_.edad}" />
-                                </p:column >
-                                <p:column headerText="Opcion">
-                                    <h:link id="cargarPaciente" outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
-                                            title="cargar"  styleClass="btn primary" value="cargar">                                        
-                                        <f:param name="pacienteId" value="#{paciente_.id}"></f:param>                                
-                                    </h:link>
-                                </p:column >
-                            </p:dataTable>
-                        </p:overlayPanel> 
+                        </h:inputText>
                     </h:panelGroup>
                     <p:commandLink id="cargarPaciente" 
                                    title="Buscar Paciente"  styleClass="btn primary" style="height: 16px;">
                         <p:graphicImage value="#{resource['/images/buscar.png']}" style="margin-top: -2px;"/>
                         <p:ajax process="@this" update=":form:infoP :form:infoFM :form:carPanel:tablaPacient" 
                                 rendered=":form:infoP :form:infoFM"  listener="#{fichaMedicaHome.buscarPorParametro()}"/>
-                    </p:commandLink>                    
+                    </p:commandLink>  
+                    <p:overlayPanel id="carPanel" for="cargarPaciente" hideEffect="fade" dynamic="false">
+                        <p:dataTable id="tablaPacient" value="#{fichaMedicaHome.listaPacietes}" var="paciente_">
+                            <p:column headerText="#{messages['profile.dni']}">
+                                <h:outputText value="#{paciente_.cedula}" />
+                            </p:column >
+                            <p:column headerText="#{messages['common.surname']}">
+                                <h:outputText value="#{paciente_.apellidos}" />
+                            </p:column >
+                            <p:column headerText="#{messages['common.firstname']}">
+                                <h:outputText value="#{paciente_.nombres}" />
+                            </p:column >                                
+                            <p:column headerText="#{messages['common.edad']}">
+                                <h:outputText value="#{paciente_.edad}" />
+                            </p:column >
+                            <p:column headerText="Opcion">
+                                <h:link id="cargarPaciente" outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
+                                        title="cargar"  styleClass="btn primary" value="cargar">                                        
+                                    <f:param name="pacienteId" value="#{paciente_.id}"></f:param>                                
+                                </h:link>
+                            </p:column >
+                        </p:dataTable>
+                    </p:overlayPanel> 
                 </h:panelGrid>
                 <br/>
                 <p:panel id="infoP" header="Información Personal" style="margin-top: 17px;">
@@ -240,11 +240,11 @@
                                         <c:choose> 
                                             <c:when test="#{(f.name eq 'antecedentesPersonalesFichaMedica')}">                                                           
                                                 <glue:input id="obap1" name="observacionAP" type="textarea" label="#{'Observación Antecedentes Familiares'}" value="#{fichaMedicaHome.instance.observacionAntecedentesPersonales}" 
-                                                             required="false" execute="@this :form:save" inlinehelp="" render="obap1" />                                                                                                
+                                                            required="false" execute="@this :form:save" inlinehelp="" render="obap1" />                                                                                                
                                             </c:when>                                
                                             <c:when test="#{(f.name eq 'antecedentesFamiliaresFichaMedica')}">                                                            
                                                 <glue:input id="obaf1" name="observacionAF" type="textarea" label="#{'Observación Antecedentes Familiares'}" value="#{fichaMedicaHome.instance.observacionAntecedentesFamiliares}" 
-                                                             required="false" execute="@this :form:save"  inlinehelp="" render="obaf1" styleClass="span14"/>                                                
+                                                            required="false" execute="@this :form:save"  inlinehelp="" render="obaf1" styleClass="span14"/>                                                
                                             </c:when>
                                         </c:choose> 
                                     </div>
@@ -309,7 +309,7 @@
                         </h:link>                        
                     </div> 
                     <p:dataTable id="tablaConsultasM" value="#{fichaMedicaHome.historiaClinica.consultas}" rows="10" var="consultaM_" editable="true"
-                                 paginator="true">
+                                 paginator="true" emptyMessage="No tiene ninguna Consulta Médica">
                         <p:column headerText="Id" style="width: 7%">
                             <h:outputText value="#{consultaM_.id}"/>
                         </p:column>                            
@@ -358,7 +358,7 @@
                         </h:link>
                     </div> 
                     <p:dataTable id="tablaConsultasO" value="#{fichaMedicaHome.fichaOdontologica.consultas}" rows="10" var="consultaO_" editable="true"
-                                 paginator="true">                                               
+                                 paginator="true" emptyMessage="No tiene ninguna Consulta Odontológica">                                               
                         <p:column headerText="Id" style="width: 7%">
                             <h:outputText value="#{consultaO_.id}"/>
                         </p:column>                            

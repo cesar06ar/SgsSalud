@@ -25,7 +25,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 /**
@@ -33,11 +36,18 @@ import javax.persistence.Transient;
  * @author cesar
  */
 @Entity
+@Table(name = "Diente")
+@NamedQueries(value = {
+    @NamedQuery(name = "Diente.buscarPorOdontogramaYPosicion",
+            query = "select d FROM Diente d "
+            + " WHERE d.odontograma.id = :odontogramaId"
+            + " AND d.posicion = :posicion"            
+            + " ORDER BY d.id")})
 public class Diente implements Serializable, Comparable<Diente> {
     
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;    
     private String nombre;
     private int posicion;  
@@ -48,7 +58,7 @@ public class Diente implements Serializable, Comparable<Diente> {
     @JoinColumn(name = "odontograma_id")
     private Odontograma odontograma;
     
-    @OneToMany(mappedBy = "consultaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)    
+    @OneToMany(mappedBy = "diente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)    
     private List<Tratamiento> tratamientos;
     
     public Diente() {
@@ -124,6 +134,15 @@ public class Diente implements Serializable, Comparable<Diente> {
             t.setDiente(this);
             tratamientos.add(t);
         }
+    }
+    
+    public boolean contineTratamiento(String nombreTratamiento){
+        for (Tratamiento t : tratamientos) {
+            if(t.getNombre().equals(nombreTratamiento)){
+                return true;
+            }        
+        }
+        return false;
     }
     
     @Override

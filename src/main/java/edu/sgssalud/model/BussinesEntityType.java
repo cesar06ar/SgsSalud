@@ -46,7 +46,7 @@ public class BussinesEntityType implements Serializable {
 
     private static final long serialVersionUID = -2155543217133636282L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     private String name;

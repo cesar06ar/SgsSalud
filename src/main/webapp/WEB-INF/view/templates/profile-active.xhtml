@@ -44,22 +44,22 @@
 			<li><h:link outcome="/pages/signup" value="Join the party" /></li>
 		</h:panelGroup>
 	
-		<h:panelGroup rendered="#{profile.persistent}">
+		<!--<h:panelGroup rendered="# {profile.persistent}">
 			<li class="dropdown">
 				<div class="linkball">◗</div>
 				<h:link outcome="profile"
 					style="padding-left: 15px;"
 					class="dropdown-toggle"
-					value="#{profile.username}">
-					<f:param name="profile" value="#{profile.username}" />
+					value="# {profile.username}">
+					<f:param name="profile" value="# {profile.username}" />
 				</h:link>
-				<!--
+				
                                 <ul class="dropdown-menu">
 					<li><h:link value="Message" outcome="/pages/project/backlog"/></li>
 				</ul>
-                                -->
+                               
 			</li>
-		</h:panelGroup>
+		</h:panelGroup> -->
 		
 		<ui:insert name="topnav-post-profile"/>
 	</ui:define>

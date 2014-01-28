@@ -34,8 +34,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
@@ -44,11 +47,23 @@ import javax.persistence.Transient;
  * @author cesar
  */
 @Entity
+@Table(name = "Tratamiento")
+@NamedQueries(value = {
+    @NamedQuery(name = "Tratamiento.buscarPorOdontogramaYConsulta",
+            query = "select t FROM Tratamiento t JOIN t.diente d"
+            + " WHERE d.odontograma.id = :odontogramaId"
+            //+ " AND t.consultaOdontologica_id = :consultaOdontId"            
+            + " ORDER BY t.id"),
+    @NamedQuery(name = "Tratamiento.buscarPorDienteYNombre",
+            query = "select t FROM Tratamiento t "
+            + " WHERE t.diente.id = :dienteId"
+            + " AND t.nombre = :nombreTratamiento"
+            + " ORDER BY t.id")})
 public class Tratamiento implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -157,12 +172,12 @@ public class Tratamiento implements Serializable {
         this.cuadrante = cuadrante;
     }
 
-    public List<String> getCuandrantes() {        
-        if(!getCuadrante().isEmpty()){
+    public List<String> getCuandrantes() {
+        if (!getCuadrante().isEmpty()) {
             return new ArrayList<String>(getCuadrante());
-        }else{
+        } else {
             return null;
-        }        
+        }
     }
 //    public Servicio getServicioDisponible() {
 //        return servicioDisponible;
@@ -198,7 +213,11 @@ public class Tratamiento implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.odontologia.Tratamiento[ id=" + id + " ]";
+        return "edu.sgssalud.model.odontologia.Tratamiento[ "
+                + "id=" + getId() + ","
+                + "nombre=" + getNombre() + ","
+                + "fecha" + getFechaRealizacion() + ","
+                + " ]";
     }
 
 }

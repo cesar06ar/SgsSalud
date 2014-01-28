@@ -263,7 +263,7 @@
             <scope>provided</scope>
         </dependency>
         <!--Glue runtime dependencees -->
-        <!--Jasypt dependencies-->
+        <!--Jasypt dependencies  para encriptar contraseñas-->
         <dependency>
             <groupId>org.jasypt</groupId>
             <artifactId>jasypt</artifactId>

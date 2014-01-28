@@ -60,13 +60,117 @@
 
                     <h:panelGroup id="odontC1" style="margin-left: 0.5%">
                         <sgs:denteS id="d18"  title="#{odontogramaHome.diente18.nombre} #{odontogramaHome.diente18.posicion} #{odontogramaHome.diente18.id}" 
-                                    check="#{odontogramaHome.diente18.select}" diente="#{odontogramaHome.diente18}" tratamientos="#{odontogramaHome.diente18.tratamientos}"    
-                                    update="@form" actualizar=":form:opciones" render=":form:opciones">                            
+                                    check="#{odontogramaHome.diente18.select}" diente="#{odontogramaHome.diente18}"                                     
+                                    update="@form" actualizar=":form:opciones" render=":form:opciones" tratamientos="#{odontogramaHome.extraerDiente(odontogramaHome.diente18.posicion)}" >                            
+                                    
                         </sgs:denteS>
+                        <ui:param name="diente" value="#{odontogramaHome.extraerDiente(odontogramaHome.diente18.posicion)}"/>
+                        <ui:repeat value="#{diente.tratamientos}" var="t">
+                            <c:choose>                                    
+                                <h:outputText value="hola 1"/>
+                                <c:when test="#{t.nombre eq messages['tratamiento.carie']}">
+                                    <h:outputText value="hola"/>
+                                    <c:forEach items="#{t.cuandrantes}" var="c">                
+                                        <c:choose>
+                                            <c:when test="#{c == 'c1'}" > 
+                                                <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                                                rendered="true" />
+                                            </c:when>
+                                            <c:when test="#{c == 'c2'}" >                            
+                                                <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                                                rendered="true"/>
+                                            </c:when>
+                                            <c:when test="#{c == 'c3'}" >                                
+                                                <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                                                rendered="true"/>
+                                            </c:when>
+                                            <c:when test="#{c == 'c4'}" >                              
+                                                <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                                                rendered="true"/>
+                                            </c:when>
+                                            <c:when test="#{c == 'c5'}" >                              
+                                                <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                                                rendered="true"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>                                     
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.obturacionProvicional']}">
+                                    <c:forEach items="#{t.cuandrantes}" var="c">
+                                        <c:choose>
+                                            <c:when test="#{c == 'c1'}" > 
 
+                                            </c:when>
+                                            <c:when test="#{c == 'c2'}" >                            
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c3'}" > 
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c4'}" > 
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c5'}" > 
+
+                                            </c:when>
+                                            <c:otherwise>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.obturacionDefinitiva']}">
+                                    <c:forEach items="#{t.cuandrantes}" var="c">
+                                        <c:choose>
+                                            <c:when test="#{c == 'c1'}" >                           
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c2'}" >
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c3'}" >                             
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c4'}" > 
+
+                                            </c:when>
+                                            <c:when test="#{c == 'c5'}" >                             
+
+                                            </c:when>
+                                            <c:otherwise>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.corona']}">                    
+
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.sellanateNecesario']}">                    
+
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.sellanateRealizado']}">                    
+
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.endodonciaNecesaria']}">                    
+
+                                </c:when>
+                                <c:when test="#{t.nombre == messages['tratamiento.endodonciaRealizada']}">                    
+
+                                </c:when>
+                                <c:when test="#{t.nambre == messages['tratamiento.extraccionIndicada']}">                    
+
+                                </c:when>
+                                <c:when test="#{t.nambre == messages['tratamiento.ausenciaPiezaDental']}">                    
+
+                                </c:when>
+                                <c:otherwise>
+                                </c:otherwise>
+                            </c:choose>        
+                        </ui:repeat>
                         <sgs:denteS id="d17" title="#{odontogramaHome.diente17.nombre} #{odontogramaHome.diente17.posicion}"
-                                    check="#{odontogramaHome.diente17.select}" actionListener="#{odontogramaHome.actualizar()}"
-                                    origen="#{odontogramaHome.diente17}" destino="#{odontogramaHome.selectDient}" 
+                                    check="#{odontogramaHome.diente17.select}" diente="#{odontogramaHome.diente18}"
+                                    tratamientos="#{odontogramaHome.extraerDiente(odontogramaHome.diente17.posicion).tratamientos}"
                                     update="@form" actualizar=":form:opciones" render=":form:opciones">                            
                         </sgs:denteS>   
                         <sgs:denteS id="d16"  title="#{odontogramaHome.diente16.nombre} #{odontogramaHome.diente16.posicion}"
@@ -143,27 +247,7 @@
                                     origen="#{odontogramaHome.diente28}" destino="#{odontogramaHome.selectDient}" 
                                     update="@form" actualizar=":form:opciones" render=":form:opciones">                             
                         </sgs:denteS>
-                    </h:panelGroup>
-                    <h:panelGroup>   
-                        
-                        <!--<p:dataTable value="#{odontogramaHome.instance.dientes}" var="t" >
-                            <p:column headerText="Id">
-                                <h:outputText value="#{t.id}"/>
-                            </p:column>
-                            <p:column headerText="Nombre">
-                                <h:outputText value="#{t.nombre}"/>
-                            </p:column>
-                            <p:column headerText="cuandrante">
-                                <h:outputText value="#{t.cuadrante}"/>
-                            </p:column>
-                            <p:column headerText="Pocision">
-                                <h:outputText value="#{t.posicion}"/>
-                            </p:column>
-                            <p:column headerText="Tratamientos">
-                                <h:outputText value="#{t.tratamientos.size}"/>
-                            </p:column>
-                        </p:dataTable>-->
-                    </h:panelGroup>
+                    </h:panelGroup>                    
                 </p:panel>         
                 <p:panel id="opciones" header="Opciones" styleClass="span16">
                     <div class="container-fluid">   
@@ -261,64 +345,69 @@
                                 </p:commandLink>
                             </div>
                             <div class="span10" >        
-                                <h:outputText value="#{odontogramaHome.nombreDiente}"/>
-                                <br/>
-                                <p:panel id="panel1" rendered="#{odontogramaHome.panel1}" header="#{odontogramaHome.nombreTratamiento}" >                                 
+                                <p:panelGrid columns="2">                                    
 
-                                    <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>
-                                    <br/> 
-                                    <h:panelGroup class="clearfix" layout="block" >
-                                        <label for="procedimient">#{messages['tratamiento.procedimiento']}</label>
-                                        <div class="input">
-                                            <h:inputTextarea id="procedimient" value="#{odontogramaHome.tratamiento.procedimiento}"  style="width: 90%; height: 80px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
-                                                <f:ajax execute="@this" render="save1"  />
+                                    <p:panel id="panel1" rendered="#{odontogramaHome.panel1}" header="#{odontogramaHome.nombreTratamiento}" >                                 
+
+                                        <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>
+                                        <br/> 
+                                    </p:panel>                                                        
+                                    <p:panel id="panel2" rendered="#{odontogramaHome.panel2}" header="#{odontogramaHome.nombreTratamiento}" style="width: 240px;">                                  
+
+                                        <!--Tratamientos que se realizan a partes del diente-->
+                                        <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40" title="Vista previa"/>                                    
+                                        <br/>
+                                        <h:panelGroup >
+                                            <h:outputText value="Seleccione las partes del diente"/>
+                                            <div >    
+                                                <p:graphicImage value="/resources/odontograma/diente.png" width="100" height="95"/>
+                                                <div class="diente_c" style="margin: -90px 0 0 40px">
+                                                    <p:selectBooleanCheckbox value="#{odontogramaHome.c1}" label="Cuadrante Superior" style="margin: 0 0 0 0;float: top">
+                                                        <f:ajax execute="@this" render="saveTratamiento"  />
+                                                    </p:selectBooleanCheckbox> 
+                                                </div>
+                                                <div style="margin: 6px 0 0 8px">
+                                                    <p:selectBooleanCheckbox value="#{odontogramaHome.c4}" label="Cuadrante Izquierdo" >
+                                                        <f:ajax execute="@this" render="saveTratamiento"  />
+                                                    </p:selectBooleanCheckbox>                                                        
+                                                    <p:selectBooleanCheckbox value="#{odontogramaHome.c5}" label="Cuadrante Centro" style="margin-left: 14px;">
+                                                        <f:ajax execute="@this" render="saveTratamiento"  />
+                                                    </p:selectBooleanCheckbox>
+                                                    <p:selectBooleanCheckbox value="#{odontogramaHome.c2}" label="Cuadrante Derecho" style="margin-left: 16px;">
+                                                        <f:ajax execute="@this" render="saveTratamiento"  />
+                                                    </p:selectBooleanCheckbox>  
+                                                </div>
+                                                <div style="margin: 9px 0 0 35px">
+                                                    <p:selectBooleanCheckbox value="#{odontogramaHome.c3}" label="Cuadrante Inferior" style="margin-left: 5px;">
+                                                        <f:ajax execute="@this" render="saveTratamiento"  />
+                                                    </p:selectBooleanCheckbox>  
+                                                </div>
+                                            </div>
+                                        </h:panelGroup>                                    
+                                    </p:panel>   
+
+                                    <h:panelGroup class="span6" layout="block" rendered="#{odontogramaHome.panel1 or odontogramaHome.panel2 or odontogramaHome.panel3}">
+                                        <label for="procedimient" style="margin-left: -35px;">#{messages['tratamiento.procedimiento']}:</label>
+                                        <br/>
+                                        <br/>
+                                        <div >
+                                            <h:inputTextarea id="procedimient" value="#{odontogramaHome.procedimiento}"  style="width: 90%; height: 80px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
+                                                <f:ajax execute="@this" render="saveTratamiento" event="keyup" />
+                                                <!--<p:ajax event="keyup" process="@this"  update="saveTratamiento"  />-->
                                             </h:inputTextarea>
                                         </div>
                                     </h:panelGroup>
-                                </p:panel>                                                        
-                                <p:panel id="panel2" rendered="#{odontogramaHome.panel2}" header="#{odontogramaHome.nombreTratamiento}" >                                  
-
-                                    <!--Tratamientos que se realizan a partes del diente-->
-
-                                    <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40"/>                                    
-                                    <br/>
-                                    <h:panelGroup >
-                                        <div >    
-                                            <p:graphicImage value="/resources/odontograma/diente.png" width="100" height="95"/>
-                                            <div class="diente_c" style="margin: -88px 0 0 40px">
-                                                <p:selectBooleanCheckbox value="#{odontogramaHome.c1}" label="Cuadrante Superior" style="margin: 0 0 0 0;float: top"/> 
-                                            </div>
-                                            <div style="margin: 6px 0 0 8px">
-                                                <p:selectBooleanCheckbox value="#{odontogramaHome.c4}" label="Cuadrante Izquierdo" />  
-                                                <p:selectBooleanCheckbox value="#{odontogramaHome.c5}" label="Cuadrante Centro" style="margin-left: 14px;"/>                                      
-                                                <p:selectBooleanCheckbox value="#{odontogramaHome.c2}" label="Cuadrante Derecho" style="margin-left: 16px;"/>  
-                                            </div>
-                                            <div style="margin: 9px 0 0 35px">
-                                                <p:selectBooleanCheckbox value="#{odontogramaHome.c3}" label="Cuadrante Inferior" style="margin-left: 5px;"/>  
-                                            </div>
-                                        </div>
-
-                                    </h:panelGroup>
-
-                                    <br/> 
-                                    <h:panelGroup class="clearfix" layout="block" style="margin-left: -40px">
-                                        <label for="procedimient1">#{messages['tratamiento.procedimiento']}</label>
-                                        <div class="input">
-                                            <h:inputTextarea id="procedimient1" value="#{odontogramaHome.tratamiento.procedimiento}"  style="width: 90%; height: 80px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
-                                                <f:ajax execute="@this" render="save1"  />
-                                            </h:inputTextarea>
-                                        </div>
-                                    </h:panelGroup>
-                                </p:panel>                                                                
+                                </p:panelGrid>
                             </div>
                         </div>                            
                     </div>
                     <div class="admin-actions">
-                        <p:commandButton id="save1" value="#{messages['common.add']} #{messages['tratamiento.nombre']}" rendered="true"
-                                         action="#{odontogramaHome.guardarTratamiento()}" immediate="true"
-                                         ajax="true" styleClass="btn primary offset2" 
+                        <p:commandButton id="saveTratamiento" value="#{messages['common.add']} #{messages['tratamiento.nombre']}" rendered="true"
+                                         action="#{odontogramaHome.guardarTratamiento()}"  
+                                         styleClass="btn primary offset2" ajax="true" immediate="true"
                                          style="margin-top:10px;" icon="ui-icon-disk">
-                            <p:ajax process="@this" rendered=":form:odot" update=":edit-dialog :form:odont :form:tablaTratamientos"/>
+                            <p:ajax process="@this" update=":form:opciones " rendered=":form:odont "/>
+                            <!--immediate="true" -->
                         </p:commandButton>                        
                     </div> 
                 </p:panel>            
@@ -332,18 +421,27 @@
                             <h:outputText value="#{tratam_.diente.nombre}"/>&nbsp;&nbsp; 
                             <h:outputText value="#{tratam_.diente.posicion}"/>
                         </p:column>
-                        <p:column headerText="Servicio Dental">
-                            <h:outputText value="#{tratam_.servicioDisponible.nombre}" styleClass="span2"/>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{tratam_.nombre}" styleClass="span2"/>
                         </p:column>                        
                         <p:column headerText="Fecha realizada">
-                            <h:outputText value="#{tratam_.fechaRelizacion}">
+                            <h:outputText value="#{tratam_.fechaRealizacion}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
                             </h:outputText>
                         </p:column>
                         <p:column headerText="Procedimiento">
                             <h:outputText value="#{tratam_.procedimiento}" styleClass="span3"/>
                         </p:column>                         
-                    </p:dataTable>                
+                        <p:column headerText="Opciones">                            
+                            <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"
+                                           onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                                           style="width: 10px; height: 10px;">                                                        
+                                <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
+                                <f:setPropertyActionListener value="#{tratam_}" target="#{odontogramaHome.tratamiento}"/>
+                                <p:ajax process="@this" update=":cancel-dialog" />
+                            </p:commandLink>
+                        </p:column>  
+                    </p:dataTable>   
                 </p:panel> 
                 <div class="admin-actions span16" style="padding-right: 0%;">
                     <p:commandButton id="save" action="#{odontogramaHome.guardar()}" value="#{messages['common.save']}" 
@@ -356,15 +454,28 @@
                     </h:link>
                 </div>
             </h:form>
+            <!--
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['tratamiento.nombre']} " 
                       widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="600">
-                <h:form id="form-dialog">
-                    <!--<h3> #{messages['common.for']} </h3>-->
+                <h:form id="form-dialog">                    
                     <h:outputText value="#{messages['common.new']} #{messages['tratamiento.nombre']} a diente seleccionado #{odontogramaHome.selectDient.nombre} #{odontogramaHome.selectDient.posicion}" styleClass="offset2"/>
 
-
                 </h:form>
-            </p:dialog> 
+            </p:dialog> -->
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
+                                     action="#{odontogramaHome.borrarTratamiento()}" update=":form"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>                

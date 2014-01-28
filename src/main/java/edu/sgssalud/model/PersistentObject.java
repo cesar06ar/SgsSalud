@@ -58,7 +58,7 @@ public abstract class PersistentObject<E extends PersistentObject<E>> implements
 
     private static final long serialVersionUID = -1272280183658745494L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
     private Long id = null;
     @Column(nullable = true)

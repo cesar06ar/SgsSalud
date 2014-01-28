@@ -172,8 +172,7 @@ public class InitializeDatabase {
         Profile admin = null;
         List<User> members = new ArrayList<User>();
         org.picketlink.idm.api.Group g = session.getPersistenceManager().findGroup("ADMIN", "GROUP");
-        if (g == null) {
-            g = session.getPersistenceManager().createGroup("ADMIN", "GROUP");
+        if (g == null) {            
             g = session.getPersistenceManager().createGroup("MEDICOS", "GROUP");
             g = session.getPersistenceManager().createGroup("ODONTOLOGOS", "GROUP");
             g = session.getPersistenceManager().createGroup("ENFERMEROS", "GROUP");
@@ -181,6 +180,7 @@ public class InitializeDatabase {
             g = session.getPersistenceManager().createGroup("FARMACEUTICOS", "GROUP");
             g = session.getPersistenceManager().createGroup("LABORATORISTAS", "GROUP");
             g = session.getPersistenceManager().createGroup("PACIENTE", "GROUP");
+            g = session.getPersistenceManager().createGroup("ADMIN", "GROUP");
         }
 
         bussinesEntityType = query.getSingleResult();

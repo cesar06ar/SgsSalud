@@ -48,7 +48,7 @@ public class Property implements Comparable<Property>, Serializable {
 
     private static final long serialVersionUID = 1020047606754217515L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "property_id")
     private Long id;
     private String groupName; //nombre de grupo

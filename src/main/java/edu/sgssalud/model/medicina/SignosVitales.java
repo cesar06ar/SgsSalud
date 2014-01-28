@@ -31,7 +31,7 @@ import javax.persistence.Temporal;
 public class SignosVitales implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     @Temporal(javax.persistence.TemporalType.DATE)

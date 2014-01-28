@@ -40,7 +40,7 @@ limitations under the License.
     <c:set var="numDecimales" value="#{not empty numDecimales ? numDecimales : '2'}" />
     <c:set var="diente" value="#{not empty diente ? diente : null}" />    
     <c:set var="update" value="#{not empty update ? update : null}" />
-    <c:set var="tratamientos" value="#{not empty tratamientos ? odontogramaHome.getMostrarTratamientos(diente) : null}" />
+    <c:set var="tratamientos" value="#{not empty tratamientos ? tratamientos : null}" />
     <!-- TODO habilitar o deshabilitar ajax validation 
     <c:set var="onclick" value="# {not empty onclick ? onclick : null}" />
     <c:set var="action" value="# {not empty action ? action : null}" />
