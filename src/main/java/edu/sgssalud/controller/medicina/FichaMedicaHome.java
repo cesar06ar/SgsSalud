@@ -97,6 +97,10 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 //    private List<ConsultaOdontologica> listaConsultasO = new ArrayList<ConsultaOdontologica>();
     private List<Paciente> listaPacietes = new ArrayList<Paciente>();
     private List<SignosVitales> listaSignosVitales = new ArrayList<SignosVitales>();
+    private boolean panelFechaDia = false;
+    private boolean panelFechaMes = false;
+    private boolean panelIntervaloPersonalizado = false;
+    private Date fecha;
 
     /*<== Métodos get y set para obtener el Id de la clase*/
     public Long getFichaMedicaId() {
@@ -203,6 +207,40 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         this.listaSignosVitales = listaSignosVitales;
     }
 
+    public boolean isPanelFechaDia() {
+        return panelFechaDia;
+    }
+
+    public void setPanelFechaDia(boolean panelFechaDia) {
+        this.panelFechaDia = panelFechaDia;
+    }
+
+    public boolean isPanelFechaMes() {
+        return panelFechaMes;
+    }
+
+    public void setPanelFechaMes(boolean panelFechaMes) {
+        this.panelFechaMes = panelFechaMes;
+    }
+
+    public boolean isPanelIntervaloPersonalizado() {
+        return panelIntervaloPersonalizado;
+    }
+
+    public void setPanelIntervaloPersonalizado(boolean panelIntervaloPersonalizado) {
+        this.panelIntervaloPersonalizado = panelIntervaloPersonalizado;
+    }   
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+    
+    
+
     /*<==....*/
     @TransactionAttribute   //
     public FichaMedica load() {
@@ -275,6 +313,23 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         return FichaMedica.class;
     }
 
+    public void mostrarPanelFecha(int n) {
+        fecha= new Date();
+        if (n == 1) {
+            setPanelFechaDia(true);
+            setPanelFechaMes(false);
+            setPanelIntervaloPersonalizado(false);
+        } else if (n == 2) {
+            setPanelFechaDia(false);
+            setPanelFechaMes(true);
+            setPanelIntervaloPersonalizado(false);
+        } else {
+            setPanelFechaDia(false);
+            setPanelFechaMes(false);
+            setPanelIntervaloPersonalizado(true);
+        }
+    }
+    
     @TransactionAttribute
     public String guardar() {
         log.info("Ingreso a guardar");

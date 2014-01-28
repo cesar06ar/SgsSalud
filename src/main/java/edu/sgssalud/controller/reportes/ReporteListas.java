@@ -52,7 +52,7 @@ public class ReporteListas {
 
     private static final String REPORTE_USUARIOS = "Reporte";  //nombre del reporte .jasper   
     private static final String REPORTE_PACIENTES = "pacientes";
-    private static final String REPORTE_FICHASMEDICAS = "listaFichasMed";
+    private static final String REPORTE_FICHASMEDICAS = "report2";
     private static final String REPORTE_CONSULTASMEDICAS = "listaConsultasMedicas";
     private static final String REPORTE_RECETAS = "listaRecetas";
 
@@ -237,12 +237,12 @@ public class ReporteListas {
         List<FichaMedica> fichaMed = fichaMedicaServicio.getFichasMedicas();
         //parametros 
         Map<String, Object> _values = new HashMap<String, Object>();
-        _values.put("numeroFichas", fichaMed.size());
-        //_values.put("numeroPacientes", pacientes.size());
-        _values.put("usd", "$");
+//        _values.put("numeroFichas", fichaMed.size());
+//        //_values.put("numeroPacientes", pacientes.size());
+//        _values.put("usd", "$");
 
         //Exportar a pdf 
-        JasperReportAction.exportToPdf(REPORTE_PACIENTES, fichaMed, _values, attachFileName);
+        JasperReportAction.exportToPdf(REPORTE_FICHASMEDICAS, fichaMed, _values, attachFileName);
 
         if (log.isDebugEnabled()) {
             log.debug("export as pdf");
