@@ -55,6 +55,15 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         return list;
     }   
     
+    public List<Receta> getRecetas(final int limit, final int offset) {
+        return findAll(Receta.class);
+    }
+
+    public List<Receta> getRecetas() {
+        List list = this.findAll(Receta.class);
+        return list;
+    }
+    
     public Receta buscarRecetaPorId(final Long id) {
         return (Receta) findById(Receta.class, id);
     }
