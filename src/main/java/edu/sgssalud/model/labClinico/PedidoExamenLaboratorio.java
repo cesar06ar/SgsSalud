@@ -33,10 +33,11 @@ public class PedidoExamenLaboratorio implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String estado;
+    private String estado;  
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaPedido;
     private String observacion;
+    private String codigoMuestra;
 
     public Long getId() {
         return id;
@@ -69,7 +70,15 @@ public class PedidoExamenLaboratorio implements Serializable {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
-    
+
+    public String getCodigoMuestra() {
+        return codigoMuestra;
+    }
+
+    public void setCodigoMuestra(String codigoMuestra) {
+        this.codigoMuestra = codigoMuestra;
+    }  
+        
     public boolean isPersistent() {
         return getId() != null;
     }

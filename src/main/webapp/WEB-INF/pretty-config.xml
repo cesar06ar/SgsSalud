@@ -140,7 +140,7 @@
    <!-- Vistas de Receta-->  
    <url-mapping id="receta">
       <pattern value="/farmacia/receta"></pattern>
-      <view-id value="/pages/farmacia/receta/receta.xhtml"></view-id>       
+      <view-id value="/pages/depSalud/receta.xhtml"></view-id>       
       <action>#{account.loadPages}</action>
    </url-mapping>
    <url-mapping id="RecetaLista">
@@ -199,8 +199,8 @@
   
  <!-- Vistas del Módulo de Lab Clínico-->
    <url-mapping id="pedidosLabClinico">
-      <pattern value="/labClinico/pedidoExamen"></pattern>
-      <view-id value="/pages/labClinico/pedidoExamen.xhtml"></view-id>       
+      <pattern value="/pedidoExamen"></pattern>
+      <view-id value="/pages/depSalud/pedidoExamen.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="examenLabClinico">
       <pattern value="/labClinico/examen"></pattern>

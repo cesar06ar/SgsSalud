@@ -32,7 +32,7 @@
         <ui:define name="content">
             <h:form id="form">                
                 <!--<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  -->
-                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="300"/>  
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="6000"/>  
                 <p:panel id="consultaM" header="Información de Consulta" toggleable="true" >
                     <p:panelGrid columns="3">
                         <h:panelGroup layout="block" >
@@ -256,38 +256,7 @@
                         <glue:input id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
                                     required="false" execute="@this :form:save" render="observacionC" helpinline=""/>
                     </p:tab>
-                </p:tabView>
-                <p:tabView  rendered="#{consultaMedicaHome.instance.persistent}">
-                    <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
-                        <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
-                            <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
-                            <f:param name="backView" value="/medicina/consultaMedica"></f:param>
-                        </h:link>
-                        <br/><br/>                        
-                        <p:dataTable id="tablaRecetas" value="#{consultaMedicaHome.instance.recetas}" var="recetaM_" >
-                            <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%">
-                                <p:outputLabel value="#{recetaM_.fechaEmision}">
-                                    <f:convertDateTime pattern="dd-MMM-yyyy"/>
-                                </p:outputLabel>
-                            </p:column>                             
-                            <p:column headerText="#{messages['receta.Responsable']} #{messages['receta.emision']}" style="width: 7%">
-                                <p:outputLabel value="#{recetaM_.responsableEmision.fullName}"/>                                   
-                            </p:column>
-                            <p:column headerText="#{messages['comun.estado']} #{messages['receta.emision']}" style="width: 7%">
-                                <p:outputLabel value="#{recetaM_.estado}"/>                                   
-                            </p:column>
-                            <p:column headerText="#{'Opción'} #{messages['receta.emision']}" style="width: 7%">
-                                <h:link value="#{messages['common.edit']}" outcome="/pages/depSalud/receta" >                                
-                                    <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
-                                    <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
-                                    <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
-                                    <f:param name="backView" value="/medicina/consultaMedica"></f:param>
-                                </h:link>                           
-                            </p:column>
-                        </p:dataTable>
-                    </p:tab>
-                </p:tabView>
-
+                </p:tabView>               
 
                 <div class="admin-actions" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" 
@@ -297,13 +266,65 @@
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                     </h:link>
-                </div>
-
+                </div>               
+                <p:tabView  rendered="#{consultaMedicaHome.instance.persistent}">
+                    <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
+                        <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
+                            <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
+                            <f:param name="backView" value="/medicina/consultaMedica"></f:param>
+                        </h:link>
+                        <br/><br/>                        
+                        <p:dataTable id="tablaRecetas" value="#{consultaMedicaHome.instance.recetas}" var="recetaM_"  emptyMessage="No hay ninguna receta">
+                            <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%" >
+                                <p:outputLabel value="#{recetaM_.fechaEmision}">
+                                    <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                                </p:outputLabel>
+                            </p:column>                             
+                            <p:column headerText="#{messages['receta.Responsable']} #{messages['receta.emision']}" style="width: 7%">
+                                <p:outputLabel value="#{recetaM_.responsableEmision.fullName}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{messages['comun.estado']}" style="width: 7%">
+                                <p:outputLabel value="#{recetaM_.estado}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{'Opción'}" style="width: 7%">
+                                <h:link value="#{messages['common.edit']}" outcome="/pages/depSalud/receta" styleClass="btn success">
+                                    <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
+                                    <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>                                    
+                                    <f:param name="backView" value="/medicina/consultaMedica"></f:param>
+                                </h:link>
+                                &nbsp;
+                                <p:commandLink id="button-delete" type="button" value="Borrar" title="#{messages['common.delete']}"
+                                               onclick="#{'deletedDlg.show();'}"  styleClass="btn success" 
+                                               ajax="true">
+                                    <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                        
+                                    <f:setPropertyActionListener value="#{recetaM_}" target="#{consultaMedicaHome.receta}"/>
+                                    <p:ajax update=":cancel-dialog" />
+                                </p:commandLink>
+                            </p:column>                            
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
                 <div class="offset8" style="float: right">
                     <glue:output id="user" name="responsable" type="text" label="Responsable" value="#{consultaMedicaHome.instance.responsable.fullName}" 
                                  required="false" execute="@this" render="user" styleClass="xLarge" disabled="true"/>
-                </div>  
+                </div> 
             </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']} de Receta"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" action="#{consultaMedicaHome.borrarReceta()}" 
+                                     oncomplete="deletedDlg.hide();" ajax="true"  
+                                     style="margin-top:10px;" >  
+                        <!--<p:ajax process="@this" update=":form" />-->
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>                

@@ -20,6 +20,9 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.BussinesEntityType;
 import edu.sgssalud.model.Structure;
+import edu.sgssalud.model.farmacia.Medicamento;
+import edu.sgssalud.model.farmacia.Receta;
+import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
 import edu.sgssalud.model.medicina.FichaMedica;
@@ -27,6 +30,8 @@ import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
+import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
+import edu.sgssalud.service.farmacia.RecetaServicio;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.EnfermedadesCie10Servicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
@@ -48,6 +53,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.hibernate.Session;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
@@ -80,6 +86,10 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private ProfileService profileS;
     @Inject
     private EnfermedadesCie10Servicio cie10servicio;
+    @Inject
+    private RecetaMedicamentoService recetaMedicamentoServicio;
+    @Inject
+    private RecetaServicio recetasServicio;
 
     private HistoriaClinica hc;
     private SignosVitales signosVitales;
@@ -92,6 +102,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private DualListModel<EnfermedadCIE10> pickListEnfermedades = new DualListModel<EnfermedadCIE10>();
 
     private CartesianChartModel linearModel = new CartesianChartModel();
+
+    private Receta receta;
 
     public Long getConsultaMedicaId() {
         return (Long) getId();
@@ -183,6 +195,14 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         this.linearModel = linearModel;
     }
 
+    public Receta getReceta() {
+        return receta;
+    }
+
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
@@ -195,6 +215,9 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         fms.setEntityManager(em);
         profileS.setEntityManager(em);
         cie10servicio.setEntityManager(em);
+        recetaMedicamentoServicio.setEntityManager(em);
+        recetasServicio.setEntityManager(em);
+        receta = new Receta();
         if (getInstance().isPersistent()) {
             if (getInstance().getResponsable() == null) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
@@ -208,7 +231,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         if (isIdDefined()) {
             wire();
         }
-        log.info("sgssalud --> cargar instance " + getInstance());
+        //log.info("sgssalud --> cargar instance " + getInstance());
         return getInstance();
     }
 
@@ -298,6 +321,38 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         return null;
     }
 
+    @TransactionAttribute
+    public String borrarReceta() {
+        System.out.println("Borrar receta_______: " + receta.toString());
+        String salida = "";
+        try {
+            if (getInstance().isPersistent()) {
+                Receta_Medicamento aux;
+                List<Receta_Medicamento> listaRM = recetaMedicamentoServicio.obtenerPorReceta(receta);
+                for (Receta_Medicamento recetaMed1 : listaRM) {
+                    Medicamento medicament = recetaMed1.getMedicamento();
+                    int cantidad = medicament.getUnidades() + recetaMed1.getCantidad();
+                    medicament.setUnidades(cantidad);
+                    aux = recetaMed1;
+                    em.merge(medicament);
+                    em.remove(aux);
+                }
+                delete(receta);
+                //wire();
+                //this.getInstance().setRecetas(recetasServicio.buscarRecetaPorConsultaMedica(getInstance()));
+                System.out.println("ELIMINO RECETA");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino receta", "" + getInstance().getId()));
+                salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaMedicaId=" + getInstance().getId();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+            e.printStackTrace();
+        }
+        return salida;
+    }
+
     public void cargarEnfermedadesActuales() {
         //String enfEstandar = UI.getMessages("EnfermedadesEstandarEcuador");
         listaEnfCie10 = new ArrayList<EnfermedadCIE10>();
@@ -357,4 +412,5 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         serieImc.set("OBESIDAD", 30);
         linearModel.addSeries(serieImc);
     }
+
 }

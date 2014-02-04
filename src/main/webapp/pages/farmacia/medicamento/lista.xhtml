@@ -9,7 +9,7 @@
         <ui:define name="header-replace" >
             <div class="header-replace">
                 <div class="container-header" >
-                    <div class="row lf row-title" style="margin-top: 0.05%; margin-left: 2%" >
+                    <div class="row lf row-title" >
                         <h2>#{messages['medicamento.admin']}</h2>   
                     </div> 
                 </div>   
@@ -41,6 +41,12 @@
                         <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
+                    #{' '}
+                    <h:link id="button-cardex" value="#{messages['farmacia.cardex']}" outcome="cardex" styleClass="btn" 
+                            disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
+                        <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>
                     <h:panelGroup style="float: right">
                         <p:inputText id="criterioBuscar" size ="25" value="#{medicamentoListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                             <p:ajax event="keyup" update="tablaMedicamentos"/>
@@ -61,8 +67,9 @@
                              selectionMode="single">
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{medicamentoListaServicio.onRowSelect}"
-                            update=":form:button-edit :form:messages "/>   
-                    <p:ajax event="rowUnselect" listener="#{medicamentoListaServicio.onRowUnselect}" update=":form:button-edit :form:messages"/>
+                            update=":form:button-edit :form:messages :form:button-cardex"/>   
+                    <p:ajax event="rowUnselect" listener="#{medicamentoListaServicio.onRowUnselect}" 
+                            update=":form:button-edit :form:messages :form:button-cardex"/>
                     <!--Columnas para mostrar en la tabla-->
 
                     <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 10%; text-align: center;">

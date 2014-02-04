@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="medicamentoId" value="#{cardexHome.medicamentoId}"/>
+        </f:metadata>
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h3>#{messages['farmacia.cardex.control']} #{cardexHome.medicamento.nombreComercial}</h3>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="content" >
+            <h:form id="form">                
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span7">
+                            <glue:output id="fechaIng" name="fechaIng" type="text" label="#{messages['common.fecha.ingreso.medicamento']}" value="#{cardexHome.medicamento.fechaIngreso}" 
+                                         required="true" execute="@this save" render="fechaIng" styleClass="xLarge" disabled="true"/>
+                            <glue:output id="medicamento" name="medicamento" type="text" label="#{messages['medicamento.Nombre']}" value="#{cardexHome.medicamento.nombreComercial} #{cardexHome.medicamento.nombreGenerico}" 
+                                         required="true" execute="@this save" render="medicamento" styleClass="xLarge" disabled="true"/>
+                            <glue:output id="presentacion" name="presentacion" type="text" label="#{messages['medicamento.presentacion']}" value="#{cardexHome.medicamento.presentacion}" 
+                                         required="true" execute="@this save" render="presentacion" styleClass="xLarge" disabled="true"/>
+                            <glue:output id="cantidadIng" name="cantidadIng" type="text" label="#{messages['medicamento.cantidadIngreso']}" value="#{cardexHome.medicamento.cantidadIngreso}" 
+                                         required="true" execute="@this save" render="cantidadIng" styleClass="xLarge" disabled="true"/>                            
+                        </div>
+                        <div class="span7">
+
+                            <h:panelGroup id="refpanel" layout="block" class="clearfix" >
+                                <label for="ref">#{messages['medicamento.referencia']}</label>
+                                <div class="input" >                                    
+                                    <h:outputText id="ref" escape="false" value="#{cardexHome.medicamento.casaComercialProveedora}" /><br/>
+                                    <h:outputText id="ref1" escape="false" value="Nro. de Factura: #{cardexHome.medicamento.numeroFactura}" /><br/>
+                                    <h:outputText id="ref2" escape="false" value="dir: #{cardexHome.medicamento.dirCasaComercial}" />
+                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{cardexHome.medicamento.persistent}"
+                                                    styleClass="validation-status" />                                    
+                                </div>
+                            </h:panelGroup>                           
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <ui:param name="saldo1" value="#{cardexHome.medicamento.cantidadIngreso}"/>                
+                <h:outputText value="${saldo1}"/>
+                <p:dataTable id="tablaCardex" value="#{cardexHome.listaRecetasMedicamentos}" var="recetaMed" >
+                    <p:column headerText="#{messages['comun.fecha']}">
+                        <h:outputText value="#{recetaMed.receta.fechaEmision}">
+                            <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{messages['medicamento.referencia']}">
+                        <h:outputText value="Receta emitida por #{recetaMed.receta.responsableEmision.fullName}"/>
+                    </p:column>
+                    <p:column headerText="#{'Egreso'}">
+                        <h:outputText value="#{recetaMed.cantidad}"/>
+                    </p:column>
+                    <p:column headerText="#{'Saldo'}">                        
+                        <ui:param name="x1" value="#{cardexHome.saldo}"/>
+                        
+                        <f:setPropertyActionListener value="#{(x1 - recetaMed.cantidad)}" target="#{cardexHome.saldo}"/>
+                        <h:outputText value="#{cardexHome.saldo}"/> 
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form id="admin">                
+
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>                
+

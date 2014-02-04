@@ -72,6 +72,7 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     private String referencia;
     private String presentacion;
     private int unidades;
+    private int cantidadIngreso;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -80,8 +81,8 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     @Transient
     private String alerta;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicamento", fetch = FetchType.LAZY)
-    private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "medicamento", fetch = FetchType.LAZY)
+    //private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
 
     public Medicamento() {
         //this.fechaIngreso = new Date();
@@ -175,6 +176,14 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
         this.presentacion = presentacion;
     }
 
+    public int getCantidadIngreso() {
+        return cantidadIngreso;
+    }
+
+    public void setCantidadIngreso(int cantidadIngreso) {
+        this.cantidadIngreso = cantidadIngreso;
+    }   
+        
     public String getAlerta() {
         Date now = Calendar.getInstance().getTime();
         int dias = FechasUtil.getFechaLimite(now, fechaCaducidad);
@@ -188,7 +197,7 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     public void setAlerta(String alerta) {
         this.alerta = alerta;
     }
-
+/*
     public List<Receta_Medicamento> getListaRecetaMedicamento() {
         return listaRecetaMedicamento;
     }
@@ -204,7 +213,7 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
         }
         return recetas;
     }
-
+*/
     @Override
     public String toString() {
         return "edu.sgssalud.model.farmacia.Medicamento[ "

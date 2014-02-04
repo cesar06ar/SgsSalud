@@ -204,6 +204,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
             save(getInstance());
         } else {
             create(getInstance());
+            getInstance().setCantidadIngreso(getInstance().getUnidades());
             save(getInstance());
             FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
             FacesContext.getCurrentInstance().addMessage("", msg);

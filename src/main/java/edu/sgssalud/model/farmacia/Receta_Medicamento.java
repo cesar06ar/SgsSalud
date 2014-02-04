@@ -31,7 +31,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Receta_Medicamento")
-public class Receta_Medicamento implements Serializable {
+public class Receta_Medicamento implements Serializable, Comparable<Receta_Medicamento> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -77,6 +77,10 @@ public class Receta_Medicamento implements Serializable {
         this.medicamento = medicamento;
     }    
     
+    public boolean isPersistent(){
+        return getId() != null;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -104,6 +108,11 @@ public class Receta_Medicamento implements Serializable {
                 + " cantidad = " + cantidad 
                 + " medicamento_id = " + medicamento.getId()
                 + " ]";
+    }
+
+    @Override
+    public int compareTo(Receta_Medicamento o) {
+        return (int)(this.getId() - o.getId());
     }
     
 }

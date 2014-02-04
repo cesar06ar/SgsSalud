@@ -20,19 +20,21 @@
             <f:viewParam name="backView" value="#{recetaHome.backView}" />
         </f:metadata>
 
-        <ui:define name="header-replace">
-            <div class="header-replace">
-                <div class="container-header" >
-                    <div class="row lf row-title" >
-                        <h2>#{recetaHome.recetaId == null? 'Nueva Receta para:': 'Editar Receta para:'}
-                            #{recetaHome.paciente.nombres}</h2>
+        <ui:define name="header-replace" >
+            <h:panelGroup rendered="#{identity.loggedIn and account.renderView}">
+                <div class="header-replace" >
+                    <div class="container-header" >
+                        <div class="row lf row-title" >
+                            <h2>#{recetaHome.recetaId == null? 'Nueva Receta para:': 'Editar Receta para:'}
+                                #{recetaHome.paciente.nombres}</h2>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </h:panelGroup>            
         </ui:define>
 
         <ui:define name="content" >
-            <h:form id="form">
+            <h:form id="form" rendered="#{identity.loggedIn and account.renderView}">
                 <p:growl id="messages" showDetail="true" life="6000" />
                 <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
                     <div class="container-fluid">
@@ -175,12 +177,28 @@
                     <p:commandButton id="enviar" action="#{recetaHome.guardarReceta()}" value="#{messages['common.submit']}" 
                                      update=":form:messages" styleClass="btn primary" style="margin-left: 32%"/>
                     &nbsp;
-                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true"
+                    <h:link outcome="/pages/depSalud#{recetaHome.backView}?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
-                    </h:link>
+                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
+                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />            
+                    </h:link>                   
                 </div>
             </h:form>            
+        </ui:define>
+        <ui:define name="content-pre" rendered="#{!account.renderView}">
+            <h:panelGroup  >
+                <br/><br/>
+                <div class="section">
+                    <h1>Accesso Denegado</h1>
+                </div>
+
+                <div class="section">
+                    <p>Usted no tiene autorización para realizar la acción solicitada.</p>
+
+                    <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
+                </div>
+            </h:panelGroup>
         </ui:define>
     </ui:composition>
 </html>

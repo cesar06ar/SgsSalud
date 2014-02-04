@@ -38,9 +38,10 @@ public class TipoAnalisis implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nombre;
-    @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
-    @Column(nullable = false)
-    private TipoAnalisis.Categoria categoria;
+//    @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
+//    @Column(nullable = false)
+//    private TipoAnalisis.Categoria categoria;
+    private String categoria;
     private Double valorReferencia;
     private Double resultado;
     
@@ -68,13 +69,13 @@ public class TipoAnalisis implements Serializable {
         this.nombre = nombre;
     }
 
-    public Categoria getCategoria() {
+    public String getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(Categoria categoria) {
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
-    }
+    }   
 
     public Double getValorReferencia() {
         return valorReferencia;
@@ -136,7 +137,7 @@ public class TipoAnalisis implements Serializable {
     public String toString() {
         return "edu.sgssalud.model.labClinico.TipoAnalisis[ id=" + id + " ]";
     }
-
+    /*
     public enum Categoria {
 
         HEMATOLOGICOS(0),
@@ -158,5 +159,5 @@ public class TipoAnalisis implements Serializable {
         public int getCategoria() {
             return categoria;
         }
-    }
+    }*/
 }

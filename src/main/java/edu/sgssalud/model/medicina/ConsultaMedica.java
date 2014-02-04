@@ -71,7 +71,7 @@ public class ConsultaMedica extends BussinesEntity implements Serializable, Comp
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "signosVitales_id")
     private SignosVitales signosVitales;
-    @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
 
     public Date getFechaConsulta() {
