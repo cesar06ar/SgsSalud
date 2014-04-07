@@ -239,11 +239,11 @@ public class Lists {
 //        caduca.setDate(22);
 //        caduca.setMonth(01);
 //        caduca.setYear(2014);
-        if(FechasUtil.getFechaLimite(now, caduca) < 90){
-            System.out.println("ALERTA CADUCIDAD");
-        }else{
-            System.out.println("No caduca ");
-        }
+//        if(FechasUtil.getFechaLimite(now, caduca) < 90){
+//            System.out.println("ALERTA CADUCIDAD");
+//        }else{
+//            System.out.println("No caduca ");
+//        }
 //        String content = null;
 //        File file = null;
 //        for (int i = 1; i <= MAX; i++) {
@@ -255,6 +255,15 @@ public class Lists {
 //            aFileName = "/home/jlgranda/iaenvirtual/selenium/CrearCurso";
 //        }
        
+        List<String> cadenas = new ArrayList<String>();
+        cadenas.add("nom1");
+        cadenas.add("nom2");
+        cadenas.add("nom3");
+        for (int i = 0; i < cadenas.size(); i++) {
+            if(i == (cadenas.size()-1)){
+                System.out.println(cadenas.get(i));
+            }
+        }
         //System.out.println(h.agregarEnfermedad(c));
 
     }

@@ -141,7 +141,7 @@
    <url-mapping id="receta">
       <pattern value="/farmacia/receta"></pattern>
       <view-id value="/pages/depSalud/receta.xhtml"></view-id>       
-      <action>#{account.loadPages}</action>
+      <action>#{account.loadPagesRol}</action>
    </url-mapping>
    <url-mapping id="RecetaLista">
       <pattern value="/listaReceta"></pattern>
@@ -157,10 +157,16 @@
    <url-mapping id="FichaMedicaLista">
       <pattern value="/listaFichaMedica"></pattern>
       <view-id value="/pages/depSalud/listaFichaMedica.xhtml"></view-id>      
+      <action>#{account.loadPages}</action>    
+   </url-mapping>
+   <url-mapping id="VistaFichaMedica">
+      <pattern value="/vista"></pattern>
+      <view-id value="/pages/depSalud/view.xhtml"></view-id>      
+      <action>#{account.loadPages}</action>    
    </url-mapping>
    <url-mapping id="AgendaMedica">
       <pattern value="/medicina/agendaMedica"></pattern>
-      <view-id value="/pages/depSalud/medicina/agenda.xhtml"></view-id>       
+      <view-id value="/pages/depSalud/agenda.xhtml"></view-id>       
    </url-mapping> 
    <url-mapping id="ConsultaMedica">
       <pattern value="/medicina/consultaMedica"></pattern>
@@ -190,7 +196,7 @@
    </url-mapping>   
    <url-mapping id="AgendaOdontologica">
       <pattern value="/odontologia/agendaOdontologica"></pattern>
-      <view-id value="/pages/depSalud/odontologia/agenda.xhtml"></view-id>       
+      <view-id value="/pages/depSalud/agenda.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="Odontograma">
       <pattern value="/odontologia/odontograma"></pattern>
@@ -201,20 +207,29 @@
    <url-mapping id="pedidosLabClinico">
       <pattern value="/pedidoExamen"></pattern>
       <view-id value="/pages/depSalud/pedidoExamen.xhtml"></view-id>       
+      <action>#{account.loadPagesRol}</action>
    </url-mapping>
    <url-mapping id="examenLabClinico">
       <pattern value="/labClinico/examen"></pattern>
       <view-id value="/pages/labClinico/examen.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="listaPedidosExamen">
+      <pattern value="/labClinico/listaPedidos"></pattern>
+      <view-id value="/pages/labClinico/listaPedidosExam.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="ResultadoExamen">
+      <pattern value="/labClinico/resultadosExamen"></pattern>
+      <view-id value="/pages/labClinico/resultadosExamen.xhtml"></view-id>       
+   </url-mapping>
    
     <!-- Vistas del Módulo de Servicios Médicos-->
    <url-mapping id="listaServicios">
-      <pattern value="/admin/serviciosMedicos/listaServicios"></pattern>
-      <view-id value="/pages/admin/serviciosMedicos/lista.xhtml"></view-id>       
+      <pattern value="/enfermeria/serviciosMedicos/listaServicios"></pattern>
+      <view-id value="/pages/depSalud/enfermeria/serviciosMedicos/lista.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="servicioMedico">
-      <pattern value="/admin/serviciosMedicos/servicio"></pattern>
-      <view-id value="/pages/admin/serviciosMedicos/servicioMedico.xhtml"></view-id>       
+      <pattern value="/enfermeria/serviciosMedicos/servicio"></pattern>
+      <view-id value="/pages/depSalud/enfermeria/serviciosMedicos/servicioMedico.xhtml"></view-id>       
    </url-mapping>
          
     <!-- Begin Exception Mappings -->

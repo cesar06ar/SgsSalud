@@ -18,6 +18,11 @@ package edu.sgssalud.controller.odontologia;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.BussinesEntityType;
+import edu.sgssalud.model.farmacia.Medicamento;
+import edu.sgssalud.model.farmacia.Receta;
+import edu.sgssalud.model.farmacia.Receta_Medicamento;
+import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
+import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.Diente;
@@ -27,9 +32,13 @@ import edu.sgssalud.model.odontologia.Tratamiento;
 import edu.sgssalud.model.servicios.Servicio;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.ServiciosMedicosService;
+import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
+import edu.sgssalud.service.farmacia.RecetaServicio;
+import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
+import edu.sgssalud.service.odontologia.TratamientoServicio;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
@@ -67,15 +76,23 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     @Inject
     private ProfileService profileS;
     @Inject
-    private ServiciosMedicosService serviciosMedicosS;
+    private TratamientoServicio tratamientoServicio;
+    @Inject
+    private RecetaMedicamentoService recetaMedicamentoServicio;
+    @Inject
+    private RecetaServicio recetasServicio;
+    @Inject
+    private ResultadoExamenLCService resultadosExamenesService;
     private Diente diente;
     private FichaOdontologica fichaOdontolog;
-    private Servicio servicio;
+    //private Servicio servicio;
     private SignosVitales signosVitales;
     private Tratamiento tratamiento;
     private Long fichaMedicaId;
+    private PedidoExamenLaboratorio pedidoExamen;
+    private Receta receta;
     private UploadedFile file;
-    private List<Servicio> listaServicios = new ArrayList<Servicio>();
+    //private List<Servicio> listaServicios = new ArrayList<Servicio>();
     private List<Diente> listaDientes = new ArrayList<Diente>();
     private List<Diente> listaDientesC1 = new ArrayList<Diente>();
     private List<Diente> listaDientesC2 = new ArrayList<Diente>();
@@ -89,6 +106,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
     public void setConsultaOdontologicaId(Long consultaOdontId) {
         setId(consultaOdontId);
+        tratamientos = tratamientoServicio.buscarPorConsultaOdontologica(consultaOdontServicio.getPorId(getConsultaOdontologicaId()));
     }
 
     public FichaOdontologica getFichaOdontolog() {
@@ -111,15 +129,14 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         }
     }
 
-    public Servicio getServicio() {
-        return servicio;
-    }
-
-    public void setServicio(Servicio servicio) {
-        this.servicio = servicio;
-        //diente.setRutaIcon(servicio.getRutaImg());
-    }
-
+//    public Servicio getServicio() {
+//        return servicio;
+//    }
+//
+//    public void setServicio(Servicio servicio) {
+//        this.servicio = servicio;
+//        //diente.setRutaIcon(servicio.getRutaImg());
+//    }
     public SignosVitales getSignosVitales() {
         return signosVitales;
     }
@@ -153,16 +170,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         this.file = file;
     }
 
-    public List<Servicio> getListaServicios() {
-        return serviciosMedicosS.todosServicios("ODONTOLOGIA");
-    }
-
-    public void setListaServicios(List<Servicio> listaServicios) {
-        this.listaServicios = listaServicios;
-    }
-
     public List<Diente> getListaDientes() {
-        //this.IniciarDientes();
         return listaDientes;
     }
 
@@ -213,6 +221,22 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         this.tratamientos = tratamientos;
     }
 
+    public PedidoExamenLaboratorio getPedidoExamen() {
+        return pedidoExamen;
+    }
+
+    public void setPedidoExamen(PedidoExamenLaboratorio pedidoExamen) {
+        this.pedidoExamen = pedidoExamen;
+    }
+
+    public Receta getReceta() {
+        return receta;
+    }
+
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
+
     @TransactionAttribute
     public ConsultaOdontologica load() {
         if (isIdDefined()) {
@@ -240,16 +264,21 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         fichaMedicaServicio.setEntityManager(em);
         fichaOdontServicio.setEntityManager(em);
         profileS.setEntityManager(em);
-        serviciosMedicosS.setEntityManager(em);
+        tratamientoServicio.setEntityManager(em);
+        recetaMedicamentoServicio.setEntityManager(em);
+        recetasServicio.setEntityManager(em);
+        receta = new Receta();
+        resultadosExamenesService.setEntityManager(em);
 
         if (getInstance().isPersistent()) {
             this.IniciarDientes();
             Odontograma o = new Odontograma();
-            o.setDientes(listaDientes);
-            log.info("Init Dientes  " + fichaOdontolog.toString());
+            //          o.setDientes(listaDientes);
+//            log.info("Init Dientes  " + fichaOdontolog.toString());
             //fichaOdontolog.setOdontograma(o);
             //fichaOdontolog.setOdontogramaInicial(o);            
         }
+
         //log.info("Odont Inicial " + fichaOdontolog.getOdontogramaInicial());
         //log.info("Odont  " + fichaOdontolog.getOdontograma());
 
@@ -288,16 +317,20 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     @TransactionAttribute
     public String guardar() {
         String salida = "";
+        System.out.println("Guardar__________");
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         try {
             if (getInstance().isPersistent()) {
+                System.out.println("Guardar__________1" + getInstance().getId());
                 getInstance().setCode("REALIZADA");
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 getInstance().getSignosVitales().setFechaActual(now);
+                System.out.println("Guardar__________ 2");
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                System.out.println("Guardar__________3");
             } else {
                 create(getInstance());
                 save(getInstance());
@@ -305,6 +338,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
@@ -353,7 +387,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             FacesMessage msg = new FacesMessage("Error", "al crear odontograma");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        return salida;        
+        return salida;
     }
 
     public void upload() {
@@ -482,6 +516,66 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             }
         }
         return dientes;
+    }
+
+    @TransactionAttribute
+    public String borrarReceta() {
+        System.out.println("Borrar receta_______: " + receta.toString());
+        String salida = "";
+        try {
+            if (getInstance().isPersistent()) {
+                Receta_Medicamento aux;
+                List<Receta_Medicamento> listaRM = recetaMedicamentoServicio.obtenerPorReceta(receta);
+                for (Receta_Medicamento recetaMed1 : listaRM) {
+                    Medicamento medicament = recetaMed1.getMedicamento();
+                    int cantidad = medicament.getUnidades() + recetaMed1.getCantidad();
+                    medicament.setUnidades(cantidad);
+                    aux = recetaMed1;
+                    em.merge(medicament);
+                    em.remove(aux);
+                }
+                delete(receta);
+                //wire();
+                //this.getInstance().setRecetas(recetasServicio.buscarRecetaPorConsultaMedica(getInstance()));
+                System.out.println("ELIMINO RECETA");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino receta", "" + getInstance().getId()));
+                salida = "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaOdontId=" + getInstance().getId();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+            e.printStackTrace();
+        }
+        return salida;
+    }
+
+    @TransactionAttribute
+    public String borrarPedidoExamen() {
+        System.out.println("Borrar Pedido Examen_______: " + pedidoExamen.toString());
+        String salida = "";
+        try {
+            if (getPedidoExamen().isPersistent()) {
+                List<ResultadoExamenLabClinico> listaResultadosExamenLab = new ArrayList<ResultadoExamenLabClinico>();
+                listaResultadosExamenLab = resultadosExamenesService.getResultadosExamenPorPedidoExamen(pedidoExamen);
+                ResultadoExamenLabClinico aux;
+                for (ResultadoExamenLabClinico result : listaResultadosExamenLab) {
+                    aux = result;
+                    em.remove(aux);
+                }
+
+                delete(pedidoExamen);
+                //System.out.println("ELIMINO Pedido");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino Pedido", "" + pedidoExamen.getId()));
+                salida = "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaOdontId=" + getInstance().getId();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+            e.printStackTrace();
+        }
+        return salida;
     }
 
 }

@@ -481,3 +481,63 @@ PRE.prettyprint {
     margin-top: 40px;
     padding-top: 10px;
 }
+
+.styleHome {    
+    margin: 0 5% 0 10%; 
+    background-color: #d0f2eb;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 2px solid #65f5bb;
+}
+.row_home {    
+    background-color: #f3f6f5;
+    margin: 0.5% 2% 0 0.05%;
+}
+
+/*Estilos para Odontograma*/
+.diente_grupo{
+    //width: 5.25%; 
+    width: 60px; 
+    //height: 100px; 
+    padding: 0 0 10px 0;
+    background-color: #f2f5f4; float: left;
+}
+.diente_grupo_inf{
+    //width: 5.25%; 
+    width: 60px; 
+    //height: 100px; 
+    padding: 10px 0 0 0;
+    background-color: #f2f5f4; float: left;
+}
+
+.diente_title{
+    width: 20px; height: 18px; margin: 3px 0 0 20px; padding-top: 5px;
+}
+.diente_img{    
+    margin: 0 0 0 -10px; width: 12px;
+}
+
+.diente_check{    
+    width: 19px; height: 19px; margin: 0 0 0 18px;
+}
+
+.diente_check_inf{    
+    width: 19px; height: 19px; margin: 0 0 0 18px
+}
+.diente_title_inf{
+    width: 20px; height: 18px; margin: 0 0 0 20px; padding-top: 0;
+}
+
+.title_odon{
+    width: 963px;
+    margin-left: 0.45%;
+    margin-top: -8px;
+    background-color: #e0eef7; 
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 5px;
+    border: 1px solid #aed0ea;
+}
+
+

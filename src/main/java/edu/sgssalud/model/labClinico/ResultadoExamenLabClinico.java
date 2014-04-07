@@ -24,7 +24,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 
 /**
@@ -32,18 +36,29 @@ import javax.persistence.Temporal;
  * @author cesar
  */
 @Entity
-public class ResultadoExamenLaboratorioClinico implements Serializable {
+@Table(name = "ResultadoExamenLabClinico")
+@NamedQueries(value = {
+    @NamedQuery(name = "ResultadoExamenLabClinico.buscarPorId",
+            query = "select r FROM ResultadoExamenLabClinico r "
+            + " WHERE r.id = :Id"
+            + " ORDER BY r.id")
+})
+public class ResultadoExamenLabClinico implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaRealizacion;
-    private String observacion;
+    private Double valorResultado;
+    //private String observacion;
+
+    @ManyToOne()
+    private ExamenLabClinico ExamenLab;
     
-    @OneToMany(mappedBy = "resultadoExamLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TipoAnalisis>  tiposAnalisis;
+    @ManyToOne()
+    private PedidoExamenLaboratorio pedidoExamenLab;
 
     public Long getId() {
         return id;
@@ -51,8 +66,8 @@ public class ResultadoExamenLaboratorioClinico implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }   
-    
+    }
+
     public boolean isPersistent() {
         return getId() != null;
     }
@@ -65,32 +80,29 @@ public class ResultadoExamenLaboratorioClinico implements Serializable {
         this.fechaRealizacion = fechaRealizacion;
     }
 
-    public String getObservacion() {
-        return observacion;
+    public Double getValorResultado() {
+        return valorResultado;
     }
 
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
-    }    
-
-    public List<TipoAnalisis> getTiposAnalisis() {
-        return tiposAnalisis;
+    public void setValorResultado(Double valorResultado) {
+        this.valorResultado = valorResultado;
     }
 
-    public void setTiposAnalisis(List<TipoAnalisis> tiposAnalisis) {
-        for (TipoAnalisis ta : tiposAnalisis) {
-            ta.setResultadoExamLabClinico(this);
-        }
-        this.tiposAnalisis = tiposAnalisis;
+    public ExamenLabClinico getExamenLab() {
+        return ExamenLab;
     }
-    
-    public void agregarTipoAnalisis(TipoAnalisis tp){
-        if(!this.tiposAnalisis.contains(tp)){
-            tp.setResultadoExamLabClinico(this);
-            this.tiposAnalisis.add(tp);
-        }
+
+    public void setExamenLab(ExamenLabClinico ExamenLab) {
+        this.ExamenLab = ExamenLab;
     }
-            
+
+    public PedidoExamenLaboratorio getPedidoExamenLab() {
+        return pedidoExamenLab;
+    }
+
+    public void setPedidoExamenLab(PedidoExamenLaboratorio pedidoExamenLab) {
+        this.pedidoExamenLab = pedidoExamenLab;
+    }
 
     @Override
     public int hashCode() {
@@ -102,10 +114,10 @@ public class ResultadoExamenLaboratorioClinico implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ResultadoExamenLaboratorioClinico)) {
+        if (!(object instanceof ResultadoExamenLabClinico)) {
             return false;
         }
-        ResultadoExamenLaboratorioClinico other = (ResultadoExamenLaboratorioClinico) object;
+        ResultadoExamenLabClinico other = (ResultadoExamenLabClinico) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

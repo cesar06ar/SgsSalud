@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:sgs="http://sgssalud.edu.org/jsf/facelets"
+      xmlns:glue="http://eqaula.org/jsf/facelets">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}" />
+            <f:viewParam name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}" />            
+            <f:viewParam name="odontogramaId" value="#{odontogramaHome.odontogramaId}"/>
+            <f:viewParam name="tipo" value="#{odontogramaHome.tipo}"/>            
+            <f:event listener="#{odontogramaHome.cargar}" type="preRenderView"/>
+        </f:metadata>
+        <ui:define name="header-replace" >
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{' Odontograma'} 
+                            #{odontogramaHome.nombreOdont}</h2> 
+                    </div>
+                </div>
+            </div>
+        </ui:define>       
+        <ui:define name="content" >
+            <h:form id="form" rendered="#{odontogramaHome.instance.persistent}">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+                <ui:repeat value="#{odontogramaHome.instance.dientes}" var="d" >
+                    <p:graphicImage value="/resources/tratamientoDentales/superior/dienteS.gif" width="55" height="65" style="margin: 5px 0 0px 10px;"
+                                    rendered="true" title="#{d.nombre} #{d.posicion} #{d.id}"/>                            
+                    <!--<h:outputText value="# {t.nombre}"/>
+                    <ui:repeat value="# {odontogramaHome.tratamiento.cuandrantes}" var="t1">   -->
+                    <ui:repeat value="#{d.tratamientos}" var="t">
+
+                        <h:panelGroup rendered="#{messages['tratamiento.carie'] eq t.nombre }">
+                            <ui:repeat value="#{t.cuadrantes}" var="cua">                                                           
+
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc1.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                                    rendered="#{'c1' eq cua }"/> 
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc2.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                                    rendered="#{'c2' eq cua }"/> 
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc3.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                                    rendered="#{'c3' eq cua }"/> 
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc4.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                                    rendered="#{'c4' eq cua }"/> 
+                                    <p:graphicImage value="/resources/tratamientoDentales/superior/carieSc5.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                                    rendered="#{'c5' eq cua }"/> 
+                            </ui:repeat> 
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <p:graphicImage value="/resources/tratamientoDentales/superior/coronaS.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                            rendered="#{messages['tratamiento.corona'] eq t.nombre }"/>                                  
+                            <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteNecesarioS.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                            rendered="#{t.nombre == messages['tratamiento.sellanateNecesario']}" />                                                                                         
+                            <p:graphicImage value="/resources/tratamientoDentales/superior/sellanteRealizadoS.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                            rendered="#{t.nombre == messages['tratamiento.sellanateRealizado']}" /> 
+                            <p:graphicImage value="/resources/tratamientoDentales/superior/endodonciaNecesariaS.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                            rendered="#{t.nombre == messages['tratamiento.endodonciaNecesaria']}" />            
+                        </h:panelGroup>
+                    </ui:repeat>                                
+                </ui:repeat>                   
+                <div class="admin-actions span16" style="padding-right: 0%;">
+                    <p:commandButton id="save" action="#{odontogramaHome.guardar()}" value="#{messages['common.save']}" 
+                                     styleClass="btn success offset4"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
+                            value="#{messages['common.cancel']}" styleClass="btn success" >
+                        <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
+                        <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
+                    </h:link>
+                </div>
+            </h:form>
+            <!--
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} #{messages['tratamiento.nombre']} " 
+                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="600">
+                <h:form id="form-dialog">                    
+                    <h:outputText value="#{messages['common.new']} #{messages['tratamiento.nombre']} a diente seleccionado #{odontogramaHome.selectDient.nombre} #{odontogramaHome.selectDient.posicion}" styleClass="offset2"/>
+    
+                </h:form>
+            </p:dialog> -->
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
+                                     action="#{odontogramaHome.borrarTratamiento()}" update=":form"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>                
+

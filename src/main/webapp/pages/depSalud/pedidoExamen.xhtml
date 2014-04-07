@@ -14,56 +14,100 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-           <!-- <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
-            <f:viewParam name="backView" value="#{pacienteHome.backView}" />-->
+            <f:viewParam name="fichaMedicaId" value="#{pedidoExamenLabHome.fichaMedicaId}" />
+            <f:viewParam name="consultaMedicaId" value="#{pedidoExamenLabHome.consultaMedId}" />
+            <f:viewParam name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />            
+            <f:viewParam name="pedidoExamenId" value="#{pedidoExamenLabHome.pedidoExamenId}" />
+            <f:viewParam name="backView" value="#{pedidoExamenLabHome.backView}" />           
+            <f:viewParam name="result" value="#{pedidoExamenLabHome.result}" />
         </f:metadata>
 
-
-        <ui:define name="header-replace">
-            <div class="header-replace">
-                <div class="container-header" >
-                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
-                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
+        <ui:define name="header-replace" >            
+                <div class="header-replace" >
+                    <div class="container-header" >
+                        <div class="row lf row-title" >
+                            <h2>#{pedidoExamenLabHome.pedidoExamenId == null? 'Pedido de examenes de laboratorio clinico para:': 'Editar pedido de examenes de laboratorio clinico para:'}
+                                #{pedidoExamenLabHome.paciente.nombres}</h2>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>            
         </ui:define>
-        <ui:define name="content" class="span20">
+        <ui:define name="content" >           
+                <h:form id="form">
+                    <p:growl id="messages" showDetail="true" life="6000" />
+                    <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                        <div class="container-fluid">
+                            <div class="row-fluid">
+                                <div class="span7">                            
+                                    <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pedidoExamenLabHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                                    <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pedidoExamenLabHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+                                </div>
+                                <div class="span7" align="left">
+                                    <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{pedidoExamenLabHome.fichaMedica.numeroFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                    <h:panelGroup layout="block" class="clearfix" >
+                                        <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
+                                        <div class="input">
+                                            <p:calendar id="fafm" value="#{pedidoExamenLabHome.instance.fechaPedido}"  label="#{messages['fechaReceta.fechaEmision']}"
+                                                        disabled="true" pattern="dd-MMM-yyyy">
+                                            </p:calendar>
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pedidoExamenLabHome.instance.fechaPedido != null}"
+                                                            styleClass="validation-status" />
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+                            </div>
+                        </div>
+                    </p:panel>
+                    <p:panel id="panelPrescripcion" header="Ingreso de datos" rendered="#{!pedidoExamenLabHome.result}">
+                        <h:panelGroup id="obEFP" >
+                            <label for="pickExamLab" style="width: 40%">#{messages['pedidoLabClinico.admin']}</label><br/><br/>
+                            <p:pickList id="pickExamLab" value="#{pedidoExamenLabHome.pickListExamenesLab}" var="examenLab_"  showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  style="width: 50%"
+                                        itemLabel="#{examenLab_.code} #{examenLab_.name}" itemValue="#{examenLab_}" converter="examenLabClinicoConverter" showCheckbox="true">  
+                                <f:facet name="sourceCaption">#{messages['Examen.listado']} #{messages['Examen.nombres']}</f:facet>
+                                <f:facet name="targetCaption">#{messages['Examen.nombres']} #{'a realizar'}</f:facet>
+                                <p:ajax event="transfer" listener="#{pedidoExamenLabHome.onTransfer}" update=":form:messages :form:save" />  
 
+                                <p:column style="width: 100%" >
+                                    <h:outputText value="#{examenLab_.code}&nbsp;&nbsp;#{examenLab_.name}" />                                        
+                                </p:column>
+                            </p:pickList>
+                        </h:panelGroup> 
+                        <glue:input id="observ" name="observ" type="textarea" label="#{messages['consultaMedica.observacion']}" value="#{pedidoExamenLabHome.instance.observacion}" 
+                                    helpinline="#{messages['consultaMedica.observacion']}"  
+                                    required="false" execute="@this save" render="observ" styleClass="xLarge" disabled="false"/>
+                    </p:panel>   
+                    <p:panel id="panelResult" header="Resultados de Examen" rendered="#{pedidoExamenLabHome.result}">
+                        <p:dataTable id="tablaResultados" var="Object_" value="#{pedidoExamenLabHome.listaResultadosExamenLab}" paginator="true" rows="30" paginatorPosition="top"
+                                     >
 
-            <p:growl id="growl" showDetail="true" />  
-
-            <p:fieldset legend="Urulogicos" toggleable="true" toggleSpeed="500">  
-                <p:ajax event="toggle" listener="#{PedidoExamanLaboratorioHome.handleToggle}" update="growl" />  
-                <h:panelGrid columns="2" cellpadding="10">  
-
-                    <p:dialog header="Selected Values" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">  
-                        <p:outputPanel id="display">  
-                            <p:dataList value="Orina" var="option">  
-                                #{option}  
-                            </p:dataList>  
-
-                           
-                        </p:outputPanel>  
-                    </p:dialog>  
-
-
-
-                </h:panelGrid>  
-            </p:fieldset>  
-
-            <h:form id="form">
-
-
-                <div class="admin-actions ">
-                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
-                    &nbsp;&nbsp;
-                    <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
-                    </h:link>
-                </div>
-            </h:form>
-        </ui:define>
+                            <p:column headerText="#{messages['common.code']}" style="width:30%">  
+                                <h:outputText value="#{Object_.examenLab.code}" />  
+                            </p:column>  
+                            <p:column headerText="#{messages['Examen.Nombre1']}" style="width:30%">                             
+                                <h:outputText value="#{Object_.examenLab.name}" />  
+                            </p:column>  
+                            <p:column headerText="Valor " style="width:30%">  
+                                <h:outputText value="#{Object_.valorResultado}" />  
+                            </p:column>  
+                            <p:column headerText="#{messages['Examen.ValorReferencial']}" style="width:30%">   
+                                <h:outputText value="#{Object_.examenLab.valorReferencia}" />
+                            </p:column>                         
+                        </p:dataTable>
+                    </p:panel>
+                    <div class="admin-actions ">
+                        <p:commandButton id="save" action="#{pedidoExamenLabHome.guardar()}" value="#{messages['common.submit']}" 
+                                         update=":form:messages" styleClass="btn primary" style="margin-left: 32%" immediate="true"
+                                         disabled="#{empty pedidoExamenLabHome.pickListExamenesLab.target}"/>
+                        &nbsp;
+                        <h:link outcome="/pages#{pedidoExamenLabHome.backView}?faces-redirect=true"
+                                value="#{messages['common.cancel']}" styleClass="btn primary" >
+                            <f:param name="fichaMedicaId" value="#{pedidoExamenLabHome.fichaMedicaId}"/>
+                            <f:param name="consultaMedicaId" value="#{pedidoExamenLabHome.consultaMedId}"></f:param>                                    
+                            <f:param name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />            
+                        </h:link>   
+                    </div>
+                </h:form>            
+        </ui:define>        
     </ui:composition>
 </html>                
 

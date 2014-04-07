@@ -21,6 +21,7 @@ import edu.sgssalud.service.farmacia.MedicamentoListaServicio;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -47,7 +48,7 @@ import org.primefaces.model.SortOrder;
  */
 @Named("consultaMedicaListaServicio")
 @ViewScoped
-public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
+public class ConsultaMedicaListaServicio implements Serializable{ //extends LazyDataModel<ConsultaMedica>
     
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
@@ -66,7 +67,7 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
     
     /*Método para inicializar tabla*/
     public ConsultaMedicaListaServicio() {
-        setPageSize(MAX_RESULTS);
+        //setPageSize(MAX_RESULTS);
         resultList = new ArrayList<ConsultaMedica>();
     }
     
@@ -74,12 +75,12 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
     public void init() {
         cms.setEntityManager(em);
         if (resultList.isEmpty() ) {
-           resultList = cms.getConsultasMedicas(getPageSize(), primerResult);
+           resultList = cms.getConsulasMedicas();
         }
     }
     
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
-    @Override
+    /*@Override
     public List<ConsultaMedica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
@@ -88,29 +89,25 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+        _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+         _filters.putAll(filters);
 
         QueryData<ConsultaMedica> qData = cms.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
         this.setResultList(qData.getResult());        
         Collections.sort(resultList);
         return qData.getResult();        
-    }
+    }*/
     
     /*Métodos que me permiten seleccionar un objeto de la tabla*/
     
-    @Override
-    public Object getRowKey(ConsultaMedica entity) {
-        return entity.getId();
-    }
-
 //    @Override
 //    public ConsultaMedica getRowData(Long t) {
 //        return cms.getConsultaMedicaPorId(t);
 //    }
 
     public void onRowSelect(SelectEvent event) {
+        this.setConsulMedicSeleccionada((ConsultaMedica) event.getObject());
         FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.selected"), ((ConsultaMedica) event.getObject()).getEnfermedadActual());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
@@ -123,15 +120,7 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
     /*.............*/
 
     /*Métodos GET y SET de los Atributos*/
-    public int getNextFirstResult() {
-        return primerResult + this.getPageSize();
-    }
-
-    public int getPreviousFirstResult() {
-        return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
-    }
-
-    public int getFirstResult() {
+    public int getFirstResult() {        
         return primerResult;
     }
 
@@ -141,9 +130,6 @@ public class ConsultaMedicaListaServicio extends LazyDataModel<ConsultaMedica>{
     }
 
     public List<ConsultaMedica> getResultList() {
-//        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-//            resultList = pacienteServicio.getPacientes(firstResult, firstResult);
-//        }
         Collections.sort(resultList);
         return resultList;
     }

@@ -46,6 +46,8 @@ public class Account implements Serializable {
     @Inject
     private PacienteServicio pacienteS;
 
+    private SecurityRules securityRules;
+    
     @PostConstruct
     public void init() {
         ps.setEntityManager(em);
@@ -134,7 +136,7 @@ public class Account implements Serializable {
         this.em = em;
         ps.setEntityManager(em);
     }
-
+    
     public boolean isUserPaciente() {
 
         if (identity.isLoggedIn()) {
@@ -192,11 +194,47 @@ public class Account implements Serializable {
         }
     }
 
-    public String loadPages() {
-        if (identity.isLoggedIn()) {
-            //return "/pages/depSalud/fichaMedica.xhtml";
-            return null;
+    public boolean isRenderView1() {
+        SecurityRules s = new SecurityRules();
+        if (s.isMedico(identity) || s.isOdontologo(identity)) {
+            return true;
+        } else {
+            return false;
         }
-        return "/pages/login.xhtml";
     }
+
+    public String loadPages() {
+        SecurityRules s = new SecurityRules();
+        if (identity.isLoggedIn()) {
+            if (s.isMedico(identity) || s.isOdontologo(identity) || s.isEnfermero(identity)) {
+                return null;
+            } else {
+                return "/pages/denied.xhtml";
+            }            
+        }else{
+            return "/pages/login.xhtml";
+        }        
+    }
+
+    public String loadPagesRol() {
+        SecurityRules s = new SecurityRules();
+        if (identity.isLoggedIn()) {
+            if (s.isMedico(identity) || s.isOdontologo(identity)) {
+                return null;
+            } else {
+                return "/pages/denied.xhtml";
+            }
+        } else {
+            return "/pages/login.xhtml";
+        }
+    }
+
+    public SecurityRules getSecurityRules() {
+        return securityRules;
+    }
+
+    public void setSecurityRules(SecurityRules securityRules) {
+        this.securityRules = securityRules;
+    }   
+    
 }

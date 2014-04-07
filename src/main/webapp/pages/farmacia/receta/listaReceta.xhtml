@@ -81,10 +81,10 @@
 
                     <p:column sortBy="#{receta_.id}" style="width: 10%; text-align: center;">
                         <f:facet name="header">  
-                            <h:outputText value="#{messages['fichaMedica.numero']}" />  
+                            <h:outputText value="#{messages['receta.numero']}" />  
                         </f:facet>  
-                        <h:outputText value="#{receta_.consultaMedica.historiaClinica.fichaMedica.numFicha}" rendered="#{receta_.consultaMedica.persistent}"/>                        
-                        <h:outputText value="#{receta_.consultaOdontologica.fichaOdontologica.fichaMedica.numFicha}" rendered="#{receta_.consultaOdontologica.persistent}"/>                        
+                        <h:outputText value="#{receta_.numvalue}" />
+                        
                     </p:column>
                     <p:column sortBy="#{receta_.paciente.nombres}" style="text-align: center;">
                         <f:facet name="header">  

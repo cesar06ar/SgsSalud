@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+
+        </f:metadata>
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{messages['agenda.Nombre']} </h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="content" >
+            <h:form id="form">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+                <!--Botones de admin-->
+                <div class="admin-actions ">
+
+                    <h:link title="#{messages['common.add']} #{messages['turno.nombre']}" rendered="#{true}" outcome="/pages/secretaria/lista" styleClass="btn btn-img" >
+                        <p:graphicImage value="/resources/img/turno.png" width="40" height="40"/>                        
+                        <f:param name="backView" value="lista"></f:param>
+                    </h:link>                   
+
+                </div>
+                <p:dataTable id="tablaTurnos" value="#{turnoHome.listaTurnos}" rows="10" var="turno_" editable="true"
+                             paginator="true" emptyMessage="No existe ningun turno"
+                             rows="20" paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                             rowsPerPageTemplate="10,20,30,50,100">
+                    <p:column headerText="#{messages['paciente.nombre']}" style="width: 30%">
+                        <h:outputText value="#{turno_.paciente.nombres}"/>
+                        &nbsp;&nbsp;&nbsp;
+                        <h:outputText value="#{turno_.paciente.apellidos}"/>
+                    </p:column>                            
+                    <p:column headerText="#{messages['comun.fecha']} #{messages['citaMedica.nombre']}" style="width: 15%">
+                        <p:outputLabel value="#{turno_.fechaCita}" style="width: 65px; margin-top: -6px;" />                        
+                        &nbsp;&nbsp;&nbsp;
+                        <h:outputText value="#{turno_.hora}" >
+                            <f:convertDateTime pattern="HH:mm"/>
+                        </h:outputText>
+                    </p:column>                   
+                    <p:column headerText="#{messages['servicioMedico.nombre1']}" style="width: 15%">
+                        <h:outputText value="#{turno_.servicio}" />
+                    </p:column>
+                    <p:column headerText="#{messages['comun.estado']}" style="width: 15%">
+                        <h:outputText value="#{turno_.estado}" />
+                    </p:column>                                       
+                    <p:column headerText="#{'Opción'}" style="width: 15%">                        
+                        <!--
+                        &nbsp;
+                        <p:commandLink id="button-delete" type="button" title="# {messages['common.delete']}"
+                                       onclick="# {'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                                       style="width: 10px; height: 10px;">                                                        
+                            <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
+                            <f:setPropertyActionListener value="# {consultaM_}" target="# {fichaMedicaHome.consultaMedica}"/>
+                            <p:ajax process="@this" update=":cancel-dialog" />
+                        </p:commandLink>-->
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>                
+

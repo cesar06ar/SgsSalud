@@ -30,61 +30,99 @@ limitations under the License.
             text-align: left;
         }
     </style>
-    <c:set var="id" value="#{not empty id ? id : (not empty name ? name : action)}" />
-    <c:set var="required" value="#{not empty required and required}" />
-    <c:set var="render" value="#{not empty render ? 'panel-group-'.concat(render) : (not empty id ? 'panel-group-'.concat(id) : 'panel-group-'.concat(mame))}" />
-    <c:set var="validator" value="#{not empty validator ? validator : 'safeTextUTF8Validator'}" />
-    <c:set var="converter" value="#{not empty converter ? converter : omnifaces.SelectItemsConverter}" />    
-    <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
-    <c:set var="numDecimales" value="#{not empty numDecimales ? numDecimales : '2'}" />
-    <!-- TODO habilitar o deshabilitar ajax validation -->
-    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
-        <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
-        <div class="input">
-            <c:choose>
-                <c:when test="#{type == 'java.lang.String' or type == 'text'}">
-                    <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" disabled="#{disabled}">
-                        <f:validator validatorId="#{validator}"/>
-                        <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
-                    </p:inputText>
-                </c:when>
-                <c:when test="#{type == 'java.util.Date' or type == 'calendar'}">
-                    <p:calendar value="#{a.value}" id="#{name}" navigator="true" label="#{label}">
-                        <p:ajax event="dateSelect" listener="#{listener}" update="#{render}" />
-                    </p:calendar>  
-                </c:when>
-                <c:when test="#{type == 'java.lang.Boolean' or type == 'checkbox'}">
-                    <h:selectBooleanCheckbox value="#{value}" id="#{name}" styleClass="xLarge" required="#{required}" label="#{label}">
-                        <f:ajax execute="#{execute}" render="#{render}"  />
-                    </h:selectBooleanCheckbox>
-                    <!--<span>#{inlinehelp}</span>-->
-                </c:when>
-                <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
-                    <h:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" style="width: 400px; height: 100px;" >
-                        <f:ajax execute="#{execute}" render="#{render}"  />
-                    </h:inputTextarea>
-                </c:when>
-                <c:when test="#{type == 'java.lang.String[]' or type == 'select'}">
-                    <p:selectOneMenu value="#{value}" effect="fade"  converter="#{converter}" required="#{required}" requiredMessage="#{requiredMessage}">  
-                        <f:selectItems value="#{values}" var="v" itemLabel="#{v}" itemValue="#{v}"/>  
-                        <p:ajax event="change" listener="#{listener}" update="#{render}" partialSubmit="true"/>
-                    </p:selectOneMenu>  
-                </c:when>
-                <c:when test="#{type == 'java.lang.Long' or type == 'java.lang.Double' or type == 'java.lang.Float' or type == 'decimal'}">
-                    <pe:inputNumber id="#{name}" value="#{value}" styleClass="xLarge span4" required="#{required}" label="#{label}" decimalPlaces="#{numDecimales}">  
-                        <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
-                    </pe:inputNumber>  
-                    <br/>
-                </c:when>
-                <c:otherwise>
-                    <h:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}">
-                        <f:ajax execute="#{execute}" render="#{render}"  />
-                    </h:inputText>
-                </c:otherwise>
-            </c:choose>
-            <h:graphicImage value="#{resource['success.gif']}" rendered="#{value != null}"
-                            styleClass="validation-status" />
-            <span class="help-inline"><br/>#{inlinehelp} <ocp:message forId="#{name}" /></span>
-        </div>
-    </h:panelGroup>  
+    <c:set var="id" value="#{not empty id ? id : null}" />
+    <c:set var="required" value="#{not empty required ? required : null}" />
+    <c:set var="render" value="#{not empty render ? render : null}" />
+    <c:set var="diente" value="#{not empty diente ? diente : null}" />    
+    <c:set var="update" value="#{not empty update ? update : null}" />
+    <c:set var="tratamientos" value="#{not empty tratamientos ? tratamientos : null}" />
+
+    <h:panelGroup id="panel-group-#{id}" >       
+        <div class="diente_grupo_inf">
+            <div class="diente_check_inf">
+                <p:selectBooleanCheckbox value="#{check}"  >
+                    <p:ajax process="@this" update="#{update}" rendered="#{render}" />
+                </p:selectBooleanCheckbox>   
+            </div>
+            <span class="diente_img">  
+                <p:graphicImage value="/resources/tratamientoDentales/inferior/dienteInferior.gif" width="55" height="65" style="margin: 0 0 0 10px;"
+                                rendered="true" title="#{diente.nombre} #{diente.posicion} "/> 
+                <ui:repeat value="#{tratamientos}" var="t">
+                    <h:panelGroup rendered="#{messages['tratamiento.carie'] eq t.nombre }">                        
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/carieIc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                        rendered="#{t.isCuandrante('c1')}"/> 
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/carieIc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                        rendered="#{t.isCuandrante('c2')}"/> 
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/carieIc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                        rendered="#{t.isCuandrante('c3')}"/> 
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/carieIc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                        rendered="#{t.isCuandrante('c4')}"/> 
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/carieIc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;" 
+                                        rendered="#{t.isCuandrante('c5')}"/>                         
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{messages['tratamiento.obturacionProvicional'] eq t.nombre }">
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionProvicionalIc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c1')}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionProvicionalIc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c2')}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionProvicionalIc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c3')}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionProvicionalIc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c4') }"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionProvicionalIc5.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c5')}"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{messages['tratamiento.obturacionDefinitiva'] eq t.nombre }">                                        
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionDefinitivaIc1.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c1')}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionDefinitivaIc2.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c2')}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionDefinitivaIc3.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c3') }"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionDefinitivaIc4.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c4') }"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/obturacionDefinitivaIc.gif" width="55" height="65" style="margin: 0 0 0 -55px;"
+                                        rendered="#{t.isCuandrante('c5') }"/>                                    
+                    </h:panelGroup>
+                    <h:panelGroup >  <!--Imagenes de tratamiento a todo el diente-->
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/coronaI.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                        rendered="#{messages['tratamiento.corona'] eq t.nombre }"/>                                  
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/sellanteNecesarioI.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                        rendered="#{t.nombre == messages['tratamiento.sellanateNecesario']}" />                                                                                         
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/sellanteRealizadoI.gif" width="55" height="65" style="margin: 0 0 0 -59px;" 
+                                        rendered="#{t.nombre == messages['tratamiento.sellanateRealizado']}" /> 
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/endodonciaNecesariaI.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{t.nombre == messages['tratamiento.endodonciaNecesaria']}" />
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/endodonciaRealizada.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.endodonciaRealizada'] == t.nombre}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/extraccionIndicadaI.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.extraccionIndicada'] == t.nombre}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/ausenciaPiesaDentalI.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.ausenciaPiezaDental'] == t.nombre}"/>
+                    </h:panelGroup>
+                    <h:panelGroup > <!--Imagenes de tratamiento a muchos dientes-->
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/protesisCentro.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisFija.centro'] == t.nombreAux}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisFija.inicio'] == t.nombreAux}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/protesisFijaFin.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisFija.fin'] == t.nombreAux}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/protesisParcialInicio.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisParcialRemovible.i'] == t.nombreAux}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/protesisParcialFin.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisParcialRemovible.f'] == t.nombreAux}"/>
+                        <p:graphicImage value="/resources/tratamientoDentales/inferior/protesisT.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisTotal'] == t.nombre}"/>
+                    </h:panelGroup> 
+                </ui:repeat>        
+            </span>
+            <div class="diente_title_inf">
+                <h:outputText value="#{diente.posicion}"/>
+            </div>
+        </div>             
+
+    </h:panelGroup> 
+    <p:tooltip for="panel-group-#{id}">
+        <h:outputText value="#{title}"/>
+    </p:tooltip>
 </ui:composition>

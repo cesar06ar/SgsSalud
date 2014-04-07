@@ -16,6 +16,7 @@
 package edu.sgssalud.model.medicina;
 
 import edu.sgssalud.model.BussinesEntity;
+import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.util.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -66,6 +67,9 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
         @JoinColumn(name = "enfermedadCIE10_id", referencedColumnName = "id")})
     private List<EnfermedadCIE10> enfermedadesCIE10 = new ArrayList<EnfermedadCIE10>();
 
+    @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PedidoExamenLaboratorio> pedidosExamenLab = new ArrayList<PedidoExamenLaboratorio>();
+
     public FichaMedica getFichaMedica() {
         return fichaMedica;
     }
@@ -91,7 +95,7 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
         return enfermedadesCIE10;
     }
 
-    public void setEnfermedadesCIE10(List<EnfermedadCIE10> enfermedadesCIE10) {       
+    public void setEnfermedadesCIE10(List<EnfermedadCIE10> enfermedadesCIE10) {
         this.enfermedadesCIE10 = enfermedadesCIE10;
     }
 
@@ -103,8 +107,26 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
     }
 
     public void agregarEnfermedad(EnfermedadCIE10 enfermedad) {
-        if(!this.enfermedadesCIE10.contains(enfermedad)){            
+        if (!this.enfermedadesCIE10.contains(enfermedad)) {
             enfermedadesCIE10.add(enfermedad);
+        }
+    }
+
+    public List<PedidoExamenLaboratorio> getPedidosExamenLab() {
+        return pedidosExamenLab;
+    }
+
+    public void setPedidosExamenLab(List<PedidoExamenLaboratorio> pedidosExamenLab) {
+        for (PedidoExamenLaboratorio p : pedidosExamenLab) {
+            p.setHistoriaClinica(this);
+        }
+        this.pedidosExamenLab = pedidosExamenLab;
+    }
+
+    public void agregarPedidoExamen(PedidoExamenLaboratorio p) {
+        if (!this.pedidosExamenLab.contains(p)) {
+            p.setHistoriaClinica(this);
+            this.pedidosExamenLab.add(p);
         }
     }
 }

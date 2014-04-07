@@ -17,11 +17,8 @@ package edu.sgssalud.model.medicina;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.farmacia.Receta;
-import edu.sgssalud.model.odontologia.Tratamiento;
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -73,7 +70,8 @@ public class ConsultaMedica extends BussinesEntity implements Serializable, Comp
     private SignosVitales signosVitales;
     @OneToMany(mappedBy = "consultaMedica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Receta> recetas = new ArrayList<Receta>();
-
+        
+    
     public Date getFechaConsulta() {
         return fechaConsulta;
     }
@@ -195,7 +193,8 @@ public class ConsultaMedica extends BussinesEntity implements Serializable, Comp
             this.recetas.add(r);
         }
     }
-
+   
+    
     @Override
     public int compareTo(ConsultaMedica o) {
 //        if (this.getFechaConsulta().before(o.getFechaConsulta())) {

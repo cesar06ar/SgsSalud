@@ -61,7 +61,7 @@ public class RecetaMedicamentoService extends PersistenceUtil<Receta_Medicamento
         return getResultList(query);
     }
     
-     public List<Receta_Medicamento> obtenerPorReceta(final Medicamento medicamento) {
+     public List<Receta_Medicamento> obtenerPorMedicamento(final Medicamento medicamento) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta_Medicamento> query = builder.createQuery(Receta_Medicamento.class);
         Root<Receta_Medicamento> entity = query.from(Receta_Medicamento.class);

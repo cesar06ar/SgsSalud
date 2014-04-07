@@ -60,7 +60,7 @@ import org.jboss.solder.logging.Logger;
             + " e.fechaElaboracion=:clave")})
 public class Medicamento extends BussinesEntity implements Serializable, Comparable<Medicamento> {
 
-    private static Logger log = Logger.getLogger(Medicamento.class);
+    //private static Logger log = Logger.getLogger(Medicamento.class);
     private static final long serialVersionUID = 2L;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaIngreso;
@@ -73,6 +73,7 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     private String presentacion;
     private int unidades;
     private int cantidadIngreso;
+    private boolean generico;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -183,12 +184,20 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     public void setCantidadIngreso(int cantidadIngreso) {
         this.cantidadIngreso = cantidadIngreso;
     }   
-        
+
+    public boolean isGenerico() {
+        return generico;
+    }
+
+    public void setGenerico(boolean generico) {
+        this.generico = generico;
+    }
+            
     public String getAlerta() {
         Date now = Calendar.getInstance().getTime();
         int dias = FechasUtil.getFechaLimite(now, fechaCaducidad);
         if (dias >= 0 && dias < 90) {
-            return "ALERTA CADUCIDAD";
+            return "POR CADUCARSE";
         } else {
             return "";
         }

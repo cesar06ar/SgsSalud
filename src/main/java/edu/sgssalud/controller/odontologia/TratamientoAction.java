@@ -55,7 +55,7 @@ public class TratamientoAction extends BussinesEntityHome<Tratamiento> implement
             getInstance().setFechaRealizacion(now);
             getInstance().setConsultaOdontologica(consultaOdont);            
             getInstance().setDiente(diente);
-            System.out.println("TratamientoAction "+" Guardar 2: ______________"+getInstance().toString()+" cuandrantes: ______________"+getInstance().getCuandrantes());
+            System.out.println("TratamientoAction "+" Guardar 2: ______________"+getInstance().toString()+" cuandrantes: ______________");
             System.out.println("TratamientoAction "+" Diente: ______________"+getDiente().getId());
             System.out.println("TratamientoAction "+" consultaOdont: ______________"+getConsultaOdont().getId());
             //error al agregar el diente ....  verificar 

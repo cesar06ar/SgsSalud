@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:p="http://primefaces.org/ui"    
+      xmlns:sgssalud="http://eqaula.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="fichaMedicaId" value="#{fichaMedicaHome.fichaMedicaId}" />
+            <f:viewParam name="pacienteId" value="#{fichaMedicaHome.pacienteId}" />            
+            <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
+        </f:metadata>
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h2>#{fichaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{fichaMedicaHome.paciente.nombres}</h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="content" >            
+            <h:form id="form">
+                <h3 ><center>FICHA MEDICA GENERAL #: #{fichaMedicaHome.instance.numeroFicha}</center></h3>
+                <p:panel id="infoP" header="Información Personal" style="margin-top: -5px;">
+                    <div class="row fl">
+                        <div class="span2 columns " style="margin: 10px 0 0 20px;">
+                            <p:graphicImage value="#{fichaMedicaHome.paciente.cargarFoto}" width="105" height="125" style="background-color: #CAD0D2; margin-bottom: -30px; margin-left: 5px; "/>
+                        </div>
+                    </div>
+                    <div class="container-fluid">   
+                        <div class="row-fluid" >
+                            <div style="margin-left: -1%; float: left" class="span7">
+                                <sgssalud:view id="nfm" name="nficha" type="text" label="#{messages['fichaMedica.numero']}" 
+                                               value="#{fichaMedicaHome.instance.numeroFicha}" styleClass="xLarge"/>
+                                <sgssalud:view id="famf" name="fafm" type="calendar" label="#{messages['fichaMedica.fechaApertura']}" value="#{fichaMedicaHome.instance.fechaApertura}" pattern="dd - MMM - yyyy"/>                                
+                                <sgssalud:view id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{fichaMedicaHome.paciente.nombres}" />
+                                <sgssalud:view id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{fichaMedicaHome.paciente.apellidos}" /> 
+                                <sgssalud:view id="genero" name="genero" type="text" label="#{messages['comun.genero']}" value="#{fichaMedicaHome.paciente.genero}"/>
+                                <sgssalud:view id="email" name="email" type="text" label="#{messages['common.email']}" value="#{fichaMedicaHome.paciente.email}"/>
+                                <sgssalud:view id="nacimient" name="nacimient" type="calendar" label="#{messages['common.fecha.nacimiento']}" value="#{fichaMedicaHome.paciente.fechaNacimiento}" pattern="dd - MMM - yyyy"/>
+                                <sgssalud:view id="edad" name="edad" type="deciamal" label="#{messages['common.edad']}" value="#{fichaMedicaHome.paciente.edad}" />
+                                <sgssalud:view id="dir" name="dir" type="text" label="#{messages['common.dir']}" value="#{fichaMedicaHome.paciente.direccion}" />                                
+                            </div>
+
+                            <div align="left" style="width: 45.6%; float: left" class="span7">
+                                <c:forEach items="#{ui.getProperties(fichaMedicaHome.paciente)}" var="p" >
+                                    <c:choose>                        
+                                        <c:when test="#{p.type == 'edu.sgssalud.model.Structure'}">
+                                            <ui:repeat value="#{fichaMedicaHome.paciente.findBussinesEntityAttribute(p.name)}" var="a" varStatus="status">                                                
+                                                <c:choose>                                                    
+                                                    <c:when test="#{(p.name eq 'datosAcademicosEstudianteEscuela')}">
+                                                        <h:panelGroup id="panel-group-#{a.name}" layout="block" class="clearfix" style="margin-left: 4%" 
+                                                                      rendered="#{fichaMedicaHome.paciente.tipoEstudiante eq 'Escuela'}">
+                                                            <label style=" font-weight: bold" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}:</label>
+                                                            <div class="survey-output" style="margin: 3px 0 -3px 0" >
+                                                                <h:outputText value="#{a.value}" style="text-align: center; margin-left: 5%; "/>
+                                                            </div>                                                
+                                                        </h:panelGroup>
+                                                    </c:when>
+                                                    <c:when test="#{(p.name eq 'datosAcademicosEstudianteColegio')}">
+                                                        <h:panelGroup id="panel-group-#{a.name}" layout="block" class="clearfix" style="margin-left: 4%" 
+                                                                      rendered="#{(fichaMedicaHome.paciente.tipoEstudiante eq 'Colegio')}">
+                                                            <label style=" font-weight: bold" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}:</label>
+                                                            <div class="survey-output" style="margin: 3px 0 -3px 0" >
+                                                                <h:outputText value="#{a.value}" style="text-align: center; margin-left: 5%; "/>
+                                                            </div>                                                
+                                                        </h:panelGroup>                                              
+                                                    </c:when>
+                                                </c:choose>
+                                                <c:otherwise>
+                                                    <h:panelGroup id="panel-group-#{a.name}" layout="block" class="clearfix" style="margin-left: 4%" rendered="#{p.name eq 'datosPersonalesPaciente'}">
+                                                        <label style=" font-weight: bold" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}:</label>
+                                                        <div class="survey-output" style="margin: 3px 0 -3px 0" >
+                                                            <h:outputText value="#{a.value}" style="text-align: center; margin-left: 5%; "/>
+                                                        </div>                                                
+                                                    </h:panelGroup>
+                                                </c:otherwise>
+                                            </ui:repeat>
+                                        </c:when> 
+                                    </c:choose>                        
+                                </c:forEach>
+                                <h:panelGroup rendered="#{fichaMedicaHome.paciente.tipoEstudiante eq 'Universitario'}" >
+                                    <sgssalud:view id="area" name="area" type="text" label="#{messages['comun.area']}" value="#{fichaMedicaHome.paciente.area}" />
+                                    <sgssalud:view id="carrera" name="carrera" type="text" label="#{messages['comun.carrera']}" value="#{fichaMedicaHome.paciente.carrera}" />
+                                    <sgssalud:view id="modulo" name="modulo" type="text" label="#{messages['comun.modulo']}" value="#{fichaMedicaHome.paciente.modulo}" />
+                                    <sgssalud:view id="paralelo" name="paralelo" type="text" label="#{messages['comun.paralelo']}" value="#{fichaMedicaHome.paciente.paralelo}" />
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <p:panel id="datosFicha" header="Información de Ficha Medica" style="margin-top: 0;">
+                    <p:panel header="#{'INFORMACION MÉDICA'}">                        
+                        <sgssalud:view id="grupoSang" name="grupoSang" type="text" label="#{messages['fichaMedica.grupoSangineo']}" value="#{fichaMedicaHome.instance.grupoSangineo}" />                        
+                    </p:panel>    
+                    <br/>
+                    <c:forEach items="#{ui.getProperties(fichaMedicaHome.instance)}" var="f" >
+                        <p:panel header="#{f.label}" styleClass="clearfix">
+                            <c:choose>
+                                <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">
+                                    <ui:repeat value="#{fichaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">
+                                        <c:choose>
+                                            <c:when test="#{(f.name eq 'habitosFichaMedica')}">
+                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
+                                                    <h:panelGroup id="panel-group-#{a.name}" layout="block" style="margin-left: 0" >
+                                                        <label style="width: 30% ;font-weight: bold" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}">#{a.property.label}:</label>
+                                                        <div class="span2" style="margin: 1% 0 0 0" >
+                                                            <h:outputText value="#{a.value}" style="text-align: center; margin-left: 10%; "/>
+                                                        </div>                                                
+                                                    </h:panelGroup>
+                                                </h:panelGroup>  
+                                            </c:when>
+                                            <c:otherwise>
+                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
+                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                                    <div class="span1" style="padding-left: 5px; padding-top: 5px;"> 
+                                                        <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}" disabled="true">
+                                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                        </p:selectBooleanCheckbox>                                                        
+                                                        <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                                    rendered="#{a.property.type eq 'java.util.Date'}">
+                                                            <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                                        </p:calendar>                                                 
+                                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
+                                                                      rendered="#{a.property.type eq 'java.lang.String'}">
+                                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                                        </p:inputText>                                                                                                     
+                                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
+                                                                        rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </pe:inputNumber>  
+                                                        <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}" >  
+                                                            <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                        </p:selectOneMenu>
+                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </p:inputTextarea>
+                                                        <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
+                                                            <h:outputText escape="false" value="#{a.property.helpInline}"/>
+                                                        </p:tooltip>
+                                                    </div>
+                                                </h:panelGroup>  
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </ui:repeat>
+                                    <div style="width: 90%; margin-top: 3%;" >                                
+                                        <c:choose>                                             
+                                            <c:when test="#{(f.name eq 'antecedentesPersonalesFichaMedica')}">                                                           
+                                                <br/><br/>
+                                                <sgssalud:view id="obap1" name="observacionAP" type="textarea" label="#{'Observación Antecedentes Familiares'}" 
+                                                               value="#{fichaMedicaHome.instance.observacionAntecedentesPersonales}" disabled="true"/>   
+                                            </c:when>                                
+                                            <c:when test="#{(f.name eq 'antecedentesFamiliaresFichaMedica')}">                                                            
+                                                <br/><br/>
+                                                <sgssalud:view id="obaf1" name="observacionAF" type="textarea" label="#{'Observación Antecedentes Familiares'}" 
+                                                               value="#{fichaMedicaHome.instance.observacionAntecedentesFamiliares}" disabled="true"/>
+                                            </c:when>
+                                        </c:choose> 
+                                        <c:otherwise>
+                                        </c:otherwise>
+                                    </div>
+                                </c:when>
+                            </c:choose>                                
+                        </p:panel>
+                        <br/>
+                    </c:forEach>
+                </p:panel>                                
+                <h:panelGroup>
+                    <h:commandButton value="Imprimir" type="button" styleClass="btn success">  
+                        <p:printer target=":form" />  
+                        <!--<p:printer target=":form:datosFicha" /> --> 
+                    </h:commandButton>           
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn">                      
+                    </h:link>
+                </h:panelGroup>
+            </h:form>
+
+            <h:form id="form1">                  
+
+            </h:form>
+
+
+        </ui:define>
+    </ui:composition>
+</html>                
+

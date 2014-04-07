@@ -24,6 +24,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -33,6 +35,12 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Odontograma")
+@NamedQueries(value = {
+    @NamedQuery(name = "Odontograma.buscarPorId",
+            query = "select d FROM Odontograma d "
+            + " WHERE d.id = :odontogramaId"            
+            + " ORDER BY d.id")    
+    })
 public class Odontograma implements Serializable {
 
     private static final long serialVersionUID = 1L;

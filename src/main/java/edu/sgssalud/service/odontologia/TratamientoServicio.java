@@ -18,6 +18,8 @@ package edu.sgssalud.service.odontologia;
 
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.Diente;
+import edu.sgssalud.model.odontologia.Diente_;
+import edu.sgssalud.model.odontologia.Odontograma;
 import edu.sgssalud.model.odontologia.Tratamiento;
 import edu.sgssalud.model.odontologia.Tratamiento_;
 import edu.sgssalud.model.servicios.Servicio;
@@ -76,6 +78,14 @@ public class TratamientoServicio extends PersistenceUtil<Tratamiento> implements
         query.where(builder.equal(entity.get(Tratamiento_.consultaOdontologica), consultaOdont));      
         return getResultList(query);
     }    
+    
+    public List<Diente> buscarPorOdontograma(Odontograma o) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Diente> query = builder.createQuery(Diente.class);
+        Root<Diente> entity = query.from(Diente.class);
+        query.where(builder.equal(entity.get(Diente_.odontograma), o));      
+        return getResultList(query);
+    }
     
 //    public List<Tratamiento> buscarPorServicioOdontologico(Servicio servicioOdontDisponible) {
 //        CriteriaBuilder builder = getCriteriaBuilder();

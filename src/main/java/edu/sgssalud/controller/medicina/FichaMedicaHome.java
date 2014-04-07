@@ -113,7 +113,9 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
             this.setPaciente(getInstance().getPaciente());
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-            this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
+             if (getHistoriaClinica().isPersistent() && getFichaOdontologica().isPersistent()) {
+                this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
+            }
         }
     }
 
@@ -124,13 +126,15 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
         this.setPaciente(pacienteS.getPacientePorId(pacienteId));
-        this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(paciente));
+        this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(getPaciente()));
         if (!getInstance().isPersistent()) {
             getInstance().setNumeroFicha(getGenerarNumeroFicha());
         } else {
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-            this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
+            if (getHistoriaClinica().isPersistent() && getFichaOdontologica().isPersistent()) {
+                this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
+            }
         }
     }
 
@@ -229,7 +233,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public void setPanelIntervaloPersonalizado(boolean panelIntervaloPersonalizado) {
         this.panelIntervaloPersonalizado = panelIntervaloPersonalizado;
-    }   
+    }
 
     public Date getFecha() {
         return fecha;
@@ -238,8 +242,6 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-    
-    
 
     /*<==....*/
     @TransactionAttribute   //
@@ -301,10 +303,12 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         historiaClinica.setCreatedOn(now);
         historiaClinica.setActivationTime(now);
         historiaClinica.setLastUpdate(now);
+        historiaClinica.setConsultas(new ArrayList<ConsultaMedica>());
         fichaOdontologica = new FichaOdontologica();
         fichaOdontologica.setCreatedOn(now);
         fichaOdontologica.setActivationTime(now);
-        fichaOdontologica.setLastUpdate(now);
+        fichaOdontologica.setLastUpdate(now); 
+        fichaOdontologica.setConsultas(new ArrayList<ConsultaOdontologica>());
         return fichaMedic;
     }
 
@@ -314,7 +318,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     }
 
     public void mostrarPanelFecha(int n) {
-        fecha= new Date();
+        fecha = new Date();
         if (n == 1) {
             setPanelFechaDia(true);
             setPanelFechaMes(false);
@@ -329,24 +333,28 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
             setPanelIntervaloPersonalizado(true);
         }
     }
-    
+
     @TransactionAttribute
     public String guardar() {
-        log.info("Ingreso a guardar");
+        //log.info("Ingreso a guardar");
+        System.out.println("Ingreso a guardar_____" + getInstance().getId());
         String salida = null;
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         historiaClinica.setLastUpdate(now);
         fichaOdontologica.setLastUpdate(now);
         try {
+            System.out.println("Ingreso a guardar 2_______");
             if (paciente.isPersistent()) {
                 if (getInstance().isPersistent()) {
                     getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                    System.out.println("Ingreso a guardar 2_______");
                     save(getInstance());
                     FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getNumeroFicha() + " con éxito");
                     FacesContext.getCurrentInstance().addMessage("", msg);
                 } else {
                     this.getInstance().setPaciente(paciente);
+                    System.out.println("Ingreso a guardar 2_______");
                     create(getInstance());
                     historiaClinica.setFichaMedica(getInstance());
                     fichaOdontologica.setFichaMedica(getInstance());
@@ -405,17 +413,17 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 this.setPaciente(getInstance().getPaciente());
                 salida += "&fichaMedicaId=" + getInstance().getId();
             } else {
-//                Paciente p = pacienteS.buscarPorCedula(parametroBusqueda);
-//                if (p != null) {
-//                    this.setPaciente(p);
-//                    this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
-//                    salida += "&pacienteId=" + paciente.getId();
-//                } else {
-//                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
-//                    FacesContext.getCurrentInstance().addMessage("", msg);
-//                }
-                salida = null;
-                this.setListaPacietes(pacienteS.BuscarPacientePorParametroCorto(salida));
+                Paciente p = pacienteS.BuscarPacientePorParametro1(parametroBusqueda);
+                if (p.isPersistent()) {
+                    this.setPaciente(p);
+                    this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
+                    salida += "&pacienteId=" + paciente.getId();
+                } else {
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                }
+                //salida = null;
+                //this.setListaPacietes(pacienteS.BuscarPacientePorParametroCorto(salida));
             }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El parametro de busqueda es incorrecto", " "));

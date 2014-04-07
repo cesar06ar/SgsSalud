@@ -22,6 +22,7 @@ import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
+import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.MedicamentoService;
@@ -89,19 +90,17 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     private String indicacion;
     private Paciente paciente;
     private Medicamento medicamento;
-    private ConsultaMedica consultaMedica;
     private FichaMedica fichaMedica;
+    private ConsultaMedica consultaMed;
+    private ConsultaOdontologica consultaOdont;
     private Medicamento medicamentoSeleccionado;
-    //private Receta recetaSeleccionada;
-    //private Receta_Medicamento recetaMedicamento;
     private List<Medicamento> listaMedicamentosStock = new ArrayList<Medicamento>();
-    //private List<Medicamento> listaMedicamentosReceta = new ArrayList<Medicamento>();
+    private List<Medicamento> listaMedicamentosFiltrados = new ArrayList<Medicamento>();
     private List<Receta_Medicamento> listaRecetaMed = new ArrayList<Receta_Medicamento>();
     private List<String> listaIndicaciones = new ArrayList<String>();
     //private List<Receta> listaRecetas = new ArrayList<Receta>();
     private List<String> listaMedicaciones = new ArrayList<String>();
 
-    //private static String inicioIndicacion = "";
     public RecetaHome() {
     }
 
@@ -119,6 +118,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         //System.out.println("INIT RECETA:_____1" + getInstance().toString());
         if (getInstance().isPersistent()) {
             this.listaRecetaMed = getInstance().getListaRecetaMedicamento();
+            this.paciente = getInstance().getPaciente();
             this.listaIndicaciones = Lists.stringToList(getInstance().getIndicaciones());
             this.listaMedicaciones = Lists.stringToList(getInstance().getMedicaciones());
         }
@@ -130,14 +130,6 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
-    }
-
-    public ConsultaMedica getConsultaMedica() {
-        return consultaMedica;
-    }
-
-    public void setConsultaMedica(ConsultaMedica consultaMedica) {
-        this.consultaMedica = consultaMedica;
     }
 
     public Medicamento getMedicamento() {
@@ -171,9 +163,9 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void setConsultaMedicaId(Long consultaMedicaId) {
         this.consultaMedicaId = consultaMedicaId;
         if (consultaMedicaId != null) {
-            this.setConsultaMedica(consultaMedicaServicio.getConsultaMedicaPorId(consultaMedicaId));
-            this.setFichaMedica(consultaMedica.getHistoriaClinica().getFichaMedica());
-            this.setPaciente(fichaMedica.getPaciente());
+            this.setConsultaMed(consultaMedicaServicio.getConsultaMedicaPorId(consultaMedicaId));
+            this.setFichaMedica(consultaMed.getHistoriaClinica().getFichaMedica());
+            this.setPaciente(getFichaMedica().getPaciente());
         }
     }
 
@@ -184,10 +176,26 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     public void setConsultaOdontId(Long consultaOdontId) {
         this.consultaOdontId = consultaOdontId;
         if (consultaOdontId != null) {
-            getInstance().setConsultaOdontologica(consultaOdontServicio.getPorId(consultaOdontId));
-            this.setFichaMedica(getInstance().getConsultaOdontologica().getFichaOdontologica().getFichaMedica());
-            this.setPaciente(fichaMedica.getPaciente());
+            this.setConsultaOdont(consultaOdontServicio.getPorId(consultaOdontId));
+            this.setFichaMedica(consultaOdont.getFichaOdontologica().getFichaMedica());
+            this.setPaciente(getFichaMedica().getPaciente());
         }
+    }
+
+    public ConsultaMedica getConsultaMed() {
+        return consultaMed;
+    }
+
+    public void setConsultaMed(ConsultaMedica consultaMed) {
+        this.consultaMed = consultaMed;
+    }
+
+    public ConsultaOdontologica getConsultaOdont() {
+        return consultaOdont;
+    }
+
+    public void setConsultaOdont(ConsultaOdontologica consultaOdont) {
+        this.consultaOdont = consultaOdont;
     }
 
     public Medicamento getMedicamentoSeleccionado() {
@@ -196,9 +204,6 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setMedicamentoSeleccionado(Medicamento medicamentoSeleccionado) {
         this.medicamentoSeleccionado = medicamentoSeleccionado;
-//        this.setPresentacion(medicamentoSeleccionado.getPresentacion());
-//        this.cargarUnidadesDosis();
-
     }
 
     public List<Medicamento> getListaMedicamentosStock() {
@@ -257,27 +262,41 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         this.listaMedicaciones = listaMedicaciones;
     }
 
+    public List<Medicamento> getListaMedicamentosFiltrados() {
+        return listaMedicamentosFiltrados;
+    }
+
+    public void setListaMedicamentosFiltrados(List<Medicamento> listaMedicamentosFiltrados) {
+        this.listaMedicamentosFiltrados = listaMedicamentosFiltrados;
+    }
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         fichaMedicaServicio.setEntityManager(em);
+        consultaMedicaServicio.setEntityManager(em);
+        consultaOdontServicio.setEntityManager(em);
+        profileServicio.setEntityManager(em);
         recetasServicio.setEntityManager(em);
         medicamentosServicio.setEntityManager(em);
-        consultaMedicaServicio.setEntityManager(em);
-        profileServicio.setEntityManager(em);
         recetaMedicamentoServicio.setEntityManager(em);
-        recetasServicio.setEntityManager(em);
-//        cargarUnidadesDosis();
+
         if (pacienteId == null) {
             paciente = new Paciente();
         }
-        if (consultaMedicaId != null) {
-            consultaMedica = new ConsultaMedica();
+
+        if (consultaMedicaId == null) {
+            consultaMed = new ConsultaMedica();
         }
-        //System.out.println("ID RECETA:___________________" + recetaId);
+
+        if (consultaOdontId == null) {
+            consultaOdont = new ConsultaOdontologica();
+        }
+
         this.nombreMedic = null;
         this.indicacion = null;
+        this.numReceta();
     }
 
     @TransactionAttribute   //    
@@ -301,13 +320,10 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         //prellenado estable para cualquier clase 
         Date now = Calendar.getInstance().getTime();
         Receta receta = new Receta();
+        //receta.setConsultaMedica(null);
+        //receta.setConsultaOdontologica(null);
         receta.setFechaEmision(now);
         receta.setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
-        //receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
-//        this.nombreMedic = null;
-//        this.indicacion = null;
-//        this.listaIndicaciones = null;
-//        this.listaMedicaciones = null;
         return receta;
 
     }
@@ -320,6 +336,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     @TransactionAttribute
     public String guardarReceta() {
         Date now = Calendar.getInstance().getTime();
+        System.out.println("Ingreso a Guardar _____");
         String salida = "/pages/depSalud" + getBackView() + "?faces-redirect=true";
         try {
             if (getInstance().isPersistent()) {
@@ -334,21 +351,29 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     }
                 }
                 save(getInstance());
+            } else {                
+                if (consultaMed.isPersistent()) {
+                    getInstance().setConsultaMedica(consultaMed);
 
-            } else {
-                if (consultaMedica.isPersistent() && paciente.isPersistent()) {  //falta consulta Odontologica
-                    //getInstance().setMedicaciones(listaMedicamentosReceta);                
+                } else if (consultaOdont.isPersistent()) {
+                    getInstance().setConsultaOdontologica(consultaOdont);
+                }
+                System.out.println("Guardar _____");
+                if ( paciente.isPersistent()) {
+
                     getInstance().setFechaEmision(now);
                     getInstance().setEstado("Emitida");
-                    getInstance().setConsultaMedica(consultaMedica);
+
                     getInstance().setPaciente(paciente);
                     getInstance().setIndicaciones(Lists.listToString(listaIndicaciones));
                     getInstance().setMedicaciones(Lists.listToString(listaMedicaciones));
-                    //getInstance().setResponsableEmision();
+
                     for (Receta_Medicamento recetaMed : listaRecetaMed) {
                         int cantidad = recetaMed.getMedicamento().getUnidades() - recetaMed.getCantidad();
                         Medicamento medicament = recetaMed.getMedicamento();
                         medicament.setUnidades(cantidad);
+                        recetaMed.setSaldo(cantidad);
+                        recetaMed.setFecha(now);
                         save(medicament);
                     }
                     getInstance().setListaRecetaMedicamento(listaRecetaMed);
@@ -358,21 +383,22 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     System.out.println("Guardo RECETA CON EXITO_____" + getInstance().toString());
                     FacesMessage msg = new FacesMessage("Se envió la receta: " + getInstance().getId() + " con éxito");
                     FacesContext.getCurrentInstance().addMessage("", msg);
-                    salida += "consultaMedicaId= " + getConsultaMedicaId()
-                            + "&fichaMedicaId=" + consultaMedica.getHistoriaClinica().getFichaMedica().getId()
-                            + "&consultaMedicaId=" + this.consultaMedicaId;
+                    salida += "&consultaMedicaId= " + consultaMedicaId
+                            + "&fichaMedicaId=" + getFichaMedica().getId()
+                            + "&consultaOdontId=" + consultaOdontId;
                 } else {
                     FacesMessage msg = new FacesMessage("Debe cargar una consulta Primero");
                     FacesContext.getCurrentInstance().addMessage("", msg);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar la receta");
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
 
         return salida;
-    }    
+    }
 
     public void cargarMedicamento() {
         Medicamento med = getMedicamentoSeleccionado();
@@ -385,33 +411,32 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
         //this.actualizarStockMedicamento(unidadesMedicacion);
         System.out.println("VALORES DE ENTRADA " + getNombreMedic() + getIndicacion() + unidadesMedicacion);
-        if (!getNombreMedic().isEmpty() && !getIndicacion().isEmpty() && unidadesMedicacion > 0) {
-            //Medicamento medic = getMedicamentoSeleccionado();
-            //setMedicamento(medicamentoSeleccionado);
-            //if(getInstance().is)
-            Receta_Medicamento recetaMed = new Receta_Medicamento();
-            recetaMed.setCantidad(unidadesMedicacion);
-            if (medicamentoSeleccionado.isPersistent()) {  //controla si esa receta tiene o no medicamentos de farmacia                
-                //System.out.println("MEdicameto _ " + medicamentoSeleccionado.toString());
-                //if (this.noContieneMedicamento(medicamentoSeleccionado)) {                    
-                if (!this.contieneMedicamento(nombreMedic)) {
-                    recetaMed.setMedicamento(medicamentoSeleccionado);
-                    String med = nombreMedic + " # " + this.getUnidadesMedicacion() + " \n ";
-                    this.getListaRecetaMed().add(recetaMed);
+        if (!getNombreMedic().isEmpty() && !getIndicacion().isEmpty()) {
+            if (unidadesMedicacion > 0 && unidadesMedicacion <= this.getMedicamentoSeleccionado().getUnidades()) {
 
-                    this.getListaMedicaciones().add(med);
-                    this.getListaIndicaciones().add(indicacion + " \n ");
-                    System.out.println(med);
-                    System.out.println(indicacion);
-                } else {
-                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El medicamento ya ha sido agregado", "");
-                    FacesContext.getCurrentInstance().addMessage("", msg);
+                Receta_Medicamento recetaMed = new Receta_Medicamento();
+                recetaMed.setCantidad(unidadesMedicacion);
+                if (medicamentoSeleccionado.isPersistent()) {  //controla si esa receta tiene o no medicamentos de farmacia                
+                    //System.out.println("MEdicameto _ " + medicamentoSeleccionado.toString());
+                    //if (this.noContieneMedicamento(medicamentoSeleccionado)) {                    
+                    if (!this.contieneMedicamento(nombreMedic)) {
+                        recetaMed.setMedicamento(medicamentoSeleccionado);
+                        String med = nombreMedic + " # " + this.getUnidadesMedicacion() + " \n ";
+                        this.getListaRecetaMed().add(recetaMed);
+
+                        this.getListaMedicaciones().add(med);
+                        this.getListaIndicaciones().add(indicacion + " \n ");
+                        System.out.println(med);
+                        System.out.println(indicacion);
+                    } else {
+                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El medicamento ya ha sido agregado", "");
+                        FacesContext.getCurrentInstance().addMessage("", msg);
+                    }
                 }
             } else {
-                //String medicacion = getInstance().getMedicaciones() + nombreMedic + "<br/><br/>";
-                //getInstance().setMedicaciones(medicacion);
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser mayor a 0", "<br/> o menor a la cantidad disponible");
+                FacesContext.getCurrentInstance().addMessage("", msg);
             }
-
             //TODO____renderizar para verificar si tiene o no medicamentos en la farmacia            
             this.reiniciar();
         } else {
@@ -429,10 +454,10 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void onRowSelect(SelectEvent event) {
 //        FacesMessage msg = new FacesMessage("Car Selected", ((Car) event.getObject()).getModel());    
-//        FacesContext.getCurrentInstance().addMessage(null, msg);  
+//        FacesContext.getCurrentInstance().addMessage(null, msg);    " /*" + med.getNombreGenerico() +
         this.setNombreMedic(null);
         Medicamento med = getMedicamentoSeleccionado();
-        String name = "(" + med.getNombreComercial() + " ) " + med.getPresentacion();
+        String name = "(" + med.getNombreComercial() + ", " + med.getNombreGenerico() + " ) " + med.getPresentacion();
         this.setNombreMedic(name);
         this.setIndicacion(med.getNombreComercial() + ": ");
         System.out.println("cargar Medicamento____:" + nombreMedic);
@@ -451,11 +476,27 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
             System.out.println("Lista de medicaciones:_________" + this.getListaMedicaciones());
             for (String s : this.getListaMedicaciones()) {
                 if (s.contains(nombreMed)) {
-                    System.out.println("Medicamento verificado:_________");
+                    //System.out.println("Medicamento verificado:_________");
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    public void numReceta() {
+        long valor = recetasServicio.getGenerarNumeroFicha();
+        if (valor < 99) {
+            getInstance().setNumvalue("0000" + valor);
+        } else if (valor < 999) {
+            getInstance().setNumvalue("000" + valor);
+        } else if (valor < 9999) {
+            getInstance().setNumvalue("00" + valor);
+        } else if (valor < 99999) {
+            getInstance().setNumvalue("0" + valor);
+        } else if (valor < 999999) {
+            getInstance().setNumvalue("" + valor);
+        }
+        getInstance().setNumero(valor);
     }
 }

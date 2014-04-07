@@ -145,7 +145,7 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
             }
             if (selectedServicio.isPersistent() ) {                
                 servicioMedS.borrarEntidad(selectedServicio.getId());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + selectedServicio.getNombre(), ""));                
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + selectedServicio.getName(), ""));                
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una entidad para ser borrada!", ""));
             }
@@ -154,16 +154,16 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/admin/serviciosMedicos/lista.xhtml?faces-redirect=true";
+        return "/pages/depSalud/enfermeria/serviciosMedicos/lista.xhtml?faces-redirect=true";
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage("Servicio Médico" + " " + UI.getMessages("common.selected"), ((Servicio) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Servicio Médico" + " " + UI.getMessages("common.selected"), ((Servicio) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("Servicio Médico" + " " + UI.getMessages("common.unselected"), ((Servicio) event.getObject()).getNombre());
+        FacesMessage msg = new FacesMessage("Servicio Médico" + " " + UI.getMessages("common.unselected"), ((Servicio) event.getObject()).getName());
 
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setSelectedServicio(null);
@@ -172,10 +172,11 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
     @Override
     public Servicio getRowData(String rowKey) {
         return servicioMedS.buscarPorNombre(rowKey);
+        //return new Servicio();
     }
 
     @Override
     public Object getRowKey(Servicio entity) {
-        return entity.getNombre();
+        return entity.getName();
     }
 }

@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="pedidoExamenId" value="#{resultadosExamenHome.pedidoExamenId}" />            
+            <f:viewParam name="result" value="#{pedidoExamenListaServicio.primerResult}" />
+        </f:metadata>
+
+        <ui:define name="header-replace">            
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >                        
+                        <h2>#{resultadosExamenHome.pedidoExamen.id == null? 'Nueva Receta:': 'Agregar Resultados de Examen para '}
+                            #{resultadosExamenHome.pedidoExamen.paciente.nombres}</h2>
+                    </div>
+                </div>
+            </div>            
+        </ui:define>
+        <ui:define name="content" >
+
+            <h:form id="form">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true"/> 
+                <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                    <div class="container-fluid">
+                        <div class="row-fluid">
+                            <div class="span7">                                
+                                <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{resultadosExamenHome.pedidoExamen.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{resultadosExamenHome.pedidoExamen.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+
+                            </div>
+                            <div class="span7" align="left">
+                                <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{resultadosExamenHome.pedidoExamen.historiaClinica.fichaMedica.numFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="fafm" >#{messages['comun.fecha']} de #{messages['pedido.name']}</label>
+                                    <div class="input">
+                                        <p:calendar id="fafm" value="#{resultadosExamenHome.pedidoExamen.fechaPedido}"  label="#{messages['comun.fecha']} de #{messages['pedido.name']}"
+                                                    disabled="true" pattern="dd-MMM-yyyy">
+                                        </p:calendar>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{resultadosExamenHome.pedidoExamen.fechaPedido != null}"
+                                                        styleClass="validation-status" />
+                                    </div>
+                                </h:panelGroup>
+
+                                <h:panelGroup layout="block" class="clearfix">
+                                    <label for="costo" class="control-label">Precio Total</label>
+                                    <div class="input">
+                                        <pe:inputNumber id="costo" value="#{resultadosExamenHome.costo}" required="false" 
+                                                        dir="lrt" symbol="  $" symbolPosition="rigth" disabled="true">
+                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+                                        </pe:inputNumber>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{resultadosExamenHome.costo != null}"
+                                                        styleClass="validation-status" />                                        
+                                    </div>
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>                
+                <p:panel id="paneltitle1" header="Resultados de Examenes" styleClass="clearfix">
+
+                    <p:dataTable id="tablaResultados" var="Object_" value="#{resultadosExamenHome.listaResultadosExamen}" paginator="true" rows="30" paginatorPosition="top"
+                                 lazy="true"
+                                 rowKey="#{Object_.id}" selection="#{resultadosExamenHome.resultadoSelect}" selectionMode="single">
+
+                        <p:ajax event="rowSelect" listener="#{resultadosExamenHome.onRowSelect}" 
+                                update=":edit-dialog :form:messages"  oncomplete="editDlg.show();"/>  
+                        <p:ajax event="rowUnselect" listener="#{resultadosExamenHome.onRowUnselect}" update=":form:messages "/>
+
+                        <!--<p:ajax event="rowEdit" listener="# {resultadosExamenHome.onEdit}" update=":form:messages" />  
+                        <p:ajax event="rowEditCancel" listener="# {resultadosExamenHome.onCancel}" update=":form:messages" />  
+                        <p:ajax event="cellEdit" listener="# {resultadosExamenHome.onCellEdit}" update=":form:messages" />-->  
+
+                        <p:column headerText="#{messages['common.code']}" style="width:30%">  
+                            <h:outputText value="#{Object_.examenLab.code}" />  
+                        </p:column>  
+                        <p:column headerText="#{messages['Examen.Nombre1']}" style="width:30%">                             
+                            <h:outputText value="#{Object_.examenLab.name}" />  
+                        </p:column>  
+                        <p:column headerText="Valor " style="width:30%">  
+                            <h:outputText value="#{Object_.valorResultado}" />  
+                        </p:column>  
+                        <p:column headerText="#{messages['Examen.ValorReferencial']}" style="width:30%">   
+                            <h:outputText value="#{Object_.examenLab.valorReferencia}" />
+                        </p:column>                         
+                    </p:dataTable>  
+                </p:panel>
+                <div class="admin-actions ">
+                    <p:commandButton id="save" value="#{messages['common.save']}"  styleClass="btn primary"
+                                     action="#{resultadosExamenHome.guardar()}"
+                                     immediate="true" style="margin: 0 0 0 30%"/>  
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/labClinico/listaPedidosExam.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >
+                    </h:link>
+                </div>                 
+            </h:form> 
+            <p:dialog id="edit-dialog" header="#{messages['common.add']} Resultado de #{messages['Examen.nombre']} 
+                      #{resultadosExamenHome.resultadoSelect.examenLab.name}" 
+                      widgetVar="editDlg" modal="true" resizable="true" width="70%">
+                <h:form id="form-dialog">
+                    <glue:input id="fechaR" name="fechaR" type="calendar" label="#{messages['comun.fecha']}" value="#{resultadosExamenHome.resultadoSelect.fechaRealizacion}" 
+                                required="false" inlinehelp="#{'Fecha en la que se realizo el examen'}" execute="@this save" render="fechaR"/>
+
+                    <glue:input id="muestra" name="muestra" type="decimal" label="Resultado" value="#{resultadosExamenHome.resultadoSelect.valorResultado}" 
+                                required="false" inlinehelp="#{messages['pedido.codMuestra.lineaAyuda']}" execute="@this save" render="muestra"/>
+
+                    <div class="admin-actions">
+                        <p:commandButton id="save" value="#{messages['common.save']}" oncomplete="editDlg.hide();"                                           
+                                         action="#{resultadosExamenHome.guardarResultado()}" update=":form:tablaResultados"    
+                                         immediate="true" 
+                                         style="margin: 0 0 0 30%">  
+                            <!--recetaListaServicio.entregarReceta()--> 
+                        </p:commandButton> 
+                        &nbsp;&nbsp;                        
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();" /> 
+                    </div>
+                </h:form>
+            </p:dialog>
+        </ui:define>
+    </ui:composition>
+</html>                
+

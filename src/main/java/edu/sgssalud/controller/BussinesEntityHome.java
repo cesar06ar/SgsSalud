@@ -40,7 +40,7 @@ import org.jboss.seam.transaction.Transactional;
 @TransactionAttribute
 public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> implements Serializable {
 
-    private static final long serialVersionUID = -8910921676468441272L;
+    private static final long serialVersionUID = -1L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityHome.class);
     @Inject
     protected BussinesEntityService bussinesEntityService;

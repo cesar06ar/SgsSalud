@@ -5,7 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <ui:composition template="/WEB-INF/view/templates/glueHome.xhtml">
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <ui:define name="header-replace" >
             <div class="header-replace">
                 <div class="container-header" >
@@ -42,7 +42,7 @@
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
                     #{' '}
-                    <h:link id="button-cardex" value="#{messages['farmacia.cardex']}" outcome="cardex" styleClass="btn" 
+                    <h:link id="button-cardex" value="#{messages['farmacia.cardex.nombre']}" outcome="cardex" styleClass="btn" 
                             disabled="#{empty medicamentoListaServicio.medicamentoSeleccionado}">
                         <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
@@ -72,7 +72,7 @@
                             update=":form:button-edit :form:messages :form:button-cardex"/>
                     <!--Columnas para mostrar en la tabla-->
 
-                    <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 10%; text-align: center;">
+                    <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 5%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{'Nro. Factura'}" />  
                         </f:facet>  
@@ -98,7 +98,12 @@
                         </f:facet> 
                         <h:outputText value="#{medicamento_.unidades}" />
                     </p:column>
-
+                    <p:column style="width: 8%; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="Genérico" />  
+                        </f:facet> 
+                        <p:selectBooleanCheckbox value="#{medicamento_.generico}" />
+                    </p:column>
                     <p:column style="width: 15%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.fechacaducidadmedicamento']}" />  
@@ -111,14 +116,15 @@
                         <f:facet name="header">                               
                             <h:outputText value="ALERTAS" />  
                         </f:facet> 
-                        <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/>
+                        <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/><br/>
+                        <h:outputText value="SIN STOCK" rendered="#{medicamento_.unidades eq 0}" style="color: red;"/>
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid id="export" class="columns" >
                     <p:panel>
                         <h:outputText value="Exportar Datos" />  
                         <br/>
-                        <h:commandLink action="#{reporteListas.renderMedicamentos()}" >                    
+                        <h:commandLink action="#{reporteListas.renderMedicamentos()}" >  
                             <p:graphicImage value="/resources/images/pdf.png" />                          
                         </h:commandLink>
                         #{''}

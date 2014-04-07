@@ -11,25 +11,13 @@
     <ui:param name="titulo" value="#{messages['fichaMedica.admin']}"/>
 
     <ui:define name="header-replace">
-        <div class="header-replace">            
-            <div class="container">
-                <div class="span9 columns">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{titulo}</h2>   
-                    </div>                    
-                </div> 
-                <!--Div para boton de regreso a inicio-->
-                <div class="span4 columns offset3">
-                    <h:form id="control">  
-                        <br/>
-                        <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                                outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary">                                
-                        </h:link>  
-                        <br/>                                             
-                    </h:form>
+        <div class="header-replace">
+            <div class="container-header" >
+                <div class="row lf row-title" >  
+                    <h2>#{titulo}</h2>   
                 </div>
-            </div> 
-        </div>             
+            </div>
+        </div>
     </ui:define>
     <ui:define name="content">
         <!--Metadato que se realiza antes de renderizarse la vista-->
@@ -47,16 +35,20 @@
                 <div>
                     <h:link value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
                         <f:param name="fichaMedicaId"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
+                        <f:param name="backView" value="listaFichaMedica"></f:param>
                     </h:link>
-                    #{' '}
+                    &nbsp;
                     <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn" 
                             disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
                         <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
+                        <f:param name="backView" value="listaFichaMedica"></f:param>
                     </h:link>
-                    #{' '}
-                    
+                    &nbsp;
+                    <h:link id="button-print" value="#{messages['common.view']}" outcome="view" styleClass="btn" 
+                            disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
+                        <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
+                        <f:param name="backView" value="listaFichaMedica"></f:param>
+                    </h:link>
                 </div>
                 <div style="float: right; margin-top: -3%">
                     <p:inputText id="criterioBuscar" size ="25" value="#{fichaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
@@ -82,9 +74,9 @@
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica-->
                 <p:ajax event="rowSelect" listener="#{fichaMedicaListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:messages "/>                 
+                        update=":form:button-edit :form:button-print :form:messages "/>                 
                 <p:ajax event="rowUnselect" listener="#{fichaMedicaListaServicio.onRowUnselect}" 
-                        update=":form:button-edit :form:messages "/>
+                        update=":form:button-edit :form:button-print :form:messages "/>
 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{fichaMedica_.numeroFicha}" style="width: 15%; text-align: center;">
@@ -120,7 +112,7 @@
                     <h:outputText value="#{fichaMedica_.lastUpdate}" >                                 
                         <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                     </h:outputText>
-                    
+
                 </p:column>
             </p:dataTable>
             <h:panelGrid id="export" class="columns" >

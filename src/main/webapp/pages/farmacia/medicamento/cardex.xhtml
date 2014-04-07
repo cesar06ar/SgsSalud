@@ -30,14 +30,31 @@
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span7">
-                            <glue:output id="fechaIng" name="fechaIng" type="text" label="#{messages['common.fecha.ingreso.medicamento']}" value="#{cardexHome.medicamento.fechaIngreso}" 
-                                         required="true" execute="@this save" render="fechaIng" styleClass="xLarge" disabled="true"/>
-                            <glue:output id="medicamento" name="medicamento" type="text" label="#{messages['medicamento.Nombre']}" value="#{cardexHome.medicamento.nombreComercial} #{cardexHome.medicamento.nombreGenerico}" 
-                                         required="true" execute="@this save" render="medicamento" styleClass="xLarge" disabled="true"/>
-                            <glue:output id="presentacion" name="presentacion" type="text" label="#{messages['medicamento.presentacion']}" value="#{cardexHome.medicamento.presentacion}" 
-                                         required="true" execute="@this save" render="presentacion" styleClass="xLarge" disabled="true"/>
-                            <glue:output id="cantidadIng" name="cantidadIng" type="text" label="#{messages['medicamento.cantidadIngreso']}" value="#{cardexHome.medicamento.cantidadIngreso}" 
-                                         required="true" execute="@this save" render="cantidadIng" styleClass="xLarge" disabled="true"/>                            
+                            <h:panelGroup id="fechap" layout="block" class="clearfix" >                                
+                                <label for="fechaIng">#{messages['common.fecha.ingreso.medicamento']}:</label>
+                                <div class="input" >                                    
+                                    <h:outputText id="fechaIng" escape="false" value="#{cardexHome.medicamento.fechaIngreso}" />
+                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty cardexHome.medicamento.fechaIngreso}"
+                                                    styleClass="validation-status" />                                    
+                                </div>
+                            </h:panelGroup>    
+                            <h:panelGroup id="nombrep" layout="block" class="clearfix" >                                
+                                <label for="nombreMed">#{messages['medicamento.Nombre']}:</label>
+                                <div class="input" >                                    
+                                    <h:outputText id="nombreMed" escape="false" value="#{cardexHome.medicamento.nombreComercial}" /> &nbsp;
+                                    <h:outputText id="nombreMed1" escape="false" value="#{cardexHome.medicamento.nombreGenerico}" />
+                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty cardexHome.medicamento.nombreComercial}"
+                                                    styleClass="validation-status" />                                    
+                                </div>
+                            </h:panelGroup> 
+                            <h:panelGroup id="presentp" layout="block" class="clearfix" >                                
+                                <label for="present" >#{messages['medicamento.presentacion']}:</label>
+                                <div class="input" >                                    
+                                    <h:outputText id="present" escape="false" value="#{cardexHome.medicamento.presentacion}" />
+                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty cardexHome.medicamento.presentacion}"
+                                                    styleClass="validation-status" />                                    
+                                </div>
+                            </h:panelGroup>                      
                         </div>
                         <div class="span7">
 
@@ -50,36 +67,44 @@
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{cardexHome.medicamento.persistent}"
                                                     styleClass="validation-status" />                                    
                                 </div>
-                            </h:panelGroup>                           
+                            </h:panelGroup>    
+                            <br/>
+                            <!--<glue:output id="cantidadIng" name="cantidadIng" type="text" label="# {messages['medicamento.cantidadIngreso']}" value="# {cardexHome.medicamento.cantidadIngreso}" 
+                                         required="true" execute="@this save" render="cantidadIng" styleClass="xLarge" disabled="true"/>                            -->
                         </div>
                     </div>
                 </div>
-                <br/>
-                <ui:param name="saldo1" value="#{cardexHome.medicamento.cantidadIngreso}"/>                
-                <h:outputText value="${saldo1}"/>
+                <br/><br/>          
                 <p:dataTable id="tablaCardex" value="#{cardexHome.listaRecetasMedicamentos}" var="recetaMed" >
-                    <p:column headerText="#{messages['comun.fecha']}">
-                        <h:outputText value="#{recetaMed.receta.fechaEmision}">
+                    <p:column headerText="#{messages['comun.fecha']}" style="width: 12%; text-align: center">
+                        <h:outputText value="#{recetaMed.fecha}">
                             <f:convertDateTime pattern="dd-MMM-yyyy"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="#{messages['medicamento.referencia']}">
-                        <h:outputText value="Receta emitida por #{recetaMed.receta.responsableEmision.fullName}"/>
+                        <h:outputText value="Receta emitida por #{recetaMed.receta.responsableEmision.fullName}" rendered="#{recetaMed.receta.persistent}"/>
+                        <h:outputText value="Ingreso de Medicamento #{recetaMed.medicamento.nombreComercial}" rendered="#{(not recetaMed.receta.persistent) and (recetaMed.saldo ne 0)}"/>
+                        <h:outputText value="Devolución de Medicamento #{recetaMed.medicamento.nombreComercial}" rendered="#{(not recetaMed.receta.persistent) and (recetaMed.saldo eq 0)}"/>
+                    </p:column>
+                    <p:column headerText="#{'Ingreso'}">
+                        <h:outputText value="#{recetaMed.ingreso}" rendered="#{recetaMed.ingreso ne 0}"/>
                     </p:column>
                     <p:column headerText="#{'Egreso'}">
-                        <h:outputText value="#{recetaMed.cantidad}"/>
+                        <h:outputText value="#{recetaMed.cantidad}" rendered="#{recetaMed.cantidad ne 0}"/>
                     </p:column>
-                    <p:column headerText="#{'Saldo'}">                        
-                        <ui:param name="x1" value="#{cardexHome.saldo}"/>
-                        
-                        <f:setPropertyActionListener value="#{(x1 - recetaMed.cantidad)}" target="#{cardexHome.saldo}"/>
-                        <h:outputText value="#{cardexHome.saldo}"/> 
+                    <p:column headerText="#{'Saldo'}">                                                
+                        <h:outputText value="#{recetaMed.saldo}"/> 
                     </p:column>
                 </p:dataTable>
             </h:form>
-            <h:form id="admin">                
-
-
+            <h:form id="admin">                  
+                <h:commandButton value="Imprimir" type="button" styleClass="btn success">  
+                    <p:printer target=":form" />  
+                </h:commandButton>           
+                &nbsp;&nbsp;
+                <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" 
+                        value="#{messages['common.cancel']}" styleClass="btn">                         
+                </h:link>
             </h:form>
         </ui:define>
     </ui:composition>

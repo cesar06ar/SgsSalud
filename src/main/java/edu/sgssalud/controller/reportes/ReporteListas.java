@@ -57,7 +57,8 @@ public class ReporteListas {
     private static final String REPORTE_FICHASMEDICAS = "report2";
     private static final String REPORTE_CONSULTASMEDICAS = "listaConsultasMedicas";
     private static final String REPORTE_RECETAS = "listaRecetas";
-
+    private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
+    //private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
     @Inject
     @Web
     private EntityManager em;
@@ -91,6 +92,7 @@ public class ReporteListas {
         profileService.setEntityManager(em);
         pacienteServicio.setEntityManager(em);
         medService.setEntityManager(em);
+        
     }
 
     private String getRealPath(String path) {
@@ -279,17 +281,20 @@ public class ReporteListas {
     }
 
     public void renderMedicamentos() {
-        final String attachFileName = "medicamentos.pdf";
+        
+        try {
+            final String attachFileName = "medicamentos.pdf";        
         List<Medicamento> medicamentos = medService.buscarTodos();
         //parametros 
         Map<String, Object> _values = new HashMap<String, Object>();
         _values.put("nMedicamentos", medicamentos.size());
         _values.put("usd", "$");
         //Exportar a pdf 
-        JasperReportAction.exportToPdf(REPORTE_RECETAS, medicamentos, _values, attachFileName);
-
-        if (log.isDebugEnabled()) {
-            log.debug("export as pdf");
+        JasperReportAction.exportToPdf(REPORTE_MEDICAMENTOS, null, _values, attachFileName);        
+        } catch (Exception e) {
+            System.out.println("Error:____________________________________");
+            e.printStackTrace();
         }
+        
     }
 }

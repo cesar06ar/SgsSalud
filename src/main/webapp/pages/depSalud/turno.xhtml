@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="pacienteId" value="#{serviciosMedicosHome.pacienteId}" />            
+            <f:viewParam name="servicioId" value="#{serviciosMedicosHome.servicioId}" /> 
+        </f:metadata>
+        <ui:define name="header-replace" rendered="#{identity.loggedIn and account.renderView}" >
+
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h3>#{turnoHome.turnoId != null? messages['common.edit'] : messages['common.add']} 
+                            #{messages['citaMedica.nombre']} #{turnoHome.paciente.nombres} #{turnoHome.paciente.apellidos}</h3>   
+                    </div>
+                </div>
+            </div>      
+        </ui:define>
+        <ui:define name="content" rendered="#{identity.loggedIn and account.renderView}">
+            <h:form id="form">                
+                <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                    <glue:output id="ced" name="ced" type="text" label="#{messages['profile.dni']}" 
+                                 value="#{turnoHome.paciente.cedula}" required="false" execute="@this save" render="ced" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" 
+                                 value="#{turnoHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" 
+                                 value="#{turnoHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+                </p:panel>
+                <p:panel id="paneltitle" header="#{messages['citaMedica.nombre']}" styleClass="clearfix">
+                    <h:panelGroup layout="block" >
+                        <label for="fechaC" > #{messages['comun.fecha']} #{messages['receta.emision']}</label>
+                        <div class="input">                                                         
+                            <p:calendar id="fechaC" value="#{turnoHome.instance.fechaEmision}"  label="" dir="ltr"
+                                        disabled="true" pattern="EEEE, dd-MMMM-yyyy HH:mm"  locale="es">
+                            </p:calendar>                                                                                                      
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaEmision != null}"
+                                            styleClass="validation-status" />                                                        
+                        </div>                    
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
+                    </h:panelGroup>                                            
+                    <h:panelGroup layout="block" class="clearfix" rendered="true">
+                        <label for="nombreServicio" >#{messages['servicioMedico.nombre1']}  </label>
+                        <div class="input">
+                            <p:selectOneMenu id="nombreServicio" value="#{turnoHome.instance.servicio}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" 
+                                             var="ser" rendered="true" >
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                             
+                                <f:selectItem  itemLabel = "MÉDICO"  itemValue="MÉDICO" /> 
+                                <f:selectItem  itemLabel = "ODONTOLÓGICO"  itemValue="ODONTOLÓGICO" /> 
+                                <p:ajax event="change" update=":form:save" partialSubmit="true" />
+                            </p:selectOneMenu>                                                                                             
+                        </div>                   
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['servicioMedico.nombre.lineaAyuda']}<ocp:message forId="nombreServicio" /></span>
+                    </h:panelGroup> 
+                    <p:spacer height="15"/>  
+                    <glue:input id="motivo" name="motivo" type="textarea" label="#{messages['turno.motivo']}" 
+                                value="#{turnoHome.instance.motivo}" required="false" inlinehelp="Describa el motivo de la cita médica" execute="@this :form:save" render="motivo"/>
+                    <h:panelGroup layout="block" >
+                        <label for="fechaC" >#{messages['comun.fecha']} *</label>
+                        <div class="input">                                                         
+                            <p:calendar id="fechaC" value="#{serviciosMedicosHome.instance.createdOn}"  label="" dir="ltr"
+                                        disabled="true" pattern="EEEE, dd-MMMM-yyyy HH:mm"  locale="es">
+                            </p:calendar>                                                                                                      
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{serviciosMedicosHome.instance.createdOn != null}"
+                                            styleClass="validation-status" />                                                        
+                        </div>                    
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
+                    </h:panelGroup>  
+                    <!--Segun la fecha deben aparecer solo los turnos dispobles-->
+                </p:panel>
+                <div class="actions">
+
+                    <p:commandButton id="save" action="#{turnoHome.guardar()}" value="#{messages['common.save']}" styleClass="btn success"
+                                     immediate="true"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/agenda.xhtml" 
+                            value="#{messages['common.cancel']}" styleClass="btn" >                         
+                    </h:link>
+                </div>
+            </h:form>
+        </ui:define>
+        <ui:define name="content-pre" rendered="#{!account.renderView}">
+            <h:panelGroup  >
+                <br/><br/>
+                <div class="section">
+                    <h1>Accesso Denegado</h1>
+                </div>
+
+                <div class="section">
+                    <p>Usted no tiene autorización para realizar la acción solicitada.</p>
+
+                    <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
+                </div>
+            </h:panelGroup>
+        </ui:define>                    
+    </ui:composition>
+</html>                
+

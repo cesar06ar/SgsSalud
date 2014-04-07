@@ -15,9 +15,7 @@
  */
 package edu.sgssalud.model.farmacia;
 
-import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.medicina.ConsultaMedica;
-import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
@@ -32,16 +30,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import org.jboss.solder.logging.Logger;
 
 /**
  *
@@ -55,13 +49,15 @@ import org.jboss.solder.logging.Logger;
             + " WHERE r.id = :recetaId"            
             + " ORDER BY r.id")
     })
-public class Receta implements Serializable {
+public class Receta implements Serializable, Comparable<Receta> {
 
+    private static final long serialVersionUID = 3L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    //private static Logger log = Logger.getLogger(Receta.class);
-    private static final long serialVersionUID = 3L;
+    //private static Logger log = Logger.getLogger(Receta.class);    
+    private Long numero;    
+    private String numvalue;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEmision;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -194,6 +190,22 @@ public class Receta implements Serializable {
         this.listaRecetaMedicamento = listaRecetaMedicamento;
     }
 
+    public Long getNumero() {
+        return numero;
+    }
+
+    public void setNumero(Long numero) {
+        this.numero = numero;
+    }     
+
+    public String getNumvalue() {
+        return numvalue;
+    }
+
+    public void setNumvalue(String numvalue) {
+        this.numvalue = numvalue;
+    } 
+        
     public void agregarRecetaMedicamento(Receta_Medicamento rm) {
         if (!listaRecetaMedicamento.contains(rm)) {
             rm.setReceta(this);
@@ -238,5 +250,10 @@ public class Receta implements Serializable {
                 + "id=" + id + ","
                 + "indicaciones=" + indicaciones + ","
                 + " ]";
+    }
+
+    @Override
+    public int compareTo(Receta o) {
+        return (int)(this.getId() - o.getId());
     }
 }

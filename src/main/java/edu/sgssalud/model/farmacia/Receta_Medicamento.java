@@ -17,13 +17,14 @@
 package edu.sgssalud.model.farmacia;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -36,8 +37,12 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fecha;
     
+    private int ingreso;
     private int cantidad;
+    private int saldo;
     
     @ManyToOne()
     private Receta receta;    
@@ -53,6 +58,22 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
         this.id = id;
     }    
 
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }   
+    
+    public int getIngreso() {
+        return ingreso;
+    }
+    
+    public void setIngreso(int ingreso) {
+        this.ingreso = ingreso;
+    }  
+    
     public int getCantidad() {
         return cantidad;
     }
@@ -76,7 +97,15 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
     public void setMedicamento(Medicamento medicamento) {
         this.medicamento = medicamento;
     }    
-    
+
+    public int getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(int saldo) {
+        this.saldo = saldo;
+    }  
+        
     public boolean isPersistent(){
         return getId() != null;
     }
@@ -106,6 +135,7 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
         return "edu.sgssalud.model.farmacia.Receta_Medicamento[" 
                 + " id = " + id 
                 + " cantidad = " + cantidad 
+                + " saldo = " + saldo 
                 + " medicamento_id = " + medicamento.getId()
                 + " ]";
     }
@@ -113,6 +143,11 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
     @Override
     public int compareTo(Receta_Medicamento o) {
         return (int)(this.getId() - o.getId());
+//        if (this.getFecha().after(o.getFecha())) {
+//            return 1;
+//        }else{
+//            return -1;
+//        }
     }
     
 }

@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml"> 
+        <ui:define name="header-replace" >
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{messages['medicamento.admin']}</h2>   
+                    </div> 
+                </div>   
+            </div>            
+        </ui:define>
+        <ui:define name="content">           
+            <!--Metadato que se realiza antes de renderizarse la vista-->
+            <f:metadata>
+                <!--<f:viewParam name="result" value="# {examenLabListaServicio.primerResult}" />
+                <f:viewParam name="" value="# {medicamentoListaServicio.parametroBusqueda}"/>-->
+            </f:metadata>
+            <!--Formulario dentro de un contenedor-->
+            <h:form id="form">            
+                <!--Opción de mensaje, cuando se realiza una acción dfghdh-->
+                <!--para mostrar mensaje de componentes seleccionados y errores si fuera el caso-->
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <!--Botones de admin disabled="# {empty examenLabListaServicio.examenSeleccionado}"-->
+                <div class="admin-actions">
+                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="examenes" styleClass="btn primary">                        
+                        <f:param name="backView" value="listaExamenes"></f:param>
+                    </h:link>
+                    #{' '}
+                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="examenes" styleClass="btn" 
+                            >
+                        <f:param name="examenLabId" value="#{examenLabListaServicio.examenSeleccionado.id}"></f:param>
+                        <f:param name="backView" value="listaExamenes"></f:param>
+                    </h:link>   
+                </div>                
+                <p:dataTable id="tablaExamenes"  var="examenLab_" value="#{examenLabListaServicio.resultList}"
+                             paginator="true" rows="20" paginatorPosition="top"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                             rowsPerPageTemplate="5,10,20,50,100" 
+                             lazy="true" rendered="true" selectionMode="single"                             
+                             rowKey="#{examenLab_.id}" selection="#{examenLabListaServicio.examenSeleccionado}">
+                             <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
+                             
+                    <f:facet name="header">  
+                        <p:outputPanel>  
+                            <h:outputText value="Buscar Examen" />  
+                            <p:inputText id="globalFilter" onkeyup="medTable.filter();" style="width:150px" />  
+                        </p:outputPanel>  
+                    </f:facet>-->
+                    <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
+                    <p:ajax event="rowSelect" listener="#{examenLabListaServicio.onRowSelect}"
+                            update=":form:button-edit :form:messages :form:tablaExamenes"/>   
+                    <p:ajax event="rowUnselect" listener="#{examenLabListaServicio.onRowUnselect}" 
+                            update=":form:button-edit :form:messages :form:tablaExamenes"/>
+                    <!--Columnas para mostrar en la tabla -->
+                    
+                    <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.code}"
+                               headerText="#{messages['common.code']}">                        
+                        <h:outputText value="#{examenLab_.code}" />                        
+                    </p:column>
+                    <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.name}"
+                               headerText="#{messages['Examen.Nombre1']}">                        
+                        <h:outputText value="#{examenLab_.name}" />                        
+                    </p:column>
+                    <p:column sortBy="#{examenLab_.tipo}" style="text-align: center;" >
+                              <!--filterMatchMode="contains" filterBy="# {examenLab_.tipo}" -->
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['Examen.Tipo']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{examenLab_.tipo}" />
+                    </p:column>
+                    <p:column sortBy="#{examenLab_.valorReferencia}" style="text-align: center;" 
+                              filterMatchMode="startsWith">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['Examen.ValorReferencial']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{examenLab_.valorReferencia}" />
+                    </p:column>
+                    <p:column sortBy="#{examenLab_.costo}" style="text-align: center;" 
+                              filterMatchMode="startsWith">
+                        <f:facet name="header">  
+                            <h:outputText value="#{messages['examen.costo']}" />  
+                        </f:facet> 
+                        <h:outputText value="#{examenLab_.costo}" />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid id="export" class="columns" >
+                    <h:commandLink value="Imprimir" styleClass="btn">  
+                        <p:printer target="tablaExamenes"/>
+                    </h:commandLink>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+</html>

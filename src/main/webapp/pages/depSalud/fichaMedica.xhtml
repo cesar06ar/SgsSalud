@@ -14,25 +14,23 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="pacienteId" value="#{fichaMedicaHome.pacienteId}" />
             <f:viewParam name="fichaMedicaId" value="#{fichaMedicaHome.fichaMedicaId}" />
+            <f:viewParam name="pacienteId" value="#{fichaMedicaHome.pacienteId}" />            
             <f:viewParam name="backView" value="#{fichaMedicaHome.backView}" />
         </f:metadata>
 
-        <ui:define name="header-replace" > <!--rendered="# {identity.loggedIn and account.renderView}"-->
-            <h:panelGroup  rendered="#{identity.loggedIn and account.renderView}">
-                <div class="header-replace">
-                    <div class="container-header" >
-                        <div class="row lf row-title" >  
-                            <h2>#{fichaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['fichaMedica.nombre']} 
-                                #{fichaMedicaHome.instance.numeroFicha}</h2>   
-                        </div>
+        <ui:define name="header-replace" >             
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >  
+                        <h2>#{fichaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['fichaMedica.nombre']} 
+                            #{fichaMedicaHome.instance.numeroFicha}</h2>   
                     </div>
                 </div>
-            </h:panelGroup>
+            </div>
         </ui:define>
         <ui:define name="content" >            
-            <h:form id="form" rendered="#{identity.loggedIn and account.renderView}">
+            <h:form id="form" >
                 <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" escape="false"/>
                 <p:growl id="growl" showDetail="true" sticky="true" escape="false"/>  
 
@@ -51,31 +49,9 @@
                     <p:commandLink id="cargarPaciente" 
                                    title="Buscar Paciente"  styleClass="btn primary" style="height: 16px;">
                         <p:graphicImage value="#{resource['/images/buscar.png']}" style="margin-top: -2px;"/>
-                        <p:ajax process="@this" update=":form:infoP :form:infoFM :form:carPanel:tablaPacient" 
+                        <p:ajax process="@this" update=":form:infoP :form:infoFM " 
                                 rendered=":form:infoP :form:infoFM"  listener="#{fichaMedicaHome.buscarPorParametro()}"/>
-                    </p:commandLink>  
-                    <p:overlayPanel id="carPanel" for="cargarPaciente" hideEffect="fade" dynamic="false">
-                        <p:dataTable id="tablaPacient" value="#{fichaMedicaHome.listaPacietes}" var="paciente_">
-                            <p:column headerText="#{messages['profile.dni']}">
-                                <h:outputText value="#{paciente_.cedula}" />
-                            </p:column >
-                            <p:column headerText="#{messages['common.surname']}">
-                                <h:outputText value="#{paciente_.apellidos}" />
-                            </p:column >
-                            <p:column headerText="#{messages['common.firstname']}">
-                                <h:outputText value="#{paciente_.nombres}" />
-                            </p:column >                                
-                            <p:column headerText="#{messages['common.edad']}">
-                                <h:outputText value="#{paciente_.edad}" />
-                            </p:column >
-                            <p:column headerText="Opcion">
-                                <h:link id="cargarPaciente" outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
-                                        title="cargar"  styleClass="btn primary" value="cargar">                                        
-                                    <f:param name="pacienteId" value="#{paciente_.id}"></f:param>                                
-                                </h:link>
-                            </p:column >
-                        </p:dataTable>
-                    </p:overlayPanel> 
+                    </p:commandLink>                      
                 </h:panelGrid>
                 <br/>
                 <p:panel id="infoP" header="Información Personal" style="margin-top: 17px;">
@@ -157,7 +133,7 @@
                         </h:panelGroup>
                     </p:tab>
 
-                    <c:forEach items="#{ui.getProperties(fichaMedicaHome.instance)}" var="f" >                        
+                    <c:forEach items="#{ui.getProperties(fichaMedicaHome.instance)}" var="f" >
                         <p:tab title="#{f.label}" titletip="#{f.helpInline}" titleStyleClass="clearfix" 
                                disabled="#{(f.name eq 'antecedentesPersonalesFichaMedica' and account.tienePermiso('ENFERMEROS')) or (f.name eq 'antecedentesFamiliaresFichaMedica' and account.tienePermiso('ENFERMEROS'))}">
                             <c:choose>
@@ -256,12 +232,13 @@
 
                 <p:panel id="signosVitalesP" header="#{messages['signosVitales.toma']} #{messages['signosVitales.Nombre']}" toggleable="true" toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ENFERMEROS') }">
-                    <h:link value="#{messages['common.new1']} #{messages['comun.consulta']}" rendered="#{true}" outcome="/pages/depSalud/enfermeria/signosVitales" 
-                            styleClass="btn success Large">
-                        <h:graphicImage value="#{resource['images/sv2.png']}" style="float: left;" />
+                    <h:link title="#{messages['common.new1']} #{messages['comun.consulta']}" rendered="#{true}" outcome="/pages/depSalud/enfermeria/signosVitales" 
+                            styleClass="btn btn-img">
+                        <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>                        
                         <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                         <f:param name="backView" value="fichaMedica"></f:param>
                     </h:link>
+                    <br/>    
                     <br/>    
                     <p:dataTable id="tablaSigVit" value="#{fichaMedicaHome.listaSignosVitales}" var="signosVit_" >
 
@@ -301,9 +278,9 @@
                 <p:panel id="consultasM" header="#{'CONSULTAS MÉDICAS'}" toggleable="true"  toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('MEDICOS')}">                    
                     <div class="admin-actions">
-                        <h:link rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" 
+                        <h:link rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn btn-img"
                                 title="#{messages['common.add']} #{messages['consultaMedica.nombre']}">
-                            <p:graphicImage value="/resources/images/consultaMed.png" width="30" height="30"/>
+                            <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="fichaMedica"></f:param>
                         </h:link>                        
@@ -330,27 +307,48 @@
                             <h:outputText value="#{consultaM_.code}" title="Estado de la consulta puede ser (PENDIENTE o REALIZADA)" escape="false"/>
                         </p:column>
                         <p:column headerText="#{'Opcines'}" style="width: 20%">
-                            <h:link id="button-edit" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" title="#{messages['common.edit']}" 
-                                    styleClass="btn success" style="width: 10px; height: 10px; float: left; margin-left: -5px;">
+                            <h:link id="button-edit" value="#{messages['common.edit']} " rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" title="#{messages['common.edit']}" 
+                                    styleClass="btn success" style="width: 50px; height: 12px;">
                                 <p:graphicImage value="/resources/images/Icon_edit.gif" width="13" height="13"/>
                                 <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
                                 <f:param name="consultaMedicaId" value="#{consultaM_.id}"></f:param>
                                 <f:param name="backView" value="fichaMedica"></f:param>
                             </h:link>
+                            <!--
                             &nbsp;
-                            <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"
-                                           onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                            <p:commandLink id="button-delete" type="button" title="# {messages['common.delete']}"
+                                           onclick="# {'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
                                            style="width: 10px; height: 10px;">                                                        
                                 <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
-                                <f:setPropertyActionListener value="#{consultaM_}" target="#{fichaMedicaHome.consultaMedica}"/>
+                                <f:setPropertyActionListener value="# {consultaM_}" target="# {fichaMedicaHome.consultaMedica}"/>
                                 <p:ajax process="@this" update=":cancel-dialog" />
-                            </p:commandLink>
+                            </p:commandLink>-->
                         </p:column>
                     </p:dataTable>
                 </p:panel>
                 <!--Evolucion o consultas medicas-->
                 <p:panel id="consultasO" header="#{'CONSULTAS ODONTOLOGICAS'}" toggleable="true" toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ODONTOLOGOS')}">                   
+                    <p:dataTable id="tablaConsultasM1" value="#{fichaMedicaHome.historiaClinica.consultas}" rows="10" var="consultaM1_" editable="true"
+                                 paginator="true" emptyMessage="No tiene ninguna Consulta Médica">
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['consultaMedica.title']}"/>
+                        </f:facet>
+                        <p:column headerText="#{messages['consultaMedica.fechaConsulta']}" style="width: 15%">
+                            <p:outputLabel value="#{consultaM1_.fechaConsulta}" style="width: 65px; margin-top: -6px;" />
+                            &nbsp;&nbsp;&nbsp;
+                            <h:outputText value="#{consultaM1_.horaConsulta}" >
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.diagnostico']}" style="width: 40%">
+                            <h:outputText value="#{consultaM1_.diagnostico}" />
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.Tratamiento']}" style="width: 40%">
+                            <h:outputText value="#{consultaM1_.tratamiento}" />
+                        </p:column>                        
+                    </p:dataTable>
+                    <br/>
                     <div class="admin-actions">
                         <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success">
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
@@ -359,6 +357,9 @@
                     </div> 
                     <p:dataTable id="tablaConsultasO" value="#{fichaMedicaHome.fichaOdontologica.consultas}" rows="10" var="consultaO_" editable="true"
                                  paginator="true" emptyMessage="No tiene ninguna Consulta Odontológica">                                               
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['consultaOdontologica.Nombre']}"/>
+                        </f:facet>
                         <p:column headerText="Id" style="width: 7%">
                             <h:outputText value="#{consultaO_.id}"/>
                         </p:column>                            
@@ -416,20 +417,6 @@
                                      style="margin-top:10px;"/>  
                 </h:form>
             </p:dialog>
-        </ui:define>
-        <ui:define name="content-pre">
-            <h:panelGroup  rendered="#{!account.renderView}">
-                <br/><br/>
-                <div class="section">
-                    <h1>Accesso Denegado</h1>
-                </div>
-
-                <div class="section">
-                    <p>Usted no tiene autorización para realizar la acción solicitada.</p>
-
-                    <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
-                </div>
-            </h:panelGroup>
-        </ui:define>
+        </ui:define>       
     </ui:composition>
 </html>                

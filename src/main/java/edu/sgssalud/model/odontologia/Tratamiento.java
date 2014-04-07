@@ -19,6 +19,7 @@ import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.servicios.Servicio;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -63,25 +64,20 @@ public class Tratamiento implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaRealizacion;
     private String nombre;
-    private String procedimiento;
-    @Transient
-    private String ruta;
-    /*
-     private boolean c1;
-     private boolean c2;
-     private boolean c3;
-     private boolean c4;
-     private boolean c5;*/
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "tratamiento_cuadrante")
-    @Column(length = 25)
-    private Set<String> cuadrante = new HashSet<String>();
+    private String procedimiento;    
+    private String nombreAux;    
+    private String cua;
+    
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @CollectionTable(name = "tratamiento_cuadrante")
+//    @Column(length = 25)
+//    private Set<String> cuadrante = new HashSet<String>();
 
     @ManyToOne()
     @JoinColumn(name = "diente_id")
@@ -91,21 +87,11 @@ public class Tratamiento implements Serializable {
     @JoinColumn(name = "consultaOdontologica_id")
     private ConsultaOdontologica consultaOdontologica;
 
-//    @ManyToOne()
-//    @JoinColumn(name = "servicioDisponible_id")
-//    private Servicio servicioDisponible;
     public Tratamiento() {
-
     }
 
     public Tratamiento(String nombre, String ruta) {
-        this.nombre = nombre;
-        this.ruta = ruta;
-//        this.c1 = c1;
-//        this.c2 = c2;
-//        this.c3 = c3;
-//        this.c4 = c4;
-//        this.c5 = c5;
+        this.nombre = nombre;        
     }
 
     public Long getId() {
@@ -132,13 +118,13 @@ public class Tratamiento implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getRuta() {
-        return ruta;
+    public String getNombreAux() {
+        return nombreAux;
     }
 
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
-    }
+    public void setNombreAux(String nombreAux) {
+        this.nombreAux = nombreAux;
+    }    
 
     public String getProcedimiento() {
         return procedimiento;
@@ -164,20 +150,36 @@ public class Tratamiento implements Serializable {
         this.consultaOdontologica = consultaOdontologica;
     }
 
-    public Set<String> getCuadrante() {
-        return cuadrante;
+//    public Set<String> getCuadrante() {
+//        return cuadrante;
+//    }
+//
+//    public void setCuadrante(Set<String> cuadrante) {
+//        this.cuadrante = cuadrante;
+//    }
+
+    public String getCua() {
+        return cua;
     }
 
-    public void setCuadrante(Set<String> cuadrante) {
-        this.cuadrante = cuadrante;
+    public void setCua(String cua) {
+        this.cua = cua;
     }
-
-    public List<String> getCuandrantes() {
-        if (!getCuadrante().isEmpty()) {
-            return new ArrayList<String>(getCuadrante());
-        } else {
-            return null;
+  
+//    public List<String> getCuadrantes() {
+//        if (!getCuadrante().isEmpty()) {
+//            return new ArrayList<String>(getCuadrante());
+//        } else {
+//            return null;
+//        }
+//    }
+    
+    public boolean isCuandrante(String c){
+         List<String> listaC = Arrays.asList(cua.split(","));        
+        if(listaC.contains(c)){
+            return true;
         }
+        return false;
     }
 //    public Servicio getServicioDisponible() {
 //        return servicioDisponible;

@@ -127,5 +127,18 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         }
         System.out.println("Actualizado correctamente:________________");
     }
+    
+     public Long getGenerarNumeroFicha() {
+        List<Receta> listaF = getRecetas();
+        Long num = new Long(001);
+        if (!listaF.isEmpty()) {
+            for (Receta rm : listaF) {                
+                if (rm.getNumero() >= num) {
+                    num = (rm.getNumero() + 1);
+                }
+            }
+        }
+        return num;
+    }
 
 }

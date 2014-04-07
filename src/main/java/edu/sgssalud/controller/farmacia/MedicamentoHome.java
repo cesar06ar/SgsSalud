@@ -15,35 +15,28 @@
  */
 package edu.sgssalud.controller.farmacia;
 
-import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
-import edu.sgssalud.controller.paciente.PacienteHome;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
-import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.service.farmacia.MedicamentoService;
+import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
-import edu.sgssalud.util.Dates;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.picketlink.idm.common.exception.IdentityException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 
@@ -65,19 +58,21 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     private MedicamentoService ms;
     @Inject
     private RecetaServicio rs;
-    
+    @Inject
+    private RecetaMedicamentoService cardexService;
+    private boolean devolucion;
+    private int cantidad;
     private List<Receta> listaRecetas;
     private Receta recetaSeleccionada;
     private List<Medicamento> listaMedicamentos;
     private Medicamento medicamentoSeleccionado;
-    
-    
-     public MedicamentoHome() {
+
+    public MedicamentoHome() {
         listaRecetas = new ArrayList<Receta>();
         listaMedicamentos = new ArrayList<Medicamento>();
-     
-     }
-     
+
+    }
+
     /*Métodos get y set para obtener el Id de la clase*/
     public Long getMedicamentoId() {
         return (Long) getId();
@@ -85,8 +80,9 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
 
     public void setMedicamentoId(Long medicamentoId) {
         setId(medicamentoId);
+        //this.setCantidad(getInstance().getCantidadIngreso());
     }
-    
+
     public Long getRecetaId() {
         return (Long) getId();
     }
@@ -94,7 +90,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public void setRecetaId(Long recetaId) {
         setId(recetaId);
     }
-    
+
     public List<Medicamento> getlistarTodos() {
         return ms.buscarTodos();
     }
@@ -104,23 +100,25 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
 
     }
 
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
     public void setListaMedicamentos(List<Medicamento> listaMedicamentos) {
         this.listaMedicamentos = listaMedicamentos;
     }
 
-//    public List<Receta> getRecetas() {
-//        List<Receta> lr = RecetaServicio.buscarTodos();
-//        Collections.sort(lr, new Comparator() {
-//            @Override
-//            public int compare(Object rc1, Object rc2) {
-//                Receta r1 = (Receta) rc1;
-//                Receta r2 = (Receta) rc2;
-//                return r1.getNombre().compareToIgnoreCase(r2.getNombre());
-//                //return e1.getCategoria()
-//            }
-//        });
-//        return lr;
-//    }
+    public boolean isDevolucion() {
+        return devolucion;
+    }
+
+    public void setDevolucion(boolean devolucion) {
+        this.devolucion = devolucion;
+    }
 
     /*Método para  cargar una instancia de medicamento==>*/
 //    @Produces
@@ -158,7 +156,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
 
     public void setMedicamentoSeleccionado(Medicamento medicamentoSeleccionado) {
         this.medicamentoSeleccionado = medicamentoSeleccionado;
-       
+
     }
 
     /*Metodo que retorna una instancia de la clase (Medicamento) cuando ya esta creada==>*/
@@ -173,7 +171,8 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         rs.setEntityManager(em);
-        ms.setEntityManager(em);        
+        ms.setEntityManager(em);
+        cardexService.setEntityManager(em);
     }
 
     @Override
@@ -184,7 +183,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         medicament.setCreatedOn(now);
         medicament.setLastUpdate(now);
         medicament.setActivationTime(now);
-        //med.setExpirationTime(Dates.addDays(now, 364));        
+        medicament.setGenerico(false);
         medicament.setResponsable(null);    //cambiar atributo a 
         medicament.setFechaIngreso(now);  //Fecha actual de ingreso 
         medicament.buildAttributes(bussinesEntityService);  //
@@ -200,22 +199,61 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public String guardarMedicamento() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()) {
-            save(getInstance());
-        } else {
-            create(getInstance());
-            getInstance().setCantidadIngreso(getInstance().getUnidades());
-            save(getInstance());
-            FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
-            FacesContext.getCurrentInstance().addMessage("", msg);
+        try {
+            if (getInstance().isPersistent()) {
+                if (devolucion == false) {
+                    if (getCantidad() != 0) {
+                        Receta_Medicamento cardex = new Receta_Medicamento();
+                        cardex.setIngreso(getCantidad());
+                        cardex.setMedicamento(getInstance());
+                        int saldo = cantidad + this.saldoCardexAnterior();
+                        //System.out.println("Guardar Medicamento_______--" + saldo);
+                        cardex.setSaldo(saldo);
+                        cardex.setFecha(now);
+                        save(cardex);
+                    }
+                    getInstance().setCantidadIngreso(cantidad);
+                    getInstance().setUnidades(getInstance().getUnidades() + cantidad);
+                } else {
+                    Receta_Medicamento cardex = new Receta_Medicamento();
+                    cardex.setCantidad(getInstance().getUnidades());
+                    
+                    cardex.setMedicamento(getInstance());
+                    int saldo = this.saldoCardexAnterior() - getInstance().getUnidades();
+                    //System.out.println("Guardar Medicamento_______--" + saldo);
+                    cardex.setSaldo(saldo);
+                    cardex.setFecha(now);                    
+                    save(cardex);                    
+                    getInstance().setUnidades(0);
+                }
+                save(getInstance());
+
+            } else {
+                create(getInstance());
+                getInstance().setCantidadIngreso(cantidad);
+                getInstance().setUnidades(getInstance().getUnidades() + cantidad);
+                save(getInstance());
+                //if(getCantidad() != getInstance().getUnidades()){
+                Receta_Medicamento cardex = new Receta_Medicamento();
+                cardex.setIngreso(getCantidad());
+                cardex.setMedicamento(getInstance());
+                cardex.setSaldo(getCantidad());
+                cardex.setFecha(now);
+                save(cardex);
+                //}   
+                FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
     }
 
     public void validarFC() {
     }
-    
-      public void onRowSelect(SelectEvent event) {
+
+    public void onRowSelect(SelectEvent event) {
         FacesMessage msg = new FacesMessage(" Medicamento Seleccionado", ((Medicamento) event.getObject()).getNombreComercial());
         setMedicamentoSeleccionado((Medicamento) event.getObject());
         FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -237,7 +275,23 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         //log.info("ingreso a getRowData");
         return ms.buscarPorNombreMedicamento(rowKey);
     }
-    
+
+    public Integer saldoCardexAnterior() {
+
+        List<Receta_Medicamento> listaC = cardexService.obtenerPorMedicamento(getInstance());
+        //System.out.println("lista Cardex____-" + listaC.toString() + " Medicamento ____"+getInstance().getId());
+        if (!listaC.isEmpty()) {
+            Receta_Medicamento cardex = new Receta_Medicamento();
+            cardex = listaC.get(0);
+            for (Receta_Medicamento rm : listaC) {
+                if (rm.getFecha().after(cardex.getFecha())) {
+                    cardex = rm;
+                }
+            }
+            return cardex.getSaldo();
+        } else {
+            return 0;
+        }
+    }
+
 }
-
-

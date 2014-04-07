@@ -16,25 +16,23 @@
             <f:viewParam name="recetaId" value="#{recetaHome.recetaId}" />
             <f:viewParam name="pacienteId" value="#{recetaHome.pacienteId}" />
             <f:viewParam name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}" />
-            <f:viewParam name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />            
+            <f:viewParam name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />            
             <f:viewParam name="backView" value="#{recetaHome.backView}" />
         </f:metadata>
 
         <ui:define name="header-replace" >
-            <h:panelGroup rendered="#{identity.loggedIn and account.renderView}">
-                <div class="header-replace" >
-                    <div class="container-header" >
-                        <div class="row lf row-title" >
-                            <h2>#{recetaHome.recetaId == null? 'Nueva Receta para:': 'Editar Receta para:'}
-                                #{recetaHome.paciente.nombres}</h2>
-                        </div>
+            <div class="header-replace" >
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{recetaHome.recetaId == null? 'Nueva Receta para:': 'Editar Receta para:'}
+                            #{recetaHome.paciente.nombres}</h2>
                     </div>
                 </div>
-            </h:panelGroup>            
+            </div>
         </ui:define>
 
         <ui:define name="content" >
-            <h:form id="form" rendered="#{identity.loggedIn and account.renderView}">
+            <h:form id="form" >
                 <p:growl id="messages" showDetail="true" life="6000" />
                 <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
                     <div class="container-fluid">
@@ -46,7 +44,9 @@
 
                             </div>
                             <div class="span7" align="left">
-                                <h:panelGroup layout="block" class="clearfix" >
+                                <glue:output id="numr" name="numr" type="text" label="#{messages['receta.numero']}" value="#{recetaHome.instance.numvalue}" 
+                                             required="true" execute="@this save" render="numr" styleClass="xLarge" disabled="true"/>
+                                <h:panelGroup layout="block" class="clearfix" >                                    
                                     <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
                                     <div class="input">
                                         <p:calendar id="fafm" value="#{recetaHome.instance.fechaEmision}"  label="#{messages['fechaReceta.fechaEmision']}"
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </p:panel>
-                <p:panel id="panelPrescripcion" header="Ingreso de datos" >
+                <p:panel id="panelPrescripcion" header="Ingreso de datos"  rendered="#{!recetaHome.instance.persistent}">
                     <div class="container-fluid">
                         <div class="row-fluid">
                             <div class="span7" style="margin-right: 3%; margin-left: 10px;">
@@ -68,7 +68,7 @@
                                 <h:panelGroup layout="block">
                                     <label for="medicamentoDisponible" style="width: 35px; margin-top: -5px">#{messages['medicamento.nombre']}*</label>
                                     <div class="input" style="margin-left: 100px;">
-                                        <p:inputText  id="medicamentoDisponible" required="false" value="#{recetaHome.nombreMedic}"
+                                        <p:inputText  id="medicamentoDisponible" required="false" value="#{recetaHome.nombreMedic} "
                                                       rendered="true" style="width: 250px;">                                            
                                             <p:ajax event="blur" update="@this" rendered="save"/>
                                         </p:inputText>
@@ -84,21 +84,25 @@
                                     </div>
                                     <p:overlayPanel id="medPanel" for="cargarMedicamento" hideEffect="fade" dynamic="false" widgetVar="dialogMedicamet" style="margin-left: -20%;">
                                         <p:dataTable id="tablaMedicamentos" var="medicamento_" value="#{recetaHome.listaMedicamentosStock}" emptyMessage="No hay medicamentos cargados"
-                                                     paginator="true" rows="10" rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single">
-
+                                                     paginator="true" rows="10" rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single"
+                                                     > <!-- widgetVar="medTable" filteredValue="# {recetaHome.listaMedicamentosFiltrados}"
+                                            <f:facet name="header">  
+                                                <p:outputPanel>  
+                                                    <h:outputText value="Buscar Medicamento" />  
+                                                    <p:inputText id="globalFilter" onkeyup="medTable.filter();" style="width:150px" />  
+                                                </p:outputPanel>  
+                                            </f:facet>  -->
                                             <p:ajax event="rowSelect" listener="#{recetaHome.onRowSelect}"   
                                                     update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos" oncomplete="dialogMedicamet.hide();" />  
                                             <p:ajax event="rowUnselect" listener="#{recetaHome.onRowUnselect}" update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos"/>
 
-                                            <p:column headerText="Nombre Comercial" style="width:6px; font-size:12px">  
+                                            <p:column headerText="Nombre Comercial" style="width:6px; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreComercial}">  
                                                 <h:outputText value="#{medicamento_.nombreComercial}" />  
                                             </p:column>
-
-                                            <p:column headerText="Nombre Genérico" style="width:6px; font-size:12px">  
+                                            <p:column headerText="Nombre Genérico" style="width:6px; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreGenerico}">  
                                                 <h:outputText value="#{medicamento_.nombreGenerico}" />  
                                             </p:column>
-
-                                            <p:column headerText="Cantidad" style="width:6px; font-size:12px">  
+                                            <p:column headerText="Cantidad" style="width:6px; font-size:12px" filterMatchMode="startsWith" filterBy="#{medicamento_.unidades}">  
                                                 <h:outputText value="#{medicamento_.unidades}" />  
                                             </p:column>
                                             <p:column headerText="ALERTAS" style="width: 15%; text-align: center; font-size:11px">                            
@@ -138,17 +142,19 @@
                         </div>
                     </div>
                 </p:panel>
-                <div class="admin-actions">
+                <div class="admin-actions" >
                     <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}" 
-                                     styleClass="btn primary" update="@form" style="margin-left: 25%">
-                        <p:ajax process="@this" update=":form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId"/>
+                                     styleClass="btn primary" update="@form" style="margin-left: 25%" immediate="true" rendered="#{!recetaHome.instance.persistent}">
+                        <p:ajax process="@this" update=":form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
+                                rendered=":form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId"/>
                     </p:commandButton>
-                    &nbsp;
-                    <p:commandButton id="clear" action="#{recetaHome.reiniciar()}" value="Limpiar" 
-                                     styleClass="btn primary" >
-                        <p:ajax process="@this" update=":form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
-                                rendered=":form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId"/>
-                    </p:commandButton>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/receta?faces-redirect=true"
+                            value="Limpiar" styleClass="btn primary" >                        
+                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param> 
+                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />
+                        <f:param name="backView" value="/medicina/consultaMedica"></f:param>
+                    </h:link>  
                 </div>
                 <p:panel id="recetasId" header="Receta">
                     <div class="container-fluid">
@@ -175,31 +181,18 @@
                 </p:panel>
                 <div class="admin-actions">
                     <p:commandButton id="enviar" action="#{recetaHome.guardarReceta()}" value="#{messages['common.submit']}" 
-                                     update=":form:messages" styleClass="btn primary" style="margin-left: 32%"/>
+                                     update=":form:messages" styleClass="btn primary" style="margin-left: 32%" immediate="true"
+                                     disabled="#{empty recetaHome.listaIndicaciones}"/>
                     &nbsp;
                     <h:link outcome="/pages/depSalud#{recetaHome.backView}?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
                         <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
-                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />            
+                        <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />            
                     </h:link>                   
                 </div>
-            </h:form>            
-        </ui:define>
-        <ui:define name="content-pre" rendered="#{!account.renderView}">
-            <h:panelGroup  >
-                <br/><br/>
-                <div class="section">
-                    <h1>Accesso Denegado</h1>
-                </div>
-
-                <div class="section">
-                    <p>Usted no tiene autorización para realizar la acción solicitada.</p>
-
-                    <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
-                </div>
-            </h:panelGroup>
-        </ui:define>
+            </h:form>             
+        </ui:define>       
     </ui:composition>
 </html>
 

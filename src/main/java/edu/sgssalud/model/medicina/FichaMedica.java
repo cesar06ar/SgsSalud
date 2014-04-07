@@ -69,8 +69,8 @@ public class FichaMedica extends BussinesEntity implements Serializable {
     @OneToOne
     @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
     private Paciente paciente;
-    @Transient
-    private int numFicha;
+//    @Transient
+//    private int numFicha;
     
     public FichaMedica(){
         fechaApertura = new Date();
@@ -132,9 +132,9 @@ public class FichaMedica extends BussinesEntity implements Serializable {
         }        
     }
 
-    public void setNumFicha(int numFicha) {
-        this.numFicha = numFicha;
-    }  
+//    public void setNumFicha(int numFicha) {
+//        this.numFicha = numFicha;
+//    }  
         
     public enum GrupoSangineo {
 

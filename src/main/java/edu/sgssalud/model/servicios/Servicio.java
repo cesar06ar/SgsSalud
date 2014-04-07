@@ -15,47 +15,52 @@
  */
 package edu.sgssalud.model.servicios;
 
+import edu.sgssalud.model.PersistentObject;
+import edu.sgssalud.model.config.Setting;
+import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
+import javax.persistence.Table;
 
 /**
  *
  * @author cesar
  */
 @Entity
-public class Servicio implements Serializable {
+@Table(name = "Servicio")
+public class Servicio extends PersistentObject<Servicio> implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
     private String categoria;
-    private String nombre;
-    private String descripcion;
-    private String rutaImg;
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaLimiteVigencia;
-    private boolean todasZonas;
+    
+//    private String descripcion;
+//    //private String rutaImg;
+//    @Temporal(javax.persistence.TemporalType.DATE)
+//    private Date fechaLimiteVigencia;
+//    private boolean todasZonas;
     @OneToOne
     @JoinColumn(name = "responsable_id")
     private Profile responsable;     //Quien presta este servicio
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @ManyToOne
+    @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
+    private Paciente paciente;
+    
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
     public String getCategoria() {
         return categoria;
     }
@@ -63,46 +68,14 @@ public class Servicio implements Serializable {
     public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
-    
-    public String getNombre() {
-        return nombre;
+
+    public Paciente getPaciente() {
+        return paciente;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public String getRutaImg() {
-        return rutaImg;
-    }
-
-    public void setRutaImg(String rutaImg) {
-        this.rutaImg = rutaImg;
-    }
-    
-    public Date getFechaLimiteVigencia() {
-        return fechaLimiteVigencia;
-    }
-
-    public void setFechaLimiteVigencia(Date fechaLimiteVigencia) {
-        this.fechaLimiteVigencia = fechaLimiteVigencia;
-    }
-
-    public boolean isTodasZonas() {
-        return todasZonas;
-    }
-
-    public void setTodasZonas(boolean todasZonas) {
-        this.todasZonas = todasZonas;
-    }
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
+    }    
     
     public Profile getResponsable() {
         return responsable;
@@ -111,37 +84,13 @@ public class Servicio implements Serializable {
     public void setResponsable(Profile responsable) {
         this.responsable = responsable;
     }
-
-    public boolean isPersistent() {
-        return getId() != null;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Servicio)) {
-            return false;
-        }
-        Servicio other = (Servicio) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
+  
     @Override
     public String toString() {
         return "edu.sgssalud.model.servicios.Servicio[ "
-                + "id=" + id + ","
-                + "nombre=" + nombre + ","
-                + "descripcion=" + descripcion + ","
+                + "id=" + getId() + ","
+                + "nombre=" + getName() + ","
+                + "descripcion=" + getDescription() + ","
                 + " ]";
     }
 }

@@ -32,7 +32,7 @@
         <ui:define name="content">
             <h:form id="form">                
                 <!--<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  -->
-                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="6000"/>  
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="6000" />  
                 <p:panel id="consultaM" header="Información de Consulta" toggleable="true" >
                     <p:panelGrid columns="3">
                         <h:panelGroup layout="block" >
@@ -194,8 +194,8 @@
                                             <c:when test="#{(f.name eq 'examenFisicoCM')}">                                                            
                                                 <h:panelGroup id="obEFP" layout="block" class="clearfix">
                                                     <label for="observ2">#{messages['consultaMedica.observacionExamFis']}</label>
-                                                    <div class="input">
-                                                        <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" required="false" style="width: 70%; height: 90px;" 
+                                                    <div class="input" >
+                                                        <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" required="false" style="width: 70%; height: 90px; margin-left: 20px;" 
                                                                          rendered="true">
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </p:inputTextarea>                                                                                                 
@@ -287,18 +287,57 @@
                                 <p:outputLabel value="#{recetaM_.estado}"/>                                   
                             </p:column>
                             <p:column headerText="#{'Opción'}" style="width: 7%">
-                                <h:link value="#{messages['common.edit']}" outcome="/pages/depSalud/receta" styleClass="btn success">
+                                <h:link value="#{messages['common.view']}" outcome="/pages/depSalud/receta" styleClass="btn success">
                                     <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
                                     <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>                                    
                                     <f:param name="backView" value="/medicina/consultaMedica"></f:param>
                                 </h:link>
                                 &nbsp;
                                 <p:commandLink id="button-delete" type="button" value="Borrar" title="#{messages['common.delete']}"
-                                               onclick="#{'deletedDlg.show();'}"  styleClass="btn success" 
+                                               onclick="#{'deletedDlg.show();'}"  styleClass="btn success" rendered="#{recetaM_.estado eq 'Emitida'}"
                                                ajax="true">
                                     <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                        
                                     <f:setPropertyActionListener value="#{recetaM_}" target="#{consultaMedicaHome.receta}"/>
                                     <p:ajax update=":cancel-dialog" />
+                                </p:commandLink>
+                            </p:column>                            
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="#{messages['Examen.label']}" rendered="true" >
+                        <h:link outcome="/pages/depSalud/pedidoExamen" value="#{messages['common.add']} #{messages['Examen.pedidos']}" styleClass="btn primary" >                            
+                            <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
+                            <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
+                            <f:param name="backView" value="/depSalud/medicina/consultaMedica"></f:param>
+                        </h:link>
+                        <br/><br/>                        
+                        <p:dataTable id="tablaPedidos" value="#{consultaMedicaHome.hc.pedidosExamenLab}" var="pedidosExam_"  emptyMessage="No hay ningun pedido de examen">
+                            <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%" >
+                                <p:outputLabel value="#{pedidosExam_.fechaPedido}">
+                                    <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                                </p:outputLabel>
+                            </p:column>                             
+                            <p:column headerText="#{messages['consultaMedica.medicoResponsable']} #{messages['receta.emision']}" style="width: 10%">
+                                <p:outputLabel value="#{pedidosExam_.responsableEmision.fullName}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{messages['comun.estado']}" style="width: 10%">
+                                <p:outputLabel value="#{pedidosExam_.estado}"/>                                   
+                            </p:column>
+                            <p:column headerText="#{'Opción'}" style="width: 7%">
+                                <h:link value="#{messages['common.view']}" outcome="/pages/depSalud/pedidoExamen" styleClass="btn success"
+                                        rendered="#{pedidosExam_.estado eq 'Realizado'}">
+                                    <f:param name="pedidoExamenId" value="#{pedidosExam_.id}"></f:param>
+                                    <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
+                                    <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>                                    
+                                    <f:param name="backView" value="/depSalud/medicina/consultaMedica"/>                                    
+                                </h:link>
+                                &nbsp;                               
+                                &nbsp;                                
+                                <p:commandLink id="button-delete1" type="button" value="Borrar" title="#{messages['common.delete']}"
+                                               onclick="#{'deletedDlg1.show();'}"  styleClass="btn success" rendered="#{pedidosExam_.estado eq 'Nuevo'}"
+                                               ajax="true">
+                                    <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                        
+                                    <f:setPropertyActionListener value="#{pedidosExam_}" target="#{consultaMedicaHome.pedidoExamen}"/>
+                                    <p:ajax update=":cancel-dialog1" />
                                 </p:commandLink>
                             </p:column>                            
                         </p:dataTable>
@@ -321,6 +360,22 @@
                         <!--<p:ajax process="@this" update=":form" />-->
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+
+                </h:form>
+            </p:dialog>
+            <p:dialog id="cancel-dialog1" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg1" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete1">
+
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']} de Pedido de Exeman"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" action="#{consultaMedicaHome.borrarPedidoExamen()}" 
+                                     oncomplete="deletedDlg1.hide();" ajax="true"  
+                                     style="margin-top:10px;" >  
+                        <!--<p:ajax process="@this" update=":form" />-->
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg1.hide();"  
                                      style="margin-top:10px;"/>  
 
                 </h:form>

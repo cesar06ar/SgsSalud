@@ -32,4 +32,8 @@ limitations under the License.
         <tag-name>output</tag-name>
         <source>tags/output.xhtml</source>
     </tag>
+    <tag>
+        <tag-name>view</tag-name>
+        <source>tags/view.xhtml</source>
+    </tag>
 </facelet-taglib>

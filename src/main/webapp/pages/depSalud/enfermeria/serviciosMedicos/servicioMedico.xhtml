@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"            
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">        
+        <f:metadata>
+            <f:viewParam name="pacienteId" value="#{serviciosMedicosHome.pacienteId}" />            
+            <f:viewParam name="servicioId" value="#{serviciosMedicosHome.servicioId}" /> 
+        </f:metadata>
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h3>#{serviciosMedicosHome.servicioId != null? messages['common.edit'] : messages['common.add']} 
+                            #{'Servicio Médico '}#{serviciosMedicosHome.instance.name}</h3>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
+        <ui:define name="content">
+
+            <h:form id="form" acceptcharset="UTF-8">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                    <glue:output id="ced" name="ced" type="text" label="#{messages['profile.dni']}" 
+                                 value="#{serviciosMedicosHome.paciente.cedula}" required="false" execute="@this save" render="ced" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" 
+                                 value="#{serviciosMedicosHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" 
+                                 value="#{serviciosMedicosHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+                </p:panel>
+                <p:panel id="panelServicio" header="Información de Atención" styleClass="clearfix">
+                    <glue:input id="cate" name="categoria" type="text" label="#{messages['servicioMedico.categoria']}" value="#{serviciosMedicosHome.instance.categoria}" required="false" 
+                                inlinehelp="#{messages['servicioMedico.categoria.lineaAyuda']}" execute="@this save" render="cate" disabled="true"/>               
+
+                    <h:panelGroup layout="block" >
+                        <label for="fechaC" >#{messages['comun.fecha']} *</label>
+                        <div class="input">                                                         
+                            <p:calendar id="fechaC" value="#{serviciosMedicosHome.instance.createdOn}"  label="" dir="ltr"
+                                        disabled="true" pattern="EEEE, dd-MMMM-yyyy HH:mm"  locale="es">
+                            </p:calendar>                                                                                                      
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{serviciosMedicosHome.instance.createdOn != null}"
+                                            styleClass="validation-status" />                                                        
+                        </div>                    
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
+                    </h:panelGroup>                                            
+                    <p:spacer height="15"/>                
+                    <h:panelGroup layout="block" class="clearfix" rendered="true">
+                        <label for="nombreServicio" >#{messages['common.name']}  </label>
+                        <div class="input">
+                            <p:selectOneMenu id="nombreServicio" value="#{serviciosMedicosHome.instance.name}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" 
+                                             var="img" rendered="true"  label="#{messages['common.name']}" panelStyleClass="span5" >
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                             
+                                <f:selectItem  itemLabel = "CURACION"  itemValue="CURACI0N" /> 
+                                <f:selectItem  itemLabel = "INYECCION"  itemValue="INYECI0N" /> 
+                                <p:ajax event="change" update=":form:save" partialSubmit="true" />
+                            </p:selectOneMenu>                                                                                             
+                        </div>                   
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['servicioMedico.nombre.lineaAyuda']}<ocp:message forId="nombreServicio" /></span>
+                    </h:panelGroup>                    
+                    <glue:input id="description" name="description" type="textarea" label="#{messages['consultaMedica.observacion']}" 
+                                value="#{serviciosMedicosHome.obs}" required="false" inlinehelp="ingrese alguna observación de la atención" execute="@this :form:save" render="description"/>
+                </p:panel>
+                <div class="actions">
+
+                    <p:commandButton id="save" action="#{serviciosMedicosHome.guardar()}" value="#{messages['common.save']}" styleClass="btn success"
+                                     immediate="true"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/enfermeria/serviciosMedicos/lista.xhtml" 
+                            value="#{messages['common.cancel']}" styleClass="btn" >                         
+                    </h:link>
+                </div>
+                <div class="offset8" style="float: right">
+                    <glue:output id="respons" name="responsable" type="text" label="Responsable" value="#{serviciosMedicosHome.instance.responsable}" 
+                                 required="false" execute="@this" render="respons" styleClass="xLarge" disabled="true"/>
+                </div>  
+            </h:form>           
+        </ui:define>             
+    </ui:composition>
+</html>
+

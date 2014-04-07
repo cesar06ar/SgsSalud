@@ -16,13 +16,13 @@
         </ui:define>
 
         <!--<ui:define name="topnav-post-template">
-           <h:panelGroup rendered="#{profile.persistent}">
+           <h:panelGroup rendered="# {profile.persistent}">
                 <li>
                     <div class="linkball">◗</div>
                     <h:link outcome="/pages/profile/profile"
                             style="padding-left: 15px;"
-                            value="#{profile.username}">
-                        <f:param name="profileId" value="#{profile.id}" />
+                            value="# {profile.username}">
+                        <f:param name="profileId" value="# {profile.id}" />
                     </h:link>
                 </li>
             </h:panelGroup>
@@ -74,94 +74,197 @@
         </ui:define>
 
         <ui:define name="sidebar">
-            
+
         </ui:define>
 
         <ui:define name="content">
             <h:panelGroup  rendered="#{identity.loggedIn}">
-                <h2>Bienvenidos al Software Clínico de Gestión de Servicios de Salud </h2>
-                <br/>
-                <p:panel header="Módulo de Administración del Sistema" toggleable="true" rendered="#{account.tienePermiso('ADMIN')}">
-                    <h:link value="#{messages['module.BussinesEntity']}" rendered="true" 
-                            outcome="/pages/admin/bussinesentitytype/list">                        
-                    </h:link>
-                    <br />
-                    <h:link value="#{messages['module.setting']}" rendered="#{true}" 
-                            outcome="/pages/admin/setting/list">
-                    </h:link>
-                    <br />
-                    <h:link value="#{messages['servicioMedico.nombre']}" rendered="#{true}" 
-                            outcome="/pages/admin/serviciosMedicos/lista" >
-                        <f:param name="result"></f:param>                      
-                    </h:link>
-                    <br />               
-                    <p:panel header="Administrar Perfiles de Usuario" toggleable="true" >
-                        <h:link value="#{messages['module.profile.profiles']}" rendered="#{true}" 
-                                outcome="/pages/admin/listProfile">                            
-                        </h:link>
-                        <br />
-                        <h:link value="#{messages['security.group']}" rendered="#{true}" 
-                                outcome="/pages/admin/security/list">
-                            <f:param name="result"></f:param>                
-                        </h:link>
-                    </p:panel>
-                </p:panel>
+                <h2 style="border-color: #adf6c1; background-color: #adf6c1">Bienvenidos al Software Clínico de Gestión de Servicios de Salud </h2>                
 
-                <p:panel header="#{messages['modulo.admin.secretaria']}" toggleable="true" rendered="#{account.tienePermiso('SECRETARIA')}">
-                    <h:link value="#{messages['paciente.admin']}" rendered="#{true}" 
-                            outcome="/pages/secretaria/lista">                    
-                    </h:link>
-                    <br />                
-                </p:panel>
-                <p:panel header="#{messages['modulo.admin.Medicina']}" toggleable="true" toggleOrientation="vertical" rendered="#{account.tienePermiso('MEDICOS')}">
-                    <h:link value="#{messages['historiasclinicas.admin']}" rendered="#{true}" 
-                            outcome="/pages/depSalud/fichaMedica">                    
-                    </h:link>
-                    <br />  
-                    <h:link value="#{messages['agendaMedica.admin']}" rendered="#{true}" 
-                            outcome="/pages/depSalud/medicina/agenda">                    
-                    </h:link>
-                    <br />  
-                    <h:link value="#{messages['enfermedadesCie10.admin']}" rendered="#{true}" 
-                            outcome="/pages/depSalud/medicina/enfermedadescie10">                    
-                    </h:link>
-                </p:panel>
-                <p:panel header="#{messages['modulo.admin.Odontologia']}" toggleable="true" toggleOrientation="vertical" rendered="#{account.tienePermiso('ODONTOLOGOS')}">
-                    <h:link value="#{messages['fichaOdontologica.admin']}" rendered="#{true}" 
-                            outcome="/pages/depSalud/fichaMedica">                    
-                    </h:link> 
-                    <br />  
-                    <h:link value="#{messages['agendaOdontologica.admin']}" rendered="#{true}" 
-                            outcome="/pages/depSalud/odontologia/agenda">                    
-                    </h:link>
-                </p:panel>
-                <p:panel header="#{messages['modulo.admin.enfermeria']}" toggleable="true" toggleOrientation="vertical" rendered="#{account.tienePermiso('ENFERMEROS')}">
-                    <h:link value="#{messages['historiasclinicas.admin']}" rendered="#{true}" 
-                            outcome="/pages/depSalud/fichaMedica">                    
-                    </h:link> 
-                    <br />  
-                    <h:link value="#{messages['curaciones']}" rendered="#{true}" 
-                            outcome="#">                    
-                    </h:link>                    
-                </p:panel>
-                <p:panel header="#{messages['modulo.admin.LabClinico']}" toggleable="true" toggleOrientation="vertical" rendered="#{account.tienePermiso('LABORATORISTAS')}">
-                    <h:link value="#{messages['pedidoLabClinico.admin']}" rendered="#{true}" 
-                            outcome="/pages/labClinico/pedidoExamen">                    
-                    </h:link>
-                    <br />  
-                    <h:link value="#{messages['examenesLabClinico.admin']}" rendered="#{true}" 
-                            outcome="/pages/labClinico/examenes">                    
-                    </h:link>                
-                </p:panel>
-                <p:panel header="#{messages['modulo.admin.farmacia']}" toggleable="true" toggleOrientation="vertical" rendered="#{account.tienePermiso('FARMACEUTICOS')}">
-                    <h:link value="#{messages['medicamento.admin']}" rendered="#{true}" 
-                            outcome="/pages/farmacia/medicamento/lista">                    
-                    </h:link> 
-                    <br />  
-                    <h:link value="#{messages['receta.admin']}" rendered="#{true}" 
-                            outcome="/pages/farmacia/receta/listaReceta">                    
-                    </h:link> 
-                </p:panel>
+                <div class="row row_home" >    
+                    <h:panelGroup  rendered="#{account.tienePermiso('ADMIN')}" >
+                        <h5 style="margin-left: 20%">MÓDULO DE ADMINISTRACIÓN DEL SISTEMA</h5>
+                        <div class="span4" style="margin-left: 2%">
+                            <div class="styleHome">
+                                <center>
+                                    <h:link id="link1" rendered="true" outcome="/pages/admin/bussinesentitytype/list" >
+                                        <p:graphicImage value="/resources/img/setting.png" width="70" height="70" />
+                                        <h:outputText value="#{messages['module.setting.name']}" style="float: left"/>
+                                    </h:link>                                     
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link outcome="/pages/admin/listProfile" >
+                                        <p:graphicImage value="/resources/img/admin1.png" width="69" height="69" />
+                                        <h:outputText value="#{messages['module.profils']}" style="float: left"/>
+                                    </h:link>                                    
+                                </center>
+                            </div>
+                        </div>  
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" outcome="/pages/admin/security/list">
+                                        <f:param name="result"></f:param>                
+                                        <p:graphicImage value="/resources/img/rol.png" width="68" height="70" />
+                                        <h:outputText value="#{messages['security.groups']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>                                                        
+                    </h:panelGroup>                  
+                </div>                 
+
+                <div class="row row_home">    
+                    <h5 style="margin-left: 20%">MÓDULOS DEL DEPARTAMENTO DE SALUD</h5>
+                    <h:panelGroup  rendered="#{account.tienePermiso('SECRETARIA')}">
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.secretaria']}"
+                                            outcome="/pages/secretaria/lista">                    
+                                        <p:graphicImage value="/resources/img/paciente.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['paciente.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup  rendered="#{account.tienePermiso('MEDICOS')}">                        
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>                                    
+                                    <h:link title="#{messages['modulo.admin.Medicina']}" rendered="#{true}" 
+                                            outcome="/pages/depSalud/listaFichaMedica">                                     
+                                        <p:graphicImage value="/resources/img/fichas.png" width="65" height="65"/>
+                                        <h:outputText value="#{messages['historiasclinicas.admin']}" style="float: left"/>
+                                    </h:link>                                    
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>                                    
+                                    <h:link title="#{messages['modulo.admin.Medicina']}" rendered="#{true}" 
+                                            outcome="/pages/depSalud/agenda"> 
+                                        <p:graphicImage value="/resources/img/agendaMed.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['agendaMedica.admin']}" style="float: left"/>
+                                    </h:link>                                                       
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link title="#{messages['modulo.admin.Medicina']}" rendered="#{true}" 
+                                            outcome="/pages/depSalud/medicina/enfermedadescie10">
+                                        <p:graphicImage value="/resources/img/cie10.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['enfermedadesCie10.admin']}" style="float: left"/>
+                                    </h:link>                   
+                                </center>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup  rendered="#{account.tienePermiso('ODONTOLOGOS')}">
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.Odontologia']}"
+                                            outcome="/pages/depSalud/listaFichaMedica">                                   
+                                        <p:graphicImage value="/resources/images/consultaMed.png" width="65" height="65"/>
+                                        <h:outputText value="#{messages['fichaOdontologica.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.Odontologia']}"
+                                            outcome="/pages/depSalud/agenda">                                                    
+                                        <p:graphicImage value="/resources/img/agendaMed.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['agendaOdontologica.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup  rendered="#{account.tienePermiso('ENFERMEROS')}">
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.enfermeria']}"
+                                            outcome="/pages/depSalud/listaFichaMedica">                                                     
+                                        <p:graphicImage value="/resources/img/fichas.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['historiasclinicas.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.enfermeria']}"
+                                            outcome="/pages/depSalud/enfermeria/serviciosMedicos/lista" >                                                   
+                                        <p:graphicImage value="/resources/img/servicioMed.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['servicioMedico.nombre']}" style="float: left"/>
+                                    </h:link>                                                                                          
+                                </center>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup  rendered="#{account.tienePermiso('LABORATORISTAS')}">
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.LabClinico']}"
+                                            outcome="/pages/labClinico/listaPedidosExam">                    
+                                        <p:graphicImage value="/resources/img/pedidoExam.jpg" width="65" height="65" />
+                                        <h:outputText value="#{messages['pedidoLabClinico.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.LabClinico']}"
+                                            outcome="/pages/labClinico/listaExamenes">                                                  
+                                        <p:graphicImage value="/resources/img/labClinic.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['examenesLabClinico.admin']}" style="float: left"/>
+                                    </h:link>                                    
+                                </center>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup  rendered="#{account.tienePermiso('FARMACEUTICOS')}">
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.farmacia']}"
+                                            outcome="/pages/farmacia/medicamento/lista">                    
+                                        <p:graphicImage value="/resources/img/medicamentos.png" width="90" height="67" />
+                                        <h:outputText value="#{messages['medicamento.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.farmacia']}"
+                                            outcome="/pages/farmacia/receta/listaReceta">
+                                        <p:graphicImage value="/resources/img/receta.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['receta.admin']}" style="float: left"/>
+                                    </h:link>                                    
+                                </center>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </div>                
             </h:panelGroup>
             <h:panelGroup  rendered="#{!identity.loggedIn}">
                 <br/><br/>

@@ -17,6 +17,7 @@ package edu.sgssalud.model.odontologia;
 
 import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.BussinesEntity;
+import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,6 +59,9 @@ public class FichaOdontologica extends BussinesEntity implements Serializable {
     private Odontograma odontograma;
     @OneToMany(mappedBy = "fichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ConsultaOdontologica> consultas = new ArrayList<ConsultaOdontologica>();
+    
+    @OneToMany(mappedBy = "fichaOdontologica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PedidoExamenLaboratorio> pedidosExamenLab = new ArrayList<PedidoExamenLaboratorio>();
 
     public FichaMedica getFichaMedica() {
         return fichaMedica;
@@ -100,6 +104,23 @@ public class FichaOdontologica extends BussinesEntity implements Serializable {
             c.setFichaOdontologica(this);
             this.consultas.add(c);
         }
-
     }
+    
+    public List<PedidoExamenLaboratorio> getPedidosExamenLab() {
+        return pedidosExamenLab;
+    }
+
+    public void setPedidosExamenLab(List<PedidoExamenLaboratorio> pedidosExamenLab) {
+        for (PedidoExamenLaboratorio p : pedidosExamenLab) {
+            p.setFichaOdontologica(this);
+        }
+        this.pedidosExamenLab = pedidosExamenLab;
+    }
+
+//    public void agregarPedidoExamen(PedidoExamenLaboratorio p) {
+//        if (!this.pedidosExamenLab.contains(p)) {
+//            p.setHistoriaClinica(this);
+//            this.pedidosExamenLab.add(p);
+//        }
+//    }
 }

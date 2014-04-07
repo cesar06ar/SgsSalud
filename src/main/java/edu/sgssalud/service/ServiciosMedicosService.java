@@ -17,9 +17,6 @@ package edu.sgssalud.service;
 
 //import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.service.medicina.*;
-import edu.sgssalud.model.medicina.SignosVitales;
-import edu.sgssalud.model.odontologia.Tratamiento;
-import edu.sgssalud.model.odontologia.Tratamiento_;
 import edu.sgssalud.model.servicios.Servicio;
 import edu.sgssalud.model.servicios.Servicio_;
 import edu.sgssalud.util.PersistenceUtil;
@@ -57,24 +54,24 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
     public List<Servicio> todosServicios() {
         return findAll(Servicio.class);
     }
-
+    
+    public Servicio getSignosVitalesPorId(final Long id) {
+        return (Servicio) findById(Servicio.class, id);
+    }
+    
     public List<Servicio> todosServicios(String categoria) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Servicio> query = builder.createQuery(Servicio.class);
         Root<Servicio> entity = query.from(Servicio.class);
         query.where(builder.equal(entity.get(Servicio_.categoria), categoria));
         return getResultList(query);
-    }
-
-    public Servicio getSignosVitalesPorId(final Long id) {
-        return (Servicio) findById(Servicio.class, id);
-    }
+    }   
 
     public Servicio buscarPorNombre(final String nombre) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Servicio> query = builder.createQuery(Servicio.class);
         Root<Servicio> entity = query.from(Servicio.class);
-        query.where(builder.equal(entity.get(Servicio_.nombre), nombre));
+        query.where(builder.equal(entity.get(Servicio_.name), nombre));
         return getSingleResult(query);
     }
 

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <h:panelGroup rendered="true" >                
+            <p:panel  header="Panel de Administracion" toggleable="true" rendered="true" style="font-size: 9; width: 115%">
+                <h:panelGroup  rendered="#{account.tienePermiso('ADMIN')}" >
+                    <h:link title="#{messages['module.setting.name']}" rendered="true" 
+                            outcome="/pages/admin/bussinesentitytype/list">
+                        <p:graphicImage value="/resources/img/setting.png" width="60" height="60" />
+                    </h:link>                    
+                    &nbsp;&nbsp;
+                    <h:link title="#{messages['module.profils']}" rendered="#{true}" 
+                            outcome="/pages/admin/listProfile">
+                        <p:graphicImage value="/resources/img/admin1.png" width="60" height="60" />
+                    </h:link>
+                    &nbsp;&nbsp;
+                    <h:link title="#{messages['security.groups']}" rendered="#{true}" 
+                            outcome="/pages/admin/security/list">
+                        <p:graphicImage value="/resources/img/rol.png" width="60" height="60" />
+                    </h:link>  
+                    &nbsp;&nbsp;
+                </h:panelGroup>
+                <h:panelGroup  rendered="#{account.tienePermiso('SECRETARIA')}" style="margin-right: -7%">
+                    <h:link title="#{messages['paciente.admin']}" rendered="#{true}" 
+                            outcome="/pages/secretaria/lista">                    
+                        <p:graphicImage value="/resources/img/paciente.png" width="60" height="60" />
+                    </h:link>
+                    &nbsp;&nbsp;             
+                </h:panelGroup>
+                <h:panelGroup  rendered="#{account.tienePermiso('MEDICOS')}" style="margin-right: -7%">
+                    <h:link title="#{messages['historiasclinicas.admin']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/listaFichaMedica">                    
+                        <p:graphicImage value="/resources/img/fichas.png" width="60" height="60" />
+                    </h:link>
+                    &nbsp;&nbsp;  
+                    <h:link title="#{messages['agendaMedica.admin']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/agenda">                    
+                        <p:graphicImage value="/resources/img/agendaMed.png" width="60" height="60" />
+                    </h:link>
+                    &nbsp;&nbsp;  
+                    <h:link title="#{messages['enfermedadesCie10.admin']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/medicina/enfermedadescie10">                    
+                        <p:graphicImage value="/resources/img/cie10.png" width="60" height="60" />
+                    </h:link>
+                    &nbsp;&nbsp;  
+                </h:panelGroup>
+                <h:panelGroup  rendered="#{account.tienePermiso('ODONTOLOGOS')}" style="margin-right: -7%">
+                    <h:link title="#{messages['fichaOdontologica.admin']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/listaFichaMedica">                    
+                        <p:graphicImage value="/resources/img/fichas.png" width="60" height="60" />
+                    </h:link> 
+                    &nbsp;&nbsp;  
+                    <h:link title="#{messages['agendaOdontologica.admin']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/agenda">                    
+                        <p:graphicImage value="/resources/img/agendaMed.png" width="60" height="60" />
+                    </h:link>
+                    &nbsp;&nbsp;  
+                </h:panelGroup>
+                <h:panelGroup  rendered="#{account.tienePermiso('ENFERMEROS')}" style="margin-right: -7%">
+
+                    <h:link title="#{messages['historiasclinicas.admin']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/listaFichaMedica">                    
+                        <p:graphicImage value="/resources/img/fichas.png" width="60" height="60" />
+                    </h:link> 
+                    &nbsp;&nbsp;  
+                    <h:link title="#{messages['servicioMedico.nombre']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/enfermeria/serviciosMedicos/lista" >
+                        <p:graphicImage value="/resources/img/servicioMed.png" width="60" height="60" />
+                    </h:link>                                                   
+                    &nbsp;&nbsp;  
+                </h:panelGroup>
+                <h:panelGroup  rendered="#{account.tienePermiso('LABORATORISTAS')}" style="margin-right: -7%">                                        
+                    <h:link title="#{messages['examenesLabClinico.admin']}" rendered="#{true}" 
+                            outcome="/pages/labClinico/listaExamenes">                         
+                        <p:graphicImage value="/resources/img/labClinic.png" width="60" height="60" />
+                    </h:link> 
+                    &nbsp;&nbsp;  
+                    <h:link title="#{messages['pedidoLabClinico.admin']}" rendered="#{true}" 
+                            outcome="/pages/labClinico/listaPedidosExam">                    
+                        <p:graphicImage value="/resources/img/pedidoExam.jpg" width="65" height="65" />
+                    </h:link>
+
+                    &nbsp;&nbsp;  
+                </h:panelGroup>
+                <h:panelGroup  rendered="#{account.tienePermiso('FARMACEUTICOS')}" style="margin-right: -7%">
+                    <h:link title="#{messages['medicamento.admin']}" rendered="#{true}" 
+                            outcome="/pages/farmacia/medicamento/lista">                    
+                        <p:graphicImage value="/resources/img/medicamentos.png" width="60" height="60" />
+                    </h:link> 
+                    &nbsp;&nbsp;  
+                    <h:link title="#{messages['receta.admin']}" rendered="#{true}" 
+                            outcome="/pages/farmacia/receta/listaReceta" >                    
+                        <p:graphicImage value="/resources/img/receta.png" width="60" height="60" />
+                    </h:link>                 
+                </h:panelGroup>
+            </p:panel>
+        </h:panelGroup>
+    </ui:composition>
+</html>
+

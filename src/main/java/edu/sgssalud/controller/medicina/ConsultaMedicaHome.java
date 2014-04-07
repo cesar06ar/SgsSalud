@@ -23,6 +23,8 @@ import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.farmacia.Receta_Medicamento;
+import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
+import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
 import edu.sgssalud.model.medicina.FichaMedica;
@@ -32,6 +34,7 @@ import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
+import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.EnfermedadesCie10Servicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
@@ -90,20 +93,22 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private RecetaMedicamentoService recetaMedicamentoServicio;
     @Inject
     private RecetaServicio recetasServicio;
+    @Inject
+    private ResultadoExamenLCService resultadosExamenesService;
 
     private HistoriaClinica hc;
     private SignosVitales signosVitales;
     private Long fichaMedicaId;
     private Paciente paciente;
+    private PedidoExamenLaboratorio pedidoExamen;
+    private Receta receta;
 
     private List<EnfermedadCIE10> listaEnfCie10 = new ArrayList<EnfermedadCIE10>();
     private List<EnfermedadCIE10> listaEnfPosee = new ArrayList<EnfermedadCIE10>();
 
     private DualListModel<EnfermedadCIE10> pickListEnfermedades = new DualListModel<EnfermedadCIE10>();
-
+    private List<PedidoExamenLaboratorio> listaPedidos = new ArrayList<PedidoExamenLaboratorio>();
     private CartesianChartModel linearModel = new CartesianChartModel();
-
-    private Receta receta;
 
     public Long getConsultaMedicaId() {
         return (Long) getId();
@@ -203,6 +208,22 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         this.receta = receta;
     }
 
+    public PedidoExamenLaboratorio getPedidoExamen() {
+        return pedidoExamen;
+    }
+
+    public void setPedidoExamen(PedidoExamenLaboratorio pedidoExamen) {
+        this.pedidoExamen = pedidoExamen;
+    }
+
+    public List<PedidoExamenLaboratorio> getListaPedidos() {
+        return listaPedidos;
+    }
+
+    public void setListaPedidos(List<PedidoExamenLaboratorio> listaPedidos) {
+        this.listaPedidos = listaPedidos;
+    }
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
@@ -218,6 +239,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         recetaMedicamentoServicio.setEntityManager(em);
         recetasServicio.setEntityManager(em);
         receta = new Receta();
+        resultadosExamenesService.setEntityManager(em);
         if (getInstance().isPersistent()) {
             if (getInstance().getResponsable() == null) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
@@ -342,6 +364,34 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 //this.getInstance().setRecetas(recetasServicio.buscarRecetaPorConsultaMedica(getInstance()));
                 System.out.println("ELIMINO RECETA");
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino receta", "" + getInstance().getId()));
+                salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaMedicaId=" + getInstance().getId();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+            e.printStackTrace();
+        }
+        return salida;
+    }
+
+    @TransactionAttribute
+    public String borrarPedidoExamen() {
+        System.out.println("Borrar Pedido Examen_______: " + pedidoExamen.toString());
+        String salida = "";
+        try {
+            if (getPedidoExamen().isPersistent()) {
+                List<ResultadoExamenLabClinico> listaResultadosExamenLab = new ArrayList<ResultadoExamenLabClinico>();
+                listaResultadosExamenLab = resultadosExamenesService.getResultadosExamenPorPedidoExamen(pedidoExamen);
+                ResultadoExamenLabClinico aux;
+                for (ResultadoExamenLabClinico result : listaResultadosExamenLab) {
+                    aux = result;
+                    em.remove(aux);
+                }
+
+                delete(pedidoExamen);
+                //System.out.println("ELIMINO Pedido");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino Pedido", "" + pedidoExamen.getId()));
                 salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
                         + "&fichaMedicaId=" + getFichaMedicaId()
                         + "&consultaMedicaId=" + getInstance().getId();

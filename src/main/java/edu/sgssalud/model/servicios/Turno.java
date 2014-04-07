@@ -33,24 +33,27 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class Turno implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    private String Servicio;
     private String motivo;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fecha;
+    private Date fechaCita;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date fechaEmision;
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date hora;
-    
+    private String estado;
     @OneToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
-    
-    @ManyToOne
-    @JoinColumn(name = "agenda_id")
-    private AgendaMedica agenda;
-    
+
+//    @ManyToOne
+//    @JoinColumn(name = "agenda_id")
+//    private AgendaMedica agenda;
     public Long getId() {
         return id;
     }
@@ -63,6 +66,14 @@ public class Turno implements Serializable {
         return getId() != null;
     }
 
+    public String getServicio() {
+        return Servicio;
+    }
+
+    public void setServicio(String Servicio) {
+        this.Servicio = Servicio;
+    }
+
     public String getMotivo() {
         return motivo;
     }
@@ -71,12 +82,20 @@ public class Turno implements Serializable {
         this.motivo = motivo;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaCita() {
+        return fechaCita;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaCita(Date fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
+    public Date getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(Date fechaEmision) {
+        this.fechaEmision = fechaEmision;
     }
 
     public Date getHora() {
@@ -85,7 +104,7 @@ public class Turno implements Serializable {
 
     public void setHora(Date hora) {
         this.hora = hora;
-    }    
+    }
 
     public Paciente getPaciente() {
         return paciente;
@@ -95,14 +114,21 @@ public class Turno implements Serializable {
         this.paciente = paciente;
     }
 
-    public AgendaMedica getAgenda() {
-        return agenda;
+    public String getEstado() {
+        return estado;
     }
 
-    public void setAgenda(AgendaMedica agenda) {
-        this.agenda = agenda;
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
-            
+
+//    public AgendaMedica getAgenda() {
+//        return agenda;
+//    }
+//
+//    public void setAgenda(AgendaMedica agenda) {
+//        this.agenda = agenda;
+//    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -127,5 +153,5 @@ public class Turno implements Serializable {
     public String toString() {
         return "edu.sgssalud.model.servicios.Turno[ id=" + id + " ]";
     }
-    
+
 }

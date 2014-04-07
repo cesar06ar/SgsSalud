@@ -209,13 +209,6 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
         }
     }
 
-//    public void agregarTratamiento(Tratamiento t) {
-//        if (!this.tratamientoDientes.contains(t)) {
-//            t.setConsultaOdontologica(this);
-//            this.tratamientoDientes.add(t);
-//        }
-//    }
-
     @Override
     public int compareTo(ConsultaOdontologica o) {
         return (int)(o.getId() - this.getId());

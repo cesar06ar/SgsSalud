@@ -45,13 +45,13 @@ public class TipoAnalisis implements Serializable {
     private Double valorReferencia;
     private Double resultado;
     
-    @ManyToOne()
-    @JoinColumn(name = "pedidoExamLab_id")
-    private PedidoExamenLaboratorio pedidoExamenLaboratorio;
-    
-    @ManyToOne
-    @JoinColumn(name = "resultadoExamLabClinico_id")
-    private ResultadoExamenLaboratorioClinico resultadoExamLabClinico;
+//    @ManyToOne()
+//    @JoinColumn(name = "pedidoExamLab_id")
+//    private PedidoExamenLaboratorio pedidoExamenLaboratorio;
+//    
+//    @ManyToOne
+//    @JoinColumn(name = "resultadoExamLabClinico_id")
+//    private ResultadoExamenLabClinico resultadoExamLabClinico;
 
     public Long getId() {
         return id;
@@ -97,21 +97,21 @@ public class TipoAnalisis implements Serializable {
         return getId() != null;
     }
 
-    public PedidoExamenLaboratorio getPedidoExamenLaboratorio() {
-        return pedidoExamenLaboratorio;
-    }
-
-    public void setPedidoExamenLaboratorio(PedidoExamenLaboratorio pedidoExamenLaboratorio) {
-        this.pedidoExamenLaboratorio = pedidoExamenLaboratorio;
-    }
-
-    public ResultadoExamenLaboratorioClinico getResultadoExamLabClinico() {
-        return resultadoExamLabClinico;
-    }
-
-    public void setResultadoExamLabClinico(ResultadoExamenLaboratorioClinico resultadoExamLabClinico) {
-        this.resultadoExamLabClinico = resultadoExamLabClinico;
-    }    
+//    public PedidoExamenLaboratorio getPedidoExamenLaboratorio() {
+//        return pedidoExamenLaboratorio;
+//    }
+//
+//    public void setPedidoExamenLaboratorio(PedidoExamenLaboratorio pedidoExamenLaboratorio) {
+//        this.pedidoExamenLaboratorio = pedidoExamenLaboratorio;
+//    }
+//
+//    public ResultadoExamenLabClinico getResultadoExamLabClinico() {
+//        return resultadoExamLabClinico;
+//    }
+//
+//    public void setResultadoExamLabClinico(ResultadoExamenLabClinico resultadoExamLabClinico) {
+//        this.resultadoExamLabClinico = resultadoExamLabClinico;
+//    }    
     
     @Override
     public int hashCode() {

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2012 jlgranda.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions"
+    xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+    >
+    <style type="text/css">
+        .ui-selectonemenu label.ui-selectonemenu-label {
+            padding-right: 28px;
+            text-align: left;
+        }
+    </style>
+    <c:set var="id" value="#{not empty id ? id : (not empty name ? name : action)}" />
+    <c:set var="required" value="#{not empty required and required}" />
+    <c:set var="render" value="#{not empty render ? 'panel-group-'.concat(render) : (not empty id ? 'panel-group-'.concat(id) : 'panel-group-'.concat(mame))}" />
+    <c:set var="validator" value="#{not empty validator ? validator : false}" />
+    <c:set var="nameValidador" value="#{not empty nameValidador ? nameValidador : null}" />    
+    <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
+    <c:set var="styleClass" value="#{not empty styleClass ? styleClass : 'clearfix'}" />    
+    <c:set var="max" value="#{not empty max ? max : null}" />    
+    <c:set var="min" value="#{not empty min ? min : null}" />        
+    <c:set var="pattern" value="#{not empty pattern ? pattern : null}" />    
+    <!-- TODO habilitar o deshabilitar ajax validation -->
+    <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix" style="margin-left: 3%">
+        <label for="#{name}" style="margin-left: 1%; font-weight: bold" class="#{(not empty required and required) ? 'required' : ''}">#{label} #{(not empty required and required) ? '*&#160;' : ''}:</label>
+
+        <div class="survey-output" style="margin: 0px 0 0 0;">            <c:choose>
+                <c:when test="#{type == 'java.lang.String' or type == 'text'}">
+                    <h:outputText value="#{value}" id="#{name}" style="text-align: left; margin-left: 5%">                        
+                    </h:outputText>
+                </c:when>
+                <c:when test="#{type == 'java.util.Date' or type == 'calendar'}">
+                    <h:outputText value="#{value}" id="#{name}"  style="text-align: left; margin-left: 5%" >
+                        <f:convertDateTime pattern="#{pattern}" />        
+                    </h:outputText>
+                </c:when>
+                <c:when test="#{type == 'java.lang.Boolean' or type == 'checkbox'}">
+                    <h:selectBooleanCheckbox value="#{value}" id="#{name}"  required="#{required}" label="#{label}" disabled="#{disabled}" style="text-align: left; margin-left: 5%">                        
+                    </h:selectBooleanCheckbox>                    
+                </c:when>
+                <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">                    
+                    <h:inputTextarea value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" style="width: 400px; height: 80px; margin-left: 10%; " disabled="#{disabled}">                        
+                    </h:inputTextarea>
+                </c:when>                
+                <c:when test="#{type == 'java.lang.Long' or type == 'java.lang.Double' or type == 'java.lang.Float' or type == 'decimal'}">
+                    <h:outputText value="#{value}" id="#{name}"  style="text-align: left; margin-left: 5%">
+                    </h:outputText>
+                </c:when>
+                <c:otherwise>
+                    <h:outputText value="#{value}" id="#{name}"  style="text-align: left; margin-left: 5%" >
+                    </h:outputText>
+                </c:otherwise>
+            </c:choose>            
+        </div>
+    </h:panelGroup>  
+    
+</ui:composition>

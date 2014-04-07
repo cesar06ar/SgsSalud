@@ -11,17 +11,13 @@
     <ui:param name="titulo" value="#{messages['consultaMedica.admin']}"/>
 
     <ui:define name="header-replace">
-        <div class="header-replace">            
-            <div class="container">
-                <div class="span9 columns">
-                    <div class="row fl" style="margin-top: 5px;">
-                        <h2>#{titulo}</h2>   
-                    </div>                    
-                </div> 
-                <!--Div para boton de regreso a inicio-->
-                
-            </div> 
-        </div>             
+        <div class="header-replace">
+            <div class="container-header" >
+                <div class="row lf row-title" >  
+                    <h2>#{titulo}</h2>   
+                </div>
+            </div>
+        </div>        
     </ui:define>
     <ui:define name="content">
         <!--Metadato que se realiza antes de renderizarse la vista-->
@@ -35,85 +31,86 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
             <!--Botones de admin-->
-            <div class="admin-actions span17">
-                <div class="span6 ">
-                    <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success">
-                        <f:param name="consultaMedicaId"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link>
-                    #{' '}
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn" 
-                            disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
-                        <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link>
-                    #{' '}
-                    <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn" 
-                            disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
-                        <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link>
-                </div>
-                <div class="span6 offset5" >
+            <div class="admin-actions">
+
+                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success">
+                    <f:param name="consultaMedicaId"></f:param>
+                    <f:param name="backView" value="lista"></f:param>
+                </h:link>
+                #{' '}
+                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn" 
+                        disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
+                    <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
+                    <f:param name="backView" value="lista"></f:param>
+                </h:link>
+                #{' '}
+                <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn" 
+                        disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
+                    <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
+                    <f:param name="backView" value="lista"></f:param>
+                </h:link>
+
+                <div style="float: right" >
                     <p:inputText id="criterioBuscar" size ="25" value="#{consultaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                         <p:ajax event="keyup" update="tablaConsultasMedicas"/>
                     </p:inputText>
                     &nbsp;
-                                   
+
                     <br/>
                 </div>             
             </div>
 
             <!--tabla de datos-->
             <p:dataTable id="tablaConsultasMedicas"  var="consultaMedica_" value="#{consultaMedicaListaServicio.resultList}"
-                         paginator="true" rows="10" styleClass="span18"
+                         paginator="true" rows="10" 
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
-                         rowsPerPageTemplate="10,20,30,50,100"
-                         lazy="true"
+                         rowsPerPageTemplate="10,20,30,50,100"                         
                          rowKey="#{consultaMedica_.id}"
                          selection="#{consultaMedicaListaServicio.consulMedicSeleccionada}"
                          rendered="true"
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Consulta Medica-->
                 <p:ajax event="rowSelect" listener="#{consultaMedicaListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:messages :form:button-abrirFM"/>                 
+                        update=":form:button-edit :form:messages :form:button-abrirFM"/>  
                 <p:ajax event="rowUnselect" listener="#{consultaMedicaListaServicio.onRowUnselect}" 
                         update=":form:button-edit :form:messages :form:button-abrirFM"/>
 
                 <!--Columnas para mostrar en la tabla-->
-                <p:column sortBy="#{consultaMedica_.id}" style="width: 15%; text-align: center;">
+                <p:column sortBy="#{consultaMedica_.id}" style="width: 15%; text-align: center;" filterBy="#{consultaMedica_.id}" filterMatchMode="exact">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.id']}" />  
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.id}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" style="text-align: center;">
+                <!--<p:column sortBy="# {consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" style="text-align: center; width: 15%">
                     <f:facet name="header">  
-                        <h:outputText value="#{messages['fichaMedica.numero']}" />  
+                        <h:outputText value="# {messages['fichaMedica.numero']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" />
-                </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" style="text-align: center;">
+                    <h:outputText value="# {consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" />
+                </p:column>-->
+                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" style="text-align: center;" 
+                          >
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" style="text-align: center;">
+                <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" style="text-align: center;"
+                          >
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.surname']}" />  
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.historiaClinica.fichaMedica.paciente.apellidos}" />
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.fechaConsulta}" style="text-align: center;">
+                <p:column sortBy="#{consultaMedica_.fechaConsulta}" style="text-align: center;" >
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.fechaConsulta']}" />  
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.fechaConsulta}">
                         <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                     </h:outputText>
-                    
+
                 </p:column>
                 <p:column sortBy="#{consultaMedica_.responsable}" style="text-align: center;">
                     <f:facet name="header">  
@@ -121,23 +118,28 @@
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.responsable}" />
                 </p:column>
+                <p:column sortBy="#{consultaMedica_.code}" style="text-align: center;" filterBy="#{consultaMedica_.code}" filterMatchMode="contains">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['comun.estado']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{consultaMedica_.code}" />
+                </p:column>
             </p:dataTable>
-            
-            <h:panelGrid id="export" class="columns" >
-                <p:panel>
-                    <h:outputText value="Exportar Datos" />  
-                    <br/>
-                    <h:commandLink action="#{reporteListas.renderConsultasMedicas()}" >                    
-                        <p:graphicImage value="/resources/images/pdf.png" />                          
-                    </h:commandLink>
-                    #{''}
-                    <h:commandLink >  
-                        <p:graphicImage value="/resources/images/xls1.png" />  
-                        <p:dataExporter type="xls" target="tablaConsultasMedicas" fileName="ConsultasMedicas"/>  
-                    </h:commandLink>
-                </p:panel>
-            </h:panelGrid>
-            
+
+
+            <h:panelGroup>
+                <h:outputText value="Exportar Datos" />  
+                <br/>
+                <h:commandLink action="#{reporteListas.renderConsultasMedicas()}" >                    
+                    <p:graphicImage value="/resources/images/pdf.png" />                          
+                </h:commandLink>
+                #{''}
+                <h:commandLink >  
+                    <p:graphicImage value="/resources/images/xls1.png" />  
+                    <p:dataExporter type="xls" target="tablaConsultasMedicas" fileName="ConsultasMedicas"/>  
+                </h:commandLink>
+            </h:panelGroup>
+
         </h:form>
     </ui:define>
 </ui:composition>

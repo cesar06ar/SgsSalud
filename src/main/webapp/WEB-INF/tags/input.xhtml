@@ -49,18 +49,18 @@ limitations under the License.
                     </p:inputText>
                 </c:when>
                 <c:when test="#{type == 'java.util.Date' or type == 'calendar'}">
-                    <p:calendar value="#{a.value}" id="#{name}" navigator="true" label="#{label}">
+                    <p:calendar value="#{a.value}" id="#{name}" navigator="true" label="#{label}" disabled="#{disabled}">
                         <p:ajax event="dateSelect" listener="#{listener}" update="#{render}" />
                     </p:calendar>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Boolean' or type == 'checkbox'}">
-                    <h:selectBooleanCheckbox value="#{value}" id="#{name}" styleClass="xLarge" required="#{required}" label="#{label}">
+                    <p:selectBooleanCheckbox value="#{value}" id="#{name}" styleClass="xLarge" required="#{required}" label="#{label}" disabled="#{disabled}">
                         <f:ajax execute="#{execute}" render="#{render}"  />
-                    </h:selectBooleanCheckbox>
-                    <!--<span>#{inlinehelp}</span>-->
+                    </p:selectBooleanCheckbox>
+                    <!--<span># {inlinehelp}</span>-->
                 </c:when>
                 <c:when test="#{type == 'java.lang.MultiLineString' or type == 'textarea'}">
-                    <h:inputTextarea value="#{value}" id="#{name}" style="width: 50%; height: 80px;" required="#{required}" label="#{label}"  >
+                    <h:inputTextarea value="#{value}" id="#{name}" style="width: 60%; height: 80px;" required="#{required}" label="#{label}"  >
                         <f:ajax execute="#{execute}" render="#{render}"  />
                     </h:inputTextarea>
                 </c:when>
@@ -71,7 +71,7 @@ limitations under the License.
                     </p:selectOneMenu>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Long' or type == 'java.lang.Double' or type == 'java.lang.Float' or type == 'decimal'}">
-                    <pe:inputNumber id="#{name}" value="#{value}" styleClass="xLarge span4" required="#{required}" label="#{label}" decimalPlaces="#{numDecimales}">  
+                    <pe:inputNumber id="#{name}" value="#{value}" styleClass="xLarge span4" required="#{required}" label="#{label}" decimalPlaces="#{numDecimales}" disabled="#{disabled}">  
                         <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
                     </pe:inputNumber>  
                     <br/>

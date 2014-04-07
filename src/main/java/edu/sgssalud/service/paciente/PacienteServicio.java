@@ -178,7 +178,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         query.where(builder.equal(paciente.get(Paciente_.cedula), cedula));
         return getSingleResult(query);
     }
-    
+
     public Photos buscarFotoPorPaciente(Long id) {
         System.out.println("Ingreso a buscar foto por paciente ____________");
         TypedQuery<Photos> query = em.createQuery("SELECT p.foto FROM Paciente p WHERE p.id = :id", Photos.class);
@@ -220,10 +220,22 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         return query.getResultList();
     }
 
+    public Paciente BuscarPacientePorParametro1(String parametro) {
+        try {
+            TypedQuery<Paciente> query = null;
+            query = em.createNamedQuery("Paciente.buscarPorParametro", Paciente.class);
+            query.setParameter("clave", parametro);
+            return query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
     public List<Paciente> BuscarPacientePorParametro(String parametro) {
         TypedQuery<Paciente> query = null;
         query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
-        query.setParameter("clave", parametro);     
+        query.setParameter("clave", parametro);
         return query.getResultList();
     }
 
@@ -234,15 +246,13 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
             query.setParameter("clave", Dates.getFormatoFecha(parametro));
         } else if (StringValidations.isDecimal(parametro)) {
             query = em.createNamedQuery("Paciente.buscarPorEdad", Paciente.class);
-            query.setParameter("clave", Integer.parseInt(parametro));                
-        } else { 
+            query.setParameter("clave", Integer.parseInt(parametro));
+        } else {
             query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
             query.setParameter("clave", parametro);
         }
         return query.getResultList();
-        
-        
+
     }
-    
-    
+
 }

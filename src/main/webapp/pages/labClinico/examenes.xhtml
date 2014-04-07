@@ -14,8 +14,8 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-           <!-- <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
-            <f:viewParam name="backView" value="#{pacienteHome.backView}" />-->
+            <f:viewParam name="examenLabId" value="#{examenHome.examenId}" />
+            <!-- <f:viewParam name="backView" value="# {pacienteHome.backView}" />-->
         </f:metadata>
 
 
@@ -23,19 +23,41 @@
             <div class="header-replace">
                 <div class="container-header" >
                     <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
-                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
+                        <h2>#{examenHome.managed? messages['common.edit'] : messages['common.add']} #{examenHome.instance.name}</h2>   
                     </div>
                 </div>
             </div>
         </ui:define>
         <ui:define name="content" class="span20">
-            <h:form id="form">
-                
-               
+            <h:form id="form">               
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <glue:input id="codig" name="codig" type="text" label="#{messages['common.code']}" value="#{examenHome.instance.code}" 
+                            inlinehelp="#{messages['Examen.codigo.lineaAyuda']}" required="true" execute="@this save" render="codig" styleClass="xLarge"/>
+                <glue:input id="nombre" name="nombre" type="text" label="#{messages['Examen.Nombre1']}" value="#{examenHome.instance.name}" 
+                            inlinehelp="#{messages['Examen.nombre1.lineaAyuda']}" required="true" execute="@this save" render="nombre" styleClass="xLarge"/>                
+                <h:panelGroup layout="block" class="clearfix">
+                    <label for="tipo_" class="control-label">#{messages['Examen.Tipo']} *</label>
+                    <div class="input">
+                        <p:selectOneMenu id="tipo_" value="#{examenHome.instance.tipo}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                         rendered="true" label="#{messages['Examen.Tipo']}">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
+                            <f:selectItems value="#{examenHome.listaTiposExamen}" var="tipo" itemLabel="#{tipo}" itemValue="#{tipo}"/> 
+                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                        </p:selectOneMenu>  
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.instance.tipo != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>#{messages['Examen.Tipo.lineaAyuda']} <ocp:message forId="tipo_" /></span>
+                    </div>
+                </h:panelGroup>
+                <glue:input id="valorRef" name="valorRef" type="decimal" label="#{messages['Examen.ValorReferencial']}" value="#{examenHome.instance.valorReferencia}" 
+                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="true" execute="@this save" render="valorRef" styleClass="xLarge"/>
+                <glue:input id="costo" name="costo" type="decimal" label="#{messages['examen.costo']}" value="#{examenHome.instance.costo}" 
+                            inlinehelp="#{messages['examen.costo.lineaAyuda']}" required="true" execute="@this save" render="costo" styleClass="xLarge"/>
+
                 <div class="admin-actions ">
-                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                    <p:commandButton id="save" action="#{examenHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4" immediate="true"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/paciente/lista.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/labClinico/listaExamenes.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
                     </h:link>
                 </div>

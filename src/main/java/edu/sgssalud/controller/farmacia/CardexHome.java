@@ -120,7 +120,7 @@ public class CardexHome implements Serializable {
     public List<Receta_Medicamento> getListaRecetasMedicamentos() {
         //return listaRecetasMedicamentos;
         Collections.sort(listaRecetasMedicamentos);
-        return recetaMedService.obtenerPorReceta(medicamento);
+        return recetaMedService.obtenerPorMedicamento(medicamento);
     }
 
     public void setListaRecetasMedicamentos(List<Receta_Medicamento> listaRecetasMedicamentos) {

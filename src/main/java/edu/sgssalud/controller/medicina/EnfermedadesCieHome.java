@@ -18,6 +18,7 @@ package edu.sgssalud.controller.medicina;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.BussinesEntityType;
+import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
 import edu.sgssalud.model.medicina.HistoriaClinica;
@@ -30,6 +31,7 @@ import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
+import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -62,7 +66,7 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
     private EntityManager em;
     @Inject
     private EnfermedadesCie10Servicio enfcie10service;
-    
+
     private EnfermedadCIE10 enfermedad;
     private List<EnfermedadCIE10> listaEnfermedades = new ArrayList<EnfermedadCIE10>();
 
@@ -75,15 +79,15 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
     public void setListaEnfermedades(List<EnfermedadCIE10> listaEnfermedades) {
         this.listaEnfermedades = listaEnfermedades;
     }
-    
+
     public EnfermedadCIE10 getEnfermedad() {
         return enfermedad;
     }
 
     public void setEnfermedad(EnfermedadCIE10 enfermedad) {
         this.enfermedad = enfermedad;
-    } 
-        
+    }
+
     @TransactionAttribute   //
     public EnfermedadCIE10 load() {
         if (isIdDefined()) {
@@ -102,6 +106,7 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
     public void init() {
         setEntityManager(em);
         enfcie10service.setEntityManager(em);
+        this.setInstance(new EnfermedadCIE10());
     }
 
     @Override
@@ -128,17 +133,18 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getName() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-                
                 salida = "";
+                init();
             } else {
                 create(getInstance());
-                //log.info("crear ");
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se agrego enfermedad Cie 10 :"+ getInstance().getName() +" con exito");
+                System.out.println("GUARDO 3_______________");
+                FacesMessage msg = new FacesMessage("Se agrego enfermedad Cie 10 :" + getInstance().getName() + " con exito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-                createInstance();
-                this.setListaEnfermedades(enfcie10service.getEnfermedadesCIE10());
-                setInstance(new EnfermedadCIE10());
+                System.out.println("GUARDO 4_______________");
+                listaEnfermedades = enfcie10service.getEnfermedadesCIE10();
+                this.init();
+                salida = "/pages/depSalud/medicina/enfermedadescie10?faces-redirect=true";
             }
 
         } catch (Exception e) {
@@ -147,27 +153,36 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
         }
         return salida;
     }
-    
+
     @Transactional
     public String borrar() {
         try {
-            if (enfermedad == null) {
-                throw new NullPointerException("property is null");
-            }
-            if (enfermedad.isPersistent() && getInstance().getHistoriasClinicas().isEmpty() ) {                
-                delete(getInstance());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
+            //boolean datos = enfcie10service.consultarDatos(getInstance().getId());
+            if (enfermedad.isPersistent()) {
+                delete(enfermedad);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + enfermedad.getName(), ""));
                 RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
-
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede borrar esta enfermedad " + getInstance().getName(), ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede borrar esta enfermedad " + enfermedad.getName(), ""));
                 RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente                    
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+            //e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ESTA ENFERMEDAD TIENE DATOS RELACIONADOS ", null));
+
         }
         return null;
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        this.setInstance((EnfermedadCIE10) event.getObject());
+        FacesMessage msg = new FacesMessage(UI.getMessages("Enfermedad CIE 10") + " " + UI.getMessages("common.selected"), "" + ((EnfermedadCIE10) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+    }
+
+    public void onRowUnselect(UnselectEvent event) {
+        FacesMessage msg = new FacesMessage(UI.getMessages("Enfermedad CIE 10") + " " + UI.getMessages("common.unselected"), "" + ((EnfermedadCIE10) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage("", msg);
+        this.setInstance(null);
     }
 }

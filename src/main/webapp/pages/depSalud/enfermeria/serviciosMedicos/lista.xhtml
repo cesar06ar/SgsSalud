@@ -33,6 +33,7 @@
                 <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="servicioMedico" 
                         styleClass="btn" disabled="#{empty servicioMedListS.selectedServicio.id}">
                     <f:param name="servicioId" value="#{servicioMedListS.selectedServicio.id}"/>
+                    <f:param name="pacienteId" value="#{servicioMedListS.selectedServicio.paciente.id}"/>
                     <f:param name="backView" value="listaServicios"></f:param>
                 </h:link> 
                 #{' '}
@@ -42,34 +43,53 @@
                                  update="form-dialog-confirm-delete" />
             </div>
             <!--   -->
-            <p:dataTable id="serviciosMedTable" var="servicio_" value="#{servicioMedListS}" paginator="true" rows="10" 
+            <p:dataTable id="serviciosMedTable" var="servicio_" value="#{servicioMedListS}" paginator="true" rows="20" 
                          paginatorPosition="top" emptyMessage="No hay ningun Servicio" paginatorAlwaysVisible="true"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"  
-                         rowsPerPageTemplate="2,5,10,15" lazy="true" 
+                         rowsPerPageTemplate="10,20,30,50,100" lazy="true" 
                          selection="#{servicioMedListS.selectedServicio}"
-                         rendered="true" rowKey="#{servicio_.nombre}"
+                         rendered="true" rowKey="#{servicio_.id}"
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{servicioMedListS.onRowSelect}"   
                         update=":form:button-edit :form:messages :form:delete" rendered=":form:button-edit"/>                 
                 <p:ajax event="rowUnselect" listener="#{servicioMedListS.onRowUnselect}" 
                         update=":form:button-edit :form:messages :form:delete" rendered=":form:button-edit"/>
-
-                <p:column headerText="#{messages['common.name']}" sortBy="#{servicio_.nombre}">
-                    <h:outputText value="#{servicio_.nombre}" />
-                </p:column>               
-                <p:column headerText="#{messages['servicioMedico.categoria']}" sortBy="#{servicio_.categoria}">
-                    <h:outputText value="#{servicio_.categoria}" />
+                <!--<p:column sortBy="# {servicio_.paciente.cedula}" style="text-align: center; width: 15%" >
+                    <f:facet name="header">  
+                        <h:outputText value="# {messages['profile.dni']}" />  
+                    </f:facet> 
+                    <h:outputText value="# {servicio_.paciente.cedula}" />
+                </p:column>-->
+                <p:column sortBy="#{servicio_.paciente.nombres}" style="text-align: center; width: 15%">
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.firstname']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{servicio_.paciente.nombres}" />
                 </p:column>
-                <p:column headerText="#{messages['fechaReceta.fechaEmision']} #{messages['comun.limite.vigencia']}" sortBy="#{servicio_.fechaLimiteVigencia}">
-                    <h:outputText value="#{servicio_.fechaLimiteVigencia}" >
-                        <f:convertDateTime pattern="dd-MMM-yyyy" />
+                <p:column sortBy="#{servicio_.paciente.apellidos}" style="text-align: center; width: 15%" >
+                    <f:facet name="header">  
+                        <h:outputText value="#{messages['common.surname']}" />  
+                    </f:facet> 
+                    <h:outputText value="#{servicio_.paciente.apellidos}" />
+                </p:column>
+                <p:column headerText="#{messages['common.name']}" sortBy="#{servicio_.name}" style="text-align: center; width: 15%">
+                    <h:outputText value="#{servicio_.name}" />
+                </p:column>                               
+                <p:column headerText="#{messages['comun.fecha']} #{messages['citaMedica.nombre']}" sortBy="#{servicio_.createdOn}" style="text-align: center; width: 15%">
+                    <h:outputText value="#{servicio_.createdOn}" >
+                        <f:convertDateTime pattern="dd-MMM-yyyy HH:mm" />
                     </h:outputText>
                 </p:column>                   
-                <p:column headerText="#{messages['common.description']}" sortBy="#{servicio_.descripcion}">
-                    <h:outputText value="#{servicio_.descripcion}" />
+                <p:column headerText="#{messages['common.description']}" sortBy="#{servicio_.description}" style="text-align: center; width: 40%">
+                    <h:outputText value="#{servicio_.description}" />
                 </p:column>
             </p:dataTable>
+            <h:panelGrid id="export" class="columns" >
+                <h:commandLink value="Imprimir" styleClass="btn">  
+                    <p:printer target="serviciosMedTable"/>
+                </h:commandLink>
+            </h:panelGrid>
         </h:form>
         <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
             <h:form id="form-dialog-confirm-delete">
