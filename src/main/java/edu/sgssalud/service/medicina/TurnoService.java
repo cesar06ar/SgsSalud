@@ -16,12 +16,19 @@
 
 package edu.sgssalud.service.medicina;
 
+import edu.sgssalud.model.medicina.FichaMedica;
+import edu.sgssalud.model.medicina.FichaMedica_;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.servicios.Turno;
+import edu.sgssalud.model.servicios.Turno_;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -50,5 +57,13 @@ public class TurnoService extends PersistenceUtil<Turno> implements Serializable
     
     public Turno getSTurnoPorId(final Long id) {
         return (Turno) findById(Turno.class, id);
+    }
+    
+    public List<Turno> getTurnosPorFecha(final Date fecha) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Turno> query = builder.createQuery(Turno.class);
+        Root<Turno> entity = query.from(Turno.class);
+        query.where(builder.equal(entity.get(Turno_.fechaCita), fecha));        
+        return getResultList(query);        
     }
 }

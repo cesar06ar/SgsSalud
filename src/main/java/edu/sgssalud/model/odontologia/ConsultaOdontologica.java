@@ -75,7 +75,11 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     private List<Receta> recetas = new ArrayList<Receta>();
 //    @OneToMany(mappedBy = "consultaOdontologica", fetch = FetchType.LAZY)
 //    private List<Tratamiento> tratamientoDientes = new ArrayList<Tratamiento>();
-
+    public ConsultaOdontologica() {
+        fechaConsulta = new Date();
+        horaConsulta = new Date();        
+    }
+    
     public Date getFechaConsulta() {
         return fechaConsulta;
     }

@@ -385,7 +385,9 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     FacesContext.getCurrentInstance().addMessage("", msg);
                     salida += "&consultaMedicaId= " + consultaMedicaId
                             + "&fichaMedicaId=" + getFichaMedica().getId()
-                            + "&consultaOdontId=" + consultaOdontId;
+                            + "&consultaOdontId=" + consultaOdontId
+                            + "&backView=" + this.getPrevious();
+                            
                 } else {
                     FacesMessage msg = new FacesMessage("Debe cargar una consulta Primero");
                     FacesContext.getCurrentInstance().addMessage("", msg);

@@ -18,6 +18,7 @@
             <f:viewParam name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}" />            
             <f:viewParam name="odontogramaId" value="#{odontogramaHome.odontogramaId}"/>
             <f:viewParam name="tipo" value="#{odontogramaHome.tipo}"/>            
+            <f:viewParam name="backView" value="#{odontogramaHome.backView}"/>            
             <f:event listener="#{odontogramaHome.cargar}" type="preRenderView"/>
         </f:metadata>
         <ui:define name="header-replace" >
@@ -332,7 +333,7 @@
                                     <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
                                     <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
                                 </p:commandLink>
-                                
+
                                 <p:spacer  width="4" height="5"/>
                                 <p:commandLink ajax="true" title="#{messages['tratamiento.protesisParcialRemovible']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
                                                update="@form">
@@ -406,7 +407,7 @@
                                         <br/> 
                                     </p:panel> 
 
-                                    <h:panelGroup class="span6" layout="block" rendered="#{odontogramaHome.panel1 or odontogramaHome.panel2 or odontogramaHome.panel3}">
+                                    <h:panelGroup class="span6" layout="block" rendered="#{odontogramaHome.tipo ne 0}">
                                         <label for="procedimient" style="margin-left: -35px;">#{messages['tratamiento.procedimiento']}:</label>
                                         <br/>
                                         <br/>
@@ -417,35 +418,42 @@
                                             </h:inputTextarea>
                                         </div>
                                     </h:panelGroup>
-                                    <p:commandButton id="saveTratamiento" value="#{messages['common.add']}" rendered="true" title="#{messages['common.add']} #{messages['tratamiento.nombre']}"
-                                                     action="#{odontogramaHome.guardarTratamiento()}"   
-                                                     styleClass="btn primary " ajax="true" immediate="true"
-                                                     style="margin:20% 0 0 0; height: 50px;" >
-                                        <p:ajax process="@this" update=":form:opciones " rendered=":form:odont "/>
+                                    <h:panelGroup>
+                                        <div class="admin-actions">                   
+                                            <p:commandButton id="saveTratamiento" value="#{messages['common.add']}" rendered="true" title="#{messages['common.add']} #{messages['tratamiento.nombre']}"
+                                                             action="#{odontogramaHome.guardarTratamiento()}"   
+                                                             styleClass="btn primary " ajax="true" immediate="true"
+                                                             style="margin:5% 0 0 0; width: 80px; height: 50px;" >
+                                                <p:ajax process="@this" update=":form:opciones " rendered=":form:odont "/>
+                                            </p:commandButton>     
+                                            <br/><br/>
+                                            <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
+                                                    value="#{messages['common.cancel']}" styleClass="btn success" style="width: 50px; height: 22px; margin-top: 0">
+                                                <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
+                                                <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
+                                                <f:param name="backView" value="#{odontogramaHome.backView}"/>
+                                            </h:link>
+                                            <br/>
 
-                                    </p:commandButton>     
+                                        </div>
+                                    </h:panelGroup>                                    
                                 </p:panelGrid>                              
                             </div>
                         </div>                            
                     </div>
                 </p:panel>            
-                <div class="admin-actions span16" style="width: 964px;">
-                    <p:commandButton id="save" action="#{odontogramaHome.guardar()}" value="#{messages['common.save']}" 
-                                     styleClass="btn success offset4" style="width: 80px; height: 40px"/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
-                            value="#{messages['common.cancel']}" styleClass="btn success" style="width: 50px; height: 26px; margin-top: -20px">
-                        <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
-                        <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
-                    </h:link>
-                </div>
+
                 <p:panel id="tratam" header="Tratamientos" styleClass="span16" style=" width: 975px;">
-                    <p:dataTable id="tablaTratamientos" value="#{odontogramaHome.listaTratamient}" var="tratam_" 
+
+                    <p:dataTable id="tablaTratamientos" value="#{odontogramaHome.tratamientosData}" var="tratam_" 
                                  paginator="true" paginatorPosition="top"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                                  rowsPerPageTemplate="5,10,20,50,100" 
-                                 rows="100" editable="true" selectionMode="single"
-                                 selection="#{odontogramaHome.tratamiento}"  rowKey="#{tratam_.id}" >                        
+                                 rows="100" editable="true" 
+                                 selection="#{odontogramaHome.listaTratamientSelect}" 
+                                 rowKey="#{tratam_.id}">
+
+                        <!--selection="# {odontogramaHome.tratamiento}"  >-->
 
                         <p:column headerText="Diente">
                             <h:outputText value="#{tratam_.diente.nombre}"/>&nbsp;&nbsp; 
@@ -458,40 +466,38 @@
                             <h:outputText value="#{tratam_.fechaRealizacion}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
                             </h:outputText>
-                        </p:column>
-                        <p:column headerText="Cuadrantes diente" style="width: 10%">
-                            <h:outputText value="#{tratam_.cua}" />
-                        </p:column>                         
-                        <p:column headerText="Procedimiento">
+                        </p:column>                                                
+                        <p:column headerText="Procedimiento" rendered="#{odontogramaHome.tipo ne 0}">
                             <h:outputText value="#{tratam_.procedimiento}" styleClass="span2"/>
                         </p:column>                         
-                        <p:column headerText="Opciones">                            
-                            <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"
-                                           onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
-                                           style="width: 10px; height: 10px;">                                                        
-                                <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
-                                <f:setPropertyActionListener value="#{tratam_}" target="#{odontogramaHome.tratamiento}"/>
-                                <p:ajax process="@this" update=":cancel-dialog" />
+                        <p:column selectionMode="multiple" style="width:2%" />  
+                        <f:facet name="footer" class="offset1"> 
+                            <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" 
+                                           oncomplete="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                                           style="width: 50px; height: 20px; margin-top: 8px"> 
+                                <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                                
+                                <p:ajax process="@this" update=":form:cancel-dialog" />
                             </p:commandLink>
-                        </p:column>  
+                        </f:facet>  
                     </p:dataTable>   
-                </p:panel> 
-
-            </h:form>            
-            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
-                <h:form id="form-dialog-confirm-delete">
-                    <h:panelGroup layout="block" style="padding:5px;">  
-                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                    </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
-                                     action="#{odontogramaHome.borrarTratamiento()}" update="@form"  
-                                     ajax="true" process="@this"  
-                                     style="margin-top:10px;">  
-                    </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                     style="margin-top:10px;"/>  
-                </h:form>
-            </p:dialog>
+                </p:panel>                 
+                <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                    <h:form id="form-dialog-confirm-delete">
+                        <h:panelGroup layout="block" style="padding:5px;">  
+                            <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                        </h:panelGroup>  
+                        <p:commandButton value="#{messages['common.yes']}" 
+                                         action="#{odontogramaHome.borrarTratamiento()}" update=":form"  
+                                         oncomplete="deletedDlg.hide();" 
+                                         ajax="true" 
+                                         style="margin-top:10px;">  
+                            <p:ajax listener="#{odontogramaHome.cargar}" update=":form"/>
+                        </p:commandButton>  
+                        <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                         style="margin-top:10px;"/>  
+                    </h:form>
+                </p:dialog>
+            </h:form>          
         </ui:define>
     </ui:composition>
 </html>                

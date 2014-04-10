@@ -23,7 +23,10 @@
                 <div class="container-header" >
                     <div class="row lf row-title" >
                         <h2>#{consultaOdontHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaOdontologica.nombre']}
-                            #{consultaOdontHome.instance.id}</h2>   
+                            #{consultaOdontHome.instance.id}<br/>
+                            #{messages['common.for']} paciente #{consultaOdontHome.fichaOdontolog.fichaMedica.paciente.nombres} #{consultaOdontHome.fichaOdontolog.fichaMedica.paciente.apellidos}
+                        </h2>
+
                     </div>
                 </div>
             </div>
@@ -72,7 +75,7 @@
                                     <p:panelGrid columns="2">
                                         <label for="peso" >#{messages['signosVitales.peso']}</label>
                                         <div class="input">                                             
-                                            <pe:inputNumber id="peso" value="#{consultaOdontHome.instance.signosVitales.peso}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber id="peso" value="#{consultaOdontHome.instance.signosVitales.peso}" required="false" style="width: 190px;" 
                                                             maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left"  decimalPlaces="2" 
                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.peso}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
@@ -80,7 +83,7 @@
                                         </div>
                                         <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} *</label>
                                         <div class="input">                                                                                
-                                            <pe:inputNumber  id="presionArtDiag" value="#{consultaOdontHome.instance.signosVitales.presionArterialDiastolica}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber  id="presionArtDiag" value="#{consultaOdontHome.instance.signosVitales.presionArterialDiastolica}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
                                                              disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialDiastolica}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
@@ -88,7 +91,7 @@
                                         </div>    
                                         <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} *</label>
                                         <div class="input"> 
-                                            <pe:inputNumber  id="presionArtSis" value="#{consultaOdontHome.instance.signosVitales.presionArterialSistolica}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber  id="presionArtSis" value="#{consultaOdontHome.instance.signosVitales.presionArterialSistolica}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
                                                              disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialSistolica}">   
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
@@ -106,7 +109,7 @@
                                     <p:panelGrid columns="2">
                                         <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
                                         <div class="input">                                                                                
-                                            <pe:inputNumber  id="frecuenciaResp" value="#{consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber  id="frecuenciaResp" value="#{consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" 
                                                              disabled="#{not empty consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
@@ -114,14 +117,14 @@
                                         </div>
                                         <label for="talla" class="span3">#{messages['signosVitales.talla']} *</label>
                                         <div class="input">                                                                                
-                                            <pe:inputNumber id="talla" value="#{consultaOdontHome.instance.signosVitales.talla}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber id="talla" value="#{consultaOdontHome.instance.signosVitales.talla}" required="false" style="width: 190px;" 
                                                             rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0"
                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.talla}">                                            
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                        
                                         </div>
                                         <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
-                                        <pe:inputNumber  id="temperatura" value="#{consultaOdontHome.instance.signosVitales.temperatura}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber  id="temperatura" value="#{consultaOdontHome.instance.signosVitales.temperatura}" required="false" style="width: 190px;" 
                                                          rendered="true" symbol="       mmHg" symbolPosition="rigth" maxValue="90" decimalPlaces="2" 
                                                          disabled="#{not empty consultaOdontHome.instance.signosVitales.temperatura}">
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
@@ -224,60 +227,46 @@
                     </p:tab>
                 </p:tabView>
 
-                <p:tabView id="tab1" >
-                    <p:tab title="#{messages['Odontograma']} #{messages['Odontograma.Evolutivo']}" rendered="true" >                                               
-                        <div class="admin-actions">
-                            <h:link value="#{messages['common.add']} #{messages['Odontograma.name']} #{messages['Odontograma.name.evolutivo']}"
-                                    rendered="#{not consultaOdontHome.fichaOdontolog.odontograma.persistent}"
-                                    outcome="/pages/depSalud/odontologia/odont" styleClass="link success">
-                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
-                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
-                                <f:param name="backView" value="consultaOdontologica"></f:param>
-                                <f:param name="tipo" value="1"></f:param>
-
-                            </h:link>                                                       
-                            <h:link id="button-edit" value="#{messages['common.edit']} #{messages['Odontograma.name']} #{messages['Odontograma.name.evolutivo']}" 
-                                    rendered="#{consultaOdontHome.fichaOdontolog.odontograma.persistent}" 
-                                    outcome="/pages/depSalud/odontologia/odont" type="link" styleClass="link success" >
-                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
-                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                                                
-                                <f:param name="odontogramaId" value="#{consultaOdontHome.fichaOdontolog.odontograma.id}"></f:param>                                                                
-                                <f:param name="backView" value="consultaOdontologica"></f:param>
-                                <f:param name="tipo" value="1"></f:param>
-                            </h:link>                       
-                        </div>                        
-                    </p:tab>     
-                    <p:tab title="#{messages['Odontograma']} #{messages['Odontograma.Inicial']}" closable="false" 
-                           rendered="true">
-                        <div class="admin-actions">                                                  
-                            <h:link value="#{messages['common.add']} #{messages['Odontograma.name']} #{messages['Odontograma.inicial']}"
-                                    rendered="#{not consultaOdontHome.fichaOdontolog.odontogramaInicial.persistent}"
-                                    outcome="/pages/depSalud/odontologia/odont" styleClass="link success">
-                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
-                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
-                                <f:param name="backView" value="consultaOdontologica"></f:param>
-                                <f:param name="tipo" value="0"></f:param>
-
-                            </h:link>
-                            <h:link id="button-edit1" value="#{messages['common.edit']} #{messages['Odontograma.inicial']}" 
-                                    rendered="#{consultaOdontHome.fichaOdontolog.odontogramaInicial.persistent}" 
-                                    outcome="/pages/depSalud/odontologia/odont" type="link" styleClass="link success">
-                                <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
-                                <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                                                
-                                <f:param name="odontogramaId" value="#{consultaOdontHome.fichaOdontolog.odontogramaInicial.id}"></f:param>                                                                
-                                <f:param name="backView" value="consultaOdontologica"></f:param>
-                                <f:param name="tipo" value="0"></f:param>
-                            </h:link>
+                <p:panel id="tab1" rendered="#{consultaOdontHome.instance.persistent}">
+                    <div class="container-fluid">   
+                        <div class="row-fluid">
+                            <div id="left" class="span6" >                                    
+                                <p:panel header="#{messages['Odontograma']} #{messages['Odontograma.Evolutivo']}">
+                                    <ui:param name="titleEvol" value="#{not consultaOdontHome.fichaOdontolog.odontograma.persistent? messages['common.add']: messages['common.edit']} #{messages['Odontograma.name']} #{messages['Odontograma.name.evolutivo']}"/>
+                                    <h:link value="#{titleEvol}" rendered="true"
+                                            outcome="/pages/depSalud/odontologia/odont" styleClass="link success">
+                                        <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
+                                        <f:param name="odontogramaId" value="#{consultaOdontHome.fichaOdontolog.odontograma.id}"></f:param>
+                                        <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
+                                        <f:param name="backView" value="#{consultaOdontHome.backView}"></f:param>
+                                        <f:param name="tipo" value="1"></f:param>
+                                    </h:link>                                                                                   
+                                </p:panel>
+                            </div>
+                            <div id="left" class="span6" >                                    
+                                <p:panel header="#{messages['Odontograma']} #{messages['Odontograma.Inicial']}">
+                                    <ui:param name="titleInit" value="#{not consultaOdontHome.fichaOdontolog.odontogramaInicial.persistent? messages['common.add']: messages['common.edit']} #{messages['Odontograma.name']} #{messages['Odontograma.inicial']}"/>
+                                    <h:link value="${titleInit}" rendered="#{true}"
+                                            outcome="/pages/depSalud/odontologia/odont" styleClass="link success">
+                                        <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
+                                        <f:param name="odontogramaId" value="#{consultaOdontHome.fichaOdontolog.odontogramaInicial.id}"></f:param>
+                                        <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
+                                        <f:param name="backView" value="#{consultaOdontHome.backView}"></f:param>
+                                        <f:param name="tipo" value="0"></f:param>                                        
+                                    </h:link> 
+                                </p:panel>
+                            </div>
                         </div>
-                    </p:tab>
-                </p:tabView>                               
+                    </div>
+                </p:panel>                               
                 <div class="admin-actions" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaOdontHome.guardar()}" value="#{messages['common.save']}" 
                                      immediate="true" styleClass="btn success offset4" update=":form:messages"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/depSalud#{consultaOdontHome.backView}?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn success" >
-                        <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
+                        <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"/>                        
+                        <f:param name="backView" value="#{consultaOdontHome.backView}"/>
                     </h:link>
                 </div>
                 <p:tabView  rendered="#{consultaOdontHome.instance.persistent}">
@@ -304,6 +293,7 @@
                         <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
                             <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
                             <f:param name="backView" value="/odontologia/consultaOdontologica"></f:param>
+                            <f:param name="previous" value="#{consultaOdontHome.backView}"/>
                         </h:link>
                         <br/><br/>                        
                         <p:dataTable id="tablaRecetas" value="#{consultaOdontHome.instance.recetas}" var="recetaM_"  emptyMessage="No hay ninguna receta">
@@ -323,6 +313,7 @@
                                     <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
                                     <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param> 
                                     <f:param name="backView" value="/odontologia/consultaOdontologica"></f:param>
+                                    <f:param name="previous" value="#{consultaOdontHome.backView}"/>
                                 </h:link>
                                 &nbsp;
                                 <p:commandLink id="button-delete" type="button" value="Borrar" title="#{messages['common.delete']}"
@@ -340,6 +331,7 @@
                             <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
                             <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
                             <f:param name="backView" value="/depSalud/odontologia/consultaOdontologica"></f:param>
+                            <f:param name="previous" value="#{consultaOdontHome.backView}"/>
                         </h:link>
                         <br/><br/>                        
                         <p:dataTable id="tablaPedidos" value="#{consultaOdontHome.fichaOdontolog.pedidosExamenLab}" var="pedidosExam_"  emptyMessage="No hay ningun pedido de examen">
@@ -361,7 +353,7 @@
                                     <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
                                     <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>                                    
                                     <f:param name="backView" value="/depSalud/odontologia/consultaOdontologica"/>
-                                    <f:param name="result" value="#{true}"/>
+                                    <f:param name="previous" value="#{consultaOdontHome.backView}"/>
                                 </h:link>
                                 &nbsp;                               
                                 &nbsp;                                

@@ -23,7 +23,8 @@
         <!--Metadato que se realiza antes de renderizarse la vista-->
         <f:metadata>
             <f:viewParam name="result" value="#{consultaMedicaListaServicio.firstResult}" />            
-            <f:viewParam name="" value="#{consultaMedicaListaServicio.parametroBusqueda}"/>
+            <f:viewParam name="" value="#{consultaMedicaListaServicio.inicio}"/>
+            <f:viewParam name="" value="#{consultaMedicaListaServicio.fin}"/>
         </f:metadata>
         <!--Formulario dentro de un contenedor-->
         <h:form id="form">            
@@ -31,50 +32,55 @@
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
             <!--Botones de admin-->
-            <div class="admin-actions">
-
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn success">
-                    <f:param name="consultaMedicaId"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
+            <div class="admin-actions">                
+                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn primary" 
+                        disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
+                    <f:param name="fichaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.historiaClinica.fichaMedica.id}"/>
+                    <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
+                    <f:param name="backView" value="/medicina/listaConsultas"></f:param>
                 </h:link>
                 #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="consultaMedica" styleClass="btn" 
+                <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="visualizar" styleClass="btn primary" 
                         disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
+                    <f:param name="fichaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.historiaClinica.fichaMedica.id}"/>
                     <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
-                </h:link>
-                #{' '}
-                <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn" 
-                        disabled="#{empty consultaMedicaListaServicio.consulMedicSeleccionada}">
-                    <f:param name="consultaMedicaId" value="#{consultaMedicaListaServicio.consulMedicSeleccionada.id}"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
+                    <f:param name="backView" value="/medicina/listaConsultas"></f:param>
                 </h:link>
 
-                <div style="float: right" >
-                    <p:inputText id="criterioBuscar" size ="25" value="#{consultaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
-                        <p:ajax event="keyup" update="tablaConsultasMedicas"/>
-                    </p:inputText>
-                    &nbsp;
-
+                <div style="float: right" >                    
+                    <p:calendar value="#{consultaMedicaListaServicio.inicio}" pattern="yyyy-MM-dd" title="fecha Inicio" >
+                        <p:ajax event="dateSelect" rendered="buscar1" update="buscar1"/>
+                    </p:calendar>
+                    #{' -- '}
+                    <p:calendar value="#{consultaMedicaListaServicio.fin}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%">
+                        <p:ajax event="dateSelect" rendered="buscar1" update="buscar1"/>
+                    </p:calendar>
+                    &nbsp;&nbsp;
+                    <p:commandButton id="buscar1" value="Buscar" action="#{consultaMedicaListaServicio.buscarPorParametro()}" immediate="true" 
+                                     update="tablaConsultasMedicas"/>
                     <br/>
                 </div>             
             </div>
 
             <!--tabla de datos-->
             <p:dataTable id="tablaConsultasMedicas"  var="consultaMedica_" value="#{consultaMedicaListaServicio.resultList}"
-                         paginator="true" rows="10" 
-                         paginatorPosition="top"
+                         paginator="true" rows="10" paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"                         
                          rowKey="#{consultaMedica_.id}"
-                         selection="#{consultaMedicaListaServicio.consulMedicSeleccionada}"
-                         rendered="true"
+                         selection="#{consultaMedicaListaServicio.consulMedicSeleccionada}"                         
                          selectionMode="single">
+                <f:facet name="header">  
+                    <h:outputText value="total consultas #{consultaMedicaListaServicio.resultList.size()}" />                
+                    &nbsp;&nbsp;
+                    <p:commandButton value="actualizar" actionListener="#{consultaMedicaListaServicio.actualizar()}"
+                                     update=":form:tablaConsultasMedicas" />                
+                </f:facet>
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Consulta Medica-->
                 <p:ajax event="rowSelect" listener="#{consultaMedicaListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:messages :form:button-abrirFM"/>  
+                        update=":form:button-edit :form:messages :form:button-view"/>  
                 <p:ajax event="rowUnselect" listener="#{consultaMedicaListaServicio.onRowUnselect}" 
-                        update=":form:button-edit :form:messages :form:button-abrirFM"/>
+                        update=":form:button-edit :form:messages :form:button-view"/>
 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{consultaMedica_.id}" style="width: 15%; text-align: center;" filterBy="#{consultaMedica_.id}" filterMatchMode="exact">
@@ -125,7 +131,6 @@
                     <h:outputText value="#{consultaMedica_.code}" />
                 </p:column>
             </p:dataTable>
-
 
             <h:panelGroup>
                 <h:outputText value="Exportar Datos" />  

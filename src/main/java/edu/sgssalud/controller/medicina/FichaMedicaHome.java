@@ -113,7 +113,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
             this.setPaciente(getInstance().getPaciente());
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-             if (getHistoriaClinica().isPersistent() && getFichaOdontologica().isPersistent()) {
+            if (getHistoriaClinica().isPersistent() && getFichaOdontologica().isPersistent()) {
                 this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
             }
         }
@@ -126,8 +126,9 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
         this.setPaciente(pacienteS.getPacientePorId(pacienteId));
-        this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(getPaciente()));
+        this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(paciente));
         if (!getInstance().isPersistent()) {
+
             getInstance().setNumeroFicha(getGenerarNumeroFicha());
         } else {
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
@@ -307,7 +308,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         fichaOdontologica = new FichaOdontologica();
         fichaOdontologica.setCreatedOn(now);
         fichaOdontologica.setActivationTime(now);
-        fichaOdontologica.setLastUpdate(now); 
+        fichaOdontologica.setLastUpdate(now);
         fichaOdontologica.setConsultas(new ArrayList<ConsultaOdontologica>());
         return fichaMedic;
     }
@@ -417,6 +418,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 if (p.isPersistent()) {
                     this.setPaciente(p);
                     this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
+                    this.getInstance().setNumeroFicha(getGenerarNumeroFicha());
                     salida += "&pacienteId=" + paciente.getId();
                 } else {
                     FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
@@ -459,32 +461,31 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         return list;
     }
 
-    /*<== métodos para selección de consultas medicas en la tabla de primefaces...*/
-    public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Medica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaMedica) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage("", msg);
-    }
+    /*<== métodos para selección de consultas medicas en la tabla de primefaces...
+     public void onRowSelect(SelectEvent event) {
+     FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Medica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaMedica) event.getObject()).getId());
+     FacesContext.getCurrentInstance().addMessage("", msg);
+     }
 
-    public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Medica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaMedica) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage("", msg);
-        this.setConsultaMedica(null);
-    }
+     public void onRowUnselect(UnselectEvent event) {
+     FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Medica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaMedica) event.getObject()).getId());
+     FacesContext.getCurrentInstance().addMessage("", msg);
+     this.setConsultaMedica(null);
+     }
 
-    public void onRowSelect1(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage("", msg);
-        FacesContext f = FacesContext.getCurrentInstance();
-        f.getExternalContext().getFlash().setKeepMessages(true);
-        //RequestContext.getCurrentInstance().execute("msgDialog.show()");
-    }
+     public void onRowSelect1(SelectEvent event) {
+     FacesMessage msg = new FacesMessage(UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
+     FacesContext.getCurrentInstance().addMessage("", msg);
+     FacesContext f = FacesContext.getCurrentInstance();
+     f.getExternalContext().getFlash().setKeepMessages(true);
+     //RequestContext.getCurrentInstance().execute("msgDialog.show()");
+     }
 
-    public void onRowUnselect1(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage("", msg);
-        this.setConsultaMedica(null);
-    }
-
+     public void onRowUnselect1(UnselectEvent event) {
+     FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("Consulta Odontologica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
+     FacesContext.getCurrentInstance().addMessage("", msg);
+     this.setConsultaMedica(null);
+     }*/
     public void cargarSignosVitales(List<ConsultaMedica> lcm, List<ConsultaOdontologica> lco) {
         listaSignosVitales = new ArrayList<SignosVitales>();
         List<SignosVitales> lsgTemp1 = new ArrayList<SignosVitales>();

@@ -284,7 +284,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
 
     @TransactionAttribute
     public String guardar() {
-        log.info("Ingreso a guardar");
+        //log.info("Ingreso a guardar");
+        String salida = null;
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
         try {
@@ -304,19 +305,25 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
             } else {
                 getInstance().setHistoriaClinica(hc);
                 getInstance().getSignosVitales().setFechaActual(now);
+                getInstance().setCode("REALIZADA");
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 create(getInstance());
                 hc.setEnfermedadesCIE10(pickListEnfermedades.getTarget());
                 save(hc);
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se creo nueva Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaMedicaId=" + getInstance().getId()
+                        + "&backView=" + this.getBackView();
             }
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId() + " " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
         //return "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId="+getFichaMedicaId();
-        return null;
+        return salida;
     }
 
     @Transactional
@@ -355,6 +362,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                     Medicamento medicament = recetaMed1.getMedicamento();
                     int cantidad = medicament.getUnidades() + recetaMed1.getCantidad();
                     medicament.setUnidades(cantidad);
+                    //medicament.set
                     aux = recetaMed1;
                     em.merge(medicament);
                     em.remove(aux);
@@ -366,7 +374,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino receta", "" + getInstance().getId()));
                 salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
                         + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaMedicaId=" + getInstance().getId();
+                        + "&consultaMedicaId=" + getInstance().getId()
+                        + "&backView=" + this.getBackView();
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
@@ -394,7 +403,8 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino Pedido", "" + pedidoExamen.getId()));
                 salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
                         + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaMedicaId=" + getInstance().getId();
+                        + "&consultaMedicaId=" + getInstance().getId()
+                        + "&backView=" + this.getBackView();
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));

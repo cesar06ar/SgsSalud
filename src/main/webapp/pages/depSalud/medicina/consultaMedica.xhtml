@@ -13,7 +13,7 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam id="fichaMedId" name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}" />
+            <f:viewParam id="fichaMedicaId" name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}" />
             <f:viewParam name="consultaMedicaId" value="#{consultaMedicaHome.consultaMedicaId}" />
             <f:viewParam name="backView" value="#{consultaMedicaHome.backView}" />
         </f:metadata>
@@ -262,7 +262,7 @@
                     <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" 
                                      update=":form:growl" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/depSalud#{consultaMedicaHome.backView}?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                     </h:link>
@@ -272,6 +272,7 @@
                         <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
                             <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
                             <f:param name="backView" value="/medicina/consultaMedica"></f:param>
+                            <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
                         </h:link>
                         <br/><br/>                        
                         <p:dataTable id="tablaRecetas" value="#{consultaMedicaHome.instance.recetas}" var="recetaM_"  emptyMessage="No hay ninguna receta">
@@ -291,6 +292,7 @@
                                     <f:param name="recetaId" value="#{recetaM_.id}"></f:param>
                                     <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>                                    
                                     <f:param name="backView" value="/medicina/consultaMedica"></f:param>
+                                    <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
                                 </h:link>
                                 &nbsp;
                                 <p:commandLink id="button-delete" type="button" value="Borrar" title="#{messages['common.delete']}"
@@ -308,6 +310,7 @@
                             <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                             <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
                             <f:param name="backView" value="/depSalud/medicina/consultaMedica"></f:param>
+                            <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
                         </h:link>
                         <br/><br/>                        
                         <p:dataTable id="tablaPedidos" value="#{consultaMedicaHome.hc.pedidosExamenLab}" var="pedidosExam_"  emptyMessage="No hay ningun pedido de examen">
@@ -329,6 +332,7 @@
                                     <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                                     <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>                                    
                                     <f:param name="backView" value="/depSalud/medicina/consultaMedica"/>                                    
+                                    <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
                                 </h:link>
                                 &nbsp;                               
                                 &nbsp;                                

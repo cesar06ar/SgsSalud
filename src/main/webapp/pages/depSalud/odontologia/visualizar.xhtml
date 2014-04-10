@@ -1,0 +1,199 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:p="http://primefaces.org/ui"    
+      xmlns:sgssalud="http://eqaula.org/jsf/facelets"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}" />
+            <f:viewParam name="consultaMedicaId" value="#{consultaMedicaHome.consultaMedicaId}" />
+            <f:viewParam name="backView" value="#{consultaMedicaHome.backView}" />
+        </f:metadata>
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h3>#{messages['common.view']} #{messages['consultaMedica.nombre']} 
+                            #{consultaMedicaHome.instance.id} <br/>
+                            #{messages['common.for']} Paciente #{consultaMedicaHome.paciente.nombres} #{consultaMedicaHome.paciente.apellidos}</h3>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="content" >            
+            <h:form id="form">
+                <h3 ><center>CONSULTA MEDICA #: #{consultaMedicaHome.id}</center></h3>
+                <p:panel id="infoP" header="Información Personal" style="margin-top: -5px;">                    
+                    <div class="container-fluid">   
+                        <div class="row-fluid" >
+                            <div style="margin-left: -1%; float: left" class="span7">
+                                <sgssalud:view id="dni" name="dni" type="text" label="#{messages['profile.dni']}" value="#{consultaMedicaHome.paciente.cedula}" /> 
+                                <sgssalud:view id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{consultaMedicaHome.paciente.nombres}" />
+                                <sgssalud:view id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{consultaMedicaHome.paciente.apellidos}" /> 
+
+                            </div>
+                            <div align="left" style="width: 45.6%; float: left" class="span7">
+                                <sgssalud:view id="nfm" name="nficha" type="text" label="#{messages['fichaMedica.numero']}" 
+                                               value="#{consultaMedicaHome.hc.fichaMedica.numFicha}" styleClass="xLarge"/>                                
+                                <sgssalud:view id="fechaC" name="fechaC" type="text" label="#{messages['consultaMedica.fechaConsulta']}" value="#{consultaMedicaHome.instance.fechaConsulta}" /> 
+                                <sgssalud:view id="hora" name="hora" type="calendar" label="#{messages['consultaMedica.horaConsulta']}" value="#{consultaMedicaHome.instance.horaConsulta}" pattern="HH:mm"/>                                
+                            </div>
+                        </div>
+                    </div>
+                </p:panel>
+                <p:panel id="datosFicha" header="Información de Consulta Médica" style="margin-top: 0;">
+                    <p:panel header="#{messages['signosVitales.Nombre']}">
+
+                        <div class="container-fluid">   
+                            <div class="row-fluid" >
+                                <div style="margin-left: -1%; float: left" class="span6">
+                                    <sgssalud:view id="peso" name="peso" type="text" label="#{messages['signosVitales.peso']}" value="#{consultaMedicaHome.instance.signosVitales.peso}" />
+                                    <sgssalud:view id="presionArtD" name="presionArtD" type="text" label="#{messages['signosVitales.presionArt.diastolica']}" value="#{consultaMedicaHome.instance.signosVitales.presionArterialDiastolica}" />    
+                                    <sgssalud:view id="presionArtS" name="presionArtD" type="text" label="#{messages['signosVitales.presionArt.sistolica']}" value="#{consultaMedicaHome.instance.signosVitales.presionArterialSistolica}" />
+                                    <sgssalud:view id="pulso" name="pulso" type="text" label="#{messages['signosVitales.pulso']}" value="#{consultaMedicaHome.instance.signosVitales.pulso}" /> 
+                                </div>
+                                <div style="margin-left: -1%; float: left" class="span6">
+                                    <sgssalud:view id="frecuenciaR" name="frecuenciaR" type="text" label="#{messages['signosVitales.frecuenciaResp']}" value="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}" />
+
+                                    <sgssalud:view id="talla" name="talla" type="text" label="#{messages['signosVitales.talla']}" value="#{consultaMedicaHome.instance.signosVitales.talla}" />
+                                    <sgssalud:view id="temper" name="temper" type="text" label="#{messages['signosVitales.temperatura']}" value="#{consultaMedicaHome.instance.signosVitales.temperatura}" />
+                                </div>
+                            </div>
+                        </div>                                     
+                    </p:panel>    
+
+                    <c:forEach items="#{ui.getProperties(consultaMedicaHome.instance)}" var="f" >
+                        <p:panel header="#{f.label}" styleClass="clearfix">
+                            <c:choose>
+                                <c:when test="#{f.type == 'edu.sgssalud.model.Structure'}">
+                                    <ui:repeat value="#{consultaMedicaHome.instance.findBussinesEntityAttribute(f.name)}" var="a" varStatus="status">
+                                        <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
+                                            <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                            <div class="span1" style="padding-left: 5px; padding-top: 5px;"> 
+                                                <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}" disabled="true">
+                                                    <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                </p:selectBooleanCheckbox>                                                        
+                                                <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
+                                                            rendered="#{a.property.type eq 'java.util.Date'}">
+                                                    <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
+                                                </p:calendar>                                                 
+                                                <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
+                                                              rendered="#{a.property.type eq 'java.lang.String'}">
+                                                    <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                                </p:inputText>                                                                                                     
+                                                <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
+                                                                rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
+                                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                </pe:inputNumber>  
+                                                <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                                 rendered="#{a.property.type eq 'java.lang.String[]'}" >  
+                                                    <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                                    <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                </p:selectOneMenu>
+                                                <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 60%; height: 100px;" 
+                                                                 rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
+                                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                </p:inputTextarea>
+                                                <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
+                                                    <h:outputText escape="false" value="#{a.property.helpInline}"/>
+                                                </p:tooltip>
+                                            </div>
+                                        </h:panelGroup>  
+                                    </ui:repeat>
+                                    <div style="width: 90%; margin-top: 3%;" >                                
+                                        <c:choose>                                             
+                                            <c:when test="#{(f.name eq 'revisionOrganosYSistemasCM')}">                                                            
+                                                <h:panelGroup id="obraosp" layout="block" class="clearfix">
+                                                    <label for="observ1">#{messages['consultaMedica.observacionActOrgySist']}</label>
+                                                    <div class="input">
+                                                        <p:inputTextarea id="observ1" value="#{consultaMedicaHome.instance.observacionRevisionOS}" styleClass="xLarge " required="false" style="width: 60%; height: 90px;" disabled="true" 
+                                                                         rendered="true">                                                            
+                                                        </p:inputTextarea>                                              
+                                                    </div>
+                                                </h:panelGroup> 
+                                            </c:when>
+                                            <c:when test="#{(f.name eq 'examenFisicoCM')}">                                                            
+                                                <h:panelGroup id="obEFP" layout="block" class="clearfix">
+                                                    <label for="observ2">#{messages['consultaMedica.observacionExamFis']}</label>
+                                                    <div class="input" >
+                                                        <p:inputTextarea id="observ2" value="#{consultaMedicaHome.instance.observacionExamenFisico}" required="false" style="width: 60%; height: 90px; margin-left: 20px;" disabled="true"
+                                                                         rendered="true">                                                            
+                                                        </p:inputTextarea>                                                                                                 
+                                                    </div>
+                                                </h:panelGroup> 
+                                            </c:when>
+                                        </c:choose> 
+                                        <c:otherwise>
+                                        </c:otherwise>
+                                    </div>
+                                </c:when>
+                            </c:choose>                                
+                        </p:panel>
+
+                    </c:forEach>
+
+                    <p:panel header="Indice Masa Corpal IMC" styleClass="offset 2">
+                        <h:outputText value="#{consultaMedicaHome.inidicadorIMC}">                                
+                        </h:outputText>
+                        <br/>
+                        <br/>                            
+                        <p:lineChart id="linear" value="#{consultaMedicaHome.linearModel}" legendPosition="e"  
+                                     title="IMC" minY="0" maxY="40" style="height: 160px; width: 80%"/>                              
+                    </p:panel>
+                    <p:panel header="#{messages['consultaMedica.Motivo']}" rendered="true" >
+                        <sgssalud:view id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" disabled="true" />
+                    </p:panel>                    
+                    <p:panel header="#{messages['consultaMedica.Enfermedad']}" closable="false" rendered="true">
+                        <sgssalud:view id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadActual']}" value="#{consultaMedicaHome.instance.enfermedadActual}" 
+                                         disabled="true"/>
+                    </p:panel>
+                    <p:panel header="#{messages['consultaMedica.Diagnostico']}"  closable="false" 
+                             rendered="true">
+                        <p:dataTable value="#{consultaMedicaHome.hc.enfermedadesCIE10}" var="enfcie10">
+                            <f:facet name="header">
+                                <h:outputText value="ENFERMEDADES QUE POSEE"/>
+                            </f:facet>
+                            <p:column headerText="#{messages['common.code']}" >
+                                <h:outputText value="#{enfcie10.code}"/>
+                            </p:column>                       
+                            <p:column headerText="#{messages['common.name']}" >
+                                <h:outputText value="#{enfcie10.name}"/>
+                            </p:column>                       
+                            <p:column headerText="#{messages['comun.categoria']}" >
+                                <h:outputText value="#{enfcie10.description}"/>
+                            </p:column>     
+                        </p:dataTable>
+                        <sgssalud:view id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
+                                         disabled="true"/>
+                    </p:panel>
+                    <p:panel header="#{messages['tratamiento.Nombre']}" closable="false" rendered="true">                           
+                        <sgssalud:view id="tratamiento" name="tratamiento" type="textarea" label="#{messages['consultaMedica.Tratamiento']}" value="#{consultaMedicaHome.instance.tratamiento}" 
+                                         disabled="true"/>
+                    </p:panel>
+                    <p:panel header="#{messages['consultaMedica.Observacion']}" closable="false" rendered="true">
+                        <sgssalud:view id="observacionC" name="observacionC" type="textarea" label="#{messages['consultaMedica.observacionC']}" value="#{consultaMedicaHome.instance.observacionConsulta}" 
+                                         disabled="true"/>
+                    </p:panel>
+                </p:panel>                                                
+                <h:panelGroup>
+                    <h:commandLink value="Imprimir" type="link" >  
+                        <p:printer target=":form" />  
+                    </h:commandLink>
+                    &nbsp;&nbsp;
+                    <h:link outcome="listaConsultas.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" >                      
+                    </h:link>
+                </h:panelGroup>
+            </h:form>
+        </ui:define>        
+    </ui:composition>
+</html>                
+

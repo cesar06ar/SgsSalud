@@ -187,7 +187,7 @@ public class InitializeDatabase {
         if (session.getPersistenceManager().findUser("admin") == null) {
             User u = session.getPersistenceManager().createUser("admin");
             session.getAttributesManager().updatePassword(u, "adminadmin");
-            session.getAttributesManager().addAttribute(u, "email", "cesar06ar@hotmail.com");
+            session.getAttributesManager().addAttribute(u, "email", "sgssalud@unl.edu");
             members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
             session.getRelationshipManager().associateUser(g, u);             
@@ -315,15 +315,12 @@ public class InitializeDatabase {
 
             attributes.add(buildProperty("Personal", "maritalstatus", "java.lang.String[]", "Casado*,Soltero,Divorciado,Unión libre", false, "Estado civil", "Indique su estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", false, 2L));
-            attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));
-            attributes.add(buildProperty("Personal", "birthplace", String.class.getName(), "Loja", false, "Lugar de nacimiento", "Dónde nacio?", false, 4L));
-            attributes.add(buildProperty("Dirección permanente", "country", String.class.getName(), "Ecuador", false, "País", "País de residencia", false, 5L));
-            attributes.add(buildProperty("Dirección permanente", "city", String.class.getName(), "Loja", false, "Ciudad", "Ciudad de residencia", false, 6L));
-            attributes.add(buildProperty("Dirección permanente", "parish", String.class.getName(), null, false, "Parroquia", "Parroquia de residencia", false, 7L));
-            attributes.add(buildProperty("Dirección permanente", "neighborhood", String.class.getName(), null, false, "Barrio", "Barrio de residencia", false, 8L));
-            attributes.add(buildProperty("Dirección permanente", "address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", false, 9L));
-            attributes.add(buildProperty("Dirección permanente", "phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", false, 10L));
-            attributes.add(buildProperty("Contacto en emergencia", "emergencyContact", String.class.getName(), null, false, "Contacta en caso de emergencia", "Sí se presenta alguna emergencia, a quién debemos llamar?", false, 11L));
+            attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));            
+            attributes.add(buildProperty("Dirección permanente", "country", String.class.getName(), "Ecuador", false, "País", "País de residencia", false, 4L));
+            attributes.add(buildProperty("Dirección permanente", "city", String.class.getName(), "Loja", false, "Ciudad", "Ciudad de residencia", false, 5L));            
+            attributes.add(buildProperty("Dirección permanente", "address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", false, 6L));
+            attributes.add(buildProperty("Dirección permanente", "phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", false, 7L));
+            attributes.add(buildProperty("Contacto en emergencia", "emergencyContact", String.class.getName(), null, false, "Contacta en caso de emergencia", "Sí se presenta alguna emergencia, a quién debemos llamar?", false, 8L));
             //attributes.add(buildProperty("Personal", "hobies", "java.lang.MultiLineString", null, false, "Hobies", "Las cosas que disfruta en su tiempo libre (separe con comas)", false, 12L));
 
             //Agregar atributos

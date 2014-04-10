@@ -41,12 +41,12 @@ public class Turno implements Serializable {
     private String Servicio;
     private String motivo;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaCita;
+    private Date fechaCita ;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fechaEmision;
+    private Date fechaEmision;// = new Date();
     @Temporal(javax.persistence.TemporalType.TIME)
     private Date hora;
-    private String estado;
+    private String estado; //Pendiente o Realizada
     @OneToOne
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;

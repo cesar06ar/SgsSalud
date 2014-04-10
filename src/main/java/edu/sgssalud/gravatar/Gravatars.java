@@ -49,8 +49,8 @@ import edu.sgssalud.util.StringValidations;
 @Named
 public class Gravatars
 {
-   private static final String GRAVATAR_BASE_URL = "http://www.gravatar.com/avatar/";
-
+   //private static final String GRAVATAR_BASE_URL = "http://www.gravatar.com/avatar/";
+    private static final String GRAVATAR_BASE_URL = "http://www.gmail.com";
    public String getURLFor(final String email)
    {
       return getURLFor(email, 140, GravatarDefault.MYSTERY_MAN, GravatarRating.G);

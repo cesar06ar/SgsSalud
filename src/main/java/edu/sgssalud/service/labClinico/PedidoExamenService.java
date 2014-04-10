@@ -60,6 +60,8 @@ public class PedidoExamenService extends PersistenceUtil<PedidoExamenLaboratorio
             query = em.createNamedQuery("PedidoExamenLab.buscarPorFecha", PedidoExamenLaboratorio.class);
             query.setParameter("fecha", parametro);
             lista = query.getResultList();
+        }else{
+            lista = this.getPedidosExamenesLab();
         }
 //        if(lista.isEmpty()){
 //            lista = this.getPedidosExamenesLab();

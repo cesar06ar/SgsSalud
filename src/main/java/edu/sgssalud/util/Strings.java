@@ -37,6 +37,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
@@ -88,6 +90,12 @@ public class Strings {
         return result;
     }
 
+    public static int hora_minuto(String hora, final int pos){
+        List<String> hor = Arrays.asList(hora.split(":"));
+        int h = Integer.parseInt(hor.get(pos));        
+        return h;
+    }
+    
     public static String guardarImagenEnFicheroTemporal(byte[] imagen, String nombreArchivo) {
         String rutaImg = null;
         ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();

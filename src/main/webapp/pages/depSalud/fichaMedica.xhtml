@@ -33,7 +33,10 @@
             <h:form id="form" >
                 <p:messages id="messages1" showDetail="true" autoUpdate="true" closable="true" escape="false"/>
                 <p:growl id="growl" showDetail="true" sticky="true" escape="false"/>  
-
+                <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" style="float: left; margin: -10px 0 5px 0"
+                        title="#{messages['common.new1']} #{messages['fichaMedica.nombre']}"  >                         
+                    <p:graphicImage value="/resources/images/consultaMed.png" width="40" height="40"/>
+                </h:link>
                 <h:panelGrid id="buscarp"  columns="3" style="margin: -2% 0 0 -3%; float: right">
                     <label for="buscar">#{'Buscar por'}</label>
                     <script type="text/javascript">
@@ -282,7 +285,7 @@
                                 title="#{messages['common.add']} #{messages['consultaMedica.nombre']}">
                             <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
-                            <f:param name="backView" value="fichaMedica"></f:param>
+                            <f:param name="backView" value="/fichaMedica"></f:param>
                         </h:link>                        
                     </div> 
                     <p:dataTable id="tablaConsultasM" value="#{fichaMedicaHome.historiaClinica.consultas}" rows="10" var="consultaM_" editable="true"
@@ -312,7 +315,7 @@
                                 <p:graphicImage value="/resources/images/Icon_edit.gif" width="13" height="13"/>
                                 <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
                                 <f:param name="consultaMedicaId" value="#{consultaM_.id}"></f:param>
-                                <f:param name="backView" value="fichaMedica"></f:param>
+                                <f:param name="backView" value="/fichaMedica"></f:param>
                             </h:link>
                             <!--
                             &nbsp;
@@ -352,7 +355,7 @@
                     <div class="admin-actions">
                         <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success">
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
-                            <f:param name="backView" value="fichaMedica"></f:param>
+                            <f:param name="backView" value="/fichaMedica"></f:param>
                         </h:link>
                     </div> 
                     <p:dataTable id="tablaConsultasO" value="#{fichaMedicaHome.fichaOdontologica.consultas}" rows="10" var="consultaO_" editable="true"
@@ -384,7 +387,7 @@
                                 <p:graphicImage value="/resources/images/Icon_edit.gif" width="13" height="13" dir="lrt"/>
                                 <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>
                                 <f:param name="consultaOdontId" value="#{consultaO_.id}"></f:param>
-                                <f:param name="backView" value="fichaMedica"></f:param>
+                                <f:param name="backView" value="/fichaMedica"></f:param>
                             </h:link>
                         </p:column>
                     </p:dataTable>
@@ -394,7 +397,7 @@
                     <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
                                      immediate="true" update=":form:growl"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/home.xhtml?faces-redirect=true" 
+                    <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
                     </h:link>
                 </div>

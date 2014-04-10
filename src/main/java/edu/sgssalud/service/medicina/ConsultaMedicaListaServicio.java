@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -41,15 +43,14 @@ import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
-
 /**
  *
  * @author tania
  */
 @Named("consultaMedicaListaServicio")
-@ViewScoped
-public class ConsultaMedicaListaServicio implements Serializable{ //extends LazyDataModel<ConsultaMedica>
-    
+@ConversationScoped
+public class ConsultaMedicaListaServicio implements Serializable { //extends LazyDataModel<ConsultaMedica>
+
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
     private static Logger log = Logger.getLogger(ConsultaMedicaListaServicio.class);
@@ -58,69 +59,70 @@ public class ConsultaMedicaListaServicio implements Serializable{ //extends Lazy
     @Web
     private EntityManager em;
     @Inject
-    private ConsultaMedicaServicio cms;    
+    private ConsultaMedicaServicio cms;
     private List<ConsultaMedica> resultList;
     private int primerResult = 0;
     private ConsultaMedica[] consulMedicSeleccionadas;
     private ConsultaMedica consulMedicSeleccionada;
     private String parametroBusqueda;
-    
+    private Date inicio;// = new Date();
+    private Date fin;// = new Date();
     /*Método para inicializar tabla*/
+
     public ConsultaMedicaListaServicio() {
         //setPageSize(MAX_RESULTS);
         resultList = new ArrayList<ConsultaMedica>();
     }
-    
+
     @PostConstruct
     public void init() {
         cms.setEntityManager(em);
-        if (resultList.isEmpty() ) {
-           resultList = cms.getConsulasMedicas();
+        if (resultList.isEmpty()) {
+            resultList = cms.getConsulasMedicas();
         }
+        inicio = new Date();
+        fin = new Date();
     }
-    
+
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
     /*@Override
-    public List<ConsultaMedica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-        int end = first + pageSize;
+     public List<ConsultaMedica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+     int end = first + pageSize;
 
-        QuerySortOrder order = QuerySortOrder.ASC;
-        if (sortOrder == SortOrder.DESCENDING) {
-            order = QuerySortOrder.DESC;
-        }
-        Map<String, Object> _filters = new HashMap<String, Object>();
-        _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);
+     QuerySortOrder order = QuerySortOrder.ASC;
+     if (sortOrder == SortOrder.DESCENDING) {
+     order = QuerySortOrder.DESC;
+     }
+     Map<String, Object> _filters = new HashMap<String, Object>();
+     _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+     _filters.putAll(filters);
 
-        QueryData<ConsultaMedica> qData = cms.find(first, end, sortField, order, _filters);
-        this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());        
-        Collections.sort(resultList);
-        return qData.getResult();        
-    }*/
-    
+     QueryData<ConsultaMedica> qData = cms.find(first, end, sortField, order, _filters);
+     this.setRowCount(qData.getTotalResultCount().intValue());
+     this.setResultList(qData.getResult());        
+     Collections.sort(resultList);
+     return qData.getResult();        
+     }*/
     /*Métodos que me permiten seleccionar un objeto de la tabla*/
-    
 //    @Override
 //    public ConsultaMedica getRowData(Long t) {
 //        return cms.getConsultaMedicaPorId(t);
 //    }
-
     public void onRowSelect(SelectEvent event) {
         this.setConsulMedicSeleccionada((ConsultaMedica) event.getObject());
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.selected"), ((ConsultaMedica) event.getObject()).getEnfermedadActual());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaMedica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.unselected"), ((ConsultaMedica) event.getObject()).getEnfermedadActual());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaMedica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsulMedicSeleccionada(null);
     }
     /*.............*/
 
     /*Métodos GET y SET de los Atributos*/
-    public int getFirstResult() {        
+    public int getFirstResult() {
         return primerResult;
     }
 
@@ -138,23 +140,38 @@ public class ConsultaMedicaListaServicio implements Serializable{ //extends Lazy
         this.resultList = resultList;
     }
 
-    public ConsultaMedica getConsulMedicSeleccionada() {    
+    public ConsultaMedica getConsulMedicSeleccionada() {
         return consulMedicSeleccionada;
     }
 
     public void setConsulMedicSeleccionada(ConsultaMedica consulMedicSeleccionada) {
         this.consulMedicSeleccionada = consulMedicSeleccionada;
     }
-    
-    
+
     public String getParametroBusqueda() {
         return parametroBusqueda;
     }
 
     public void setParametroBusqueda(String parametroBusqueda) {
-        this.parametroBusqueda = parametroBusqueda;        
-    }    
-    
+        this.parametroBusqueda = parametroBusqueda;
+    }
+
+    public Date getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(Date inicio) {
+        this.inicio = inicio;
+    }
+
+    public Date getFin() {
+        return fin;
+    }
+
+    public void setFin(Date fin) {
+        this.fin = fin;
+    }
+
     /*..
      * Busca de la base de datos pacientes segun el parametro ingresado
      */
@@ -162,8 +179,17 @@ public class ConsultaMedicaListaServicio implements Serializable{ //extends Lazy
 //        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
 //    }
 //
-//    public void buscarPorParametro() {
-//        this.setResultList(cms.BuscarPacientePorTodosParametros(parametroBusqueda));
-//    }
-   
+    public void buscarPorParametro() {
+        System.out.println("FECHAS " + inicio + fin);
+        this.setResultList(cms.buscarPorRangoFechas(inicio, fin));
+        this.setInicio(null);
+        this.setFin(null);
+    }
+
+    public void actualizar() {
+        this.setResultList(cms.getConsulasMedicas());
+        this.setInicio(null);
+        this.setFin(null);
+    }
+
 }

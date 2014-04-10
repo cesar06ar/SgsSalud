@@ -37,7 +37,7 @@
                     </h:link>                   
 
                 </div>
-                <p:dataTable id="tablaTurnos" value="#{turnoHome.listaTurnos}" rows="10" var="turno_" editable="true"
+                <p:dataTable id="tablaTurnos" value="#{turnoHome.listaTurnos}" var="turno_" editable="true"
                              paginator="true" emptyMessage="No existe ningun turno"
                              rows="20" paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
@@ -47,7 +47,7 @@
                         &nbsp;&nbsp;&nbsp;
                         <h:outputText value="#{turno_.paciente.apellidos}"/>
                     </p:column>                            
-                    <p:column headerText="#{messages['comun.fecha']} #{messages['citaMedica.nombre']}" style="width: 15%">
+                    <p:column headerText="#{messages['comun.fecha']} #{messages['citaMedica.nombre']}" style="width: 20%">
                         <p:outputLabel value="#{turno_.fechaCita}" style="width: 65px; margin-top: -6px;" />                        
                         &nbsp;&nbsp;&nbsp;
                         <h:outputText value="#{turno_.hora}" >

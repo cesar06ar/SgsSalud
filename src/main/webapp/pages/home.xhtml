@@ -159,6 +159,17 @@
                         <div class="span3" >
                             <div class="styleHome">
                                 <center>
+                                    <h:link title="#{messages['consultaMedica.admin']}" rendered="#{true}" 
+                                            outcome="/pages/depSalud/medicina/listaConsultas">
+                                        <p:graphicImage value="/resources/img/consulta.png" width="65" height="65" />
+                                        <h:outputText value="#{messages['consultaMedica.admin']}" style="float: left"/>
+                                    </h:link>                   
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
                                     <h:link title="#{messages['modulo.admin.Medicina']}" rendered="#{true}" 
                                             outcome="/pages/depSalud/medicina/enfermedadescie10">
                                         <p:graphicImage value="/resources/img/cie10.png" width="65" height="65" />
@@ -166,7 +177,7 @@
                                     </h:link>                   
                                 </center>
                             </div>
-                        </div>
+                        </div>                        
                     </h:panelGroup>
                     <h:panelGroup  rendered="#{account.tienePermiso('ODONTOLOGOS')}">
                         <div class="span3" >
@@ -174,8 +185,19 @@
                                 <center>
                                     <h:link rendered="#{true}" title="#{messages['modulo.admin.Odontologia']}"
                                             outcome="/pages/depSalud/listaFichaMedica">                                   
-                                        <p:graphicImage value="/resources/images/consultaMed.png" width="65" height="65"/>
-                                        <h:outputText value="#{messages['fichaOdontologica.admin']}" style="float: left"/>
+                                        <p:graphicImage value="/resources/img/fichas.png" width="65" height="65"/>
+                                        <h:outputText value="#{messages['fichaMedica.admin']}" style="float: left"/>
+                                    </h:link>
+                                </center>
+                            </div>
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.Odontologia']}"
+                                            outcome="/pages/depSalud/odontologia/listaConsultaOdontologica">                                   
+                                        <p:graphicImage value="/resources/img/consultaOdont.png" width="65" height="65"/>
+                                        <h:outputText value="#{messages['consultaOdontologica.admin']}" style="float: left"/>
                                     </h:link>
                                 </center>
                             </div>

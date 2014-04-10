@@ -20,8 +20,10 @@ import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +43,9 @@ import org.primefaces.model.SortOrder;
 /**
  *
  * @author tania
- */@Named("consultaOdontologicaListaServicio")
+ */@Named("consultaOdontListaS")
 @ViewScoped
-public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdontologica>{
+public class ConsultaOdontologicaListaServicio implements Serializable{
     
      private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
@@ -59,10 +61,11 @@ public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdo
     private ConsultaOdontologica[] consulOdontSeleccionadas;
     private ConsultaOdontologica consulOdontSeleccionada;
     private String parametroBusqueda;
+    private Date fecha; 
     
     /*Método para inicializar tabla*/
     public ConsultaOdontologicaListaServicio() {
-        setPageSize(MAX_RESULTS);
+//        setPageSize(MAX_RESULTS);
         resultList = new ArrayList<ConsultaOdontologica>();
     }
     
@@ -70,12 +73,12 @@ public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdo
     public void init() {
         cos.setEntityManager(em);
         if (resultList.isEmpty() ) {
-           resultList = cos.getConsultasOdontologica(getPageSize(), primerResult);
+           resultList = cos.TodasConsulasOdontologica();
         }
     }
     
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
-    @Override
+    /*@Override
     public List<ConsultaOdontologica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
@@ -84,8 +87,8 @@ public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdo
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+        _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+         _filters.putAll(filters);
 
         QueryData<ConsultaOdontologica> qData = cos.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
@@ -94,38 +97,39 @@ public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdo
         return qData.getResult();        
     }
     
-    /*Métodos que me permiten seleccionar un objeto de la tabla*/
+    Métodos que me permiten seleccionar un objeto de la tabla
     
     @Override
     public Object getRowKey(ConsultaOdontologica entity) {
-        return entity.getId();
+        return entity.getId(); 
     }
 
 //    @Override
 //    public ConsultaOdontologica getRowData(Long t) {
 //        return cms.getConsultaOdontologicaPorId(t);
-//    }
+//    }*/
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.selected"), ((ConsultaOdontologica) event.getObject()).getDiagnostico());
+        this.setConsulOdontSeleccionada((ConsultaOdontologica)event.getObject());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.selected"), ""+((ConsultaOdontologica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.unselected"), ((ConsultaOdontologica) event.getObject()).getDiagnostico());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.unselected"), ""+((ConsultaOdontologica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsulOdontSeleccionada(null);
     }
     /*.............*/
 
-    /*Métodos GET y SET de los Atributos*/
+    /*Métodos GET y SET de los Atributos
     public int getNextFirstResult() {
         return primerResult + this.getPageSize();
     }
 
     public int getPreviousFirstResult() {
         return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
-    }
+    }*/
 
     public int getFirstResult() {
         return primerResult;
@@ -164,6 +168,21 @@ public class ConsultaOdontologicaListaServicio extends LazyDataModel<ConsultaOdo
         this.parametroBusqueda = parametroBusqueda;
     }
 
-   
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }  
     
+    public void buscarPorFecha(){
+        this.setResultList(cos.buscarPorFechaActual(fecha));
+        this.setFecha(null);
+    }
+    
+    public void actualizar(){
+        this.setResultList(cos.TodasConsulasOdontologica());
+        this.setFecha(null);
+    }
 }

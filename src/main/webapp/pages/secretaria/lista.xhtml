@@ -97,9 +97,9 @@
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                 <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM :form:button-labC"/>                 
+                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM :form:button-labC :form:button-Turno"/>                 
                 <p:ajax event="rowUnselect" listener="#{pacienteListaServicio.onRowUnselect}" 
-                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM :form:button-labC"/>
+                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM :form:button-labC :form:button-Turno"/>
 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{paciente_.cedula}" style="width: 15%; text-align: center;">

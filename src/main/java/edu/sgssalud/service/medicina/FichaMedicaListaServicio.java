@@ -163,7 +163,7 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;        
-    }    
+    }        
     
     /*..
      * Busca de la base de datos pacientes segun el parametro ingresado
@@ -175,6 +175,14 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica>{
 //    public void buscarPorParametro() {
 //        this.setResultList(cms.BuscarPacientePorTodosParametros(parametroBusqueda));
 //    }
+
+    public FichaMedica[] getFichaMedicSeleccionadas() {
+        return fichaMedicSeleccionadas;
+    }
+
+    public void setFichaMedicSeleccionadas(FichaMedica[] fichaMedicSeleccionadas) {
+        this.fichaMedicSeleccionadas = fichaMedicSeleccionadas;
+    }
 
     
     

@@ -27,6 +27,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -41,6 +43,12 @@ import javax.persistence.Temporal;
 @Table(name = "ConsultaMedica")
 @DiscriminatorValue(value = "CM")
 @PrimaryKeyJoinColumn(name = "id")
+@NamedQueries(value = {
+    @NamedQuery(name = "ConsultaMedica.buscarPorFechas",
+            query = "select e from ConsultaMedica e where"
+            + " e.fechaConsulta BETWEEN :inicio AND :fin"            
+            + " ORDER BY e.id")
+    })
 public class ConsultaMedica extends BussinesEntity implements Serializable, Comparable<ConsultaMedica> {
 
     @Temporal(javax.persistence.TemporalType.DATE)

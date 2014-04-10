@@ -12,11 +12,11 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-            <f:viewParam name="pacienteId" value="#{serviciosMedicosHome.pacienteId}" />            
-            <f:viewParam name="servicioId" value="#{serviciosMedicosHome.servicioId}" /> 
+            <f:viewParam name="pacienteId" value="#{turnoHome.pacienteId}" />            
+            <f:viewParam name="servicioId" value="#{turnoHome.turnoId}" />
+            <f:viewParam name="backView" value="#{turnoHome.backView}" />
         </f:metadata>
-        <ui:define name="header-replace" rendered="#{identity.loggedIn and account.renderView}" >
-
+        <ui:define name="header-replace" >
             <div class="header-replace">
                 <div class="container-header" >
                     <div class="row lf row-title" >
@@ -26,7 +26,7 @@
                 </div>
             </div>      
         </ui:define>
-        <ui:define name="content" rendered="#{identity.loggedIn and account.renderView}">
+        <ui:define name="content" >
             <h:form id="form">                
                 <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
                     <glue:output id="ced" name="ced" type="text" label="#{messages['profile.dni']}" 
@@ -36,18 +36,20 @@
                     <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" 
                                  value="#{turnoHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
                 </p:panel>
-                <p:panel id="paneltitle" header="#{messages['citaMedica.nombre']}" styleClass="clearfix">
-                    <h:panelGroup layout="block" >
-                        <label for="fechaC" > #{messages['comun.fecha']} #{messages['receta.emision']}</label>
+                <p:panel id="panelTurno" header="#{messages['citaMedica.nombre']}" styleClass="clearfix" >
+                    
+                    <h:panelGroup id="fechaEP" layout="block" styleClass="clearfix">
+                        <label for="fechaC" >#{messages['comun.fecha']} #{messages['receta.emision']}</label>
                         <div class="input">                                                         
-                            <p:calendar id="fechaC" value="#{turnoHome.instance.fechaEmision}"  label="" dir="ltr"
-                                        disabled="true" pattern="EEEE, dd-MMMM-yyyy HH:mm"  locale="es">
+                            <p:calendar id="fechaE" value="#{turnoHome.instance.fechaEmision}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
+                                        disabled="true" pattern="EEE, dd-MMMM-yyyy"  locale="es" disabledWeekends="true" >                                
                             </p:calendar>                                                                                                      
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaEmision != null}"
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaEmision ne null}"
                                             styleClass="validation-status" />                                                        
                         </div>                    
-                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
-                    </h:panelGroup>                                            
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha']} #{messages['receta.emision']}<ocp:message forId="fechaE" /></span>
+                    </h:panelGroup>  
+                    
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <label for="nombreServicio" >#{messages['servicioMedico.nombre1']}  </label>
                         <div class="input">
@@ -56,52 +58,65 @@
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                             
                                 <f:selectItem  itemLabel = "MÉDICO"  itemValue="MÉDICO" /> 
                                 <f:selectItem  itemLabel = "ODONTOLÓGICO"  itemValue="ODONTOLÓGICO" /> 
-                                <p:ajax event="change" update=":form:save" partialSubmit="true" />
-                            </p:selectOneMenu>                                                                                             
+                                <p:ajax event="change" update="@parent" partialSubmit="true" />
+                            </p:selectOneMenu> 
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.servicio ne null}"
+                                            styleClass="validation-status" />      
                         </div>                   
                         <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['servicioMedico.nombre.lineaAyuda']}<ocp:message forId="nombreServicio" /></span>
                     </h:panelGroup> 
-                    <p:spacer height="15"/>  
-                    <glue:input id="motivo" name="motivo" type="textarea" label="#{messages['turno.motivo']}" 
-                                value="#{turnoHome.instance.motivo}" required="false" inlinehelp="Describa el motivo de la cita médica" execute="@this :form:save" render="motivo"/>
-                    <h:panelGroup layout="block" >
-                        <label for="fechaC" >#{messages['comun.fecha']} *</label>
+                    <p:spacer height="15"/>    
+                    <h:panelGroup layout="block" styleClass="clearfix">
+                        <label for="motivo" >#{messages['turno.motivo']} </label>
                         <div class="input">                                                         
-                            <p:calendar id="fechaC" value="#{serviciosMedicosHome.instance.createdOn}"  label="" dir="ltr"
-                                        disabled="true" pattern="EEEE, dd-MMMM-yyyy HH:mm"  locale="es">
+                            <p:inputTextarea id="motivo" value="#{turnoHome.instance.motivo}"  label="" 
+                                             style="width: 60%; height: 60px;" >
+                                <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                            </p:inputTextarea>                            
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty turnoHome.instance.motivo}"
+                                            styleClass="validation-status" />                                                        
+                        </div>                    
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>Motivo por el cual solitica la cita médica<ocp:message forId="motivo" /></span>
+                    </h:panelGroup> 
+                    <h:panelGroup id="fechaCP" layout="block" styleClass="clearfix">
+                        <label for="fechaC" >#{messages['comun.fecha']} #{messages['citaMedica.nombre']}*</label>
+                        <div class="input">                                                         
+                            <p:calendar id="fechaC" value="#{turnoHome.instance.fechaCita}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
+                                        disabled="false" pattern="EEE, dd-MMMM-yyyy"  locale="es" disabledWeekends="true" >
+                                <p:ajax event="dateSelect" update="@parent :form:hora :form:save" partialSubmit="true" listener="#{turnoHome.horasDisponibles()}" rendered=":form:hora"/>  
                             </p:calendar>                                                                                                      
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{serviciosMedicosHome.instance.createdOn != null}"
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaCita ne null}"
                                             styleClass="validation-status" />                                                        
                         </div>                    
                         <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
                     </h:panelGroup>  
                     <!--Segun la fecha deben aparecer solo los turnos dispobles-->
+                    <h:panelGroup layout="block" class="clearfix" rendered="true">
+                        <label for="hora" >#{messages['comun.horaCita']}  </label>
+                        <div class="input">
+                            <p:selectOneMenu id="hora" value="#{turnoHome.horaD}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" 
+                                             var="h_" rendered="true" disabled="#{empty turnoHome.instance.fechaCita}">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                                                             
+                                <f:selectItems value="#{turnoHome.listaHoras}" var="hora_" itemLabel ="#{hora_}"  itemValue="#{hora_}" /> 
+                                <p:ajax event="change" update="@parent" partialSubmit="true" />
+                            </p:selectOneMenu> 
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.servicio ne null}"
+                                            styleClass="validation-status" />      
+                        </div>                   
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['servicioMedico.nombre.lineaAyuda']}<ocp:message forId="nombreServicio" /></span>
+                    </h:panelGroup> 
                 </p:panel>
                 <div class="actions">
 
                     <p:commandButton id="save" action="#{turnoHome.guardar()}" value="#{messages['common.save']}" styleClass="btn success"
-                                     immediate="true"/>
+                                     ajax="true" />
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud/agenda.xhtml" 
                             value="#{messages['common.cancel']}" styleClass="btn" >                         
                     </h:link>
                 </div>
             </h:form>
-        </ui:define>
-        <ui:define name="content-pre" rendered="#{!account.renderView}">
-            <h:panelGroup  >
-                <br/><br/>
-                <div class="section">
-                    <h1>Accesso Denegado</h1>
-                </div>
-
-                <div class="section">
-                    <p>Usted no tiene autorización para realizar la acción solicitada.</p>
-
-                    <p>#{facesContext.externalContext.requestMap['javax.servlet.error.message']}</p>
-                </div>
-            </h:panelGroup>
-        </ui:define>                    
+        </ui:define>                          
     </ui:composition>
 </html>                
 

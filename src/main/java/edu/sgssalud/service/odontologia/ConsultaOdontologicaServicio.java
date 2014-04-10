@@ -15,7 +15,6 @@
  */
 package edu.sgssalud.service.odontologia;
 
-
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.medicina.SignosVitales_;
 import edu.sgssalud.model.odontologia.*;
@@ -37,8 +36,9 @@ import javax.persistence.criteria.Root;
  *
  * @author cesar
  */
-public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdontologica> implements Serializable{
-     private static final long serialVersionUID = 234L;
+public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdontologica> implements Serializable {
+
+    private static final long serialVersionUID = 234L;
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaOdontologicaServicio.class);
     @Inject
     private BussinesEntityService bussinesEntityService;
@@ -84,6 +84,28 @@ public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdonto
         return temp;
     }
 
+    public List<ConsultaOdontologica> buscarPorRangoFecha(Date inicio, Date fin) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<ConsultaOdontologica> query = builder.createQuery(ConsultaOdontologica.class);
+        Root<ConsultaOdontologica> entity = query.from(ConsultaOdontologica.class);
+        query.where(builder.between(entity.get(ConsultaOdontologica_.fechaConsulta), inicio, fin));
+        //query.where(builder.equal(entity.get(ConsultaOdontologica_.fechaConsulta), fecha));
+        List<ConsultaOdontologica> temp = getResultList(query);
+        Collections.sort(temp);
+        return temp;
+    }
+    
+    public List<ConsultaOdontologica> buscarPorFechaActual(Date ahora) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<ConsultaOdontologica> query = builder.createQuery(ConsultaOdontologica.class);
+        Root<ConsultaOdontologica> entity = query.from(ConsultaOdontologica.class);
+        //query.where(builder.between(entity.get(ConsultaOdontologica_.fechaConsulta), inicio, fin));
+        query.where(builder.equal(entity.get(ConsultaOdontologica_.fechaConsulta), ahora));
+        List<ConsultaOdontologica> temp = getResultList(query);
+        Collections.sort(temp);
+        return temp;
+    }
+
     public ConsultaOdontologica getPorSignosVitales(final SignosVitales signosVitales) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<ConsultaOdontologica> query = builder.createQuery(ConsultaOdontologica.class);
@@ -92,15 +114,16 @@ public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdonto
         return getSingleResult(query);
     }
     
-    public SignosVitales getSignosVitalesPorIdConsultaOdontologica(final ConsultaOdontologica consultaMed){
+
+    public SignosVitales getSignosVitalesPorIdConsultaOdontologica(final ConsultaOdontologica consultaMed) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<SignosVitales> query = builder.createQuery(SignosVitales.class);
         Root<SignosVitales> entity = query.from(SignosVitales.class);
         query.where(builder.equal(entity.get(SignosVitales_.id), consultaMed.getSignosVitales().getId()));
         return getSingleResult(query);
     }
-    
-    public List<Tratamiento> getTratamientosPorConsulta(Long consultaOdontId, Long odontId){
+
+    public List<Tratamiento> getTratamientosPorConsulta(Long consultaOdontId, Long odontId) {
 //        CriteriaBuilder builder = getCriteriaBuilder();
 //        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);
 //        Root<Tratamiento> entity = query.from(Tratamiento.class);

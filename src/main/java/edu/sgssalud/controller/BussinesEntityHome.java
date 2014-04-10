@@ -47,6 +47,7 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
     protected BussinesEntity bussinesEntity;
     private Property property;
     private String backView;
+    private String previous;
     private boolean editionEnabled = true;
 
     public Property getProperty() {
@@ -65,6 +66,15 @@ public abstract class BussinesEntityHome<E> extends Home<EntityManager, E> imple
         this.backView = backView;
     }
 
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
+    } 
+    
+    
     public boolean isEditionEnabled() {
         return editionEnabled;
     }

@@ -219,9 +219,9 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                     cardex.setCantidad(getInstance().getUnidades());
                     
                     cardex.setMedicamento(getInstance());
-                    int saldo = this.saldoCardexAnterior() - getInstance().getUnidades();
+                    //int saldo = this.saldoCardexAnterior() - getInstance().getUnidades();
                     //System.out.println("Guardar Medicamento_______--" + saldo);
-                    cardex.setSaldo(saldo);
+                    cardex.setSaldo(0);
                     cardex.setFecha(now);                    
                     save(cardex);                    
                     getInstance().setUnidades(0);

@@ -37,6 +37,8 @@ import edu.sgssalud.model.Structure;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.service.BussinesEntityTypeService;
 import edu.sgssalud.util.UI;
+import java.util.ArrayList;
+import java.util.List;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -194,13 +196,12 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                     save(s);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
                     RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
-                    outcome = "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();                    
+                    outcome = "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues")+" "+ getInstance().getName(), ""));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, UI.getMessages("common.property.hasValues") + " " + getInstance().getName(), ""));
                     RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
-                    outcome = "/pages/admin/bussinesentitytype/property?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId()+"&propertyId="+getPropertyId();
+                    outcome = "/pages/admin/bussinesentitytype/property?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId() + "&propertyId=" + getPropertyId();
                 }
-
 
             } else {
                 //remover de la lista, si aún no esta persistido
@@ -263,13 +264,28 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
         //log.info("eqaula --> property tiene valores : " + ban);
         return ban;
     }
-    
-    public String cargarValidador(){
-        log.info("ingreso a validador value");
-        if("java.lang.String[]".equals(getInstance().getType().toString())){
+
+    public String cargarValidador() {
+        //log.info("ingreso a validador value");
+        if ("java.lang.String[]".equals(getInstance().getType().toString())) {
             log.info("ingreso a validador value valueTextPropertyValidator");
             return "valueTextPropertyValidator";
         }
         return "";
+    }
+
+    public List<String> getTiposDatos() {
+        List<String> tipos = new ArrayList<String>();
+        tipos.add("edu.sgssalud.model.Structure");
+        tipos.add("edu.sgssalud.model.Group");
+        tipos.add("java.util.Date");
+        tipos.add("java.lang.String");
+        tipos.add("java.lang.Double");
+        tipos.add("java.lang.Long");
+        tipos.add("java.lang.Boolean");
+        tipos.add("java.lang.String[]");        
+        tipos.add("java.lang.MultiLineString");
+        tipos.add("java.lang.Object");
+        return tipos;
     }
 }

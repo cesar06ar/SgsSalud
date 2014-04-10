@@ -129,14 +129,6 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         }
     }
 
-//    public Servicio getServicio() {
-//        return servicio;
-//    }
-//
-//    public void setServicio(Servicio servicio) {
-//        this.servicio = servicio;
-//        //diente.setRutaIcon(servicio.getRutaImg());
-//    }
     public SignosVitales getSignosVitales() {
         return signosVitales;
     }
@@ -242,7 +234,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         if (isIdDefined()) {
             wire();
         }
-        log.info("sgssalud --> cargar instance " + getInstance());
+        //log.info("sgssalud --> cargar instance " + getInstance());
         if (getInstance().isPersistent()) {
             if (getInstance().getResponsable() == null) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
@@ -271,7 +263,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         resultadosExamenesService.setEntityManager(em);
 
         if (getInstance().isPersistent()) {
-            this.IniciarDientes();
+//            this.IniciarDientes();
             Odontograma o = new Odontograma();
             //          o.setDientes(listaDientes);
 //            log.info("Init Dientes  " + fichaOdontolog.toString());
@@ -322,20 +314,30 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         getInstance().setLastUpdate(now);
         try {
             if (getInstance().isPersistent()) {
-                System.out.println("Guardar__________1" + getInstance().getId());
+                //System.out.println("Guardar__________1" + getInstance().getId());
                 getInstance().setCode("REALIZADA");
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 getInstance().getSignosVitales().setFechaActual(now);
-                System.out.println("Guardar__________ 2");
+                //System.out.println("Guardar__________ 2");
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 System.out.println("Guardar__________3");
             } else {
+                getInstance().setCode("REALIZADA");
+                getInstance().setFichaOdontologica(fichaOdontolog);
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                getInstance().getSignosVitales().setFechaActual(now);
+                create(getInstance().getSignosVitales());
                 create(getInstance());
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                System.out.println("SE CREO CORRECTAMENTE______");
+                salida = "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaOdontId=" + getInstance().getId()
+                        + "&backView=" + getBackView();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,15 +346,15 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         }
         return salida;
     }
-
+/*
     @TransactionAttribute
     public void guardarTratamiento() {
         log.info("valor diente: " + diente);
-//        diente.setRutaIcon(servicio.getRutaImg());
-//        tratamiento.setFechaRelizacion(new Date());
-//        tratamientos.add(tratamiento);
+        diente.setRutaIcon(servicio.getRutaImg());
+        tratamiento.setFechaRelizacion(new Date());
+        tratamientos.add(tratamiento);
         this.actualizarDiente(diente);
-    }
+    }*/
 
     @TransactionAttribute
     public String agregarOdontograma(int odont) {
@@ -401,7 +403,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             log.info("Consulta Odont: Error al cargar la imagen");
         }
     }
-
+/*
     public void IniciarDientes() {
         listaDientesC1 = new ArrayList<Diente>();
         listaDientesC2 = new ArrayList<Diente>();
@@ -516,7 +518,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             }
         }
         return dientes;
-    }
+    }*/
 
     @TransactionAttribute
     public String borrarReceta() {
@@ -541,7 +543,8 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino receta", "" + getInstance().getId()));
                 salida = "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
                         + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaOdontId=" + getInstance().getId();
+                        + "&consultaOdontId=" + getInstance().getId()
+                        + "&backView=" + getBackView();
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
@@ -569,7 +572,8 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se elimino Pedido", "" + pedidoExamen.getId()));
                 salida = "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
                         + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaOdontId=" + getInstance().getId();
+                        + "&consultaOdontId=" + getInstance().getId()
+                        + "&backView=" + getBackView();
             }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));

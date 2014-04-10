@@ -56,15 +56,7 @@
       <query-param name="structureName" decode="false">#{profileHome.structureName}</query-param>
    </url-mapping>
    
-   <!-- Admin Pages -->
-   <url-mapping id="admin">
-      <pattern value="/admin"></pattern>
-      <view-id value="/pages/admin/home.xhtml"></view-id>
-   </url-mapping>
-   <url-mapping id="querytool">
-      <pattern value="/admin/querytool"></pattern>
-      <view-id value="/pages/admin/query.xhtml"></view-id>
-   </url-mapping>
+   <!-- Admin Pages -->   
    <url-mapping id="profilelist">
       <pattern value="/admin/profile/list"></pattern>
       <view-id value="/pages/admin/listProfile.xhtml"></view-id>
@@ -72,21 +64,21 @@
       <query-param name="typeName" decode="false">#{profileListService.typeName}</query-param>-->
    </url-mapping>
    <url-mapping id="bussinesentitytype">
-      <pattern value="/admin/bussinesentitytype/bussinesentitytype"></pattern>
+      <pattern value="/admin/setting/bussinesentitytype"></pattern>
       <view-id value="/pages/admin/bussinesentity/bussinesentitytype.xhtml"></view-id>
       <query-param name="bussinesEntityTypeId" decode="false">#{bussinesEntityTypeHome.bussinesEntityTypeId}</query-param>
    </url-mapping>
    <url-mapping id="bussinesentitytypelist">
-      <pattern value="/admin/bussinesentitytype/list"></pattern>
+      <pattern value="/admin/setting/list"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/list.xhtml"></view-id>
       <query-param name="result" decode="false">#{bussinesEntityTypeListService.firstResult}</query-param>
    </url-mapping>
    <url-mapping id="bussinesentitytypeview">
-      <pattern value="/admin/bussinesentitytype/view"></pattern>
+      <pattern value="/admin//setting/view"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/view.xhtml"></view-id>
    </url-mapping>
    <url-mapping id="property">
-      <pattern value="/admin/bussinesentitytype/property"></pattern>
+      <pattern value="/admin//setting/property"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/property.xhtml"></view-id>       
    </url-mapping>   
    
@@ -136,6 +128,10 @@
       <pattern value="/medicamento/medicamento"></pattern>
       <view-id value="/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="cardex">
+      <pattern value="/farmacia/cardex"></pattern>
+      <view-id value="/pages/farmacia/medicamento/cardex.xhtml"></view-id>       
+   </url-mapping>
    
    <!-- Vistas de Receta-->  
    <url-mapping id="receta">
@@ -166,14 +162,15 @@
    </url-mapping>
    <url-mapping id="AgendaMedica">
       <pattern value="/medicina/agendaMedica"></pattern>
-      <view-id value="/pages/depSalud/agenda.xhtml"></view-id>       
+      <view-id value="/pages/depSalud/agenda.xhtml"></view-id>
+      <action>#{account.loadPages}</action>       
    </url-mapping> 
    <url-mapping id="ConsultaMedica">
       <pattern value="/medicina/consultaMedica"></pattern>
       <view-id value="/pages/depSalud/medicina/consultaMedica.xhtml"></view-id>       
    </url-mapping> 
    <url-mapping id="ListaConsultaMedica">
-      <pattern value="/listaConsultaMedica"></pattern>
+      <pattern value="/medicina/listaConsultaMedica"></pattern>
       <view-id value="/pages/depSalud/medicina/listaConsultas.xhtml"></view-id>       
    </url-mapping>   
    <url-mapping id="SignosVitales">
@@ -191,16 +188,22 @@
       <view-id value="/pages/depSalud/odontologia/consultaOdontologica.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="ListaConsultaOdontologica">
-      <pattern value="/listaConsultaOdontologica"></pattern>
+      <pattern value="/odontologia/consultasOdontologicas"></pattern>
       <view-id value="/pages/depSalud/odontologia/listaConsultaOdontologica.xhtml"></view-id>       
    </url-mapping>   
    <url-mapping id="AgendaOdontologica">
       <pattern value="/odontologia/agendaOdontologica"></pattern>
       <view-id value="/pages/depSalud/agenda.xhtml"></view-id>       
+      <action>#{account.loadPages}</action>
    </url-mapping>
    <url-mapping id="Odontograma">
       <pattern value="/odontologia/odontograma"></pattern>
       <view-id value="/pages/depSalud/odontologia/odont.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="turnoMedico">
+      <pattern value="/turno"></pattern>
+      <view-id value="/pages/depSalud/turno.xhtml"></view-id>       
+      <action>#{account.loadPages}</action>
    </url-mapping>
   
  <!-- Vistas del Módulo de Lab Clínico-->

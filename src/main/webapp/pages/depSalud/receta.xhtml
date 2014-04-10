@@ -18,6 +18,7 @@
             <f:viewParam name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}" />
             <f:viewParam name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />            
             <f:viewParam name="backView" value="#{recetaHome.backView}" />
+            <f:viewParam name="previous" value="#{recetaHome.previous}" />
         </f:metadata>
 
         <ui:define name="header-replace" >
@@ -188,7 +189,8 @@
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
                         <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
-                        <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />            
+                        <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />
+                        <f:param name="backView" value="#{recetaHome.previous}" />
                     </h:link>                   
                 </div>
             </h:form>             

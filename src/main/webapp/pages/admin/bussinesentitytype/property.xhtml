@@ -32,8 +32,22 @@
                                 value="#{propertyHome.instance.groupName}" required="false" inlinehelp="#{messages['common.property.groupName.help']}" execute="@this save" />
                     <glue:input id="name" name="tname" type="text" label="#{messages['common.name']}" 
                                 value="#{propertyHome.instance.name}" required="true" inlinehelp="#{messages['common.property.name.help']}" execute="@this save" render="name"/>                     
-                    <glue:input id="typ" name="type" type="text" label="#{messages['common.property.type']}"                      
-                                value="#{propertyHome.instance.type}" required="true" inlinehelp="#{messages['common.property.type.help']}" execute="@this save" />                                          
+                    <!--<glue:input id="typ" name="type" type="text" label="# {messages['common.property.type']}"                      
+                                value="# {propertyHome.instance.type}" required="true" inlinehelp="# {messages['common.property.type.help']}" execute="@this save" />-->
+                    <h:panelGroup id="typeP" layout="block" class="clearfix" >
+                        <label for="type" class="control-label" >#{messages['common.property.type']} *</label>
+                        <div class="input">
+                            <p:selectOneMenu id="type" value="#{propertyHome.instance.type}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false" requiredMessage="false" 
+                                             label="#{messages['common.property.type']}" rendered="true">
+                                <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
+                                <f:selectItems value="#{propertyHome.tiposDatos}" var="tipos" itemLabel="#{tipos}" itemValue="#{tipos}"/>
+                                <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                            </p:selectOneMenu>  
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{propertyHome.instance.type  != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>#{messages['common.property.type.help']} <ocp:message forId="type" /></span>
+                        </div>
+                    </h:panelGroup>
                     <h:panelGroup id="pvaluep" layout="block" class="clearfix">
                         <label for="valuep">#{messages['common.property.value']}</label>
                         <div class="input" >

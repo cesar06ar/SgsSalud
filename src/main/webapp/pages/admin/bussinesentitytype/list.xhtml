@@ -21,12 +21,12 @@ limitations under the License.
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/view/templates/glue.xhtml">
-    <ui:param name="title" value="#{messages['module.BussinesEntityTypes']}" />
+    <ui:param name="title" value="#{messages['module.setting.name']}" />
     <ui:define name="header-replace">
         <div class="header-replace">
             <div class="container-header">                
                 <div class="row lf row-title" >
-                    <h2>#{messages['module.BussinesEntity']}</h2>   
+                    <h2>#{title}</h2>   
                 </div>                    
             </div>
         </div>                    
@@ -48,11 +48,7 @@ limitations under the License.
                         disabled="#{bussinesEntityTypeListService.selectedBussinesEntityType == null}" >
                     <f:param name="bussinesEntityTypeId" value="#{bussinesEntityTypeListService.selectedBussinesEntityType.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
-                </h:link>
-                #{' '}
-                <h:link value="#{messages['panel.admin']} " rendered="#{true}" 
-                        outcome="/pages/admin/home.xhtml?faces-redirect=true" styleClass="btn secondary" style="float: right;">
-                </h:link>
+                </h:link>                
             </div>           
             <p:dataTable var="bussinesEntityType" value="#{bussinesEntityTypeListService}"
                          paginator="true" rows="15"                         

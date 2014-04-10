@@ -66,13 +66,10 @@
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"
-                         lazy="true"
-                         rowKey="#{fichaMedica_.id}"
-                         selection="#{fichaMedicaListaServicio.fichaMedicSeleccionada}"                          
-
-                         rendered="true"
-                         selectionMode="single">
-                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica-->
+                         lazy="true" rowKey="#{fichaMedica_.id}" selectionMode="single"
+                         selection="#{fichaMedicaListaServicio.fichaMedicSeleccionada}"
+                         rendered="true">
+                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica -->
                 <p:ajax event="rowSelect" listener="#{fichaMedicaListaServicio.onRowSelect}"   
                         update=":form:button-edit :form:button-print :form:messages "/>                 
                 <p:ajax event="rowUnselect" listener="#{fichaMedicaListaServicio.onRowUnselect}" 
@@ -111,10 +108,9 @@
                     </f:facet> 
                     <h:outputText value="#{fichaMedica_.lastUpdate}" >                                 
                         <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
-                    </h:outputText>
-
+                    </h:outputText>                    
                 </p:column>
-            </p:dataTable>
+            </p:dataTable>            
             <h:panelGrid id="export" class="columns" >
                 <p:panel>
                     <h:outputText value="Exportar Datos" />  

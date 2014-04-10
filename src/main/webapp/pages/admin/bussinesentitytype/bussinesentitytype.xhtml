@@ -28,21 +28,16 @@ limitations under the License.
     <f:metadata>
         <f:viewParam name="bussinesEntityTypeId" value="#{bussinesEntityTypeHome.bussinesEntityTypeId}" />             
         <s:viewAction action="#{bussinesEntityTypeHome.load}" if="#{conversation.transient}"/>                          
-    </f:metadata>
+    </f:metadata>    
     <ui:define name="header-replace">                    
-       <div class="header-replace">
+        <div class="header-replace">
             <div class="container-header" >
                 <div class="row lf row-title" >
                     <div class="span9 columns">   
                         <div class="row fl row-title" >
                             <h2>#{bussinesEntityTypeHome.bussinesEntityTypeId != null? messages['common.edit'] : messages['common.add']} 
-
                                 #{bussinesEntityTypeHome.instance.label==null ? bussinesEntityTypeHome.instance.name : bussinesEntityTypeHome.instance.label}</h2>   
-
-                            <p>#{bussinesEntityTypeHome.bussinesEntityTypeId != null ? bussinesEntityTypeHome.instance.description: ' '}</p>
-
-                            <h:outputLabel value=""/>
-
+                            <p>#{bussinesEntityTypeHome.bussinesEntityTypeId != null ? bussinesEntityTypeHome.instance.description: ' '}</p>                                     
                         </div>                        
                     </div>
                     <div class="span4 columns offset3">
@@ -52,7 +47,7 @@ limitations under the License.
                                              onclick="editDlg.show();" update=":edit-dialog"                                             
                                              icon="ui-icon-plus" styleClass="btn primary"
                                              rendered="#{bussinesEntityTypeHome.instance.persistent}" >
-                                
+
                             </p:commandButton>
                             <br/>
                             <br/>  
@@ -78,8 +73,6 @@ limitations under the License.
                                 <p:ajax event="keyup" rendered="save" update="save" />  
                             </p:inputText>
                         </div>
-
-                        <br/> 
                         <br/> 
                         <h:outputLabel value="#{messages['module.BussinesEntityType.label']}" />
                         <div class="input">
@@ -89,9 +82,9 @@ limitations under the License.
                             </p:inputText>
                         </div>
                         <br/> 
-                        <h:outputLabel value="#{messages['module.BussinesEntityType.description']}" />
+                        <h:outputLabel value="#{messages['common.description']}" />
                         <div class="input">
-                            <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.description']}" 
+                            <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['common.description']}" 
                                               rendered="true" >
                                 <p:ajax event="keyup" rendered="save" update="save" />  
                             </p:inputTextarea>
@@ -136,9 +129,9 @@ limitations under the License.
 
 
                 <br/> 
-                <h:outputLabel value="#{messages['module.BussinesEntityType.description']}" />
+                <h:outputLabel value="#{messages['common.description']}" />
                 <div class="input">
-                    <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.description']}" 
+                    <p:inputTextarea  value="#{bussinesEntityTypeHome.instance.description}" styleClass="xLarge span4" required="true" label="#{messages['common.description']}" 
                                       rendered="true" >
                         <p:ajax event="keyup" rendered="savenew" update="savenew" />  
                     </p:inputTextarea>
@@ -154,7 +147,7 @@ limitations under the License.
                 </div>
             </h:panelGroup>
             <c:forEach items="#{bussinesEntityTypeHome.instance.structures}" var="e" id="forEach">
-                <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{bussinesEntityTypeHome.instance.id != null}" style="width:105%">
+                <p:panel id="panel" toggleable="true" closable="false" toggleSpeed="0" closeSpeed="0" widgetVar="panel#{e.name}" rendered="#{bussinesEntityTypeHome.instance.id != null}" >
                     <!--<f:facet name="header">
                         <strong>#{e.name}</strong>#{' '}                            
                     </f:facet>-->
@@ -188,24 +181,24 @@ limitations under the License.
                                 update=":form:button-edit :form:messages"/>  
                         <p:ajax event="rowUnselect" listener="#{propertyHome.onRowUnselect}" update=":form:button-edit :form:messages"/>
 
-                        <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{property.name}" style="width: 20%">
+                        <p:column headerText="#{messages['BussinesEntity.name']}" sortBy="#{property.name}" style="width: 15%">
                             <h:outputText value="#{property.name}" />
                         </p:column>
 
-                        <p:column headerText="#{messages['common.property.label']}" sortBy="#{property.label}" style="width: 20%">
+                        <p:column headerText="#{messages['common.property.label']}" sortBy="#{property.label}" style="width: 15%">
                             <h:outputText value="#{property.label}" />
                         </p:column>                        
-                        <p:column headerText="#{messages['common.property.type']}" sortBy="#{property.type}" style="width: 25%">
-                            <h:outputText value="#{property.type}" />
+                        <p:column headerText="#{messages['common.property.type']}" sortBy="#{property.type}" style="width: 5%">
+                            <h:outputText value="#{property.type}" styleClass="span1"/>
                         </p:column>                                 
-                        <p:column headerText="#{messages['common.property.value']}" sortBy="#{property.value}" style="width: 15%">
-                            <h:outputText value="#{property.value}" />
+                        <p:column headerText="#{messages['common.property.value']}" sortBy="#{property.value}" style="width: 20%">
+                            <h:outputText value="#{property.value}" styleClass="span3"/>
                         </p:column>                                 
-                        <p:column headerText="#{messages['common.property.required']}" sortBy="#{property.required}" style="width: 15%">
+                        <p:column headerText="Obligatoria" sortBy="#{property.required}" style="width: 10%" >
                             <h:selectBooleanCheckbox value="#{property.required}"  disabled="true" >                                
                             </h:selectBooleanCheckbox>
                         </p:column>
-                        <p:column headerText="#{messages['common.property.sequence']}" sortBy="#{property.sequence}" style="width: 10%">
+                        <p:column headerText="Posición" sortBy="#{property.sequence}" style="width: 5%">
                             <h:outputText value="#{property.sequence}" />
                         </p:column>     
                     </p:dataTable>

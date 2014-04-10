@@ -66,6 +66,54 @@ public class FechasUtil {
         return formateador.format(ahora);
     }
 
+    /**
+     * Formatea las fechas con formato yyyy-MM-dd
+     *
+     * @param fecha
+     * @return
+     */
+    public static String getFecha1(Date fecha) {
+        Date ahora = fecha;
+        SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
+        return formateador.format(ahora);
+        
+    }
+
+    public static Date fijarHoraMinuto(int horas, int minutos) {        
+        Calendar time = Calendar.getInstance();
+        time.set(Calendar.HOUR, horas);
+        time.set(Calendar.MINUTE, minutos);
+        return time.getTime(); // Devuelve el objeto Date con las nuevas horas añadidas	
+    }
+    
+    public static Date fijarHoraMinutoConFecha(Date fecha, int horas, int minutos) {        
+        Calendar time = Calendar.getInstance();
+        time.setTime(fecha);
+        time.set(Calendar.HOUR, horas);
+        time.set(Calendar.MINUTE, minutos);
+        return time.getTime(); // Devuelve el objeto Date con las nuevas horas añadidas	
+    }
+
+    public static Date sumarRestarHorasFecha(Date fecha, int horas) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+        calendar.add(Calendar.HOUR, horas);  // numero de horas a añadir, o restar en caso de horas<0
+        return calendar.getTime(); // Devuelve el objeto Date con las nuevas horas añadidas	
+    }
+
+    public static Date sumarRestaMinutosFecha(Date fecha, int minutos) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+        calendar.add(Calendar.MINUTE, minutos);  // numero de horas a añadir, o restar en caso de horas<0
+        return calendar.getTime(); // Devuelve el objeto Date con las nuevas horas añadidas	
+    }
+
+    public static String getHoraActual(Date hora) {
+        //Date ahora = new Date();
+        SimpleDateFormat formateador = new SimpleDateFormat("hh:mm:a");
+        return formateador.format(hora);
+    }
+
     public static boolean getFechasIguales(Date fechaMenor, Date fechaMayor) {
         if (fechaMenor != null && fechaMayor != null) {
             Calendar timeMayor = Calendar.getInstance();
@@ -91,18 +139,18 @@ public class FechasUtil {
 
     public static int getFechaLimite(Date fechaActual, Date fechaPosterior) {  //retorna la diferencia en dias
         long dias = -1;
-        if (fechaActual != null && fechaPosterior != null) {          
+        if (fechaActual != null && fechaPosterior != null) {
             final long MILLSECS_PER_DAY = 24 * 60 * 60 * 1000; //Milisegundos al día 
             Calendar timeMenor = Calendar.getInstance();
-            timeMenor.setTime(fechaActual);           
+            timeMenor.setTime(fechaActual);
 
             int anio = timeMenor.get(Calendar.YEAR);
             int mes = timeMenor.get(Calendar.MONTH);
             int dia = timeMenor.get(Calendar.DATE);
-            
+
             Calendar actual = new GregorianCalendar(anio, mes, dia);
-            java.sql.Date fecha = new java.sql.Date(actual.getTimeInMillis());                       
-            dias = (fechaPosterior.getTime() - fecha.getTime())/MILLSECS_PER_DAY;            
+            java.sql.Date fecha = new java.sql.Date(actual.getTimeInMillis());
+            dias = (fechaPosterior.getTime() - fecha.getTime()) / MILLSECS_PER_DAY;
         }
         return (int) dias;
     }
