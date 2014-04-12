@@ -41,10 +41,12 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Index;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jboss.solder.logging.Logger;
 
 /**
@@ -52,7 +54,7 @@ import org.jboss.solder.logging.Logger;
  * @author cesar
  */
 @Entity
-@Table(name = "Paciente")
+@Table(name = "Paciente", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @DiscriminatorValue(value = "Pac")
 @PrimaryKeyJoinColumn(name = "id")
 @NamedQueries(value = {
@@ -178,7 +180,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     }
 
     public void setClave(String clave) {
-        this.clave = clave;
+        this.clave = new BasicPasswordEncryptor().encryptPassword(clave);
     }
 
     public String getCedula() {

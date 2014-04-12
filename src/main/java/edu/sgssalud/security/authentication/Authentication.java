@@ -4,6 +4,9 @@
 package edu.sgssalud.security.authentication;
 
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.profile.Profile;
+import edu.sgssalud.profile.ProfileService;
 import java.io.IOException;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -31,7 +34,13 @@ import org.ocpsoft.rewrite.servlet.impl.HttpInboundRewriteImpl;
 import org.picketlink.idm.api.Credential;
 import org.picketlink.idm.api.User;
 import edu.sgssalud.service.paciente.PacienteServicio;
+import java.util.logging.Level;
 import javax.annotation.PostConstruct;
+import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.picketlink.idm.api.AttributesManager;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.common.exception.IdentityException;
+import org.picketlink.idm.impl.api.PasswordCredential;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
@@ -51,10 +60,14 @@ public class Authentication {
     @Inject
     private Identity identity;
     @Inject
+    private IdentitySession security;
+    @Inject
     private Messages messages;
     @Inject
     @Web
     private EntityManager em;
+    @Inject
+    private ProfileService profileService;
     @Inject
     private PacienteServicio pacienteServic;
     @Inject
@@ -63,6 +76,7 @@ public class Authentication {
     @PostConstruct
     public void init() {
         pacienteServic.setEntityManager(em);
+        profileService.setEntityManager(em);
     }
 
     public void loginSuccess(@Observes final LoggedInEvent event, final NavigationHandler navigation,
@@ -70,10 +84,11 @@ public class Authentication {
             final HttpServletRequest request,
             final HttpServletResponse response) throws IOException {
         User user = event.getUser();
-        logger.info("User logged in [{}, {}]", user.getId(), user.getKey());
+        //logger.info("User logged in [{}, {}]", user.getId(), user.getKey());
 
         String viewId = context.getViewRoot().getViewId();
-        logger.info("viewId [{}]", viewId);
+        //logger.info("viewId [{}]", viewId);
+        
         if (!"/pages/signup.xhtml".equals(viewId) && !"/pages/login.xhtml".equals(viewId) && !"/pages/reset.xhtml".equals(viewId)) {
             // TODO need a better way to navigate: this doesn't work with AJAX requests
             HttpInboundServletRewrite rewrite = new HttpInboundRewriteImpl(request, response);
@@ -84,7 +99,7 @@ public class Authentication {
             //return;
         } else {
             //Configurar si es usuario de perfil o usuario de paciente...  
-            log.info("Nombre usuario: " + credencials.getUsername());
+            //log.info("Nombre usuario: " + credencials.getUsername());
             pacienteServic.setEntityManager(em);
             if (pacienteServic.getPacientePorIdentityKey(identity.getUser().getKey()) != null) {
                 String result = "/pages/home.xhtml";
@@ -131,10 +146,12 @@ public class Authentication {
         }
     }
 
-    public void login() throws InterruptedException {
+    public void login() throws InterruptedException, IdentityException {
         identity.setAuthenticatorClass(IdmAuthenticator.class);
         try {
-            identity.login();
+            //if(this.isUserLoggedIn()){
+                identity.login();
+                       
         } catch (Exception e) {
             identity.login();
         }
@@ -145,5 +162,30 @@ public class Authentication {
         identity.logout();
         //session.invalidate();
         return "/pages/loggedOffHome.xhtml?faces-redirect=true";
+    }
+
+    public boolean isUserLoggedIn() throws InterruptedException, IdentityException {
+        /*bloque de codigo para descifrar la clave*/
+        System.out.println("ERROR 0_______-");
+        User user = security.getPersistenceManager().findUser(credencials.getUsername());
+
+        //AttributesManager attributesManager = security.getAttributesManager();
+        if (user != null) {
+            //credencials.setUsername(user.getKey());  
+            System.out.println("ERROR 1_______-");
+            Profile userPro = profileService.getProfileByIdentityKey(user.getKey());
+            String pass = ((PasswordCredential) credencials.getCredential()).getValue();
+            if (userPro.isPersistent()) {
+                System.out.println("ERROR 2_______-"+pass);
+                return new BasicPasswordEncryptor().checkPassword(pass, userPro.getUsername());
+            }else{
+                System.out.println("ERROR 3_______-");
+                Paciente p = pacienteServic.getPacientePorIdentityKey(user.getKey());
+                if(p.isPersistent()){
+                    return new BasicPasswordEncryptor().checkPassword(pass, p.getClave());
+                }
+            }
+        }        
+        return false;
     }
 }

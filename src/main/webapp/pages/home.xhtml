@@ -47,6 +47,7 @@
                                         <h4>
                                             <h:link outcome="/pages/paciente/view" title="Perfil de Paciente" value="${userPaciente.nombres} ${userPaciente.apellidos}">
                                                 <f:param name="pacienteId" value="#{account.loggedId}"/>
+                                                <f:param name="backView" value="home"/>
                                             </h:link>
                                         </h4>
                                     </div>  

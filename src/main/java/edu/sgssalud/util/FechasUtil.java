@@ -76,20 +76,24 @@ public class FechasUtil {
         Date ahora = fecha;
         SimpleDateFormat formateador = new SimpleDateFormat("yyyy-MM-dd");
         return formateador.format(ahora);
-        
+
     }
 
-    public static Date fijarHoraMinuto(int horas, int minutos) {        
+    public static Date fijarHoraMinuto(int horas, int minutos) {
         Calendar time = Calendar.getInstance();
         time.set(Calendar.HOUR, horas);
         time.set(Calendar.MINUTE, minutos);
         return time.getTime(); // Devuelve el objeto Date con las nuevas horas añadidas	
     }
-    
-    public static Date fijarHoraMinutoConFecha(Date fecha, int horas, int minutos) {        
+
+    public static Date fijarHoraMinutoConFecha(Date fecha, int horas, int minutos) {
         Calendar time = Calendar.getInstance();
         time.setTime(fecha);
-        time.set(Calendar.HOUR, horas);
+        if (horas >= 3 && horas <= 6) {
+            time.set(Calendar.HOUR, horas + 12);
+        } else {
+            time.set(Calendar.HOUR, horas);
+        }
         time.set(Calendar.MINUTE, minutos);
         return time.getTime(); // Devuelve el objeto Date con las nuevas horas añadidas	
     }

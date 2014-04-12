@@ -68,7 +68,7 @@ public class SignupUsernameAvailabilityValidator implements Validator
       if (value instanceof String && !value.equals(profile.getUsername())) {
          ps.setEntityManager(em);
          if (!ps.isUsernameAvailable((String) value))
-            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "El nombre de usuario no esta disponible", null));
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "El nombre de usuario no esta disponible. ¡Pertenece a otro usuario!", null));
       }
    }
 }

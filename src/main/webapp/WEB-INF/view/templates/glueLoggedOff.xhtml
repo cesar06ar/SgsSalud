@@ -82,7 +82,7 @@
                         <h:outputText value=" " />
                         <h:inputSecret id="password" value="#{credentials.password}" style="width: 100px;"/>
                         <h:outputText value=" " />
-                        <h:commandButton action="#{authentication.login}" value="#{messages['common.login']}" />
+                        <h:commandButton action="#{authentication.login()}" value="#{messages['common.login']}" />
 
                     </h:form>
                 </li>
@@ -110,6 +110,7 @@
                             </a>                                                                                  
                             <ul class="dropdown-menu">                                
                                 <li><h:link outcome="/pages/reset" value="Cambiar Contraseña">                                        
+                                        <f:param name="profileId" value="#{account.loggedId}"/>
                                     </h:link>                                    
                                 </li>
                                 <li><h:link outcome="/pages/temas" value="Cambiar Tema">                                        

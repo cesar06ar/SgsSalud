@@ -44,6 +44,7 @@ import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
@@ -246,20 +247,25 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @TransactionAttribute
     public String guardarPaciente() {
         Date now = Calendar.getInstance().getTime();
+        String salida = null;
         getInstance().setLastUpdate(now);
         if (getInstance().isPersistent()) {
             save(getInstance());
+            salida = "/pages/" + getBackView() + "?faces-redirect=true";
         } else {
             try {
                 register();
                 FacesMessage msg = new FacesMessage("Se creo nuevo paciente: " + getInstance().getNombres() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                salida = "/pages/" + getBackView() + "?faces-redirect=true";
             } catch (IdentityException ex) {
-                Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
+                //Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
+                FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getNombres() + " ¡Puede que el correo ingresado ya pertenesca a otro usuario!");
+                FacesContext.getCurrentInstance().addMessage("", msg);
             }
         }
 
-        return "/pages/secretaria/lista?faces-redirect=true";
+        return salida;
     }
     /*....==>*/
 
@@ -284,7 +290,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     @TransactionAttribute
     private void createUser() throws IdentityException {
-
         // TODO validate username, email address, and user existence
         getInstance().setNombreUsuario(getInstance().getCedula());
         getInstance().setClave(getInstance().getCedula());
@@ -301,22 +306,20 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         getInstance().setShowBootcamp(true);
         create(getInstance());
         setPacienteId(getInstance().getId());
-        
+
         //crear seguridad de paciente
-//        try {
-//            org.picketlink.idm.api.Group group = security.getPersistenceManager().findGroup("PACIENTE", "GROUP");
-//            security.getRelationshipManager().associateUser(group, user);            
-//        } catch (Exception e) {
-//        }        
-        
+        try {
+            org.picketlink.idm.api.Group group = security.getPersistenceManager().findGroup("PACIENTE", "GROUP");
+            security.getRelationshipManager().associateUser(group, user);
+        } catch (Exception e) {
+            System.out.println("Error");
+        }
         wire();
 //        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
 //                Paciente.class.getName()));
 //        getInstance()
 //                .buildAttributes(bussinesEntityService);
-        
-        
-        
+
         save(getInstance()); //Actualizar estructura de datos  
     }
 
@@ -411,7 +414,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         //if (file != null) {
         System.out.println("Ingreso a subir Imagen_________________________________________________");
         try {
-            getInstance().setFoto(buildPhoto(event.getFile()));            
+            getInstance().setFoto(buildPhoto(event.getFile()));
             FacesMessage msg = new FacesMessage("Ok", "Fichero " + event.getFile().getFileName() + " subido correctamente.");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         } catch (Exception e) {

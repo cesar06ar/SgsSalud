@@ -10,9 +10,9 @@
     <ui:param name="title" value="#{messages['security.group']}" />
     <ui:define name="header-replace">        
         <div class="header-replace">
-                <div class="container-header" >
-                    <div class="row lf row-title" >                    
-                        <h2>#{messages['security.groups']}</h2>                                 
+            <div class="container-header" >
+                <div class="row lf row-title" >                    
+                    <h2>#{messages['security.groups']}</h2>                                 
                 </div>     
             </div>
         </div>
@@ -26,21 +26,21 @@
 
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="admin-actions">
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="group" styleClass="btn primary">
+                <!--<h:link value="# {messages['common.add']}" rendered="true" outcome="group" styleClass="btn primary">
                     <f:param name="groupKey"></f:param>                    
                     <f:param name="backView" value="authorization"></f:param>
                 </h:link>                                
                 &nbsp;
-                <p:commandLink id="button-delete" value="#{messages['common.delete']}" 
+                <p:commandLink id="button-delete" value="# {messages['common.delete']}" 
                                type="button" immediate="true" styleClass="btn"
                                onclick="deletedDlg.show();"
                                rendered="true">                     
-                </p:commandLink>
+                </p:commandLink>-->
                 &nbsp;
                 <h:link value="#{messages['common.cancel']} #{'a'} #{messages['module.profile.profiles']}" rendered="#{true}" 
                         outcome="/pages/admin/listProfile.xhtml?faces-redirect=true" styleClass="btn secondary" style="float: right;">
-                                <f:param name="result"></f:param>                
-                      </h:link> 
+                    <f:param name="result"></f:param>                
+                </h:link> 
             </div>
             <p:dataTable var="g" value="#{securityGroupListService}"
                          editable="false" id="groupTable" rendered="true"                          
@@ -63,23 +63,23 @@
                 </p:column>                
             </p:dataTable>          
         </h:form>       
-        <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" 
+        <!--<p:dialog id="cancel-dialog" header="# {messages['common.delete.confirm']}" 
                   widgetVar="deletedDlg" dynamic="true" resizable="false" modal="true">  
             <h:form id="form-dialog-confirm-delete">
                 <h:panelGroup layout="block" style="padding:5px;">  
-                    <h:outputText value="#{messages['common.delete.confirm.message']}"/> 
+                    <h:outputText value="# {messages['common.delete.confirm.message']}"/> 
                     <br/>
-                    <h:outputText value="#{securityGroupListService.selectedGroup.name}"/> 
+                    <h:outputText value="# {securityGroupListService.selectedGroup.name}"/> 
                 </h:panelGroup>  
-                <p:commandButton id ="delete-yes" value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                 action="#{securityGroupListService.deleteGroup()}"                                         
+                <p:commandButton id ="delete-yes" value="# {messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                 action="# {securityGroupListService.deleteGroup()}"                                         
                                  ajax="true" process="@this"  update=":form:groupTable"
                                  style="margin-top:10px;">                                                  
                 </p:commandButton>  
-                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
+                <p:commandButton value="# {messages['common.no']}" type="button" onclick="deletedDlg.hide();"                                       
                                  style="margin-top:10px;"/>  
             </h:form>
-        </p:dialog>
+        </p:dialog>-->
     </ui:define>    
 </ui:composition>
 

@@ -297,7 +297,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         if (identity.isLoggedIn()) {
             fichaMedic.setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));    //cambiar atributo a 
         }
-        fichaMedic.setType(_type);
+        fichaMedic.setType(_type);                          //Obtengo datos dotos de manera     
         fichaMedic.buildAttributes(bussinesEntityService);  //
 
         historiaClinica = new HistoriaClinica();

@@ -54,13 +54,14 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     @Inject
     private TurnoService turnoS;
 
-    @Inject
-    private Identity identity;
+    //@Inject
+    //private Identity identity;
     @Inject
     private PacienteServicio pacienteS;
     private Long pacienteId;
     private String horaD;
     private Date fecha;
+    private Date fechaBusc;
     private Paciente paciente;
     private List<Turno> listaTurnos = new ArrayList<Turno>();
     private List<String> listaHoras = new ArrayList<String>();
@@ -93,8 +94,13 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         pacienteS.setEntityManager(em);
         turnoS.setEntityManager(em);
         listaHoras = this.agregarHoras();
+        listaTurnos = turnoS.getTurnos();
     }
-
+    
+    public void cargarTurnosPaciente(){
+        listaTurnos = turnoS.getTurnosPorFecha(paciente);
+    }
+    
     @Override
     protected Turno createInstance() {
         //prellenado estable para cualquier clase 
@@ -112,7 +118,8 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     @TransactionAttribute
     public String guardar() {
         System.out.println("INGRESO GUARDAR_____-");
-        Date now = Calendar.getInstance().getTime();        
+        String salida = "";
+        Date now = Calendar.getInstance().getTime();
         int hora;
         int min;
         try {
@@ -125,7 +132,8 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
                 //System.out.println("INGRESO GUARDAR_____3-");
                 hora = Strings.hora_minuto(horaD, 0);
                 min = Strings.hora_minuto(horaD, 1);
-                getInstance().setHora(FechasUtil.fijarHoraMinutoConFecha(getInstance().getFechaCita(),hora, min));
+                getInstance().setFechaCita(fecha);
+                getInstance().setHora(FechasUtil.fijarHoraMinutoConFecha(getInstance().getFechaCita(), hora, min));
                 getInstance().setEstado("Pendiente");
                 getInstance().setPaciente(paciente);
                 create(getInstance());
@@ -133,6 +141,8 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
                 FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 //System.out.println("INGRESO GUARDAR_____EXITO");
+                salida = "/pages/"+getBackView()+"?faces-redirect=true"
+                        +"&pacienteId="+getPacienteId();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,11 +150,11 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
             FacesContext.getCurrentInstance().addMessage("", msg);
             //System.out.println("INGRESO GUARDAR_____error");
         }
-        return null;
+        return salida;
     }
 
     @Transactional
-    public String borrarEntidad() {
+    public void borrarEntidad() {
 //        log.info("sgssalud --> ingreso a eliminar: " + getInstance().getId());
         try {
             if (getInstance() == null) {
@@ -161,7 +171,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/serviciosMedicos/lista.xhtml?faces-redirect=true";
+        //return "/pages/serviciosMedicos/lista.xhtml?faces-redirect=true";
     }
 
     public Long getPacienteId() {
@@ -193,19 +203,18 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-        if(fecha != null){
+        if (fecha != null) {
             this.horasDisponibles();
         }
-    }   
-    
+    }
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
 
     public List<Turno> getListaTurnos() {
-        //return listaTurnos;
-        return turnoS.getTurnos();
+        return listaTurnos;
+        //return turnoS.getTurnos();
     }
 
     public void setListaTurnos(List<Turno> listaTurnos) {
@@ -256,17 +265,40 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     }
 
     public void horasDisponibles() {
-        listaTurnos = turnoS.getTurnosPorFecha(getInstance().getFechaCita());
+        //System.out.println("LISTA DE TURNOS POR FECHA___" + listaTurnos.toString());
+        listaTurnos = turnoS.getTurnosPorFecha(fecha);
         String hora = null;
+        List<String> listaH = new ArrayList<String>();
         if (!listaTurnos.isEmpty()) {
             for (Turno t : listaTurnos) {
-                hora = FechasUtil.getHoraActual(t.getFechaCita());
-                if (listaHoras.contains(hora)) {
-                    listaHoras.remove(hora);
+                System.out.println("TURNO______" + t.toString());
+                hora = FechasUtil.getHoraActual(t.getHora());
+                System.out.println("HORA ___" + hora);
+                for (String h : listaHoras) {
+                    if (h.equals(hora)) {
+                        //listaHoras.remove(hora);
+                        listaH.add(h);
+                        System.out.println("ELIMINO HORA");
+                    }
                 }
             }
+            listaHoras.removeAll(listaH);
         }
-        
-        System.out.println("Lista "+listaHoras.toString());
     }
+
+    public void buscarPorFecha() {
+        listaTurnos = turnoS.getTurnosPorFecha(fechaBusc);
+    }
+
+    public Date getFechaBusc() {
+        return fechaBusc;
+    }
+
+    public void setFechaBusc(Date fechaBusc) {
+        this.fechaBusc = fechaBusc;
+        if (fechaBusc != null) {
+            listaTurnos = turnoS.getTurnosPorFecha(fechaBusc);
+        }
+    }
+
 }

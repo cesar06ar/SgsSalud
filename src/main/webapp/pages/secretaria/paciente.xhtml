@@ -41,7 +41,7 @@
                                         <div class="input" > 
                                             <h:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">
                                                 <f:validator validatorId="ciValidator" />
-                                                <!--<f:validator validatorId="dniDisponiblePaciente" />-->
+                                                <f:validator validatorId="dniDisponiblePaciente" />
                                                 <f:ajax execute="@this" render="dnip" />                                
                                             </h:inputText>                                           
                                             <span class="help-inline">#{messages['profile.dni.inlinehelp']}<ocp:message forId="dni" /></span>
@@ -53,7 +53,8 @@
                                         <label for="email">#{messages['common.email']} *</label>
                                         <div class="input">
                                             <h:inputText id="email" value="#{pacienteHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
-                                                <f:validator validatorId="emailValidator" />                                            
+                                                <f:validator validatorId="emailValidator" />  
+                                                <f:validator validatorId="emailDisponibleParaRegistrarValidador" />
                                                 <f:ajax execute="@this" render="eml"  />
                                             </h:inputText>
                                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.email != null}"

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition>
+        <h:panelGroup rendered="true" >                
+            <p:panel  header="Panel de Administracion" toggleable="true" rendered="true" style="font-size: 9; width: 115%">
+                <h:link value="Datos de Paciente" rendered="#{true}" 
+                        outcome="/pages/paciente/view">
+                    <f:param name="pacienteId" value="#{account.loggedId}"/>
+                    <f:param name="backView" value="home"/>
+                </h:link>
+                <br/>
+                <h:link value="Modificar Foto" rendered="#{true}" 
+                        outcome="/pages/paciente/foto">
+                    <f:param name="pacienteId" value="#{account.loggedId}"/>
+                    <f:param name="backView" value="home"/>
+                </h:link>
+                <br/>
+                <h:link value="Solicitar Turno" rendered="#{true}" 
+                        outcome="/pages/paciente/turnoP">
+                    <f:param name="pacienteId" value="#{account.loggedId}"/>
+                    <f:param name="backView" value="paciente/turnoP"/>
+                </h:link>
+                <br/>
+                <h:link value="Ver consultas" rendered="#{true}" 
+                        outcome="/pages/paciente/consultas">
+                    <f:param name="pacienteId" value="#{account.loggedId}"/>
+                    <f:param name="backView" value="home"/>
+                </h:link>
+            </p:panel>
+        </h:panelGroup>
+    </ui:composition>
+</html>
+

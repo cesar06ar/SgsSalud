@@ -12,9 +12,8 @@
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
-
+            <f:viewParam name="" value="#{turnoHome.fechaBusc}"/> 
         </f:metadata>
-
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container-header" >
@@ -34,7 +33,20 @@
                     <h:link title="#{messages['common.add']} #{messages['turno.nombre']}" rendered="#{true}" outcome="/pages/secretaria/lista" styleClass="btn btn-img" >
                         <p:graphicImage value="/resources/img/turno.png" width="40" height="40"/>                        
                         <f:param name="backView" value="lista"></f:param>
-                    </h:link>                   
+                    </h:link>      
+
+                    <h:panelGroup style="float: right">
+                        <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha"
+                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="false" >
+                            <!--<p:ajax event="dateSelect" />-->
+                        </p:calendar>
+                        &nbsp;
+                        <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPorFecha()}"  styleClass="btn info" update=":form:tablaTurnos">
+                            <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
+                        </p:commandButton>    
+                        &nbsp;
+                        <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.init}"  styleClass="btn info" update=":form:tablaTurnos"/>
+                    </h:panelGroup>
 
                 </div>
                 <p:dataTable id="tablaTurnos" value="#{turnoHome.listaTurnos}" var="turno_" editable="true"
@@ -42,6 +54,7 @@
                              rows="20" paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="10,20,30,50,100">
+
                     <p:column headerText="#{messages['paciente.nombre']}" style="width: 30%">
                         <h:outputText value="#{turno_.paciente.nombres}"/>
                         &nbsp;&nbsp;&nbsp;
@@ -54,25 +67,39 @@
                             <f:convertDateTime pattern="HH:mm"/>
                         </h:outputText>
                     </p:column>                   
-                    <p:column headerText="#{messages['servicioMedico.nombre1']}" style="width: 15%">
+                    <p:column headerText="#{messages['servicioMedico.nombre1']}" style="width: 15%" sortBy="#{turno_.servicio}"
+                              filterBy="#{turno_.servicio}" filterMatchMode="contains">
                         <h:outputText value="#{turno_.servicio}" />
                     </p:column>
-                    <p:column headerText="#{messages['comun.estado']}" style="width: 15%">
+                    <p:column headerText="#{messages['comun.estado']}" style="width: 15%" sortBy="#{turno_.estado}"
+                              filterBy="#{turno_.estado}" filterMatchMode="contains">
                         <h:outputText value="#{turno_.estado}" />
                     </p:column>                                       
-                    <p:column headerText="#{'Opción'}" style="width: 15%">                        
-                        <!--
-                        &nbsp;
-                        <p:commandLink id="button-delete" type="button" title="# {messages['common.delete']}"
-                                       onclick="# {'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
-                                       style="width: 10px; height: 10px;">                                                        
-                            <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
-                            <f:setPropertyActionListener value="# {consultaM_}" target="# {fichaMedicaHome.consultaMedica}"/>
+                    <p:column headerText="#{'Opción'}" style="width: 5%">                                                
+                        <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"
+                                       onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                                       style="width: 20px; height: 10px;">                                                        
+                            <p:graphicImage value="/resources/images/delete.gif" width="18" height="13"/>
+                            <f:setPropertyActionListener value="#{turno_}" target="#{turnoHome.instance}"/>
                             <p:ajax process="@this" update=":cancel-dialog" />
-                        </p:commandLink>-->
+                        </p:commandLink>
                     </p:column>
                 </p:dataTable>
             </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{turnoHome.borrarEntidad()}"                                          
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
         </ui:define>
     </ui:composition>
 </html>                

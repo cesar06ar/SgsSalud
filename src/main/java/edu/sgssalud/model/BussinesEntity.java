@@ -310,7 +310,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             for (Property a : s.getProperties()) {
                 if (a.getType().equals(Group.class.getName())) {
                     buildGroup(a, bes);
-                } else if (a.getType().equals(Structure.class.getName())) {
+                } else if (a.getType().equals(Structure.class.getName())) {  //
                     loadStructure(a, bes);
                 } else {
                     this.addBussinesEntityAttribute(buildAtribute(a));

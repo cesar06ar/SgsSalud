@@ -33,6 +33,7 @@ import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.security.authorization.SecurityRules;
 import edu.sgssalud.util.Dates;
 import edu.sgssalud.web.ParamsBean;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator;
@@ -174,8 +175,9 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
     @TransactionAttribute
     public String register() throws IdentityException {
         createUser();
-
+        //BasicPasswordEncryptor().encryptPassword(password)
         credentials.setUsername(getInstance().getUsername());
+        //credentials.getCredential().
         credentials.setCredential(new PasswordCredential(getPassword()));
 
         oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
@@ -239,11 +241,11 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         credentials.setCredential(new PasswordCredential(getPassword()));
         oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
         identity.setAuthenticatorClass(IdmAuthenticator.class);
-        String result = identity.login();
-        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
-            result = identity.login();
-        }
-        return result;
+//        String result = identity.login();
+//        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
+//            result = identity.login();
+//        }
+        return "/pages/home.xhtml?faces-redirect=true";
 
     }
 
@@ -254,7 +256,8 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         User user = identityManager.createUser(getInstance().getUsername());
 
         AttributesManager attributesManager = security.getAttributesManager();
-        attributesManager.updatePassword(user, getPassword());
+        PasswordCredential p = new PasswordCredential(getPassword());                
+        attributesManager.updatePassword(user, p.getValue());
         attributesManager.addAttribute(user, "email", getInstance().getEmail());  //me permite agregar un atributo de cualquier tipo a un usuario 
 
         em.flush();

@@ -47,7 +47,7 @@ public class Account implements Serializable {
     private PacienteServicio pacienteS;
 
     private SecurityRules securityRules;
-    
+
     @PostConstruct
     public void init() {
         ps.setEntityManager(em);
@@ -136,7 +136,7 @@ public class Account implements Serializable {
         this.em = em;
         ps.setEntityManager(em);
     }
-    
+
     public boolean isUserPaciente() {
 
         if (identity.isLoggedIn()) {
@@ -210,10 +210,10 @@ public class Account implements Serializable {
                 return null;
             } else {
                 return "/pages/denied.xhtml";
-            }            
-        }else{
+            }
+        } else {
             return "/pages/login.xhtml";
-        }        
+        }
     }
 
     public String loadPagesRol() {
@@ -229,12 +229,21 @@ public class Account implements Serializable {
         }
     }
 
+    public String loadPagesLoggedIn() {
+        //SecurityRules s = new SecurityRules();
+        if (identity.isLoggedIn()) {
+            return null;
+        } else {
+            return "/pages/login.xhtml";
+        }
+    }
+
     public SecurityRules getSecurityRules() {
         return securityRules;
     }
 
     public void setSecurityRules(SecurityRules securityRules) {
         this.securityRules = securityRules;
-    }   
-    
+    }
+
 }

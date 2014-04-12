@@ -279,7 +279,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public Integer saldoCardexAnterior() {
 
         List<Receta_Medicamento> listaC = cardexService.obtenerPorMedicamento(getInstance());
-        //System.out.println("lista Cardex____-" + listaC.toString() + " Medicamento ____"+getInstance().getId());
+        System.out.println("lista Cardex____-" + listaC.toString() + " Medicamento ____"+getInstance().getId());
         if (!listaC.isEmpty()) {
             Receta_Medicamento cardex = new Receta_Medicamento();
             cardex = listaC.get(0);

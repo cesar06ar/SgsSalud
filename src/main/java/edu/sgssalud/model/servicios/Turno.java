@@ -151,7 +151,12 @@ public class Turno implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.servicios.Turno[ id=" + id + " ]";
+        return "edu.sgssalud.model.servicios.Turno["
+                +" id= " + id 
+                +" fecha= " + fechaCita
+                +" hora= " + hora
+                +" motivo= " + motivo
+                + " ]";
     }
 
 }

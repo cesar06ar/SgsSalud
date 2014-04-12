@@ -111,11 +111,14 @@
    <url-mapping id="pacienteTest">
       <pattern value="/paciente/test"></pattern>
       <view-id value="/pages/paciente/test.xhtml"></view-id>       
-   </url-mapping>
-   
+   </url-mapping>   
    <url-mapping id="PacienteView">
        <pattern value="/paciente/view"></pattern>
        <view-id value="/pages/paciente/view.xhtml"></view-id>
+   </url-mapping>
+   <url-mapping id="solicitarTurno">
+       <pattern value="/paciente/turno"></pattern>
+       <view-id value="/pages/paciente/turnoP.xhtml"></view-id>
    </url-mapping>
    
    <!-- Vistas de Medicamento-->
@@ -249,7 +252,8 @@
     
     <url-mapping id="changePassword">
       <pattern value="/reset"></pattern>
-      <view-id value="/pages/reset.xhtml"></view-id>                              
+      <view-id value="/pages/reset.xhtml"></view-id>
+      <action>#{account.loadPagesLoggedIn}</action>
    </url-mapping>
 
 </pretty-config>

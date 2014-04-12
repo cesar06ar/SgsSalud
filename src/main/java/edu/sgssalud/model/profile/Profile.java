@@ -60,7 +60,8 @@ import org.jboss.solder.logging.Logger;
     /*@NamedQuery(name = "Profile.findGroupsByUserAndType", query = "select g FROM Profile u JOIN u.groups g WHERE u=:user and g.type=:groupType"),
      @NamedQuery(name = "Profile.findUserByGroupsAndRole", query = "select entity From Profile entity join entity.groups g where g in (:groups) and entity.role.name=:role"),*/
     @NamedQuery(name = "Profile.findUsersByNameOrUsername", query = "select u from Profile u where lower(u.username)  LIKE lower(:name) or lower(u.name) LIKE lower(:name)"),
-    @NamedQuery(name = "Profile.findUserByEmail", query = "from Profile u where u.email = :email")})
+    @NamedQuery(name = "Profile.findUserByEmail", query = "from Profile u where u.email = :email")
+})
 public class Profile extends BussinesEntity implements Serializable {
 
     private static Logger log = Logger.getLogger(Profile.class);

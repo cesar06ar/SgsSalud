@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      template="/WEB-INF/view/templates/glue.xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="pacienteId" value="#{consultasPacienteHome.pacienteId}"/> 
+        </f:metadata>
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>Consultas de paciente: #{consultasPacienteHome.fichaMedica.paciente.nombres}
+                            #{consultasPacienteHome.fichaMedica.paciente.apellidos}</h2>   
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+        <ui:define name="sidebar">
+            <ui:include src="/pages/paciente/sidebar.xhtml"/>
+        </ui:define>
+        <ui:define name="content" >
+            <h:form id="form">                
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+
+                <!--Botones de admin-->
+                <div class="admin-actions ">
+                    <h:link value="#{messages['common.cancel']}" rendered="#{true}" outcome="/pages/home" styleClass="btn btn-img" > 
+                    </h:link>      
+                </div>
+                <p:panel header="#{messages['consultaMedica.title']}">
+                    <p:dataTable id="tablaCM" value="#{consultasPacienteHome.hc.consultas}" var="consultaM_" editable="true"
+                                 paginator="true" emptyMessage="No tiene ninguna consulta que mostrar"
+                                 rows="10" paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
+                                 rowsPerPageTemplate="10,20,30,50,100">
+
+                        <p:column headerText="Id" style="width: 7%">
+                            <h:outputText value="#{consultaM_.id}"/>
+                        </p:column>                            
+                        <p:column headerText="#{messages['consultaMedica.fechaConsulta']}" style="width: 13%">
+                            <p:outputLabel value="#{consultaM_.fechaConsulta}" style="width: 65px; margin-top: -6px;" />
+                            &nbsp;&nbsp;&nbsp;
+                            <h:outputText value="#{consultaM_.horaConsulta}" >
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.diagnostico']}" style="width: 30%">
+                            <h:outputText value="#{consultaM_.diagnostico}" />
+                        </p:column>
+                        <p:column headerText="#{messages['consultaMedica.Tratamiento']}" style="width: 29%">
+                            <h:outputText value="#{consultaM_.tratamiento}" />
+                        </p:column>                        
+                    </p:dataTable>
+                </p:panel>
+                <p:panel header="#{messages['consultaOdontologica.title']}">
+
+                    <p:dataTable id="tablaConsultasO" value="#{consultasPacienteHome.fo.consultas}" rows="10" var="consultaO_" editable="false"
+                                 paginator="true" emptyMessage="No tiene ninguna Consulta Odontológica">                                               
+                        <f:facet name="header">
+                            <h:outputText value="#{messages['consultaOdontologica.Nombre']}"/>
+                        </f:facet>
+                        <p:column headerText="Id" style="width: 7%">
+                            <h:outputText value="#{consultaO_.id}"/>
+                        </p:column>                            
+                        <p:column headerText="#{messages['consultaMedica.fechaConsulta']}" style="width: 15%">                            
+                            <p:outputLabel value="#{consultaO_.fechaConsulta}" style="width: 75px; margin-top: -6px;">
+                                <f:convertDateTime pattern="dd-MMM-yyyy"/>
+                            </p:outputLabel>
+                            &nbsp;&nbsp;&nbsp;
+                            <h:outputText value="#{consultaO_.horaConsulta}">
+                                <f:convertDateTime pattern="HH:mm"/>
+                            </h:outputText>
+                        </p:column>                                                    
+                        <p:column headerText="#{messages['consultaMedica.motivo']}" style="width: 20%">
+                            <h:outputText value="#{consultaO_.motivoConsulta}" styleClass="span3"/>
+                        </p:column>                                                
+                        <p:column headerText="#{messages['consultaMedica.diagnostico']}" style="width: 20%">
+                            <h:outputText value="#{consultaO_.diagnostico}" styleClass="span3"/>
+                        </p:column>                                                                                       
+                        <p:column headerText="#{messages['tratamiento.Label']}" style="width: 30%">
+                            <ui:repeat value="#{consultasPacienteHome.buscarPorConsulta(consultaO_)}" var="t">
+                                <h:outputText value="#{t.diente.nombre} #{t.diente.posicion}"/>
+                                &nbsp;&nbsp;&nbsp;
+                                <h:outputText value="#{t.nombre}"/>
+                                &nbsp;&nbsp;&nbsp;
+                                <h:outputText value="#{t.fechaRealizacion}"/>
+                            </ui:repeat>
+                        </p:column>                        
+                    </p:dataTable>
+                </p:panel>
+            </h:form>            
+        </ui:define>
+    </ui:composition>
+</html>                
+

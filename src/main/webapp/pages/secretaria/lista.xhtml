@@ -36,7 +36,7 @@
                 <h:link title="#{messages['common.add']} #{messages['paciente.nombre']}" rendered="#{true}" outcome="paciente" styleClass="btn btn-img" >
                     <p:graphicImage value="/resources/img/addP.png" width="40" height="40"/>
                     <f:param name="pacienteId"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
+                    <f:param name="backView" value="secretaria/lista"></f:param>
 
                 </h:link>
                 #{' '}
@@ -44,7 +44,7 @@
                         disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
                     <p:graphicImage value="/resources/img/editP.png" width="40" height="40"/>
                     <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
+                    <f:param name="backView" value="secretaria/lista"></f:param>
                 </h:link>
                 #{' '}
                 <h:link id="button-abrirFM" title="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/fichaMedica" styleClass="btn btn-img" 
@@ -65,7 +65,7 @@
                                disabled="#{empty pacienteListaServicio.pacienteSelecionado}" >
                     <p:graphicImage value="/resources/img/turno.png" width="40" height="40"/>
                     <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>                    
-                    <f:param name="backView" value="lista"></f:param>
+                    <f:param name="backView" value="depSalud/agenda"></f:param>
                 </h:link>
                  #{' '}
                 <h:link id="button-labC" title="#{messages['common.add']} #{messages['turno.nombre']}" outcome="/pages/labClinico/pedidoE" styleClass="btn btn-img" 
