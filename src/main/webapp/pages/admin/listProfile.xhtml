@@ -49,13 +49,7 @@ limitations under the License.
                         disabled="#{empty profileListService.selectedProfile}">
                     <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
                     <f:param name="backView" value="listProfile"></f:param>
-                </h:link>
-                #{' '}
-                <h:link id="button-view" value="#{messages['common.view']}" rendered="#{true}" outcome="/pages/profile/view" styleClass="btn"
-                        disabled="#{empty profileListService.selectedProfile}">
-                    <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
-                    <f:param name="backView" value="listProfile"></f:param>
-                </h:link>
+                </h:link>                
                 #{' '}
                 <h:link id="button-authorize" value="#{messages['common.authorize']}" rendered="#{true}" outcome="/pages/admin/security/authorization.xhtml?faces-redirect=true" styleClass="btn"
                         disabled="#{empty  profileListService.selectedProfile}">
@@ -74,8 +68,9 @@ limitations under the License.
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{profileListService.onRowSelect}"   
-                        update=":form:button-edit :form:messages :form:button-view :form:button-authorize"/>                 
-                <p:ajax event="rowUnselect" listener="#{profileListService.onRowUnselect}" update=":form:button-edit :form:messages :form:button-view :form:button-authorize"/>
+                        update=":form:button-edit :form:messages  :form:button-authorize"/>                 
+                <p:ajax event="rowUnselect" listener="#{profileListService.onRowUnselect}" 
+                        update=":form:button-edit :form:messages :form:button-authorize"/>
 
                 <p:column sortBy="#{profile_.username}">
                     <f:facet name="header">  

@@ -14,6 +14,9 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="medicamentoId" value="#{cardexHome.medicamentoId}"/>
+            <f:viewParam name="" value="#{cardexHome.fechaI}"/>
+            <f:viewParam name="" value="#{cardexHome.fechaF}"/>
+            <!--<f:event listener="# {cardexHome.buscarTodos()}" type="preRenderView"/>-->
         </f:metadata>
 
         <ui:define name="header-replace">
@@ -25,8 +28,29 @@
                 </div>
             </div>
         </ui:define>
+        <ui:define name="content-pre" >
+            <h:form id="form1">
+                <div style="float: right; margin-top: -20px" >                    
+                    <p:calendar value="#{cardexHome.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
+                        <p:ajax event="dateSelect"/>
+                    </p:calendar>
+                    #{' -- '}
+                    <p:calendar value="#{cardexHome.fechaF}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%">
+                        <p:ajax event="dateSelect"/>  <!-- rendered="buscar1" update="buscar1"-->
+                    </p:calendar>
+                    &nbsp;&nbsp;
+                    <p:commandButton id="buscar1" value="Buscar" action="#{cardexHome.buscarPorFechas()}" immediate="true" 
+                                     update=":form:tablaCardex"/>
+                    &nbsp;
+                    <p:commandButton id="buscar" value="Buscar Todos" action="#{cardexHome.buscarTodos()}" immediate="true" 
+                                     update=":form:tablaCardex"/>
+                    <br/>
+                </div>             
+            </h:form>
+        </ui:define>
         <ui:define name="content" >
-            <h:form id="form">                
+            <h:form id="form">      
+                <h3><center>#{messages['medicamento.Nombre']}: #{cardexHome.medicamento.nombreComercial}</center></h3>
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span7">

@@ -15,6 +15,9 @@
  */
 package edu.sgssalud.service.medicina;
 
+import edu.sgssalud.model.farmacia.Medicamento;
+import edu.sgssalud.model.farmacia.Receta_Medicamento;
+import edu.sgssalud.model.farmacia.Receta_Medicamento_;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.FichaMedica_;
 import edu.sgssalud.model.paciente.Paciente;
@@ -25,6 +28,7 @@ import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.StringValidations;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -106,8 +110,23 @@ public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements
             query = em.createNamedQuery("FichaMedica.buscarPorFecha", FichaMedica.class);
             query.setParameter("clave", Dates.getFormatoFecha(parametro));
             consulFichas = query.getResultList();
-        } 
+        }
         return consulFichas;
-        
+    }
+    
+    public List<Receta_Medicamento> obtenerPorMedicamentoYFechas(final Date fechaI, final Date fechaF, final Medicamento medicamento) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Receta_Medicamento> query = builder.createQuery(Receta_Medicamento.class);
+        Root<Receta_Medicamento> entity = query.from(Receta_Medicamento.class);
+        query.where(builder.equal(entity.get(Receta_Medicamento_.medicamento), medicamento), builder.between(entity.get(Receta_Medicamento_.fecha), fechaI, fechaF));
+        return getResultList(query);
+    } 
+    
+     public List<FichaMedica> getFichaMedicaPorFechas(final Date fechaI, final Date fechaF) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<FichaMedica> query = builder.createQuery(FichaMedica.class);
+        Root<FichaMedica> entity = query.from(FichaMedica.class);
+        query.where(builder.between(entity.get(FichaMedica_.fechaApertura), fechaI, fechaF));
+        return getResultList(query);
     }
 }

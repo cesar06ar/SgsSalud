@@ -16,9 +16,6 @@
 
 package edu.sgssalud.service.medicina;
 
-import edu.sgssalud.model.medicina.FichaMedica;
-import edu.sgssalud.model.medicina.FichaMedica_;
-import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.servicios.Turno;
 import edu.sgssalud.model.servicios.Turno_;

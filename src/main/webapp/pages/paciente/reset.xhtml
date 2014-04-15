@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <f:metadata>
+        <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />                        
+        <f:viewParam name="backView" value="#{pacienteHome.backView}" />            
+    </f:metadata>    
+    <ui:define name="sidebar">
+        <ui:include src="/pages/paciente/sidebar.xhtml"/>
+    </ui:define>
+
+    <ui:composition template="/WEB-INF/view/templates/glueHome.xhtml">
+
+        <ui:param name="title" value="Recover Password" />
+        <ui:define name="header-replace" >
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{messages['common.password.change']} #{pacienteHome.instance.persistent? pacienteHome.instance.nombres:null}</h2>
+                    </div>
+                </div>
+            </div>      
+        </ui:define>        
+        <ui:define name="content">
+            <h:form id="signup" acceptcharset="UTF-8">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+
+                <div class="clearfix">
+                    <label for="password">#{messages['common.password.new']}</label>
+                    <div class="input">
+                        <h:inputSecret id="password" value="#{pacienteHome.clave}" redisplay="true" 
+                                       styleClass="xLarge" style="text-transform: uppercase;" required="true" requiredMessage="Required" label="#{messages['common.password']}">
+                            <f:ajax execute="password passwordConfirm passwordValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
+                            <f:validator validatorId="passwordValidator" />
+                        </h:inputSecret>
+                        <h:panelGroup id="pwg">
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.clave != null}"
+                                            styleClass="validation-status"/>
+                            <span class="help-inline"><ocp:message id="pm"  forId="password" /></span>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <div class="clearfix">
+                    <label for="passwordConfirm">#{messages['common.confirmPassword']}</label>
+                    <div class="input">
+                        <h:inputSecret id="passwordConfirm" value="#{pacienteHome.confirmarClave}"
+                                       redisplay="true" styleClass="xLarge" style="text-transform: uppercase;" label="#{messages['common.confirmPassword']}">
+                            <f:ajax execute="password passwordConfirm passwordValidator signup:signupValidator" render="password passwordConfirm pwg pwcg :messages:messages"/>
+                            <f:validator validatorId="passwordValidator" />
+                        </h:inputSecret>
+                        <h:panelGroup id="pwcg">
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.confirmarClave != null}"
+                                            styleClass="validation-status"/>
+                            <span class="help-inline"><ocp:message forId="passwordConfirm" /></span>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
+                <s:validateForm id="passwordValidator" validatorId="passwordConfirm" />
+                <s:validateForm id="signupValidator" validatorId="signupValidator" />
+
+                <div class="actions">
+                    <h:commandButton action="#{pacienteHome.cambiarClave()}" value="#{messages['common.save']}"
+                                     styleClass="btn primary">
+                        <f:ajax execute="@form" render="@form" />
+                    </h:commandButton>
+                    &nbsp;&nbsp;
+                    <h:link value="#{messages['common.cancel']}" type="button" outcome="home"
+                                         style="margin-top:10px;"/>  
+                </div>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

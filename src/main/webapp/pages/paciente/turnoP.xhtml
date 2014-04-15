@@ -89,7 +89,7 @@
                             <label for="fechaC" >#{messages['comun.fecha']} #{messages['receta.emision']}</label>
                             <div class="input">                                                         
                                 <p:calendar id="fechaE" value="#{turnoHome.instance.fechaEmision}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
-                                            disabled="true" pattern="EEE, dd-MMMM-yyyy"  locale="es" disabledWeekends="true" >                                
+                                            disabled="true" pattern="dd-MMM-yyyy"  locale="es" disabledWeekends="true" >                                
                                 </p:calendar>                                                                                                      
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaEmision ne null}"
                                                 styleClass="validation-status" />                                                        

@@ -255,5 +255,9 @@
       <view-id value="/pages/reset.xhtml"></view-id>
       <action>#{account.loadPagesLoggedIn}</action>
    </url-mapping>
+   <url-mapping id="cambioClavePaciente">
+      <pattern value="/reset"></pattern>
+      <view-id value="/pages/paciente/reset.xhtml"></view-id>   
+   </url-mapping>
 
 </pretty-config>

@@ -284,7 +284,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
             Receta_Medicamento cardex = new Receta_Medicamento();
             cardex = listaC.get(0);
             for (Receta_Medicamento rm : listaC) {
-                if (rm.getFecha().after(cardex.getFecha())) {
+                if (rm.getId() >= cardex.getId()) {
                     cardex = rm;
                 }
             }

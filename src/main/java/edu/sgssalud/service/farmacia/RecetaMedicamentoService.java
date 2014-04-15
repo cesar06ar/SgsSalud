@@ -20,8 +20,10 @@ import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.model.farmacia.Receta_Medicamento_;
+import edu.sgssalud.model.medicina.ConsultaMedica_;
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
 import edu.sgssalud.util.PersistenceUtil;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -68,4 +70,12 @@ public class RecetaMedicamentoService extends PersistenceUtil<Receta_Medicamento
         query.where(builder.equal(entity.get(Receta_Medicamento_.medicamento), medicamento));
         return getResultList(query);
     }
+     
+    public List<Receta_Medicamento> obtenerPorMedicamentoYFechas(final Date fechaI, final Date fechaF, final Medicamento medicamento) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Receta_Medicamento> query = builder.createQuery(Receta_Medicamento.class);
+        Root<Receta_Medicamento> entity = query.from(Receta_Medicamento.class);
+        query.where(builder.equal(entity.get(Receta_Medicamento_.medicamento), medicamento), builder.between(entity.get(Receta_Medicamento_.fecha), fechaI, fechaF));
+        return getResultList(query);
+    } 
 }

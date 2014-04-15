@@ -45,12 +45,14 @@ limitations under the License.
                 <c:when test="#{type == 'java.lang.String' or type == 'text'}">
                     <p:inputText value="#{value}" id="#{name}" styleClass="xLarge span4" required="#{required}" label="#{label}" disabled="#{disabled}">
                         <f:validator validatorId="#{validator}"/>
+                        <f:validateLength minimum="#{minLength}" rendered="#{validateLength}"/>
                         <p:ajax event="blur" update="#{render}" partialSubmit="true"/>
                     </p:inputText>
                 </c:when>
                 <c:when test="#{type == 'java.util.Date' or type == 'calendar'}">
                     <p:calendar value="#{a.value}" id="#{name}" navigator="true" label="#{label}" disabled="#{disabled}">
-                        <p:ajax event="dateSelect" listener="#{listener}" update="#{render}" />
+                        
+                        <p:ajax event="dateSelect" listener="#{listener}" update="#{render}" />                        
                     </p:calendar>  
                 </c:when>
                 <c:when test="#{type == 'java.lang.Boolean' or type == 'checkbox'}">

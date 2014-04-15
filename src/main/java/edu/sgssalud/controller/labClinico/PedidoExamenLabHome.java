@@ -17,6 +17,7 @@ package edu.sgssalud.controller.labClinico;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
+import edu.sgssalud.controller.odontologia.TratamientoDataModel;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
@@ -92,7 +93,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
     private FichaOdontologica fo;
     private FichaMedica fichaMedica;
     private ExamenLabClinico examenLabClinico;
-
+    private ExamenDataModel examenDataModel = new ExamenDataModel();
     private List<ResultadoExamenLabClinico> listaResultadosExamenLab = new ArrayList<ResultadoExamenLabClinico>();
     private List<ExamenLabClinico> listaExamenLab = new ArrayList<ExamenLabClinico>();
     private List<ExamenLabClinico> listaPedidoExamenLabC = new ArrayList<ExamenLabClinico>();
@@ -139,7 +140,8 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         resultadoService.setEntityManager(em);
         if (pacienteId == null) {
             paciente = new Paciente();
-        }
+            fichaMedica = new FichaMedica();
+        }        
         if (consultaMedId == null) {
             hc = new HistoriaClinica();
         }
@@ -148,6 +150,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         }
         listaExamenLab = examenLabService.getExamenesLab();
         pickListExamenesLab = new DualListModel<ExamenLabClinico>(this.getListaExamenLab(), this.getListaPedidoExamenLabC());
+        examenDataModel = new ExamenDataModel(listaExamenLab);
     }
 
     @Override
@@ -178,16 +181,16 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
                 FacesMessage msg = new FacesMessage("Se actualizo Pedido : " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
-                if(consultaMedId != null){
+                if (consultaMedId != null) {
                     getInstance().setHistoriaClinica(hc);
-                }else if(consultaOdontId != null){
+                } else if (consultaOdontId != null) {
                     getInstance().setFichaOdontologica(fo);
                 }
                 this.listaPedidoExamenLabC = pickListExamenesLab.getTarget();
                 //System.out.println("Lista De Examens para Pedido   PICK:_______\n" + listaPedidoExamenLabC);
                 if (!this.listaPedidoExamenLabC.isEmpty()) {
 
-                    getInstance().setPaciente(paciente);                    
+                    getInstance().setPaciente(paciente);
                     getInstance().setEstado("Nuevo");
                     getInstance().setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
 
@@ -213,7 +216,8 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         return "/pages" + this.getBackView() + "?faces-redirect=true"
                 + "&fichaMedicaId= " + this.fichaMedicaId
                 + "&consultaMedicaId= " + this.consultaMedId
-                + "&consultaOdontId= " + this.consultaOdontId;
+                + "&consultaOdontId= " + this.consultaOdontId
+                + "&backView=" + this.getPrevious();
     }
 
     @Transactional
@@ -257,7 +261,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
-        this.setPaciente(pacienteServic.getPacientePorId(pacienteId));
+        this.setPaciente(pacienteServic.getPacientePorId(pacienteId));        
         this.setFichaMedica(fichaMedicaServicio.getFichaMedicaPorPaciente(paciente));
         if (fichaMedica.isPersistent()) {
             this.setHc(historiaClinService.buscarPorFichaMedica(fichaMedica));

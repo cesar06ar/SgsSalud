@@ -49,8 +49,7 @@ public class CardexHome implements Serializable {
     
     @Inject
     @Web
-    private EntityManager em;
-    
+    private EntityManager em;    
     @Inject
     private RecetaMedicamentoService recetaMedService;     
     @Inject
@@ -60,6 +59,8 @@ public class CardexHome implements Serializable {
     
     private Long medicamentoId;
     private int saldo;
+    private Date fechaI;
+    private Date fechaF;
     private String backView;
     private Medicamento medicamento;
     private List<Receta_Medicamento> listaRecetasMedicamentos = new ArrayList<Receta_Medicamento>();
@@ -81,7 +82,8 @@ public class CardexHome implements Serializable {
     public void init() {           
         recetaMedService.setEntityManager(em);
         recetaServicio.setEntityManager(em);
-        medicamentoService.setEntityManager(em);
+        medicamentoService.setEntityManager(em);        
+        listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
     }    
 
     @TransactionAttribute
@@ -98,6 +100,7 @@ public class CardexHome implements Serializable {
         this.medicamentoId = medicamentoId;
         if(medicamentoId != null){
             medicamento = medicamentoService.buscarMedicamentosPorId(medicamentoId);
+            listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
         }
     }  
 
@@ -115,12 +118,28 @@ public class CardexHome implements Serializable {
 
     public void setBackView(String backView) {
         this.backView = backView;
-    }  
+    }
 
+    public Date getFechaI() {
+        return fechaI;
+    }
+
+    public void setFechaI(Date fechaI) {
+        this.fechaI = fechaI;
+    }
+
+    public Date getFechaF() {
+        return fechaF;
+    }
+
+    public void setFechaF(Date fechaF) {
+        this.fechaF = fechaF;
+    }  
+    
     public List<Receta_Medicamento> getListaRecetasMedicamentos() {
         //return listaRecetasMedicamentos;
         Collections.sort(listaRecetasMedicamentos);
-        return recetaMedService.obtenerPorMedicamento(medicamento);
+        return listaRecetasMedicamentos;
     }
 
     public void setListaRecetasMedicamentos(List<Receta_Medicamento> listaRecetasMedicamentos) {
@@ -135,4 +154,11 @@ public class CardexHome implements Serializable {
         this.saldo = saldo;
     }            
     
+    public void buscarPorFechas(){
+        listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamentoYFechas(fechaI, fechaF, medicamento);
+    }
+    
+    public void buscarTodos(){
+        listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
+    }
 }

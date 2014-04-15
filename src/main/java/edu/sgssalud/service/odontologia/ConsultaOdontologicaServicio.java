@@ -105,6 +105,16 @@ public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdonto
         Collections.sort(temp);
         return temp;
     }
+    
+    public List<ConsultaOdontologica> buscarPorFechas(final Date fechaI, final Date fechaF) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<ConsultaOdontologica> query = builder.createQuery(ConsultaOdontologica.class);
+        Root<ConsultaOdontologica> entity = query.from(ConsultaOdontologica.class);
+        query.where(builder.between(entity.get(ConsultaOdontologica_.fechaConsulta), fechaI, fechaF));        
+        List<ConsultaOdontologica> temp = getResultList(query);
+        Collections.sort(temp);
+        return temp;
+    }
 
     public ConsultaOdontologica getPorSignosVitales(final SignosVitales signosVitales) {
         CriteriaBuilder builder = getCriteriaBuilder();

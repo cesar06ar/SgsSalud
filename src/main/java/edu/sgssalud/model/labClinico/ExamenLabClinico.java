@@ -22,6 +22,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -37,7 +38,10 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
     @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
     @Column(nullable = false)
     private ExamenLabClinico.Tipo tipo;
-
+    
+    @Transient
+    private boolean select;
+    
     public Tipo getTipo() {
         return tipo;
     }
@@ -70,6 +74,14 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
         this.costo = costo;
     } 
 
+    public boolean isSelect() {
+        return select;
+    }
+
+    public void setSelect(boolean select) {
+        this.select = select;
+    }   
+    
     @Override
     public int compareTo(ExamenLabClinico o) {
         return (int)(this.getId() - o.getId());
@@ -77,13 +89,13 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
         
     public enum Tipo {
 
-        HEMATOLOGICOS(0),
-        BIOQUIMICO_Y_ENZIMATICOS(1),
+        HEMATOLÓGICOS(0),
+        BIOQUIMÍCO_Y_ENZIMÁTICOS(1),
         ELECTROLITOS(2),
         MARCADORES_TUMORALES(3),
         HORMONAS(4),
-        INMUNOLOGICOS(5),
-        LIQUIDOS_BIOLOGICOS(6),
+        INMUNOLÓGICOS(5),
+        LÍQUIDOS_BIOLÓGICOS(6),
         ORINA(7),
         HECES(8),
         SECRECIONES(9),

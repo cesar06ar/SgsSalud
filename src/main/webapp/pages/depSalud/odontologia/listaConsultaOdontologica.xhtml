@@ -9,7 +9,12 @@
                 template="/WEB-INF/view/templates/glue.xhtml">
 
     <ui:param name="titulo" value="#{messages['consultaOdontologica.admin']}"/>
-
+    <!--Metadato que se realiza antes de renderizarse la vista-->
+    <f:metadata>
+        <f:viewParam name="result" value="#{consultaOdontListaS.firstResult}" />            
+        <f:viewParam name="" value="#{consultaOdontListaS.fechaI}"/>
+        <f:viewParam name="" value="#{consultaOdontListaS.fechaF}"/>
+    </f:metadata>
     <ui:define name="header-replace">
         <div class="header-replace">
             <div class="container-header" >
@@ -19,13 +24,24 @@
             </div>
         </div>                      
     </ui:define>
-    <ui:define name="content">
-        <!--Metadato que se realiza antes de renderizarse la vista-->
-        <f:metadata>
-            <f:viewParam name="result" value="#{consultaOdontListaS.firstResult}" />            
-            <f:viewParam name="" value="#{consultaOdontListaS.fecha}"/>
-
-        </f:metadata>
+    <ui:define name="content-pre" >
+        <h:form id="form1">
+            <h:panelGroup style="margin-top: -15px;">
+                <p:calendar value="#{consultaOdontListaS.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
+                    <p:ajax event="dateSelect"/>
+                </p:calendar>
+                <p:calendar value="#{consultaOdontListaS.fechaF}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%">
+                    <p:ajax event="dateSelect"/>  <!-- rendered="buscar1" update="buscar1"-->
+                </p:calendar>
+                &nbsp;
+                <p:commandButton id="buscar1" value="Buscar" action="#{consultaOdontListaS.buscarPorFecha()}" immediate="true" 
+                                 update=":form:tablaConsultasOdontologicas"/>
+                <p:commandButton id="buscar" value="Buscar Todos" action="#{consultaOdontListaS.actualizar()}" immediate="true" 
+                                 update=":form:tablaConsultasOdontologicas"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+    <ui:define name="content">        
         <!--Formulario dentro de un contenedor-->
         <h:form id="form">            
             <!--Opción de mensaje, cuando se realiza una acción-->
@@ -46,21 +62,10 @@
                     <f:param name="consultaOdontId" value="#{consultaOdontListaS.consulOdontSeleccionada.id}"></f:param>
                     <f:param name="backView" value="/odontologia/listaConsultaOdontologica"></f:param>
                 </h:link>
-
-                <div style="float: right" >
-                    <p:calendar id="criterioBuscar" size ="25" value="#{consultaOdontListaS.fecha}" title="Ingrese un criterio de busqueda">
-                        <p:ajax event="dateSelect" update="buscar1"/>
-                    </p:calendar>
-                    &nbsp;
-                    <p:commandButton id="buscar1" value="Buscar" action="#{consultaOdontListaS.buscarPorFecha()}" immediate="true" 
-                                     update="@form"/>
-                    <br/>
-                </div>             
             </div>
-
             <!--tabla de datos-->
             <p:dataTable id="tablaConsultasOdontologicas"  var="consultaOdontologica_" value="#{consultaOdontListaS.resultList}"
-                         paginator="true" rows="10" paginatorPosition="top"
+                         paginator="true" rows="10" paginatorPosition="top" emptyMessage="No se ha encontrado ninguna consulta"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"                         
                          rowKey="#{consultaOdontologica_.id}"
@@ -73,10 +78,7 @@
                 <p:ajax event="rowUnselect" listener="#{consultaOdontListaS.onRowUnselect}" 
                         update=":form:button-edit :form:messages :form:button-view"/>
                 <f:facet name="header">  
-                    <h:outputText value="Total consultas odontológicas #{consultaOdontListaS.resultList.size()}" />
-                    &nbsp;&nbsp;
-                    <p:commandButton value="actualizar" actionListener="#{consultaOdontListaS.actualizar()}"
-                                     update=":form:tablaConsultasOdontologicas" />
+                    <h:outputText value="Total consultas odontológicas #{consultaOdontListaS.resultList.size()}" />                    
                 </f:facet>  
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{consultaOdontologica_.id}" style="width: 15%; text-align: center;"

@@ -19,7 +19,10 @@ import com.smartics.common.action.report.JasperReportAction;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.service.generic.CrudService;
 import edu.sgssalud.service.generic.QueryParameter;
+import edu.sgssalud.util.Dates;
+import edu.sgssalud.util.FechasUtil;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,13 +41,11 @@ import javax.inject.Named;
 @Named(value = "reporteReceta")
 public class ReporteReceta implements Serializable {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ReporteReceta.class);
-
+    //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ReporteReceta.class);
     private static final String REPORTE_RECETA = "recetaMedica";  //nombre del reporte .jasper   
 
     @EJB
     CrudService crudService;
-
     @Inject
     JasperReportAction JasperReportAction;
 
@@ -55,12 +56,14 @@ public class ReporteReceta implements Serializable {
         final String attachFileName = "receta.pdf";
         //List<Paciente> pacientes = pacienteServicio.getPacientes();
         //parametros 
-
+        crudService.getEntityManager();
         String medicaciones = null;
         String indicaciones = null;
         String nombres = null;
         String apellidos = null;
         String recetaId = null;
+        String numReceta = null;
+        String fechaE = null;
         if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
 
         } else {
@@ -69,14 +72,22 @@ public class ReporteReceta implements Serializable {
             nombres = context.getExternalContext().getRequestParameterMap().get("nombres");
             apellidos = context.getExternalContext().getRequestParameterMap().get("apellidos");
             recetaId = context.getExternalContext().getRequestParameterMap().get("recetaId");
+            numReceta = context.getExternalContext().getRequestParameterMap().get("numReceta");
+            fechaE = context.getExternalContext().getRequestParameterMap().get("fechaE");
         }
 
         System.out.println("Valores " + medicaciones + ", " + indicaciones + ", " + nombres + ", " + apellidos + ", " + recetaId);
 
         Map<String, Object> _values = new HashMap<String, Object>();
         _values.put("nombres", nombres);
-        _values.put("apellidos", apellidos);        
-        _values.put("recetaId", Long.parseLong(recetaId));
+        _values.put("apellidos", apellidos);
+        if (recetaId != null) {
+            _values.put("recetaId", Long.parseLong(recetaId));
+        }
+        _values.put("numReceta", numReceta);
+        if (fechaE != null) {
+            _values.put("fechaE", Dates.getFormatoFecha(fechaE));
+        }
         _values.put("usd", "$");
 
         //Exportar a pdf 
@@ -84,8 +95,8 @@ public class ReporteReceta implements Serializable {
         System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
         JasperReportAction.exportToPdf(REPORTE_RECETA, _values, attachFileName);
 
-        if (log.isDebugEnabled()) {
-            log.debug("export as pdf");
-        }
+//        if (log.isDebugEnabled()) {
+//            log.debug("export as pdf");
+//        }
     }
 }

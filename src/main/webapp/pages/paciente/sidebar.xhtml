@@ -33,6 +33,12 @@
                     <f:param name="pacienteId" value="#{account.loggedId}"/>
                     <f:param name="backView" value="home"/>
                 </h:link>
+                <br/>
+                <h:link value="Cambiar Contraseña" rendered="#{true}" 
+                        outcome="/pages/paciente/reset">
+                    <f:param name="pacienteId" value="#{account.loggedId}"/>
+                    <f:param name="backView" value="home"/>
+                </h:link>
             </p:panel>
         </h:panelGroup>
     </ui:composition>

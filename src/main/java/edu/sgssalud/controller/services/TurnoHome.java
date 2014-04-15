@@ -204,6 +204,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     public void setFecha(Date fecha) {
         this.fecha = fecha;
         if (fecha != null) {
+            this.listaHoras = this.agregarHoras();
             this.horasDisponibles();
         }
     }

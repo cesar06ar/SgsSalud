@@ -79,9 +79,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
         cms.setEntityManager(em);
         if (resultList.isEmpty()) {
             resultList = cms.getConsulasMedicas();
-        }
-        inicio = new Date();
-        fin = new Date();
+        }        
     }
 
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
@@ -179,17 +177,12 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
 //        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
 //    }
 //
-    public void buscarPorParametro() {
-        System.out.println("FECHAS " + inicio + fin);
-        this.setResultList(cms.buscarPorRangoFechas(inicio, fin));
-        this.setInicio(null);
-        this.setFin(null);
+    public void buscarPorParametro() {        
+        this.setResultList(cms.buscarPorRangoFechas(inicio, fin));        
     }
 
     public void actualizar() {
-        this.setResultList(cms.getConsulasMedicas());
-        this.setInicio(null);
-        this.setFin(null);
+        this.setResultList(cms.getConsulasMedicas());    
     }
 
 }

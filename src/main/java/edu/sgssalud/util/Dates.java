@@ -46,14 +46,18 @@ import java.util.logging.Logger;
 public class Dates {
 
     public static Date getFormatoFecha(String fecha) {
-        String[] parrents = {"dd-MM-yyyy","dd/MM/yyyy","yyyy-MM-dd","yyyy/MM/dd"};
-        try {
-            return DateUtils.parseDate(fecha, parrents);
-        } catch (ParseException ex) {
+        if (fecha != null) {
+            String[] parrents = {"dd-MM-yyyy", "dd/MM/yyyy", "yyyy-MM-dd", "yyyy/MM/dd"};
+            try {
+                return DateUtils.parseDate(fecha, parrents);
+            } catch (ParseException ex) {
             //Logger.getLogger(Dates.class.getName()).log(Level.SEVERE, null, ex.getMessage());
-            //System.out.println("erro");
+                //System.out.println("erro");
+                return null;
+            }
+        }else{
             return null;
-        }        
+        }
     }
 
     public static boolean isSameDay(final Date one, final Date two) {
@@ -140,11 +144,13 @@ public class Dates {
     }
 
     /**
-     * <p> A suite of utilities surrounding the use of the
+     * <p>
+     * A suite of utilities surrounding the use of the
      * {@link java.util.Calendar} and {@link java.util.Date} object. </p>
      *
-     * <p> DateUtils contains a lot of common methods considering manipulations
-     * of Dates or Calendars. Some methods require some extra explanation. The
+     * <p>
+     * DateUtils contains a lot of common methods considering manipulations of
+     * Dates or Calendars. Some methods require some extra explanation. The
      * truncate and round methods could be considered the Math.floor(),
      * Math.ceil() or Math.round versions for dates This way date-fields will be
      * ignored in bottom-up order. As a complement to these methods we've
@@ -242,8 +248,9 @@ public class Dates {
          * standard programming. Instead, the class should be used as
          * <code>DateUtils.parse(str);</code>. </p>
          *
-         * <p> This constructor is public to permit tools that require a
-         * JavaBean instance to operate. </p>
+         * <p>
+         * This constructor is public to permit tools that require a JavaBean
+         * instance to operate. </p>
          */
         public DateUtils() {
             super();
@@ -251,10 +258,12 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Checks if two date objects are on the same day ignoring time.
+         * <p>
+         * Checks if two date objects are on the same day ignoring time.
          * </p>
          *
-         * <p> 28 Mar 2002 13:45 and 28 Mar 2002 06:01 would return true. 28 Mar
+         * <p>
+         * 28 Mar 2002 13:45 and 28 Mar 2002 06:01 would return true. 28 Mar
          * 2002 13:45 and 12 Mar 2002 13:45 would return false. </p>
          *
          * @param date1 the first date, not altered, not null
@@ -275,17 +284,19 @@ public class Dates {
         }
 
         /**
-         * <p> Checks if two calendar objects are on the same day ignoring time.
+         * <p>
+         * Checks if two calendar objects are on the same day ignoring time.
          * </p>
          *
-         * <p> 28 Mar 2002 13:45 and 28 Mar 2002 06:01 would return true. 28 Mar
+         * <p>
+         * 28 Mar 2002 13:45 and 28 Mar 2002 06:01 would return true. 28 Mar
          * 2002 13:45 and 12 Mar 2002 13:45 would return false. </p>
          *
          * @param cal1 the first calendar, not altered, not null
          * @param cal2 the second calendar, not altered, not null
          * @return true if they represent the same day
-         * @throws IllegalArgumentException if either calendar
-         * is <code>null</code>
+         * @throws IllegalArgumentException if either calendar is
+         * <code>null</code>
          * @since 2.1
          */
         public static boolean isSameDay(final Calendar cal1, final Calendar cal2) {
@@ -299,11 +310,13 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Checks if two date objects represent the same instant in time.
+         * <p>
+         * Checks if two date objects represent the same instant in time.
          * </p>
          *
-         * <p> This method compares the long millisecond time of the two
-         * objects. </p>
+         * <p>
+         * This method compares the long millisecond time of the two objects.
+         * </p>
          *
          * @param date1 the first date, not altered, not null
          * @param date2 the second date, not altered, not null
@@ -319,11 +332,13 @@ public class Dates {
         }
 
         /**
-         * <p> Checks if two calendar objects represent the same instant in
-         * time. </p>
+         * <p>
+         * Checks if two calendar objects represent the same instant in time.
+         * </p>
          *
-         * <p> This method compares the long millisecond time of the two
-         * objects. </p>
+         * <p>
+         * This method compares the long millisecond time of the two objects.
+         * </p>
          *
          * @param cal1 the first calendar, not altered, not null
          * @param cal2 the second calendar, not altered, not null
@@ -340,11 +355,13 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Checks if two calendar objects represent the same local time.
+         * <p>
+         * Checks if two calendar objects represent the same local time.
          * </p>
          *
-         * <p> This method compares the values of the fields of the two objects.
-         * In addition, both calendars must be the same of the same type. </p>
+         * <p>
+         * This method compares the values of the fields of the two objects. In
+         * addition, both calendars must be the same of the same type. </p>
          *
          * @param cal1 the first calendar, not altered, not null
          * @param cal2 the second calendar, not altered, not null
@@ -367,12 +384,14 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Parses a string representing a date by trying a variety of
-         * different parsers. </p>
+         * <p>
+         * Parses a string representing a date by trying a variety of different
+         * parsers. </p>
          *
-         * <p> The parse will try each parse pattern in turn. A parse is only
-         * deemed sucessful if it parses the whole of the input string. If no
-         * parse patterns match, a ParseException is thrown. </p>
+         * <p>
+         * The parse will try each parse pattern in turn. A parse is only deemed
+         * sucessful if it parses the whole of the input string. If no parse
+         * patterns match, a ParseException is thrown. </p>
          *
          * @param str the date to parse, not null
          * @param parsePatterns the date format patterns to use, see
@@ -670,16 +689,19 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Round this date, leaving the field specified as the most
-         * significant field. </p>
+         * <p>
+         * Round this date, leaving the field specified as the most significant
+         * field. </p>
          *
-         * <p> For example, if you had the datetime of 28 Mar 2002 13:45:01.231,
-         * if this was passed with HOUR, it would return 28 Mar 2002
-         * 14:00:00.000. If this was passed with MONTH, it would return 1 April
-         * 2002 0:00:00.000. </p>
+         * <p>
+         * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if
+         * this was passed with HOUR, it would return 28 Mar 2002 14:00:00.000.
+         * If this was passed with MONTH, it would return 1 April 2002
+         * 0:00:00.000. </p>
          *
-         * <p> For a date in a timezone that handles the change to daylight
-         * saving time, rounding to Calendar.HOUR_OF_DAY will behave as follows.
+         * <p>
+         * For a date in a timezone that handles the change to daylight saving
+         * time, rounding to Calendar.HOUR_OF_DAY will behave as follows.
          * Suppose daylight saving time begins at 02:00 on March 30. Rounding a
          * date that crosses this time would produce the following values: <ul>
          * <li>March 30, 2003 01:10 rounds to March 30, 2003 01:00</li>
@@ -689,8 +711,8 @@ public class Dates {
          * </p>
          *
          * @param date the date to work with
-         * @param field the field from <code>Calendar</code>
-         * or <code>SEMI_MONTH</code>
+         * @param field the field from <code>Calendar</code> or
+         * <code>SEMI_MONTH</code>
          * @return the rounded date
          * @throws IllegalArgumentException if the date is <code>null</code>
          * @throws ArithmeticException if the year is over 280 million
@@ -706,16 +728,19 @@ public class Dates {
         }
 
         /**
-         * <p> Round this date, leaving the field specified as the most
-         * significant field. </p>
+         * <p>
+         * Round this date, leaving the field specified as the most significant
+         * field. </p>
          *
-         * <p> For example, if you had the datetime of 28 Mar 2002 13:45:01.231,
-         * if this was passed with HOUR, it would return 28 Mar 2002
-         * 14:00:00.000. If this was passed with MONTH, it would return 1 April
-         * 2002 0:00:00.000. </p>
+         * <p>
+         * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if
+         * this was passed with HOUR, it would return 28 Mar 2002 14:00:00.000.
+         * If this was passed with MONTH, it would return 1 April 2002
+         * 0:00:00.000. </p>
          *
-         * <p> For a date in a timezone that handles the change to daylight
-         * saving time, rounding to Calendar.HOUR_OF_DAY will behave as follows.
+         * <p>
+         * For a date in a timezone that handles the change to daylight saving
+         * time, rounding to Calendar.HOUR_OF_DAY will behave as follows.
          * Suppose daylight saving time begins at 02:00 on March 30. Rounding a
          * date that crosses this time would produce the following values: <ul>
          * <li>March 30, 2003 01:10 rounds to March 30, 2003 01:00</li>
@@ -725,8 +750,8 @@ public class Dates {
          * </p>
          *
          * @param date the date to work with
-         * @param field the field from <code>Calendar</code>
-         * or <code>SEMI_MONTH</code>
+         * @param field the field from <code>Calendar</code> or
+         * <code>SEMI_MONTH</code>
          * @return the rounded date (a different object)
          * @throws IllegalArgumentException if the date is <code>null</code>
          * @throws ArithmeticException if the year is over 280 million
@@ -741,16 +766,19 @@ public class Dates {
         }
 
         /**
-         * <p> Round this date, leaving the field specified as the most
-         * significant field. </p>
+         * <p>
+         * Round this date, leaving the field specified as the most significant
+         * field. </p>
          *
-         * <p> For example, if you had the datetime of 28 Mar 2002 13:45:01.231,
-         * if this was passed with HOUR, it would return 28 Mar 2002
-         * 14:00:00.000. If this was passed with MONTH, it would return 1 April
-         * 2002 0:00:00.000. </p>
+         * <p>
+         * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if
+         * this was passed with HOUR, it would return 28 Mar 2002 14:00:00.000.
+         * If this was passed with MONTH, it would return 1 April 2002
+         * 0:00:00.000. </p>
          *
-         * <p> For a date in a timezone that handles the change to daylight
-         * saving time, rounding to Calendar.HOUR_OF_DAY will behave as follows.
+         * <p>
+         * For a date in a timezone that handles the change to daylight saving
+         * time, rounding to Calendar.HOUR_OF_DAY will behave as follows.
          * Suppose daylight saving time begins at 02:00 on March 30. Rounding a
          * date that crosses this time would produce the following values: <ul>
          * <li>March 30, 2003 01:10 rounds to March 30, 2003 01:00</li>
@@ -760,12 +788,12 @@ public class Dates {
          * </p>
          *
          * @param date the date to work with, either Date or Calendar
-         * @param field the field from <code>Calendar</code>
-         * or <code>SEMI_MONTH</code>
+         * @param field the field from <code>Calendar</code> or
+         * <code>SEMI_MONTH</code>
          * @return the rounded date
          * @throws IllegalArgumentException if the date is <code>null</code>
-         * @throws ClassCastException if the object type is not
-         * a <code>Date</code> or <code>Calendar</code>
+         * @throws ClassCastException if the object type is not a
+         * <code>Date</code> or <code>Calendar</code>
          * @throws ArithmeticException if the year is over 280 million
          */
         public static Date round(final Object date, final int field) {
@@ -783,17 +811,19 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Truncate this date, leaving the field specified as the most
+         * <p>
+         * Truncate this date, leaving the field specified as the most
          * significant field. </p>
          *
-         * <p> For example, if you had the datetime of 28 Mar 2002 13:45:01.231,
-         * if you passed with HOUR, it would return 28 Mar 2002 13:00:00.000. If
+         * <p>
+         * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if
+         * you passed with HOUR, it would return 28 Mar 2002 13:00:00.000. If
          * this was passed with MONTH, it would return 1 Mar 2002 0:00:00.000.
          * </p>
          *
          * @param date the date to work with
-         * @param field the field from <code>Calendar</code>
-         * or <code>SEMI_MONTH</code>
+         * @param field the field from <code>Calendar</code> or
+         * <code>SEMI_MONTH</code>
          * @return the rounded date
          * @throws IllegalArgumentException if the date is <code>null</code>
          * @throws ArithmeticException if the year is over 280 million
@@ -809,17 +839,19 @@ public class Dates {
         }
 
         /**
-         * <p> Truncate this date, leaving the field specified as the most
+         * <p>
+         * Truncate this date, leaving the field specified as the most
          * significant field. </p>
          *
-         * <p> For example, if you had the datetime of 28 Mar 2002 13:45:01.231,
-         * if you passed with HOUR, it would return 28 Mar 2002 13:00:00.000. If
+         * <p>
+         * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if
+         * you passed with HOUR, it would return 28 Mar 2002 13:00:00.000. If
          * this was passed with MONTH, it would return 1 Mar 2002 0:00:00.000.
          * </p>
          *
          * @param date the date to work with
-         * @param field the field from <code>Calendar</code>
-         * or <code>SEMI_MONTH</code>
+         * @param field the field from <code>Calendar</code> or
+         * <code>SEMI_MONTH</code>
          * @return the rounded date (a different object)
          * @throws IllegalArgumentException if the date is <code>null</code>
          * @throws ArithmeticException if the year is over 280 million
@@ -834,22 +866,24 @@ public class Dates {
         }
 
         /**
-         * <p> Truncate this date, leaving the field specified as the most
+         * <p>
+         * Truncate this date, leaving the field specified as the most
          * significant field. </p>
          *
-         * <p> For example, if you had the datetime of 28 Mar 2002 13:45:01.231,
-         * if you passed with HOUR, it would return 28 Mar 2002 13:00:00.000. If
+         * <p>
+         * For example, if you had the datetime of 28 Mar 2002 13:45:01.231, if
+         * you passed with HOUR, it would return 28 Mar 2002 13:00:00.000. If
          * this was passed with MONTH, it would return 1 Mar 2002 0:00:00.000.
          * </p>
          *
-         * @param date the date to work with, either <code>Date</code>
-         * or <code>Calendar</code>
-         * @param field the field from <code>Calendar</code>
-         * or <code>SEMI_MONTH</code>
+         * @param date the date to work with, either <code>Date</code> or
+         * <code>Calendar</code>
+         * @param field the field from <code>Calendar</code> or
+         * <code>SEMI_MONTH</code>
          * @return the rounded date
          * @throws IllegalArgumentException if the date is <code>null</code>
-         * @throws ClassCastException if the object type is not
-         * a <code>Date</code> or <code>Calendar</code>
+         * @throws ClassCastException if the object type is not a
+         * <code>Date</code> or <code>Calendar</code>
          * @throws ArithmeticException if the year is over 280 million
          */
         public static Date truncate(final Object date, final int field) {
@@ -867,7 +901,8 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> Internal calculation method. </p>
+         * <p>
+         * Internal calculation method. </p>
          *
          * @param val the calendar
          * @param field the field constant
@@ -888,7 +923,6 @@ public class Dates {
             //
             // Manually truncate milliseconds, seconds and minutes, rather than using
             // Calendar methods.
-
             Date date = val.getTime();
             long time = date.getTime();
             boolean done = false;
@@ -1002,18 +1036,20 @@ public class Dates {
 
         // -----------------------------------------------------------------------
         /**
-         * <p> This constructs an
-         * <code>Iterator</code> over each day in a date range defined by a
-         * focus date and range style. </p>
+         * <p>
+         * This constructs an <code>Iterator</code> over each day in a date
+         * range defined by a focus date and range style. </p>
          *
-         * <p> For instance, passing Thursday, July 4, 2002 and a
-         * <code>RANGE_MONTH_SUNDAY</code> will return an
-         * <code>Iterator</code> that starts with Sunday, June 30, 2002 and ends
-         * with Saturday, August 3, 2002, returning a Calendar instance for each
-         * intermediate day. </p>
+         * <p>
+         * For instance, passing Thursday, July 4, 2002 and a
+         * <code>RANGE_MONTH_SUNDAY</code> will return an <code>Iterator</code>
+         * that starts with Sunday, June 30, 2002 and ends with Saturday, August
+         * 3, 2002, returning a Calendar instance for each intermediate day.
+         * </p>
          *
-         * <p> This method provides an iterator that returns Calendar objects.
-         * The days are progressed using {@link Calendar#add(int, int)}. </p>
+         * <p>
+         * This method provides an iterator that returns Calendar objects. The
+         * days are progressed using {@link Calendar#add(int, int)}. </p>
          *
          * @param focus the date to work with, not null
          * @param rangeStyle the style constant to use. Must be one of {@link DateUtils#RANGE_MONTH_SUNDAY},
@@ -1034,18 +1070,20 @@ public class Dates {
         }
 
         /**
-         * <p> This constructs an
-         * <code>Iterator</code> over each day in a date range defined by a
-         * focus date and range style. </p>
+         * <p>
+         * This constructs an <code>Iterator</code> over each day in a date
+         * range defined by a focus date and range style. </p>
          *
-         * <p> For instance, passing Thursday, July 4, 2002 and a
-         * <code>RANGE_MONTH_SUNDAY</code> will return an
-         * <code>Iterator</code> that starts with Sunday, June 30, 2002 and ends
-         * with Saturday, August 3, 2002, returning a Calendar instance for each
-         * intermediate day. </p>
+         * <p>
+         * For instance, passing Thursday, July 4, 2002 and a
+         * <code>RANGE_MONTH_SUNDAY</code> will return an <code>Iterator</code>
+         * that starts with Sunday, June 30, 2002 and ends with Saturday, August
+         * 3, 2002, returning a Calendar instance for each intermediate day.
+         * </p>
          *
-         * <p> This method provides an iterator that returns Calendar objects.
-         * The days are progressed using {@link Calendar#add(int, int)}. </p>
+         * <p>
+         * This method provides an iterator that returns Calendar objects. The
+         * days are progressed using {@link Calendar#add(int, int)}. </p>
          *
          * @param focus the date to work with
          * @param rangeStyle the style constant to use. Must be one of {@link DateUtils#RANGE_MONTH_SUNDAY},
@@ -1129,24 +1167,25 @@ public class Dates {
         }
 
         /**
-         * <p> This constructs an
-         * <code>Iterator</code> over each day in a date range defined by a
-         * focus date and range style. </p>
+         * <p>
+         * This constructs an <code>Iterator</code> over each day in a date
+         * range defined by a focus date and range style. </p>
          *
-         * <p> For instance, passing Thursday, July 4, 2002 and a
-         * <code>RANGE_MONTH_SUNDAY</code> will return an
-         * <code>Iterator</code> that starts with Sunday, June 30, 2002 and ends
-         * with Saturday, August 3, 2002, returning a Calendar instance for each
-         * intermediate day. </p>
+         * <p>
+         * For instance, passing Thursday, July 4, 2002 and a
+         * <code>RANGE_MONTH_SUNDAY</code> will return an <code>Iterator</code>
+         * that starts with Sunday, June 30, 2002 and ends with Saturday, August
+         * 3, 2002, returning a Calendar instance for each intermediate day.
+         * </p>
          *
-         * @param focus the date to work with, either <code>Date</code>
-         * or <code>Calendar</code>
+         * @param focus the date to work with, either <code>Date</code> or
+         * <code>Calendar</code>
          * @param rangeStyle the style constant to use. Must be one of the range
          * styles listed for the {@link #iterator(Calendar, int)} method.
          * @return the date iterator
          * @throws IllegalArgumentException if the date is <code>null</code>
-         * @throws ClassCastException if the object type is not
-         * a <code>Date</code> or <code>Calendar</code>
+         * @throws ClassCastException if the object type is not a
+         * <code>Date</code> or <code>Calendar</code>
          */
         public static Iterator iterator(final Object focus, final int rangeStyle) {
             if (focus == null) {
@@ -1162,24 +1201,28 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of milliseconds within the fragment. All
+         * <p>
+         * Returns the number of milliseconds within the fragment. All
          * datefields greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the milliseconds of any date will only return the number
-         * of milliseconds of the current second (resulting in a number between
-         * 0 and 999). This method will retrieve the number of milliseconds for
+         * <p>
+         * Asking the milliseconds of any date will only return the number of
+         * milliseconds of the current second (resulting in a number between 0
+         * and 999). This method will retrieve the number of milliseconds for
          * any fragment. For example, if you want to calculate the number of
          * milliseconds past today, your fragment is Calendar.DATE or
          * Calendar.DAY_OF_YEAR. The result will be all milliseconds of the past
          * hour(s), minutes(s) and second(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a SECOND field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.SECOND as
-         * fragment will return 538</li> <li>January 6, 2008 7:15:10.538 with
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.SECOND as fragment
+         * will return 538</li> <li>January 6, 2008 7:15:10.538 with
          * Calendar.SECOND as fragment will return 538</li> <li>January 6, 2008
          * 7:15:10.538 with Calendar.MINUTE as fragment will return 10538
          * (10*1000 + 538)</li> <li>January 16, 2008 7:15:10.538 with
@@ -1198,31 +1241,34 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of seconds within the fragment. All datefields
+         * <p>
+         * Returns the number of seconds within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the seconds of any date will only return the number of
-         * seconds of the current minute (resulting in a number between 0 and
-         * 59). This method will retrieve the number of seconds for any
-         * fragment. For example, if you want to calculate the number of seconds
-         * past today, your fragment is Calendar.DATE or Calendar.DAY_OF_YEAR.
-         * The result will be all seconds of the past hour(s) and minutes(s).
+         * <p>
+         * Asking the seconds of any date will only return the number of seconds
+         * of the current minute (resulting in a number between 0 and 59). This
+         * method will retrieve the number of seconds for any fragment. For
+         * example, if you want to calculate the number of seconds past today,
+         * your fragment is Calendar.DATE or Calendar.DAY_OF_YEAR. The result
+         * will be all seconds of the past hour(s) and minutes(s).
          * </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a SECOND field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.MINUTE as
-         * fragment will return 10 (equivalent to deprecated
-         * date.getSeconds())</li> <li>January 6, 2008 7:15:10.538 with
-         * Calendar.MINUTE as fragment will return 10 (equivalent to deprecated
-         * date.getSeconds())</li> <li>January 6, 2008 7:15:10.538 with
-         * Calendar.DAY_OF_YEAR as fragment will return 26110 (7*3600 + 15*60 +
-         * 10)</li> <li>January 16, 2008 7:15:10.538 with Calendar.MILLISECOND
-         * as fragment will return 0 (a millisecond cannot be split in
-         * seconds)</li> </ul> </p>
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.MINUTE as fragment
+         * will return 10 (equivalent to deprecated date.getSeconds())</li>
+         * <li>January 6, 2008 7:15:10.538 with Calendar.MINUTE as fragment will
+         * return 10 (equivalent to deprecated date.getSeconds())</li>
+         * <li>January 6, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as fragment
+         * will return 26110 (7*3600 + 15*60 + 10)</li> <li>January 16, 2008
+         * 7:15:10.538 with Calendar.MILLISECOND as fragment will return 0 (a
+         * millisecond cannot be split in seconds)</li> </ul> </p>
          *
          * @param date the date to work with, not null
          * @param fragment the Calendar field part of date to calculate
@@ -1236,22 +1282,26 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of minutes within the fragment. All datefields
+         * <p>
+         * Returns the number of minutes within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the minutes of any date will only return the number of
-         * minutes of the current hour (resulting in a number between 0 and 59).
-         * This method will retrieve the number of minutes for any fragment. For
+         * <p>
+         * Asking the minutes of any date will only return the number of minutes
+         * of the current hour (resulting in a number between 0 and 59). This
+         * method will retrieve the number of minutes for any fragment. For
          * example, if you want to calculate the number of minutes past this
          * month, your fragment is Calendar.MONTH. The result will be all
          * minutes of the past day(s) and hour(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a MINUTE field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.HOUR_OF_DAY as
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.HOUR_OF_DAY as
          * fragment will return 15 (equivalent to deprecated
          * date.getMinutes())</li> <li>January 6, 2008 7:15:10.538 with
          * Calendar.HOUR_OF_DAY as fragment will return 15 (equivalent to
@@ -1274,22 +1324,26 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of hours within the fragment. All datefields
+         * <p>
+         * Returns the number of hours within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the hours of any date will only return the number of hours
-         * of the current day (resulting in a number between 0 and 23). This
-         * method will retrieve the number of hours for any fragment. For
-         * example, if you want to calculate the number of hours past this
-         * month, your fragment is Calendar.MONTH. The result will be all hours
-         * of the past day(s). </p>
+         * <p>
+         * Asking the hours of any date will only return the number of hours of
+         * the current day (resulting in a number between 0 and 23). This method
+         * will retrieve the number of hours for any fragment. For example, if
+         * you want to calculate the number of hours past this month, your
+         * fragment is Calendar.MONTH. The result will be all hours of the past
+         * day(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a HOUR field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as
          * fragment will return 7 (equivalent to deprecated
          * date.getHours())</li> <li>January 6, 2008 7:15:10.538 with
          * Calendar.DAY_OF_YEAR as fragment will return 7 (equivalent to
@@ -1312,25 +1366,29 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of days within the fragment. All datefields
+         * <p>
+         * Returns the number of days within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the days of any date will only return the number of days
-         * of the current month (resulting in a number between 1 and 31). This
+         * <p>
+         * Asking the days of any date will only return the number of days of
+         * the current month (resulting in a number between 1 and 31). This
          * method will retrieve the number of days for any fragment. For
          * example, if you want to calculate the number of days past this year,
          * your fragment is Calendar.YEAR. The result will be all days of the
          * past month(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a DAY field will return 0. </p>
          *
-         * <p> <ul> <li>January 28, 2008 with Calendar.MONTH as fragment will
-         * return 28 (equivalent to deprecated date.getDay())</li> <li>February
-         * 28, 2008 with Calendar.MONTH as fragment will return 28 (equivalent
-         * to deprecated date.getDay())</li> <li>January 28, 2008 with
+         * <p>
+         * <ul> <li>January 28, 2008 with Calendar.MONTH as fragment will return
+         * 28 (equivalent to deprecated date.getDay())</li> <li>February 28,
+         * 2008 with Calendar.MONTH as fragment will return 28 (equivalent to
+         * deprecated date.getDay())</li> <li>January 28, 2008 with
          * Calendar.YEAR as fragment will return 28</li> <li>February 28, 2008
          * with Calendar.YEAR as fragment will return 59</li> <li>January 28,
          * 2008 with Calendar.MILLISECOND as fragment will return 0 (a
@@ -1348,24 +1406,28 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of milliseconds within the fragment. All
+         * <p>
+         * Returns the number of milliseconds within the fragment. All
          * datefields greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the milliseconds of any date will only return the number
-         * of milliseconds of the current second (resulting in a number between
-         * 0 and 999). This method will retrieve the number of milliseconds for
+         * <p>
+         * Asking the milliseconds of any date will only return the number of
+         * milliseconds of the current second (resulting in a number between 0
+         * and 999). This method will retrieve the number of milliseconds for
          * any fragment. For example, if you want to calculate the number of
          * seconds past today, your fragment is Calendar.DATE or
          * Calendar.DAY_OF_YEAR. The result will be all seconds of the past
          * hour(s), minutes(s) and second(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a MILLISECOND field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.SECOND as
-         * fragment will return 538 (equivalent to
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.SECOND as fragment
+         * will return 538 (equivalent to
          * calendar.get(Calendar.MILLISECOND))</li> <li>January 6, 2008
          * 7:15:10.538 with Calendar.SECOND as fragment will return 538
          * (equivalent to calendar.get(Calendar.MILLISECOND))</li> <li>January
@@ -1386,31 +1448,34 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of seconds within the fragment. All datefields
+         * <p>
+         * Returns the number of seconds within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the seconds of any date will only return the number of
-         * seconds of the current minute (resulting in a number between 0 and
-         * 59). This method will retrieve the number of seconds for any
-         * fragment. For example, if you want to calculate the number of seconds
-         * past today, your fragment is Calendar.DATE or Calendar.DAY_OF_YEAR.
-         * The result will be all seconds of the past hour(s) and minutes(s).
+         * <p>
+         * Asking the seconds of any date will only return the number of seconds
+         * of the current minute (resulting in a number between 0 and 59). This
+         * method will retrieve the number of seconds for any fragment. For
+         * example, if you want to calculate the number of seconds past today,
+         * your fragment is Calendar.DATE or Calendar.DAY_OF_YEAR. The result
+         * will be all seconds of the past hour(s) and minutes(s).
          * </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a SECOND field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.MINUTE as
-         * fragment will return 10 (equivalent to
-         * calendar.get(Calendar.SECOND))</li> <li>January 6, 2008 7:15:10.538
-         * with Calendar.MINUTE as fragment will return 10 (equivalent to
-         * calendar.get(Calendar.SECOND))</li> <li>January 6, 2008 7:15:10.538
-         * with Calendar.DAY_OF_YEAR as fragment will return 26110 (7*3600 +
-         * 15*60 + 10)</li> <li>January 16, 2008 7:15:10.538 with
-         * Calendar.MILLISECOND as fragment will return 0 (a millisecond cannot
-         * be split in seconds)</li> </ul> </p>
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.MINUTE as fragment
+         * will return 10 (equivalent to calendar.get(Calendar.SECOND))</li>
+         * <li>January 6, 2008 7:15:10.538 with Calendar.MINUTE as fragment will
+         * return 10 (equivalent to calendar.get(Calendar.SECOND))</li>
+         * <li>January 6, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as fragment
+         * will return 26110 (7*3600 + 15*60 + 10)</li> <li>January 16, 2008
+         * 7:15:10.538 with Calendar.MILLISECOND as fragment will return 0 (a
+         * millisecond cannot be split in seconds)</li> </ul> </p>
          *
          * @param calendar the calendar to work with, not null
          * @param fragment the Calendar field part of calendar to calculate
@@ -1424,22 +1489,26 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of minutes within the fragment. All datefields
+         * <p>
+         * Returns the number of minutes within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the minutes of any date will only return the number of
-         * minutes of the current hour (resulting in a number between 0 and 59).
-         * This method will retrieve the number of minutes for any fragment. For
+         * <p>
+         * Asking the minutes of any date will only return the number of minutes
+         * of the current hour (resulting in a number between 0 and 59). This
+         * method will retrieve the number of minutes for any fragment. For
          * example, if you want to calculate the number of minutes past this
          * month, your fragment is Calendar.MONTH. The result will be all
          * minutes of the past day(s) and hour(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a MINUTE field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.HOUR_OF_DAY as
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.HOUR_OF_DAY as
          * fragment will return 15 (equivalent to
          * calendar.get(Calendar.MINUTES))</li> <li>January 6, 2008 7:15:10.538
          * with Calendar.HOUR_OF_DAY as fragment will return 15 (equivalent to
@@ -1462,22 +1531,26 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of hours within the fragment. All datefields
+         * <p>
+         * Returns the number of hours within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the hours of any date will only return the number of hours
-         * of the current day (resulting in a number between 0 and 23). This
-         * method will retrieve the number of hours for any fragment. For
-         * example, if you want to calculate the number of hours past this
-         * month, your fragment is Calendar.MONTH. The result will be all hours
-         * of the past day(s). </p>
+         * <p>
+         * Asking the hours of any date will only return the number of hours of
+         * the current day (resulting in a number between 0 and 23). This method
+         * will retrieve the number of hours for any fragment. For example, if
+         * you want to calculate the number of hours past this month, your
+         * fragment is Calendar.MONTH. The result will be all hours of the past
+         * day(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a HOUR field will return 0. </p>
          *
-         * <p> <ul> <li>January 1, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as
+         * <p>
+         * <ul> <li>January 1, 2008 7:15:10.538 with Calendar.DAY_OF_YEAR as
          * fragment will return 7 (equivalent to
          * calendar.get(Calendar.HOUR_OF_DAY))</li> <li>January 6, 2008
          * 7:15:10.538 with Calendar.DAY_OF_YEAR as fragment will return 7
@@ -1500,23 +1573,27 @@ public class Dates {
         }
 
         /**
-         * <p> Returns the number of days within the fragment. All datefields
+         * <p>
+         * Returns the number of days within the fragment. All datefields
          * greater than the fragment will be ignored. </p>
          *
-         * <p> Asking the days of any date will only return the number of days
-         * of the current month (resulting in a number between 1 and 31). This
+         * <p>
+         * Asking the days of any date will only return the number of days of
+         * the current month (resulting in a number between 1 and 31). This
          * method will retrieve the number of days for any fragment. For
          * example, if you want to calculate the number of days past this year,
          * your fragment is Calendar.YEAR. The result will be all days of the
          * past month(s). </p>
          *
-         * <p> Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
+         * <p>
+         * Valid fragments are: Calendar.YEAR, Calendar.MONTH, both
          * Calendar.DAY_OF_YEAR and Calendar.DATE, Calendar.HOUR_OF_DAY,
          * Calendar.MINUTE, Calendar.SECOND and Calendar.MILLISECOND A fragment
          * less than or equal to a DAY field will return 0. </p>
          *
-         * <p> <ul> <li>January 28, 2008 with Calendar.MONTH as fragment will
-         * return 28 (equivalent to calendar.get(Calendar.DAY_OF_MONTH))</li>
+         * <p>
+         * <ul> <li>January 28, 2008 with Calendar.MONTH as fragment will return
+         * 28 (equivalent to calendar.get(Calendar.DAY_OF_MONTH))</li>
          * <li>February 28, 2008 with Calendar.MONTH as fragment will return 28
          * (equivalent to calendar.get(Calendar.DAY_OF_MONTH))</li> <li>January
          * 28, 2008 with Calendar.YEAR as fragment will return 28 (equivalent to
@@ -1645,7 +1722,8 @@ public class Dates {
         }
 
         /**
-         * <p> Date iterator. </p>
+         * <p>
+         * Date iterator. </p>
          */
         static class DateIterator implements Iterator {
 

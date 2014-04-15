@@ -100,7 +100,7 @@ public class ReporteListas {
         return context.getRealPath(path);
     }
 
-    /*
+    /**
      public void render() {
      if (log.isDebugEnabled()) {
      log.debug("export as pdf");
@@ -199,7 +199,7 @@ public class ReporteListas {
      facesContext.responseComplete();
      }
     
-     */
+    * */
     public void renderProfile() {
 
         final String attachFileName = "usuarios.pdf";
@@ -290,7 +290,7 @@ public class ReporteListas {
         _values.put("nMedicamentos", medicamentos.size());
         _values.put("usd", "$");
         //Exportar a pdf 
-        JasperReportAction.exportToPdf(REPORTE_MEDICAMENTOS, null, _values, attachFileName);        
+        JasperReportAction.exportToPdf(REPORTE_MEDICAMENTOS, medicamentos, _values, attachFileName);        
         } catch (Exception e) {
             System.out.println("Error:____________________________________");
             e.printStackTrace();

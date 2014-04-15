@@ -9,7 +9,11 @@
                 template="/WEB-INF/view/templates/glue.xhtml">
 
     <ui:param name="titulo" value="#{messages['fichaMedica.admin']}"/>
-
+    <f:metadata>
+        <f:viewParam name="result" value="#{fichaMedicaListaServicio.firstResult}" />            
+        <f:viewParam name="" value="#{fichaMedicaListaServicio.fechaI}"/>
+        <f:viewParam name="" value="#{fichaMedicaListaServicio.fechaF}"/>
+    </f:metadata>
     <ui:define name="header-replace">
         <div class="header-replace">
             <div class="container-header" >
@@ -19,17 +23,29 @@
             </div>
         </div>
     </ui:define>
+    <ui:define name="content-pre" >
+        <h:form id="form1">
+            <h:panelGroup style="margin-top: -15px;">
+                <p:calendar value="#{fichaMedicaListaServicio.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
+                    <p:ajax event="dateSelect"/>
+                </p:calendar>
+                <p:calendar value="#{fichaMedicaListaServicio.fechaF}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%">
+                    <p:ajax event="dateSelect"/>  <!-- rendered="buscar1" update="buscar1"-->
+                </p:calendar>
+                &nbsp;
+                <p:commandButton id="buscar1" value="Buscar" action="#{fichaMedicaListaServicio.buscarFichaMedicaPorFechas()}" immediate="true" 
+                                 update=":form:tablaFichasMedicas"/>
+                <p:commandButton id="buscar" value="Buscar Todos" action="#{fichaMedicaListaServicio.buscarTodos()}" immediate="true" 
+                                 update=":form:tablaFichasMedicas"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
     <ui:define name="content">
-        <!--Metadato que se realiza antes de renderizarse la vista-->
-        <f:metadata>
-            <f:viewParam name="result" value="#{fichaMedicaListaServicio.firstResult}" />            
-            <f:viewParam name="" value="#{fichaMedicaListaServicio.parametroBusqueda}"/>
-        </f:metadata>
+        <!--Metadato que se realiza antes de renderizarse la vista style="float: right; margin: -20px 0 10px 0" -->        
         <!--Formulario dentro de un contenedor-->
         <h:form id="form">            
-            <!--Opción de mensaje, cuando se realiza una acción-->
+            <!--Opción de mensaje, cuando se realiza una acción-->            
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-
             <!--Botones de admin-->
             <div class="admin-actions ">
                 <div>
@@ -49,20 +65,12 @@
                         <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
                         <f:param name="backView" value="listaFichaMedica"></f:param>
                     </h:link>
-                </div>
-                <div style="float: right; margin-top: -3%">
-                    <p:inputText id="criterioBuscar" size ="25" value="#{fichaMedicaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
-                        <p:ajax event="keyup" update="tablaFichasMedicas"/>
-                    </p:inputText>
-                    &nbsp;
-                    <p:commandButton value="Buscar" action="#{fichaMedicaListaServicio.buscarFichaMedicaPorParametro()}" update="tablaFichasMedicas" styleClass="btn info"/>                    
-                    <br/>
-                </div>             
+                </div>               
             </div>
 
             <!--tabla de datos-->
-            <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio}"
-                         paginator="true" rows="10" 
+            <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"
+                         paginator="true" rows="10" emptyMessage="No se ha encontrado ninguna consulta"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"

@@ -48,14 +48,16 @@
                         <p:ajax process="@this" update=":edit-dialog"/>
                     </p:commandButton>
                     &nbsp;&nbsp;
-                    <p:commandLink id="button-print" value="#{messages['common.print']}" styleClass="btn primary" action="#{reporteReceta.renderReceta()}"
-                                   disabled="#{empty recetaListaServicio.recetaSeleccionada}" rendered="true" immediate="true">
+                    <p:commandButton id="button-print" value="#{messages['common.print']}" styleClass="btn primary" action="#{reporteReceta.renderReceta()}" 
+                                   disabled="#{empty recetaListaServicio.recetaSeleccionada}" rendered="true">
                         <f:param name="medicaciones" value="#{recetaListaServicio.recetaSeleccionada.medicaciones}" rendered="true"/>
                         <f:param name="indicaciones" value="#{recetaListaServicio.recetaSeleccionada.indicaciones}" rendered="true"/>
                         <f:param name="nombres" value="#{recetaListaServicio.recetaSeleccionada.paciente.nombres}" rendered="true"/>
                         <f:param name="apellidos" value="#{recetaListaServicio.recetaSeleccionada.paciente.apellidos}" rendered="true"/>
                         <f:param name="recetaId" value="#{recetaListaServicio.recetaSeleccionada.id}" rendered="true"/>
-                    </p:commandLink>
+                        <f:param name="numReceta" value="#{recetaListaServicio.recetaSeleccionada.numvalue}" rendered="true"/>
+                        <f:param name="fechaE" value="#{recetaListaServicio.recetaSeleccionada.fechaEntrega}" rendered="true"/>
+                    </p:commandButton>
 
                     <div style="float: right" >
                         <p:inputText id="criterioBuscar" size ="25" value="#{recetaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
@@ -145,11 +147,10 @@
                     <p:panelGrid columns="4">
                         <label for="nombres" style="margin-top: -5px;">#{messages['common.firstname']}: </label>                        
                         <h:outputText value="#{recetaListaServicio.recetaSeleccionada.paciente.nombres}" />                                                
-                        <label for="numero" style="margin-top: -5px;">#{messages['fichaMedica.numero']}: </label>                        
+                        <label for="numero" style="margin-top: -5px;">#{messages['receta.numero']}: </label>                        
                         <h:panelGroup >
-                            <h:outputText value="#{recetaListaServicio.recetaSeleccionada.consultaMedica.historiaClinica.fichaMedica.numFicha}" rendered="#{recetaListaServicio.recetaSeleccionada.consultaMedica.persistent}"/>                        
-                            <h:outputText value="#{recetaListaServicio.recetaSeleccionada.consultaOdontologica.fichaOdontologica.fichaMedica.numFicha}" rendered="#{recetaListaServicio.recetaSeleccionada.consultaOdontologica.persistent}"/>                        
-                        </h:panelGroup>                        
+                            <h:outputText value="#{recetaListaServicio.recetaSeleccionada.numvalue}" />                            
+                        </h:panelGroup>
                         <label for="apellidos" style="margin-top: -5px;" >#{messages['common.surname']}: </label>
                         <h:outputText value="#{recetaListaServicio.recetaSeleccionada.paciente.apellidos}" />
                         <label for="fecha" style="margin-top: -5px;">#{messages['fechaReceta.fechaEmision']}: </label>                        

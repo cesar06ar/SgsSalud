@@ -83,7 +83,7 @@
                         <label for="fechaC" >#{messages['comun.fecha']} #{messages['citaMedica.nombre']}*</label>
                         <div class="input">                                                         
                             <p:calendar id="fechaC" value="#{turnoHome.fecha}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
-                                        disabled="false" pattern="EEE, dd-MMMM-yyyy"  locale="es" disabledWeekends="true" required="true">
+                                        disabled="false" pattern="dd-MMM-yyyy"  locale="es" disabledWeekends="true" required="true">
                                 <p:ajax event="dateSelect" update="@parent :form:hora :form:save" partialSubmit="true" rendered=":form:hora"/>  
                             </p:calendar>                                                                                                      
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaCita ne null}"

@@ -179,7 +179,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         credentials.setUsername(getInstance().getUsername());
         //credentials.getCredential().
         credentials.setCredential(new PasswordCredential(getPassword()));
-
         oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
         identity.setAuthenticatorClass(IdmAuthenticator.class);
 
@@ -246,7 +245,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 //            result = identity.login();
 //        }
         return "/pages/home.xhtml?faces-redirect=true";
-
     }
 
     @TransactionAttribute
@@ -255,9 +253,9 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.createUser(getInstance().getUsername());
 
-        AttributesManager attributesManager = security.getAttributesManager();
+        AttributesManager attributesManager = security.getAttributesManager();        
         PasswordCredential p = new PasswordCredential(getPassword());                
-        attributesManager.updatePassword(user, p.getValue());
+        attributesManager.updatePassword(user, p.getValue());        
         attributesManager.addAttribute(user, "email", getInstance().getEmail());  //me permite agregar un atributo de cualquier tipo a un usuario 
 
         em.flush();

@@ -57,6 +57,7 @@ public class Authentication {
     private FacesContext context;
     @Inject
     private Credentials credencials;
+
     @Inject
     private Identity identity;
     @Inject
@@ -88,7 +89,7 @@ public class Authentication {
 
         String viewId = context.getViewRoot().getViewId();
         //logger.info("viewId [{}]", viewId);
-        
+
         if (!"/pages/signup.xhtml".equals(viewId) && !"/pages/login.xhtml".equals(viewId) && !"/pages/reset.xhtml".equals(viewId)) {
             // TODO need a better way to navigate: this doesn't work with AJAX requests
             HttpInboundServletRewrite rewrite = new HttpInboundRewriteImpl(request, response);
@@ -149,12 +150,38 @@ public class Authentication {
     public void login() throws InterruptedException, IdentityException {
         identity.setAuthenticatorClass(IdmAuthenticator.class);
         try {
-            //if(this.isUserLoggedIn()){
-                identity.login();
-                       
+            identity.login();
         } catch (Exception e) {
             identity.login();
         }
+    }
+
+    public void login1() throws InterruptedException, IdentityException {
+        identity.setAuthenticatorClass(IdmAuthenticator.class);
+        //identity.
+        String userName = credencials.getUsername();
+        String pass = ((PasswordCredential) credencials.getCredential()).getValue();
+        System.out.println("USER NAME_ " + userName + "   PASS  " + pass);
+        try {
+            User u = security.getPersistenceManager().findUser(userName);
+            //AttributesManager attributesManager = security.getAttributesManager();                        
+            if (u != null) {
+                boolean ispass = security.getAttributesManager().validatePassword(u, pass);
+                if (ispass) {
+                    System.out.println("INGRESO correcto ____");
+                    identity.login();
+                } else {
+                    System.out.println("FALLO al ingresar");
+                    //identity.login();
+                    identity.login();
+                }
+            }
+        } catch (IdentityException ex) {
+            System.out.println("ERROR_");
+            //java.util.logging.Logger.getLogger(Authenticate.class.getName()).log(Level.SEVERE, null, ex);            
+            identity.login();
+        }
+        //buscar usuario si esta habilitado para realizar ingresar al sistema y realizar las acciones solicitadas
     }
 
     public String logout() {
@@ -168,7 +195,7 @@ public class Authentication {
         /*bloque de codigo para descifrar la clave*/
         System.out.println("ERROR 0_______-");
         User user = security.getPersistenceManager().findUser(credencials.getUsername());
-
+        //security.getPersistenceManager().
         //AttributesManager attributesManager = security.getAttributesManager();
         if (user != null) {
             //credencials.setUsername(user.getKey());  
@@ -176,16 +203,16 @@ public class Authentication {
             Profile userPro = profileService.getProfileByIdentityKey(user.getKey());
             String pass = ((PasswordCredential) credencials.getCredential()).getValue();
             if (userPro.isPersistent()) {
-                System.out.println("ERROR 2_______-"+pass);
+                System.out.println("ERROR 2_______-" + pass);
                 return new BasicPasswordEncryptor().checkPassword(pass, userPro.getUsername());
-            }else{
+            } else {
                 System.out.println("ERROR 3_______-");
                 Paciente p = pacienteServic.getPacientePorIdentityKey(user.getKey());
-                if(p.isPersistent()){
+                if (p.isPersistent()) {
                     return new BasicPasswordEncryptor().checkPassword(pass, p.getClave());
                 }
             }
-        }        
+        }
         return false;
     }
 }

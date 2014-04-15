@@ -90,8 +90,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private IdmAuthenticator idmAuth;
     /*....==>*/
     /*<== Atributos propios para interaccion con la vista*/
-    private String password;
-    private String passwordConfirm;
+    private String clave;
+    private String confirmarClave;
     private String nombreEstructura;
     private boolean rendPanelEstUni;
     private boolean rendPanelEstCol;
@@ -109,24 +109,24 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     public void setPacienteId(Long pacienteId) {
         setId(pacienteId);
     }
+
     /*<==....*/
-
     /*<== Métodos get y set del Bean PacienteHome*/
-    public String getPassword() {
-        return password;
+    public String getClave() {
+        return clave;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setClave(String clave) {
+        this.clave = clave;
+    }    
+
+    public String getConfirmarClave() {
+        return confirmarClave;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
+    public void setConfirmarClave(String confirmarClave) {
+        this.confirmarClave = confirmarClave;
+    }    
 
     public String getNombreEstructura() {
         return nombreEstructura;
@@ -321,6 +321,27 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 //                .buildAttributes(bussinesEntityService);
 
         save(getInstance()); //Actualizar estructura de datos  
+    }
+    
+    @TransactionAttribute
+    public String cambiarClave() throws IdentityException, InterruptedException {
+        PersistenceManager identityManager = security.getPersistenceManager();
+        User user = identityManager.findUser(getInstance().getCedula());
+        AttributesManager attributesManager = security.getAttributesManager();
+        attributesManager.updatePassword(user, clave);
+        getInstance().setClave(clave);
+        save(getInstance());
+
+        em.flush();
+        credentials.setUsername(getInstance().getNombreUsuario());
+        credentials.setCredential(new PasswordCredential(clave));
+        //oidAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
+        identity.setAuthenticatorClass(IdmAuthenticator.class);
+//        String result = identity.login();
+//        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
+//            result = identity.login();
+//        }
+        return "/pages/home.xhtml?faces-redirect=true";
     }
 
     /*<== método que retorna la lista de tipos de datos enumerados ...*/

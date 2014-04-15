@@ -19,7 +19,7 @@
             <f:viewParam name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />            
             <f:viewParam name="pedidoExamenId" value="#{pedidoExamenLabHome.pedidoExamenId}" />
             <f:viewParam name="backView" value="#{pedidoExamenLabHome.backView}" />           
-            <f:viewParam name="result" value="#{pedidoExamenLabHome.result}" />
+            <f:viewParam name="previous" value="#{pedidoExamenLabHome.previous}" />
         </f:metadata>
 
         <ui:define name="header-replace" >            
@@ -103,7 +103,8 @@
                                 value="#{messages['common.cancel']}" styleClass="btn primary" >
                             <f:param name="fichaMedicaId" value="#{pedidoExamenLabHome.fichaMedicaId}"/>
                             <f:param name="consultaMedicaId" value="#{pedidoExamenLabHome.consultaMedId}"></f:param>                                    
-                            <f:param name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />            
+                            <f:param name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />
+                            <f:param name="backView" value="#{pedidoExamenLabHome.previous}" />
                         </h:link>   
                     </div>
                 </h:form>            

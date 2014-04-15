@@ -62,7 +62,8 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
     private ConsultaOdontologica consulOdontSeleccionada;
     private String parametroBusqueda;
     private Date fecha; 
-    
+    private Date fechaI;
+    private Date fechaF;
     /*Método para inicializar tabla*/
     public ConsultaOdontologicaListaServicio() {
 //        setPageSize(MAX_RESULTS);
@@ -175,14 +176,30 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }  
-    
+
+    public Date getFechaI() {
+        return fechaI;
+    }
+
+    public void setFechaI(Date fechaI) {
+        this.fechaI = fechaI;
+    }
+
+    public Date getFechaF() {
+        return fechaF;
+    }
+
+    public void setFechaF(Date fechaF) {
+        this.fechaF = fechaF;
+    }  
+        
     public void buscarPorFecha(){
-        this.setResultList(cos.buscarPorFechaActual(fecha));
-        this.setFecha(null);
+        this.setResultList(cos.buscarPorFechas(fechaI, fechaF));        
     }
     
     public void actualizar(){
         this.setResultList(cos.TodasConsulasOdontologica());
-        this.setFecha(null);
-    }
+        //this.setFecha(null);
+    }   
+    
 }

@@ -33,8 +33,9 @@
         </ui:define>
         <ui:define name="content-pre">
             <h:form id="form_pre" rendered="#{not odontogramaHome.instance.persistent}">
-                <h3>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{' Odontograma'} 
-                    #{odontogramaHome.nombreOdont}</h3> 
+                <h3>#{'¡Usted va ha '} #{messages['common.add']}#{' un nuevo Odontograma '}
+                    #{odontogramaHome.nombreOdont}#{' para este paciente. Confirme para realizar la acción!'} 
+                </h3> 
                 <div class="admin-actions" style="padding-right: 0%;">
                     <p:commandButton id="saveNew" action="#{odontogramaHome.guardar()}" value="#{messages['common.add']}" 
                                      styleClass="btn success offset4" >

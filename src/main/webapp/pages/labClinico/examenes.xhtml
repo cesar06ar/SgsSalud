@@ -33,7 +33,7 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <glue:input id="codig" name="codig" type="text" label="#{messages['common.code']}" value="#{examenHome.instance.code}" 
                             inlinehelp="#{messages['Examen.codigo.lineaAyuda']}" required="true" execute="@this save" render="codig" styleClass="xLarge"/>
-                <glue:input id="nombre" name="nombre" type="text" label="#{messages['Examen.Nombre1']}" value="#{examenHome.instance.name}" 
+                <glue:input id="nombre" name="nombre" type="text" label="#{messages['Examen.Nombre1']}" value="#{examenHome.instance.name}" validator="stringValidator"
                             inlinehelp="#{messages['Examen.nombre1.lineaAyuda']}" required="true" execute="@this save" render="nombre" styleClass="xLarge"/>                
                 <h:panelGroup layout="block" class="clearfix">
                     <label for="tipo_" class="control-label">#{messages['Examen.Tipo']} *</label>
