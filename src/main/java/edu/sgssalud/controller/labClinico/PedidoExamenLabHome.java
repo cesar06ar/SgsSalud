@@ -98,7 +98,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
     private List<ExamenLabClinico> listaExamenLab = new ArrayList<ExamenLabClinico>();
     private List<ExamenLabClinico> listaPedidoExamenLabC = new ArrayList<ExamenLabClinico>();
 
-    private DualListModel<ExamenLabClinico> pickListExamenesLab = new DualListModel<ExamenLabClinico>();
+    //private DualListModel<ExamenLabClinico> pickListExamenesLab = new DualListModel<ExamenLabClinico>();
 
     /*Métodos get y set para obtener el Id de la clase*/
     public Long getPedidoExamenId() {
@@ -141,7 +141,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         if (pacienteId == null) {
             paciente = new Paciente();
             fichaMedica = new FichaMedica();
-        }        
+        }
         if (consultaMedId == null) {
             hc = new HistoriaClinica();
         }
@@ -149,7 +149,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
             fo = new FichaOdontologica();
         }
         listaExamenLab = examenLabService.getExamenesLab();
-        pickListExamenesLab = new DualListModel<ExamenLabClinico>(this.getListaExamenLab(), this.getListaPedidoExamenLabC());
+//        pickListExamenesLab = new DualListModel<ExamenLabClinico>(this.getListaExamenLab(), this.getListaPedidoExamenLabC());
         examenDataModel = new ExamenDataModel(listaExamenLab);
     }
 
@@ -186,7 +186,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
                 } else if (consultaOdontId != null) {
                     getInstance().setFichaOdontologica(fo);
                 }
-                this.listaPedidoExamenLabC = pickListExamenesLab.getTarget();
+                //this.listaPedidoExamenLabC = pickListExamenesLab.getTarget();
                 //System.out.println("Lista De Examens para Pedido   PICK:_______\n" + listaPedidoExamenLabC);
                 if (!this.listaPedidoExamenLabC.isEmpty()) {
 
@@ -241,6 +241,17 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         return "/pages/serviciosMedicos/lista.xhtml?faces-redirect=true";
     }
 
+    public void agregarExamen(ExamenLabClinico examen) {
+        if (examen.isSelect()) {
+            if (!listaPedidoExamenLabC.contains(examen)) {
+                listaPedidoExamenLabC.add(examen);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se agrego:  " + examen.getName(), " con éxito"));
+            }
+        } else if (listaPedidoExamenLabC.contains(examen)) {
+            listaExamenLab.remove(examen);
+        }
+    }
+
     public Long getFichaMedicaId() {
         return fichaMedicaId;
     }
@@ -261,9 +272,10 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
-        this.setPaciente(pacienteServic.getPacientePorId(pacienteId));        
-        this.setFichaMedica(fichaMedicaServicio.getFichaMedicaPorPaciente(paciente));
-        if (fichaMedica.isPersistent()) {
+        this.setPaciente(pacienteServic.getPacientePorId(pacienteId));
+        FichaMedica f = fichaMedicaServicio.getFichaMedicaPorPaciente(paciente);
+        if (f != null) {
+            this.setFichaMedica(f);
             this.setHc(historiaClinService.buscarPorFichaMedica(fichaMedica));
             this.setFo(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(fichaMedica));
         }
@@ -366,33 +378,26 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         this.listaPedidoExamenLabC = listaPedidoExamenLabC;
     }
 
-    public DualListModel<ExamenLabClinico> getPickListExamenesLab() {
-        return pickListExamenesLab;
+    public ExamenDataModel getExamenDataModel() {
+        return examenDataModel;
     }
 
-    public void setPickListExamenesLab(DualListModel<ExamenLabClinico> pickListExamenesLab) {
-        this.pickListExamenesLab = pickListExamenesLab;
+    public void setExamenDataModel(ExamenDataModel examenDataModel) {
+        this.examenDataModel = examenDataModel;
     }
 
-    public void onTransfer(TransferEvent event) {
-        StringBuilder builder = new StringBuilder();
-        ExamenLabClinico exa;
-        FacesMessage msg = new FacesMessage();
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        for (Object item : event.getItems()) {
-            exa = (ExamenLabClinico) item;
-            builder.append(exa.getName()).append(" \n");
-            if (!this.pickListExamenesLab.getTarget().contains(exa)) {
-                msg.setSummary("Examenes Agregados");
-            } else {
-                msg.setSummary("Examenes Excluido");
-            }
-            msg.setDetail(builder.toString());
-        }
-
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
-
+    /**
+     * public void onTransfer(TransferEvent event) { StringBuilder builder = new
+     * StringBuilder(); ExamenLabClinico exa; FacesMessage msg = new
+     * FacesMessage(); msg.setSeverity(FacesMessage.SEVERITY_INFO); for (Object
+     * item : event.getItems()) { exa = (ExamenLabClinico) item;
+     * builder.append(exa.getName()).append(" \n"); if
+     * (!this.pickListExamenesLab.getTarget().contains(exa)) {
+     * msg.setSummary("Examenes Agregados"); } else { msg.setSummary("Examenes
+     * Excluido"); } msg.setDetail(builder.toString()); }
+     *
+     * FacesContext.getCurrentInstance().addMessage(null, msg); }
+     */
     public boolean contieneObj(List<ExamenLabClinico> listaExam, ExamenLabClinico examenLab) {
         for (ExamenLabClinico exam : listaExam) {
             if (exam.getId().equals(examenLab.getId())) {

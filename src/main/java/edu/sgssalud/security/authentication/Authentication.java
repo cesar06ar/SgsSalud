@@ -101,15 +101,14 @@ public class Authentication {
         } else {
             //Configurar si es usuario de perfil o usuario de paciente...  
             //log.info("Nombre usuario: " + credencials.getUsername());
-            pacienteServic.setEntityManager(em);
-            if (pacienteServic.getPacientePorIdentityKey(identity.getUser().getKey()) != null) {
-                String result = "/pages/home.xhtml";
-                navigation.handleNavigation(context, null, result + "?faces-redirect=true");
-            } else {
-                String result = "/pages/home.xhtml";
-                navigation.handleNavigation(context, null, result + "?faces-redirect=true");
-            }
-
+//            pacienteServic.setEntityManager(em);
+//            if (pacienteServic.getPacientePorIdentityKey(identity.getUser().getKey()) != null) {
+//                String result = "/pages/home.xhtml";
+//                navigation.handleNavigation(context, null, result + "?faces-redirect=true");
+//            } else {
+//            }
+            String result = "/pages/home.xhtml";
+            navigation.handleNavigation(context, null, result + "?faces-redirect=true");
         }
     }
 
@@ -141,17 +140,17 @@ public class Authentication {
                 //messages.warn("Whoops! We don't recognize that username or password. Care to try again?");
                 messages.warn(UI.getMessages("common.login.bad.usernamepassword"));
             }
-            Thread.sleep(500);
-
+            Thread.sleep(50);
             navigation.handleNavigation(context, null, "/pages/login?faces-redirect=true");
         }
     }
 
-    public void login() throws InterruptedException, IdentityException {
+    public void login() throws InterruptedException {
         identity.setAuthenticatorClass(IdmAuthenticator.class);
         try {
             identity.login();
         } catch (Exception e) {
+            //identity.tryLogin();
             identity.login();
         }
     }

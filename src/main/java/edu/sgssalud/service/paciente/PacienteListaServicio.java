@@ -19,6 +19,7 @@ import edu.sgssalud.cdi.Web;
 import org.primefaces.model.LazyDataModel;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
+import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
@@ -56,6 +57,8 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     private EntityManager em;
     @Inject
     private PacienteServicio pacienteServicio;
+    @Inject
+    private FichaMedicaServicio fichaMedServicio;
     private List<Paciente> resultList;
     private int firstResult = 0;
     private Paciente[] pacientesSeleccionados;
@@ -70,6 +73,7 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     @PostConstruct
     public void init() {
         pacienteServicio.setEntityManager(em);
+        fichaMedServicio.setEntityManager(em);
         if (resultList.isEmpty() ) {
            resultList = pacienteServicio.getPacientes(getPageSize(), firstResult);
         }
@@ -175,4 +179,11 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     public void buscarPorParametro() {
         this.setResultList(pacienteServicio.BuscarPacientePorTodosParametros(parametroBusqueda));
     }
+    
+//    public boolean tieneFicha(){
+//        if(pacienteSelecionado.isPersistent()){
+//            return (fichaMedServicio.getFichaMedicaPorPaciente(pacienteSelecionado) != null) ;
+//        }        
+//        return false;        
+//    }
 }

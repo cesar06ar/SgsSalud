@@ -16,10 +16,8 @@
 package edu.sgssalud.service.labClinico;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.farmacia.Medicamento;
-import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
-import edu.sgssalud.util.Lists;
+import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
@@ -30,13 +28,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.seam.security.Identity;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -58,6 +56,8 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
     private EntityManager em;
     @Inject
     private PedidoExamenService pedidosExamenLabService;
+    @Inject
+    private ResultadoExamenLCService resultadosExamenesService;
 //    @Inject
 //    private Identity identity;
 //    @Inject
@@ -151,9 +151,9 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
     }
 
     @PostConstruct
-    public void init() {
-
+    public void init() {        
         pedidosExamenLabService.setEntityManager(em);
+        resultadosExamenesService.setEntityManager(em);
         //profileServicio.setEntityManager(em);
         if (resultList.isEmpty()) {
             resultList = pedidosExamenLabService.getPedidosExamenesLab();
@@ -189,18 +189,44 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
     public void agregarMuestra() {
         System.out.println("Actualizado correctamente :________________ ");
         Date now = Calendar.getInstance().getTime();
-        if(PedidoExamenSeleccionado.isPersistent()){
+        if (PedidoExamenSeleccionado.isPersistent()) {
             PedidoExamenSeleccionado.setEstado("Pendiente");
             em.merge(PedidoExamenSeleccionado);
             System.out.println("Actualizado correcta  :________________ ");
         }
 //        System.out.println("Actualizado correcta 2 :________________ ");
 //        if (resultList.isEmpty()) {
-            resultList = pedidosExamenLabService.getPedidosExamenesLab();
+        resultList = pedidosExamenLabService.getPedidosExamenesLab();
 //        }
         System.out.println("Actualizado correcta 3 :________________ ");
-        FacesMessage msg = new FacesMessage(UI.getMessages("Los Códigos de muestra han sido agregados") + " ", "");
+        FacesMessage msg = new FacesMessage("Los Códigos de muestra han sido agregados" + " ", "");
         FacesContext.getCurrentInstance().addMessage("", msg);
+    }
+    @TransactionAttribute
+    public void borrar() {
+        System.out.println("Ingreso a borrar______________-");
+        try {
+            if (PedidoExamenSeleccionado.isPersistent()) {
+                PedidoExamenLaboratorio p = PedidoExamenSeleccionado;
+                ResultadoExamenLabClinico aux;
+                List<ResultadoExamenLabClinico> listaResultadosExamenLab = resultadosExamenesService.getResultadosExamenPorPedidoExamen(p);
+                for (ResultadoExamenLabClinico result : listaResultadosExamenLab) {
+                    aux = result;
+                    em.remove(aux);
+                    em.flush();
+                }   
+                em.flush();                
+                em.remove(em.merge(p));
+                PedidoExamenSeleccionado = null;
+                FacesMessage msg = new FacesMessage("Se elimino correctamente. ", "");
+                FacesContext.getCurrentInstance().addMessage("", msg);                
+            }
+        } catch (Exception e) {
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+            e.printStackTrace();
+        }
+        resultList = pedidosExamenLabService.getPedidosExamenesLab();
     }
 
 }

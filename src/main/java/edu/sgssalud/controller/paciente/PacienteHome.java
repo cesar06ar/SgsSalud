@@ -326,7 +326,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @TransactionAttribute
     public String cambiarClave() throws IdentityException, InterruptedException {
         PersistenceManager identityManager = security.getPersistenceManager();
-        User user = identityManager.findUser(getInstance().getCedula());
+        User user = identityManager.findUser(getInstance().getNombreUsuario());
         AttributesManager attributesManager = security.getAttributesManager();
         attributesManager.updatePassword(user, clave);
         getInstance().setClave(clave);

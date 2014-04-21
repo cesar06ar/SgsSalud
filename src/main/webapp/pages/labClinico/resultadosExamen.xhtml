@@ -41,7 +41,9 @@
 
                             </div>
                             <div class="span7" align="left">
-                                <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{resultadosExamenHome.pedidoExamen.historiaClinica.fichaMedica.numFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                <ui:param name="nFicha" value="#{resultadosExamenHome.pedidoExamen.historiaClinica.persistent? resultadosExamenHome.pedidoExamen.historiaClinica.fichaMedica.numFicha: (resultadosExamenHome.pedidoExamen.fichaOdontologica.persistent? resultadosExamenHome.pedidoExamen.fichaOdontologica.fichaMedica.numFicha : null)}"/>
+                                <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{nFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                
                                 <h:panelGroup layout="block" class="clearfix" >
                                     <label for="fafm" >#{messages['comun.fecha']} de #{messages['pedido.name']}</label>
                                     <div class="input">
@@ -58,7 +60,7 @@
                                     <div class="input">
                                         <pe:inputNumber id="costo" value="#{resultadosExamenHome.costo}" required="false" 
                                                         dir="lrt" symbol="  $" symbolPosition="rigth" disabled="true">
-                                            <p:ajax event="blur" update="@parent" process="@this"/>  
+
                                         </pe:inputNumber>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{resultadosExamenHome.costo != null}"
                                                         styleClass="validation-status" />                                        
@@ -110,12 +112,10 @@
                       #{resultadosExamenHome.resultadoSelect.examenLab.name}" 
                       widgetVar="editDlg" modal="true" resizable="true" width="70%">
                 <h:form id="form-dialog">
-                    <glue:input id="fechaR" name="fechaR" type="calendar" label="#{messages['comun.fecha']}" value="#{resultadosExamenHome.resultadoSelect.fechaRealizacion}" 
-                                required="false" inlinehelp="#{'Fecha en la que se realizo el examen'}" execute="@this save" render="fechaR"/>
-
                     <glue:input id="muestra" name="muestra" type="decimal" label="Resultado" value="#{resultadosExamenHome.resultadoSelect.valorResultado}" 
                                 required="false" inlinehelp="#{messages['pedido.codMuestra.lineaAyuda']}" execute="@this save" render="muestra"/>
-
+                    <glue:input id="fechaR" name="fechaR" type="calendar" label="#{messages['comun.fecha']}" value="#{resultadosExamenHome.resultadoSelect.fechaRealizacion}" 
+                                required="false" inlinehelp="#{'Fecha en la que se realizo el examen'}" execute="@this save" render="fechaR"/>
                     <div class="admin-actions">
                         <p:commandButton id="save" value="#{messages['common.save']}" oncomplete="editDlg.hide();"                                           
                                          action="#{resultadosExamenHome.guardarResultado()}" update=":form:tablaResultados"    

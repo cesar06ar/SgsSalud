@@ -227,6 +227,10 @@
       <pattern value="/labClinico/resultadosExamen"></pattern>
       <view-id value="/pages/labClinico/resultadosExamen.xhtml"></view-id>       
    </url-mapping>
+   <url-mapping id="listaExamen">
+      <pattern value="/labClinico/listadoExamenes"></pattern>
+      <view-id value="/pages/labClinico/listaExamens.xhtml"></view-id>       
+   </url-mapping>
    
     <!-- Vistas del Módulo de Servicios Médicos-->
    <url-mapping id="listaServicios">
@@ -256,7 +260,7 @@
       <action>#{account.loadPagesLoggedIn}</action>
    </url-mapping>
    <url-mapping id="cambioClavePaciente">
-      <pattern value="/reset"></pattern>
+      <pattern value="/paciente/reset"></pattern>
       <view-id value="/pages/paciente/reset.xhtml"></view-id>   
    </url-mapping>
 

@@ -23,91 +23,292 @@
         </f:metadata>
 
         <ui:define name="header-replace" >            
-                <div class="header-replace" >
-                    <div class="container-header" >
-                        <div class="row lf row-title" >
-                            <h2>#{pedidoExamenLabHome.pedidoExamenId == null? 'Pedido de examenes de laboratorio clinico para:': 'Editar pedido de examenes de laboratorio clinico para:'}
-                                #{pedidoExamenLabHome.paciente.nombres}</h2>
-                        </div>
+            <div class="header-replace" >
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h2>#{pedidoExamenLabHome.pedidoExamenId == null? 'Pedido de examenes de laboratorio clinico para:': 'Editar pedido de examenes de laboratorio clinico para:'}
+                            #{pedidoExamenLabHome.paciente.nombres}</h2>
                     </div>
-                </div>            
+                </div>
+            </div>            
         </ui:define>
         <ui:define name="content" >           
-                <h:form id="form">
-                    <p:growl id="messages" showDetail="true" life="6000" />
-                    <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
-                        <div class="container-fluid">
-                            <div class="row-fluid">
-                                <div class="span7">                            
-                                    <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pedidoExamenLabHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
-                                    <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pedidoExamenLabHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
-                                </div>
-                                <div class="span7" align="left">
-                                    <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{pedidoExamenLabHome.fichaMedica.numeroFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
-                                    <h:panelGroup layout="block" class="clearfix" >
-                                        <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
-                                        <div class="input">
-                                            <p:calendar id="fafm" value="#{pedidoExamenLabHome.instance.fechaPedido}"  label="#{messages['fechaReceta.fechaEmision']}"
-                                                        disabled="true" pattern="dd-MMM-yyyy">
-                                            </p:calendar>
-                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pedidoExamenLabHome.instance.fechaPedido != null}"
-                                                            styleClass="validation-status" />
-                                        </div>
-                                    </h:panelGroup>
-                                </div>
+            <h:form id="form">
+                <p:growl id="messages" showDetail="true" life="6000" />
+                <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
+                    <div class="container-fluid">
+                        <div class="row-fluid">
+                            <div class="span7">                            
+                                <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pedidoExamenLabHome.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pedidoExamenLabHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+                            </div>
+                            <div class="span7" align="left">
+                                <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{pedidoExamenLabHome.fichaMedica.numeroFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
+                                <h:panelGroup layout="block" class="clearfix" >
+                                    <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
+                                    <div class="input">
+                                        <p:calendar id="fafm" value="#{pedidoExamenLabHome.instance.fechaPedido}"  label="#{messages['fechaReceta.fechaEmision']}"
+                                                    disabled="true" pattern="dd-MMM-yyyy">
+                                        </p:calendar>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{pedidoExamenLabHome.instance.fechaPedido != null}"
+                                                        styleClass="validation-status" />
+                                    </div>
+                                </h:panelGroup>
                             </div>
                         </div>
-                    </p:panel>
-                    <p:panel id="panelPrescripcion" header="Ingreso de datos" rendered="#{!pedidoExamenLabHome.result}">
-                        <h:panelGroup id="obEFP" >
-                            <label for="pickExamLab" style="width: 40%">#{messages['pedidoLabClinico.admin']}</label><br/><br/>
-                            <p:pickList id="pickExamLab" value="#{pedidoExamenLabHome.pickListExamenesLab}" var="examenLab_"  showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"  style="width: 50%"
-                                        itemLabel="#{examenLab_.code} #{examenLab_.name}" itemValue="#{examenLab_}" converter="examenLabClinicoConverter" showCheckbox="true">  
-                                <f:facet name="sourceCaption">#{messages['Examen.listado']} #{messages['Examen.nombres']}</f:facet>
-                                <f:facet name="targetCaption">#{messages['Examen.nombres']} #{'a realizar'}</f:facet>
-                                <p:ajax event="transfer" listener="#{pedidoExamenLabHome.onTransfer}" update=":form:messages :form:save" />  
-
-                                <p:column style="width: 100%" >
-                                    <h:outputText value="#{examenLab_.code}&nbsp;&nbsp;#{examenLab_.name}" />                                        
-                                </p:column>
-                            </p:pickList>
-                        </h:panelGroup> 
-                        <glue:input id="observ" name="observ" type="textarea" label="#{messages['consultaMedica.observacion']}" value="#{pedidoExamenLabHome.instance.observacion}" 
-                                    helpinline="#{messages['consultaMedica.observacion']}"  
-                                    required="false" execute="@this save" render="observ" styleClass="xLarge" disabled="false"/>
-                    </p:panel>   
-                    <p:panel id="panelResult" header="Resultados de Examen" rendered="#{pedidoExamenLabHome.result}">
-                        <p:dataTable id="tablaResultados" var="Object_" value="#{pedidoExamenLabHome.listaResultadosExamenLab}" paginator="true" rows="30" paginatorPosition="top"
-                                     >
-
-                            <p:column headerText="#{messages['common.code']}" style="width:30%">  
-                                <h:outputText value="#{Object_.examenLab.code}" />  
-                            </p:column>  
-                            <p:column headerText="#{messages['Examen.Nombre1']}" style="width:30%">                             
-                                <h:outputText value="#{Object_.examenLab.name}" />  
-                            </p:column>  
-                            <p:column headerText="Valor " style="width:30%">  
-                                <h:outputText value="#{Object_.valorResultado}" />  
-                            </p:column>  
-                            <p:column headerText="#{messages['Examen.ValorReferencial']}" style="width:30%">   
-                                <h:outputText value="#{Object_.examenLab.valorReferencia}" />
-                            </p:column>                         
-                        </p:dataTable>
-                    </p:panel>
-                    <div class="admin-actions ">
-                        <p:commandButton id="save" action="#{pedidoExamenLabHome.guardar()}" value="#{messages['common.submit']}" 
-                                         update=":form:messages" styleClass="btn primary" style="margin-left: 32%" immediate="true"
-                                         disabled="#{empty pedidoExamenLabHome.pickListExamenesLab.target}"/>
-                        &nbsp;
-                        <h:link outcome="/pages#{pedidoExamenLabHome.backView}?faces-redirect=true"
-                                value="#{messages['common.cancel']}" styleClass="btn primary" >
-                            <f:param name="fichaMedicaId" value="#{pedidoExamenLabHome.fichaMedicaId}"/>
-                            <f:param name="consultaMedicaId" value="#{pedidoExamenLabHome.consultaMedId}"></f:param>                                    
-                            <f:param name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />
-                            <f:param name="backView" value="#{pedidoExamenLabHome.previous}" />
-                        </h:link>   
                     </div>
-                </h:form>            
+                </p:panel>                
+                <p:panel id="panelPrescripcion" header="Listado de Examenes disponibles"  rendered="true">
+                    <div class="container-fluid" >
+                        <div class="row-fluid" >
+                            <div class="span4"  style="width: 25%;">
+                                <p:panel header="HEMATOLÓGICOS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam_.tipo.tipo eq 0}">                                    
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="BIOQUIMÍCO Y ENZIMÁTICOS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam1_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam1_.tipo.tipo eq 1}">                                                                            
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam1_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam1_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam1_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="ELECTROLITOS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam3_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam3_.tipo.tipo eq 2}">                                                                            
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam3_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam3_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam3_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                 
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="MARCADORES TUMORALES" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam4_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam4_.tipo.tipo eq 3}">                                                                            
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam4_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam4_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam4_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="HORMONAS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam5_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam5_.tipo.tipo eq 4}">                                                                            
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam5_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam5_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam5_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="INMUNOLÓGICOS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam2_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam2_.tipo.tipo eq 5}">                                                                            
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam2_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam2_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam2_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="LÍQUIDOS BIOLÓGICOS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam6_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam6_.tipo.tipo eq 6}">   
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam6_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam6_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam6_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;"> 
+                                <p:panel header="ORINA" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam7_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam7_.tipo.tipo eq 7}">   
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam7_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam7_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam7_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="HECES" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam8_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam8_.tipo.tipo eq 8}">   
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam8_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam8_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam8_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="SECRECIONES" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam9_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam9_.tipo.tipo eq 9}">   
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam9_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam9_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam9_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                            <div class="span4" style="width: 25%;">
+                                <p:panel header="OTROS" >
+                                    <c:forEach items="#{pedidoExamenLabHome.listaExamenLab}" var="exam10_"  >
+                                        <c:choose>
+                                            <c:when test="#{exam10_.tipo.tipo eq 10}">   
+                                                <span >                                            
+                                                    <p:selectBooleanCheckbox value="#{exam10_.select}" >
+                                                        <p:ajax update="save :form:messages" listener="#{pedidoExamenLabHome.agregarExamen(exam10_)}"/>
+                                                    </p:selectBooleanCheckbox>&nbsp;
+                                                    <h:outputText value="#{exam10_.name}" />
+                                                </span>
+                                                <br/>
+                                            </c:when>                                
+                                        </c:choose>                            
+                                    </c:forEach>
+                                </p:panel>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <glue:input id="observ" name="observ" type="textarea" label="#{messages['consultaMedica.observacion']}" value="#{pedidoExamenLabHome.instance.observacion}" 
+                                helpinline="#{messages['consultaMedica.observacion']}"  
+                                required="false" execute="@this save" render="observ" styleClass="xLarge" disabled="false"/>
+                </p:panel>   
+                <p:panel id="panelResult" header="Resultados de Examen" rendered="#{pedidoExamenLabHome.result}">
+                    <p:dataTable id="tablaResultados" var="Object_" value="#{pedidoExamenLabHome.listaResultadosExamenLab}" paginator="true" rows="30" paginatorPosition="top"
+                                 >
+
+                        <p:column headerText="#{messages['common.code']}" style="width:30%">  
+                            <h:outputText value="#{Object_.examenLab.code}" />  
+                        </p:column>  
+                        <p:column headerText="#{messages['Examen.Nombre1']}" style="width:30%">                             
+                            <h:outputText value="#{Object_.examenLab.name}" />  
+                        </p:column>  
+                        <p:column headerText="Valor " style="width:30%">  
+                            <h:outputText value="#{Object_.valorResultado}" />  
+                        </p:column>  
+                        <p:column headerText="#{messages['Examen.ValorReferencial']}" style="width:30%">   
+                            <h:outputText value="#{Object_.examenLab.valorReferencia}" />
+                        </p:column>                         
+                    </p:dataTable>
+                </p:panel>
+                <div class="admin-actions ">
+                    <p:commandButton id="save" action="#{pedidoExamenLabHome.guardar()}" value="#{messages['common.submit']}" 
+                                     update=":form:messages" styleClass="btn primary" style="margin-left: 32%" immediate="true"
+                                     disabled="#{empty pedidoExamenLabHome.listaPedidoExamenLabC}"/>
+                    &nbsp;
+                    <p:commandButton value="Ver" oncomplete="deletedDlg.show();" update=":cancel-dialog"/> 
+                    &nbsp;
+                    <h:link outcome="/pages/depSalud/pedidoExamen?faces-redirect=true"
+                            value="Limpiar" styleClass="btn primary" >                        
+                        <f:param name="backView" value="#{pedidoExamenLabHome.backView}"/>
+                        <f:param name="pacienteId" value="#{pedidoExamenLabHome.paciente.id}" />
+                        <f:param name="fichaMedicaId" value="#{pedidoExamenLabHome.fichaMedicaId}"/>
+                        <f:param name="consultaMedicaId" value="#{pedidoExamenLabHome.consultaMedId}"></f:param> 
+                        <f:param name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />
+                        <f:param name="previous" value="#{pedidoExamenLabHome.previous}" />
+                    </h:link>                    
+                    &nbsp;
+                    <h:link outcome="/pages#{pedidoExamenLabHome.backView}?faces-redirect=true"
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >
+                        <f:param name="fichaMedicaId" value="#{pedidoExamenLabHome.fichaMedicaId}"/>
+                        <f:param name="consultaMedicaId" value="#{pedidoExamenLabHome.consultaMedId}"></f:param>
+                        <f:param name="consultaOdontId" value="#{pedidoExamenLabHome.consultaOdontId}" />
+                        <f:param name="backView" value="#{pedidoExamenLabHome.previous}" />
+                    </h:link>   
+                </div>
+            </h:form> 
+            <p:dialog id="cancel-dialog" header="Ver Examenes seleccionados" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <ui:repeat value="#{pedidoExamenLabHome.listaPedidoExamenLabC}" var="p1">
+                        <h:outputText value="#{p1.name} -- #{p1.tipo} -- #{p1.select}"/>  
+                        <br/>
+                    </ui:repeat>                  
+                    <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
         </ui:define>        
     </ui:composition>
 </html>                
