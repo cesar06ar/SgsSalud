@@ -33,30 +33,33 @@
                 <li><a href="#">Downloads</a></li>
             </ul>            
         </ui:define>-->
-
-        <ui:define name="image_gallery">
-            <center> 
-                <p:galleria value="#{galleryController.images}" var="image" showCaption="true" panelWidth="800" panelHeight="280" >  
-                    <p:graphicImage value="/resources/images/#{image}" alt="Image Description for #{image}" title="#{image}"/>  
-                </p:galleria> 
-            </center>
-        </ui:define>        
-
         <ui:define name="content">
-            <div class="span6">
-                <h2>Servicio Medicos</h2>
+            <h:form id="form">
 
-            </div>            
-
-            <div class="info" style="background-color: #00FFCC; margin: auto; margin-top: 5%; width: 121%; ">
-                <center>
-                    <div class="admin-actions" >                            
-                        <h:link value="#{messages['common.alreadyaccount']}" outcome="/pages/login" class="btn primary large">
-                        </h:link>
-                    </div>
+                <center > 
+                    <p:galleria value="#{galleryController.images}" var="image" showCaption="true" panelHeight="300" style="width: 100%">  
+                        <p:graphicImage value="/resources/images/#{image}" alt="Image Description for #{image}" title="#{image}"/>  
+                    </p:galleria> 
                 </center>
-            </div>
 
+
+
+
+
+                <div class="span6">
+                    <h2>Servicio Medicos</h2>
+
+                </div>            
+                <br/>
+                <div class="admin info" style="background-color: #00FFCC; margin: auto; margin-top: 5%; width: 100%; ">
+                    <center>
+                        <div class="admin-actions" >                            
+                            <h:link value="#{messages['common.alreadyaccount']}" outcome="/pages/login" class="btn primary large">
+                            </h:link>
+                        </div>
+                    </center>
+                </div>
+            </h:form>
         </ui:define>
 
         <ui:define name="side-items">

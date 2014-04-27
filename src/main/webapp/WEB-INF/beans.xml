@@ -5,7 +5,10 @@
       http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
    <interceptors>
-      <class>org.jboss.seam.transaction.TransactionInterceptor</class>
+      <class>org.jboss.seam.transaction.TransactionInterceptor</class>  
+      <!--cuando se esta utilizando metodos transaccionales de seam como @Transactional,,,
+      es decir insertar datos a la base de datos de una clases o realizar modificaciones de datos-->
       <class>org.jboss.seam.security.SecurityInterceptor</class>
-   </interceptors>
+      <!--Se activa esta clase para restringir el acceso a la aplicación de la autorización de seam-->
+   </interceptors>  
 </beans>

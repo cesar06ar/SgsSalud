@@ -48,7 +48,7 @@ import org.hibernate.annotations.Index;
 import org.jboss.solder.logging.Logger;
 
 @Entity
-@Table(name = "Profile")
+@Table(name = "Profile", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 @DiscriminatorValue(value = "PR")
 @PrimaryKeyJoinColumn(name = "id")
 /*
@@ -276,10 +276,11 @@ public class Profile extends BussinesEntity implements Serializable {
 
     @Override
     public String toString() {
-        return Profile.class.getName()
-                + "id=" + getId() + ","
-                + "fullName=" + getFullName() + ","
-                + "IdentityKeys=" + getIdentityKeys() + ","
-                + " ]";
+//        return Profile.class.getName()
+//                + "id=" + getId() + ","
+//                + "fullName=" + getFullName() + ","
+//                + "IdentityKeys=" + getIdentityKeys() + ","
+//                + " ]";
+        return getFullName();
     }
 }

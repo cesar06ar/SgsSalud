@@ -131,7 +131,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     private String telefono;
     private String celular;
     @Email(message = "#{messages['MailBadFormat']}")
-    @Index(name = "userEmailIndex")   //investigar
+    //@Index(name = "userEmailIndex1")   //investigar
     @Column(nullable = false, length = 128, unique = false)
     private String email;
     @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
@@ -384,12 +384,13 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.paciente.Paciente[ "
-                //return Paciente.class.getName()
-                + "id=" + getId() + ","
-                + "nombres=" + getNombres() + ","
-                + "IdentityKeys=" + getIdentityKeys() + ","
-                + " ]";
+//        return "edu.sgssalud.model.paciente.Paciente[ "
+//                //return Paciente.class.getName()
+//                + "nomb=" + getId() + ","
+//                + "nombres=" + getNombres() + ","
+//                + "IdentityKeys=" + getIdentityKeys() + ","
+//                + " ]";
+        return this.getNombres()+" "+getApellidos();
     }
 
     @Override

@@ -20,6 +20,7 @@ import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
+import edu.sgssalud.model.labClinico.ResultadoParametro;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.labClinico.PedidoExamenService;
 import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
@@ -76,6 +77,7 @@ public class ResultadosExamenHome extends LazyDataModel<ResultadoExamenLabClinic
     private PedidoExamenLaboratorio pedidoExamen;
     private ResultadoExamenLabClinico resultadoSelect;
     private List<ResultadoExamenLabClinico> listaResultadosExamen = new ArrayList<ResultadoExamenLabClinico>();
+    private List<ResultadoParametro> listaResultadoParam = new ArrayList<ResultadoParametro>();
     private int primerResult = 0;
     private boolean estadoResult = false;
     private Date fecha; //= new Date();
@@ -138,6 +140,15 @@ public class ResultadosExamenHome extends LazyDataModel<ResultadoExamenLabClinic
         //resultList = new ArrayList<Medicamento>();        
     }
 
+    public List<ResultadoParametro> getListaResultadoParam() {
+        return listaResultadoParam;
+    }
+
+    public void setListaResultadoParam(List<ResultadoParametro> listaResultadoParam) {
+        this.listaResultadoParam = listaResultadoParam;
+    }
+    
+
     @PostConstruct
     public void init() {
         //setEntityManager(em);
@@ -170,6 +181,7 @@ public class ResultadosExamenHome extends LazyDataModel<ResultadoExamenLabClinic
         //Date now = Calendar.getInstance().getTime();
         try {
             if (resultadoSelect.isPersistent()) {
+                resultadoSelect.setResultadosParametros(listaResultadoParam);
                 em.merge(resultadoSelect);
                 FacesMessage msg = new FacesMessage("Se guardo resultado de Examen: " + resultadoSelect.getId() + " con éxito", null);
                 FacesContext.getCurrentInstance().addMessage("", msg);
@@ -235,7 +247,8 @@ public class ResultadosExamenHome extends LazyDataModel<ResultadoExamenLabClinic
     }
 
     public void onRowSelect(SelectEvent event) {
-        this.resultadoSelect.setFechaRealizacion(new Date());
+        this.resultadoSelect.setFechaRealizacion(Calendar.getInstance().getTime());
+        listaResultadoParam = resultadosExamenService.getResultadoParametros(resultadoSelect);
         FacesMessage msg = new FacesMessage(UI.getMessages("Resultado Examen") + " " + UI.getMessages("common.selected"), "" + ((ResultadoExamenLabClinico) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }

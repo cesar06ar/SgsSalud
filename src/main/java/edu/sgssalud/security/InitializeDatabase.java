@@ -51,6 +51,7 @@ import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.config.Setting;
+import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.odontologia.*;
 import edu.sgssalud.model.paciente.Paciente;
@@ -172,7 +173,7 @@ public class InitializeDatabase {
         Profile admin = null;
         List<User> members = new ArrayList<User>();
         org.picketlink.idm.api.Group g = session.getPersistenceManager().findGroup("ADMIN", "GROUP");
-        if (g == null) {            
+        if (g == null) {
             g = session.getPersistenceManager().createGroup("MEDICOS", "GROUP");
             g = session.getPersistenceManager().createGroup("ODONTOLOGOS", "GROUP");
             g = session.getPersistenceManager().createGroup("ENFERMEROS", "GROUP");
@@ -190,7 +191,7 @@ public class InitializeDatabase {
             session.getAttributesManager().addAttribute(u, "email", "sgssalud@unl.edu");
             members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
-            session.getRelationshipManager().associateUser(g, u);             
+            session.getRelationshipManager().associateUser(g, u);
 
             p = new Profile();
             p.setEmail("sgssalud@unl.edu");
@@ -246,6 +247,7 @@ public class InitializeDatabase {
         validarExamenDentarioConsultaOdont();
         validarEvaluacionPeriodontalConsultaOdont();
         validarDatosEnfermedadesCIE10();
+        validarDatosExamenLabCLinico();
     }
 
     private void validarEstructuraParaPerfilDeUsuario() {
@@ -315,9 +317,9 @@ public class InitializeDatabase {
 
             attributes.add(buildProperty("Personal", "maritalstatus", "java.lang.String[]", "Casado*,Soltero,Divorciado,Unión libre", false, "Estado civil", "Indique su estado civil", false, 1L));
             attributes.add(buildProperty("Personal", "birthday", Date.class.getName(), ago.getTime(), false, "Fecha de nacimiento", "Nunca olvidaremos su cumpleaños", false, 2L));
-            attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));            
+            attributes.add(buildProperty("Personal", "gender", "java.lang.String[]", "Másculino,Femenino", false, "Género", "", false, 3L));
             attributes.add(buildProperty("Dirección permanente", "country", String.class.getName(), "Ecuador", false, "País", "País de residencia", false, 4L));
-            attributes.add(buildProperty("Dirección permanente", "city", String.class.getName(), "Loja", false, "Ciudad", "Ciudad de residencia", false, 5L));            
+            attributes.add(buildProperty("Dirección permanente", "city", String.class.getName(), "Loja", false, "Ciudad", "Ciudad de residencia", false, 5L));
             attributes.add(buildProperty("Dirección permanente", "address", String.class.getName(), null, false, "Dirección", "Calles y número de casa", false, 6L));
             attributes.add(buildProperty("Dirección permanente", "phone", String.class.getName(), null, false, "Teléfono", "Telefóno de contacto", false, 7L));
             attributes.add(buildProperty("Contacto en emergencia", "emergencyContact", String.class.getName(), null, false, "Contacta en caso de emergencia", "Sí se presenta alguna emergencia, a quién debemos llamar?", false, 8L));
@@ -1115,6 +1117,60 @@ public class InitializeDatabase {
 
             for (EnfermedadCIE10 enf1 : enfs) {
                 entityManager.persist(enf1);
+                entityManager.flush();
+            }
+        }
+    }
+
+    public void validarDatosExamenLabCLinico() {
+        TypedQuery<ExamenLabClinico> query = entityManager.createQuery("from ExamenLabClinico e",
+                ExamenLabClinico.class);
+        if (query.getResultList().isEmpty()) {
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            //ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            ExamenLabClinico exam = null;            
+            List<ExamenLabClinico> enfs = new ArrayList<ExamenLabClinico>();
+           
+            exam = new ExamenLabClinico("Biometría", "001", 200.0, 300.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Sangre", "002", 200.0, 300.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Glucosa Basal", "010", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.BIOQUIMÍCO_Y_ENZIMÁTICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Colesterol", "011", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.BIOQUIMÍCO_Y_ENZIMÁTICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Sodio", "020", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.ELECTROLITOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("PCR", "030", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.MARCADORES_TUMORALES, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("T 3", "040", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.HORMONAS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("T 4", "041", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.HORMONAS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("ASTO", "050", 0.0, 0.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.INMUNOLÓGICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("VDRL", "051", 0.0, 0.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.INMUNOLÓGICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Citológico", "056", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.LÍQUIDOS_BIOLÓGICOS, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Orina", "060", 0.0, 0.0, null, "FÍSICO,ELEMENTAL,MICROSCÓPICO", 0.0, ExamenLabClinico.Tipo.ORINA, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("Gota Fresca", "061", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.ORINA, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("UROANÁLISIS", "062", 0.0, 0.0, null, "FÍSICO,ELEMENTAL,MICROSCÓPICO", 0.0, ExamenLabClinico.Tipo.ORINA, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("COPROPARASITARIO", "070", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.HECES, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("GLICEMIA BASAL", "070", 0.0, 0.0, null, "EN FRESCO,GRAM", 0.0, ExamenLabClinico.Tipo.SECRECIONES, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("GLICEMIA BASAL", "070", 0.0, 0.0, null, "EN FRESCO,GRAM", 0.0, ExamenLabClinico.Tipo.SECRECIONES, now);
+            enfs.add(exam);
+            exam = new ExamenLabClinico("ESPERMATOGRAMA", "070", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.OTROS, now);
+            enfs.add(exam);
+            
+            for (ExamenLabClinico e : enfs) {
+                entityManager.persist(e);
                 entityManager.flush();
             }
         }

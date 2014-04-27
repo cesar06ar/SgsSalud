@@ -81,13 +81,7 @@
                         <h:outputText value="#{messages['consultaMedica.id']}" />  
                     </f:facet> 
                     <h:outputText value="#{consultaMedica_.id}" />
-                </p:column>
-                <!--<p:column sortBy="# {consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" style="text-align: center; width: 15%">
-                    <f:facet name="header">  
-                        <h:outputText value="# {messages['fichaMedica.numero']}" />  
-                    </f:facet> 
-                    <h:outputText value="# {consultaMedica_.historiaClinica.fichaMedica.numeroFicha}" />
-                </p:column>-->
+                </p:column>                
                 <p:column sortBy="#{consultaMedica_.historiaClinica.fichaMedica.paciente.nombres}" style="text-align: center;" 
                           >
                     <f:facet name="header">  
@@ -111,11 +105,11 @@
                     </h:outputText>
 
                 </p:column>
-                <p:column sortBy="#{consultaMedica_.responsable}" style="text-align: center;">
+                <p:column sortBy="#{consultaMedica_.responsable.fullName}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.medicoResponsable']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaMedica_.responsable}" />
+                    <h:outputText value="#{consultaMedica_.responsable.fullName}" />
                 </p:column>
                 <p:column sortBy="#{consultaMedica_.code}" style="text-align: center;" filterBy="#{consultaMedica_.code}" filterMatchMode="contains">
                     <f:facet name="header">  
@@ -130,12 +124,9 @@
                 <br/>
                 <h:commandLink action="#{reporteListas.renderConsultasMedicas()}" >                    
                     <p:graphicImage value="/resources/images/pdf.png" />                          
-                </h:commandLink>
-                #{''}
-                <h:commandLink >  
-                    <p:graphicImage value="/resources/images/xls1.png" />  
-                    <p:dataExporter type="xls" target="tablaConsultasMedicas" fileName="ConsultasMedicas"/>  
-                </h:commandLink>
+                    <f:setPropertyActionListener value="#{consultaMedicaListaServicio.inicio}" target="#{reporteListas.fechaInf}"/>
+                    <f:setPropertyActionListener value="#{consultaMedicaListaServicio.fin}" target="#{reporteListas.fechaSup}"/>
+                </h:commandLink>                
             </h:panelGroup>
 
         </h:form>

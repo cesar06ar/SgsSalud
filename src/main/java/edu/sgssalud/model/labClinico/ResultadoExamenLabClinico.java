@@ -16,6 +16,7 @@
 package edu.sgssalud.model.labClinico;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -59,6 +60,9 @@ public class ResultadoExamenLabClinico implements Serializable {
     
     @ManyToOne()
     private PedidoExamenLaboratorio pedidoExamenLab;
+    
+    @OneToMany(mappedBy = "resultadoExamenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ResultadoParametro> resultadosParametros = new ArrayList<ResultadoParametro>();
 
     public Long getId() {
         return id;
@@ -104,6 +108,41 @@ public class ResultadoExamenLabClinico implements Serializable {
         this.pedidoExamenLab = pedidoExamenLab;
     }
 
+    public List<ResultadoParametro> getResultadosParametros() {
+        return resultadosParametros;
+    }
+
+    public void setResultadosParametros(List<ResultadoParametro> resultadosParametros) {
+        for (ResultadoParametro r : resultadosParametros) {
+            r.setResultadoExamenLabClinico(this);
+        }
+        this.resultadosParametros = resultadosParametros;
+    }
+    
+    public void agregarValoresResultados(List<Parametros> pl){
+        System.out.println("INGRESO A AGREGAR VALORES  _________0 ");
+        if(!pl.isEmpty()){
+            System.out.println("INGRESO A AGREGAR VALORES  _________1");
+            ResultadoParametro r ;
+            for (Parametros p : pl) {
+                r = new ResultadoParametro();
+                r.setNombre(p.getNombre());
+                r.setValor(p.getValor());
+                r.setResultadoExamenLabClinico(this);
+                r.setParametro(p);
+                resultadosParametros.add(r);           
+            }
+            System.out.println(" AGREGAR VALORES exito _________1");
+        }
+    }
+    
+    public void agregarResultadoParametros(ResultadoParametro rp){
+        if(!resultadosParametros.contains(rp)){
+            rp.setResultadoExamenLabClinico(this);
+            resultadosParametros.add(rp);
+        }
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

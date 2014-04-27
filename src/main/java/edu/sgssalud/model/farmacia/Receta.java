@@ -46,9 +46,21 @@ import javax.persistence.Temporal;
 @NamedQueries(value = {
     @NamedQuery(name = "Receta.buscarPorId",
             query = "select r FROM Receta r "
-            + " WHERE r.id = :recetaId"            
+            + " WHERE r.id = :recetaId"
+            + " ORDER BY r.id"),
+    @NamedQuery(name = "Receta.buscarPorCriterio",
+            query = "select r FROM Receta r where"
+            + " LOWER(r.numvalue) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(r.estado) like lower(concat('%',:clave,'%')) OR"
+            + " r.paciente.nombres = :clave OR"
+            + " r.paciente.apellidos = :clave"
+            + " ORDER BY r.id"),
+    @NamedQuery(name = "Receta.buscarPorFecha",
+            query = "select r FROM Receta r where"
+            + " r.fechaEmision = :clave OR"
+            + " r.fechaEntrega = :clave"
             + " ORDER BY r.id")
-    })
+})
 public class Receta implements Serializable, Comparable<Receta> {
 
     private static final long serialVersionUID = 3L;
@@ -56,7 +68,7 @@ public class Receta implements Serializable, Comparable<Receta> {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     //private static Logger log = Logger.getLogger(Receta.class);    
-    private Long numero;    
+    private Long numero;
     private String numvalue;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaEmision;
@@ -70,19 +82,19 @@ public class Receta implements Serializable, Comparable<Receta> {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receta", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Receta_Medicamento> listaRecetaMedicamento = new ArrayList<Receta_Medicamento>();
-    
+
     private String medicaciones;
     private String indicaciones;
-    
+
     @ManyToOne(optional = true)
     @JoinColumn(name = "responsableEmision_id")
     private Profile responsableEmision;
-    
+
     @ManyToOne
     @JoinColumn(name = "responsableEntrega_id")
     private Profile ResponsableEntrega;
 
-       //el usuario responsable de emitir la receta se carga de la consulta medica
+    //el usuario responsable de emitir la receta se carga de la consulta medica
     @ManyToOne
     @JoinColumn(name = "consultaMedica_id")
     private ConsultaMedica consultaMedica;
@@ -105,7 +117,7 @@ public class Receta implements Serializable, Comparable<Receta> {
 
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
-    }     
+    }
 
     public Date getFechaEntrega() {
         return fechaEntrega;
@@ -113,7 +125,7 @@ public class Receta implements Serializable, Comparable<Receta> {
 
     public void setFechaEntrega(Date fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
-    } 
+    }
 
     public Paciente getPaciente() {
         return paciente;
@@ -129,8 +141,8 @@ public class Receta implements Serializable, Comparable<Receta> {
 
     public void setMedicaciones(String medicaciones) {
         this.medicaciones = medicaciones;
-    } 
-        
+    }
+
     public String getIndicaciones() {
         return indicaciones;
     }
@@ -196,7 +208,7 @@ public class Receta implements Serializable, Comparable<Receta> {
 
     public void setNumero(Long numero) {
         this.numero = numero;
-    }     
+    }
 
     public String getNumvalue() {
         return numvalue;
@@ -204,8 +216,8 @@ public class Receta implements Serializable, Comparable<Receta> {
 
     public void setNumvalue(String numvalue) {
         this.numvalue = numvalue;
-    } 
-        
+    }
+
     public void agregarRecetaMedicamento(Receta_Medicamento rm) {
         if (!listaRecetaMedicamento.contains(rm)) {
             rm.setReceta(this);
@@ -249,11 +261,12 @@ public class Receta implements Serializable, Comparable<Receta> {
         return "edu.sgssalud.model.farmacia.Receta[ "
                 + "id=" + id + ","
                 + "indicaciones=" + indicaciones + ","
+                + "indicaciones=" + medicaciones + ","
                 + " ]";
     }
 
     @Override
     public int compareTo(Receta o) {
-        return (int)(this.getId() - o.getId());
+        return (int) (this.getId() - o.getId());
     }
 }

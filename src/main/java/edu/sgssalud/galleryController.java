@@ -22,7 +22,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
+//import javax.faces.bean.RequestScoped;
 import javax.inject.Named;
 
 /**
@@ -46,7 +47,7 @@ public class galleryController implements Serializable {
     public void init() {
         images = new ArrayList<String>();
 
-        for (int i = 0; i <= 1; i++) {
+        for (int i = 0; i <= 6; i++) {
             images.add("img" + i + ".jpg");
         }
 

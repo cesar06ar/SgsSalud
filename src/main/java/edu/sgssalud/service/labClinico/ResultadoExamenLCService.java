@@ -17,9 +17,12 @@
 package edu.sgssalud.service.labClinico;
 
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
+import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico_;
+import edu.sgssalud.model.labClinico.ResultadoParametro;
+import edu.sgssalud.model.labClinico.ResultadoParametro_;
 import edu.sgssalud.util.PersistenceUtil;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -64,6 +67,22 @@ public class ResultadoExamenLCService extends PersistenceUtil<ResultadoExamenLab
         CriteriaQuery<ResultadoExamenLabClinico> query = builder.createQuery(ResultadoExamenLabClinico.class);
         Root<ResultadoExamenLabClinico> entity = query.from(ResultadoExamenLabClinico.class);
         query.where(builder.equal(entity.get(ResultadoExamenLabClinico_.ExamenLab), examenL));
+        return getResultList(query);        
+    }    
+    
+    public List<ResultadoParametro> getResultadoParametros(ResultadoExamenLabClinico relc) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<ResultadoParametro> query = builder.createQuery(ResultadoParametro.class);
+        Root<ResultadoParametro> entity = query.from(ResultadoParametro.class);
+        query.where(builder.equal(entity.get(ResultadoParametro_.resultadoExamenLabClinico), relc));
+        return getResultList(query);        
+    }    
+    
+    public List<ResultadoParametro> getResultadoParametros(Parametros p) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<ResultadoParametro> query = builder.createQuery(ResultadoParametro.class);
+        Root<ResultadoParametro> entity = query.from(ResultadoParametro.class);
+        query.where(builder.equal(entity.get(ResultadoParametro_.parametro), p));
         return getResultList(query);        
     }    
     

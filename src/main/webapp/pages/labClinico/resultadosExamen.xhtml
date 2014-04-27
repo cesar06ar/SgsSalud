@@ -23,7 +23,7 @@
                 <div class="container-header" >
                     <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >                        
                         <h2>#{resultadosExamenHome.pedidoExamen.id == null? 'Nueva Receta:': 'Agregar Resultados de Examen para '}
-                            #{resultadosExamenHome.pedidoExamen.paciente.nombres}</h2>
+                            #{resultadosExamenHome.pedidoExamen.paciente.nombres} #{resultadosExamenHome.pedidoExamen.paciente.apellidos}</h2>
                     </div>
                 </div>
             </div>            
@@ -43,7 +43,7 @@
                             <div class="span7" align="left">
                                 <ui:param name="nFicha" value="#{resultadosExamenHome.pedidoExamen.historiaClinica.persistent? resultadosExamenHome.pedidoExamen.historiaClinica.fichaMedica.numFicha: (resultadosExamenHome.pedidoExamen.fichaOdontologica.persistent? resultadosExamenHome.pedidoExamen.fichaOdontologica.fichaMedica.numFicha : null)}"/>
                                 <glue:output id="numfm" name="numfm" type="text" label="#{messages['fichaMedica.numero']}" value="#{nFicha}" required="true" execute="@this save" render="numfm" styleClass="xLarge" disabled="true"/>
-                                
+
                                 <h:panelGroup layout="block" class="clearfix" >
                                     <label for="fafm" >#{messages['comun.fecha']} de #{messages['pedido.name']}</label>
                                     <div class="input">
@@ -77,7 +77,7 @@
                                  rowKey="#{Object_.id}" selection="#{resultadosExamenHome.resultadoSelect}" selectionMode="single">
 
                         <p:ajax event="rowSelect" listener="#{resultadosExamenHome.onRowSelect}" 
-                                update=":edit-dialog :form:messages"  oncomplete="editDlg.show();"/>  
+                                update=":edit-dialog :form:messages"  />  
                         <p:ajax event="rowUnselect" listener="#{resultadosExamenHome.onRowUnselect}" update=":form:messages "/>
 
                         <!--<p:ajax event="rowEdit" listener="# {resultadosExamenHome.onEdit}" update=":form:messages" />  
@@ -93,9 +93,18 @@
                         <p:column headerText="Valor " style="width:30%">  
                             <h:outputText value="#{Object_.valorResultado}" />  
                         </p:column>  
-                        <p:column headerText="#{messages['Examen.ValorReferencial']}" style="width:30%">   
-                            <h:outputText value="#{Object_.examenLab.valorReferencia}" />
+                        <p:column headerText="Ref inferior" style="width:30%">   
+                            <h:outputText value="#{Object_.examenLab.valorRefInferior}" title="#{messages['Examen.ValorRefInf']}"/>
                         </p:column>                         
+                        <p:column headerText="Ref Superior" style="width:30%">   
+                            <h:outputText value="#{Object_.examenLab.valorRefSuperior}" title="#{messages['Examen.ValorRefSup']}"/>
+                        </p:column>                         
+                        <p:column headerText="opciones " style="width:30%">
+                            <h:link id="button-edit" value="#{messages['common.edit']}" outcome="resultado" styleClass="btn primary" >                                
+                                <f:param name="pedidoExamenId" value="#{resultadosExamenHome.pedidoExamenId}"/>
+                                <f:param name="resultadoId" value="#{Object_.id}"/>
+                            </h:link>
+                        </p:column> 
                     </p:dataTable>  
                 </p:panel>
                 <div class="admin-actions ">
@@ -116,10 +125,24 @@
                                 required="false" inlinehelp="#{messages['pedido.codMuestra.lineaAyuda']}" execute="@this save" render="muestra"/>
                     <glue:input id="fechaR" name="fechaR" type="calendar" label="#{messages['comun.fecha']}" value="#{resultadosExamenHome.resultadoSelect.fechaRealizacion}" 
                                 required="false" inlinehelp="#{'Fecha en la que se realizo el examen'}" execute="@this save" render="fechaR"/>
+                    <h:panelGroup >
+                        <p:spacer width="200" height="5"/>
+                        <ui:repeat value="#{resultadosExamenHome.resultadoSelect.resultadosParametros}" var="rp_">
+                            <h:panelGroup layout="block" class="clearfix" >                                
+                                <label for="rp-#{rp_.id}" >#{rp_.nombre}</label>
+                                <div class="input" >                                    
+                                    <p:inputText id="rp-#{rp_.id}" value="#{rp_.valor}" label="#{rp_.nombre}" style="width: 100px;">
+                                        <p:ajax event="keyup" update="@parent save" partialSubmit="true"/>
+                                    </p:inputText>
+                                </div>
+                            </h:panelGroup>
+                        </ui:repeat>                        
+                    </h:panelGroup>
+
                     <div class="admin-actions">
                         <p:commandButton id="save" value="#{messages['common.save']}" oncomplete="editDlg.hide();"                                           
                                          action="#{resultadosExamenHome.guardarResultado()}" update=":form:tablaResultados"    
-                                         immediate="true" 
+                                         immediate="true" ajax="true"
                                          style="margin: 0 0 0 30%">  
                             <!--recetaListaServicio.entregarReceta()--> 
                         </p:commandButton> 

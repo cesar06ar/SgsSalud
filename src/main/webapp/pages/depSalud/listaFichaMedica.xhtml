@@ -125,12 +125,9 @@
                     <br/>
                     <h:commandLink action="#{reporteListas.renderFichasMedicas()}" >                    
                         <p:graphicImage value="/resources/images/pdf.png" />                          
-                    </h:commandLink>
-                    #{''}
-                    <h:commandLink >  
-                        <p:graphicImage value="/resources/images/xls1.png" />  
-                        <p:dataExporter type="xls" target="tablaFichasMedicas" fileName="FichasMedicas"/>  
-                    </h:commandLink>
+                        <f:setPropertyActionListener value="#{fichaMedicaListaServicio.fechaI}" target="#{reporteListas.fechaInf}"/>
+                        <f:setPropertyActionListener value="#{fichaMedicaListaServicio.fechaF}" target="#{reporteListas.fechaSup}"/>
+                    </h:commandLink>                    
                 </p:panel>
             </h:panelGrid>
         </h:form>

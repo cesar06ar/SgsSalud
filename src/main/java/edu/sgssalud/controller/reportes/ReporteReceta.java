@@ -16,22 +16,20 @@
 package edu.sgssalud.controller.reportes;
 
 import com.smartics.common.action.report.JasperReportAction;
+import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.farmacia.Receta;
-import edu.sgssalud.service.generic.CrudService;
-import edu.sgssalud.service.generic.QueryParameter;
-import edu.sgssalud.util.Dates;
-import edu.sgssalud.util.FechasUtil;
-import java.io.Serializable;
-import java.util.Date;
+import edu.sgssalud.service.farmacia.RecetaServicio;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.ejb.EJB;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -39,64 +37,53 @@ import javax.inject.Named;
  */
 @RequestScoped
 @Named(value = "reporteReceta")
-public class ReporteReceta implements Serializable {
+public class ReporteReceta {
 
     //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ReporteReceta.class);
     private static final String REPORTE_RECETA = "recetaMedica";  //nombre del reporte .jasper   
-
-    @EJB
-    CrudService crudService;
+    
+    @Inject
+    @Web
+    private EntityManager em;
     @Inject
     JasperReportAction JasperReportAction;
+    @Inject
+    private RecetaServicio recetaServicio;
+
+    private Receta receta;
+
+    public Receta getReceta() {
+        return receta;
+    }
+
+    public void setReceta(Receta receta) {
+        this.receta = receta;
+    }
+
+    @PostConstruct
+    public void init() {
+        recetaServicio.setEntityManager(em);
+    }
 
     public void renderReceta() {
-        System.out.println("INGRESO a RECETA REPORTE________");
+        
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String logo = context.getRealPath("/reportes/unl.png");
+        final String attachFileName = "receta.pdf";                      
+        if (receta.isPersistent()) {
+            Map<String, Object> _values = new HashMap<String, Object>();
+            _values.put("nombres", receta.getPaciente().getNombres()+" "+receta.getPaciente().getApellidos());           
+            _values.put("numReceta", receta.getNumvalue());
+            _values.put("fechaE", receta.getFechaEntrega());                  
+            _values.put("logo", logo);
+            _values.put("medico", receta.getResponsableEmision().getFullName());
+            _values.put("usd", "$");
 
-        FacesContext context = FacesContext.getCurrentInstance();
-        final String attachFileName = "receta.pdf";
-        //List<Paciente> pacientes = pacienteServicio.getPacientes();
-        //parametros 
-        crudService.getEntityManager();
-        String medicaciones = null;
-        String indicaciones = null;
-        String nombres = null;
-        String apellidos = null;
-        String recetaId = null;
-        String numReceta = null;
-        String fechaE = null;
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-
-        } else {
-            medicaciones = context.getExternalContext().getRequestParameterMap().get("medicaciones");
-            indicaciones = context.getExternalContext().getRequestParameterMap().get("indicaciones");
-            nombres = context.getExternalContext().getRequestParameterMap().get("nombres");
-            apellidos = context.getExternalContext().getRequestParameterMap().get("apellidos");
-            recetaId = context.getExternalContext().getRequestParameterMap().get("recetaId");
-            numReceta = context.getExternalContext().getRequestParameterMap().get("numReceta");
-            fechaE = context.getExternalContext().getRequestParameterMap().get("fechaE");
-        }
-
-        System.out.println("Valores " + medicaciones + ", " + indicaciones + ", " + nombres + ", " + apellidos + ", " + recetaId);
-
-        Map<String, Object> _values = new HashMap<String, Object>();
-        _values.put("nombres", nombres);
-        _values.put("apellidos", apellidos);
-        if (recetaId != null) {
-            _values.put("recetaId", Long.parseLong(recetaId));
-        }
-        _values.put("numReceta", numReceta);
-        if (fechaE != null) {
-            _values.put("fechaE", Dates.getFormatoFecha(fechaE));
-        }
-        _values.put("usd", "$");
-
-        //Exportar a pdf 
-        List<Receta> recetas = crudService.findWithNamedQuery("Receta.buscarPorId", QueryParameter.with("recetaId", Long.parseLong(recetaId)).parameters());
-        System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
-        JasperReportAction.exportToPdf(REPORTE_RECETA, _values, attachFileName);
-
-//        if (log.isDebugEnabled()) {
-//            log.debug("export as pdf");
-//        }
+            //Exportar a pdf 
+            List<Receta> recetas = new ArrayList<Receta>();
+            recetas.add(receta);
+            //System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
+            JasperReportAction.exportToPdf(REPORTE_RECETA, recetas, _values, attachFileName);
+        } 
     }
 }

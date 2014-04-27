@@ -29,6 +29,6 @@
         serverPort="25">
         <s:modifies/>
     </mail:MailConfig>
-
+    
 </beans>
 

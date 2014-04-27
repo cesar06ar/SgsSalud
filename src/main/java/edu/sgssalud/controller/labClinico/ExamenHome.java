@@ -18,14 +18,20 @@ package edu.sgssalud.controller.labClinico;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
+import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.service.labClinico.ExamenLabService;
+import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -40,11 +46,20 @@ import org.jboss.seam.transaction.Transactional;
  */
 @Named
 @ViewScoped
-public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements Serializable{
+public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements Serializable {
 
     @Inject
     @Web
     private EntityManager em;
+    private Parametros parametro;
+    @Inject
+    private Event<Parametros> evento;
+    @Inject
+    private ExamenLabService examenLabService;
+    @Inject
+    private ResultadoExamenLCService resultadoService;
+    private List<Parametros> parametros = new ArrayList<Parametros>();
+    private List<String> categorias = new ArrayList<String>();
 
     public Long getExamenId() {
         return (Long) getId();
@@ -52,7 +67,42 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
 
     public void setExamenId(Long examenId) {
         setId(examenId);
+        if (getInstance().isPersistent()) {
+            parametros = examenLabService.getParametrosPorExamen(getInstance());
+            this.listarCategorias();
+        }
     }
+
+    public Parametros getParametro() {
+        return parametro;
+    }
+
+    public void setParametro(Parametros parametro) {
+        this.parametro = parametro;
+    }
+
+    public List<Parametros> getParametros() {
+        return parametros;
+    }
+
+    public void setParametros(List<Parametros> parametros) {
+        this.parametros = parametros;
+    }
+
+    public List<String> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(List<String> categorias) {
+        this.categorias = categorias;
+    }
+    
+    public void listarCategorias(){
+        if(getInstance().getCategorias() != null){
+            String c = getInstance().getCategorias();
+            categorias = Arrays.asList(c.split(","));
+        }
+    }    
 
     @TransactionAttribute   //
     public ExamenLabClinico load() {
@@ -71,10 +121,12 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
     @PostConstruct
     public void init() {
         setEntityManager(em);
-        /*el bussinesEntityService.setEntityManager(em) solo va si la Entidad en este caso (ConsultaMedia)
-         *hereda de la Entidad BussinesEntity...  caso contrario no se lo agrega
-         */
-        //bussinesEntityService.setEntityManager(em);
+        examenLabService.setEntityManager(em);
+        parametro = new Parametros();
+        resultadoService.setEntityManager(em);
+//        if(getInstance().isPersistent()){
+//            this.listarCategorias();
+//        }
     }
 
     @Override
@@ -86,7 +138,7 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
         examenLab.setCreatedOn(now);
         examenLab.setLastUpdate(now);
         examenLab.setActivationTime(now);
-
+        examenLab.setParametros(new ArrayList<Parametros>());
         //fichaMedic.setResponsable(null);    //cambiar atributo a                 
         return examenLab;
     }
@@ -100,48 +152,72 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
     public String guardar() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
+        String salida = null;
         try {
             if (getInstance().isPersistent()) {
+                getInstance().setParametros(parametros);
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo el nombre del Examen: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                salida = "/pages/labClinico/listaExamenes.xhtml?faces-redirect=true";
             } else {
+                //getInstance().setParametros(parametros);
                 create(getInstance());
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se creo nueva Examen: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                salida = "/pages/labClinico/examenes.xhtml?faces-redirect=true"
+                        + "&examenLabId=" + getInstance().getId();
             }
         } catch (Exception e) {
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }
-        return "/pages/labClinico/listaExamenes.xhtml?faces-redirect=true";
+        return salida;
     }
 
     @Transactional
-    public String borrarEntidad() {
+    public String borrarParametro() {
         //log.info("sgssalud --> ingreso a eliminar: " + getInstance().getId());
         try {
-            if (getInstance() == null) {
-                throw new NullPointerException("Servicio is null");
+            boolean ban = resultadoService.getResultadoParametros(parametro).isEmpty();
+            if (parametro != null && ban) {
+                delete(parametro);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  ", "El parametro seleccionado"));
+                parametro = new Parametros();
+            }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El parametro contiene datos asociados ", "no se puede borrar"));
             }
-            if (getInstance().isPersistent()) {
-                delete(getInstance());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una entidad para ser borrada!", ""));
-            }
-
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/serviciosMedicos/lista.xhtml?faces-redirect=true";
+        return "/pages/labClinico/examenes.xhtml?faces-redirect=true"
+                        + "&examenLabId=" + getInstance().getId();
     }
-    
-    public List<ExamenLabClinico.Tipo> listaTiposExamen(){
+
+    public List<ExamenLabClinico.Tipo> listaTiposExamen() {
         wire();
         List<ExamenLabClinico.Tipo> list = Arrays.asList(getInstance().getTipo().values());
         return list;
+    }
+
+    @TransactionAttribute
+    public void agregarParametro() {
+        System.out.println("agregar parametro");
+        try {
+            //getInstance().agregarParametro(parametro);
+            parametro.setExamenLabClinico(getInstance());
+            //save(getInstance());
+            create(parametro);
+            save(parametro);
+            parametros = examenLabService.getParametrosPorExamen(getInstance());
+            parametro = new Parametros();
+            evento.fire(parametro);
+            System.out.println("fin agregar parametro");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

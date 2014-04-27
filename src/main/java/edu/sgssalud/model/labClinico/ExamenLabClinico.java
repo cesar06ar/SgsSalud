@@ -17,10 +17,16 @@
 package edu.sgssalud.model.labClinico;
 
 import edu.sgssalud.model.PersistentObject;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -32,15 +38,39 @@ import javax.persistence.Transient;
 @Table(name = "ExamenLabClinico")
 public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> implements Comparable<ExamenLabClinico>{
     
-    private Double valorReferencia;
-    private Double valorReferencia1;
+    private Double valorRefInferior;
+    private Double valorRefSuperior;
+    private String valorReferencia;
+    private String categorias;
     private Double costo;
     @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
     @Column(nullable = false)
     private ExamenLabClinico.Tipo tipo;
     
+    @OneToMany(mappedBy = "examenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Parametros> parametros = new ArrayList<Parametros>();
+    
     @Transient
     private boolean select;
+
+    public ExamenLabClinico() {
+    }
+
+    public ExamenLabClinico(String nombre, String codigo, Double valorRefInferior, Double valorRefSuperior, String valorReferencia, String categorias, Double costo, Tipo tipo, Date fecha) {
+        this.setName(nombre);
+        this.setCode(codigo);        
+        this.valorRefInferior = valorRefInferior;
+        this.valorRefSuperior = valorRefSuperior;
+        this.valorReferencia = valorReferencia;
+        this.categorias = categorias;
+        this.costo = costo;
+        this.tipo = tipo;
+        this.setCreatedOn(fecha);
+        this.setActivationTime(fecha);
+        this.setLastUpdate(fecha);
+    }
+    
+    
     
     public Tipo getTipo() {
         return tipo;
@@ -49,23 +79,23 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }    
-    
-    public Double getValorReferencia() {
-        return valorReferencia;
+
+    public Double getValorRefInferior() {
+        return valorRefInferior;
     }
 
-    public void setValorReferencia(Double valorReferencia) {
-        this.valorReferencia = valorReferencia;
-    }    
-
-    public Double getValorReferencia1() {
-        return valorReferencia1;
+    public void setValorRefInferior(Double valorRefInferior) {
+        this.valorRefInferior = valorRefInferior;
     }
 
-    public void setValorReferencia1(Double valorReferencia1) {
-        this.valorReferencia1 = valorReferencia1;
-    }    
+    public Double getValorRefSuperior() {
+        return valorRefSuperior;
+    }
 
+    public void setValorRefSuperior(Double valorRefSuperior) {
+        this.valorRefSuperior = valorRefSuperior;
+    }  
+     
     public Double getCosto() {
         return costo;
     }
@@ -81,7 +111,41 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
     public void setSelect(boolean select) {
         this.select = select;
     }   
+
+    public String getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(String categorias) {
+        this.categorias = categorias;
+    }   
     
+    public List<Parametros> getParametros() {
+        return parametros;
+    }
+
+    public void setParametros(List<Parametros> parametros) {
+        for (Parametros p : parametros) {
+            p.setExamenLabClinico(this);
+        }
+        this.parametros = parametros;
+    }   
+    
+    public void agregarParametro(Parametros p){
+        if(!parametros.contains(p)){
+            p.setExamenLabClinico(this);
+            parametros.add(p);
+        }
+    }
+
+    public String getValorReferencia() {
+        return valorReferencia;
+    }
+
+    public void setValorReferencia(String valorReferencia) {
+        this.valorReferencia = valorReferencia;
+    }  
+        
     @Override
     public int compareTo(ExamenLabClinico o) {
         return (int)(this.getId() - o.getId());
@@ -110,6 +174,10 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
         public int getTipo() {
             return tipo;
         }
+        
+//        private void setTipo(int tipo) {
+//            this.tipo = tipo;
+//        }
 
     }
     

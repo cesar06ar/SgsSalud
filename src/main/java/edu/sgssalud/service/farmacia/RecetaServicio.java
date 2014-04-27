@@ -48,17 +48,17 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
     @Override
     public void setEntityManager(EntityManager em) {
         this.em = em;
-    }    
+    }
 
     public List<Receta> getRecetas() {
         List list = this.findAll(Receta.class);
         return list;
-    }   
-    
+    }
+
     public List<Receta> getRecetas(final int limit, final int offset) {
         return findAll(Receta.class);
-    }   
-    
+    }
+
     public Receta buscarRecetaPorId(final Long id) {
         return (Receta) findById(Receta.class, id);
     }
@@ -81,7 +81,15 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         Root<Receta> bussinesEntityType = query.from(Receta.class);
         query.where(builder.equal(bussinesEntityType.get(Receta_.fechaEmision), fecha));
         return getSingleResult(query);
+    }
 
+    public List<Receta> buscarRecetaPorFechas(final Date fechaInf, final Date fechaSup) throws NoResultException {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Receta> query = builder.createQuery(Receta.class);
+        Root<Receta> objeto = query.from(Receta.class);
+        query.where(builder.between(objeto.get(Receta_.fechaEntrega), fechaInf, fechaSup),
+                builder.or(builder.between(objeto.get(Receta_.fechaEmision), fechaInf, fechaSup)));        
+        return getResultList(query);
     }
 
     public List<Receta> buscarRecetaPorConsultaMedica(final ConsultaMedica consulMedica) throws NoResultException {
@@ -108,7 +116,7 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
             query = em.createNamedQuery("Receta.buscarPorFecha", Receta.class);
             query.setParameter("clave", Dates.getFormatoFecha(parametro));
         } else {
-            query = em.createNamedQuery("Receta.buscarPorPaciente", Receta.class);
+            query = em.createNamedQuery("Receta.buscarPorCriterio", Receta.class);
             query.setParameter("clave", parametro);
         }
 //        else if{
@@ -127,12 +135,12 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
         }
         System.out.println("Actualizado correctamente:________________");
     }
-    
-     public Long getGenerarNumeroFicha() {
+
+    public Long getGenerarNumeroFicha() {
         List<Receta> listaF = getRecetas();
         Long num = new Long(001);
         if (!listaF.isEmpty()) {
-            for (Receta rm : listaF) {                
+            for (Receta rm : listaF) {
                 if (rm.getNumero() >= num) {
                     num = (rm.getNumero() + 1);
                 }

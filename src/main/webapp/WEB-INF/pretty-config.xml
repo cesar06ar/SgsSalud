@@ -217,7 +217,7 @@
    </url-mapping>
    <url-mapping id="examenLabClinico">
       <pattern value="/labClinico/examen"></pattern>
-      <view-id value="/pages/labClinico/examen.xhtml"></view-id>       
+      <view-id value="/pages/labClinico/examenes.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="listaPedidosExamen">
       <pattern value="/labClinico/listaPedidos"></pattern>

@@ -109,12 +109,18 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public void setFichaMedicaId(Long fichaMedicaId) {
         setId(fichaMedicaId);
-        if (getInstance().isPersistent()) {
+        FichaMedica f = fichaMedicaService.getFichaMedicaPorId(fichaMedicaId);
+        if (f.isPersistent()) {
+            this.setInstance(f);
             this.setPaciente(getInstance().getPaciente());
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-            if (getHistoriaClinica().isPersistent() && getFichaOdontologica().isPersistent()) {
+            if (getHistoriaClinica() != null && getFichaOdontologica() != null) {
                 this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
+            } else if (getHistoriaClinica() != null && getFichaOdontologica() == null) {
+                this.cargarSignosVitales(getHistoriaClinica().getConsultas(), new ArrayList<ConsultaOdontologica>());
+            } else if (getHistoriaClinica() == null && getFichaOdontologica() != null) {
+                this.cargarSignosVitales(new ArrayList<ConsultaMedica>(), getFichaOdontologica().getConsultas());
             }
         }
     }
@@ -126,15 +132,20 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
         this.setPaciente(pacienteS.getPacientePorId(pacienteId));
-        this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(paciente));
-        if (!getInstance().isPersistent()) {
-
+        FichaMedica f = fichaMedicaService.getFichaMedicaPorPaciente(paciente);
+        if (f == null) {
+            createInstance();
             getInstance().setNumeroFicha(getGenerarNumeroFicha());
         } else {
+            setInstance(f);
             this.setHistoriaClinica(historiaClinService.buscarPorFichaMedica(getInstance()));
             this.setFichaOdontologica(fichaOdonServicio.getFichaOdontologicaPorFichaMedica(getInstance()));
-            if (getHistoriaClinica().isPersistent() && getFichaOdontologica().isPersistent()) {
+            if (getHistoriaClinica() != null && getFichaOdontologica() != null) {
                 this.cargarSignosVitales(getHistoriaClinica().getConsultas(), getFichaOdontologica().getConsultas());
+            } else if (getHistoriaClinica() != null && getFichaOdontologica() == null) {
+                this.cargarSignosVitales(getHistoriaClinica().getConsultas(), new ArrayList<ConsultaOdontologica>());
+            } else if (getHistoriaClinica() == null && getFichaOdontologica() != null) {
+                this.cargarSignosVitales(new ArrayList<ConsultaMedica>(), getFichaOdontologica().getConsultas());
             }
         }
     }
@@ -177,7 +188,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        this.setListaPacietes(pacienteS.BuscarPacientePorParametro(parametroBusqueda));
+        //this.setListaPacietes(pacienteS.BuscarPacientePorParametro(parametroBusqueda));
     }
 
     public FichaOdontologica getFichaOdontologica() {
@@ -418,7 +429,9 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 if (p.isPersistent()) {
                     this.setPaciente(p);
                     this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
-                    this.getInstance().setNumeroFicha(getGenerarNumeroFicha());
+                    if (!getInstance().isPersistent()) {
+                        this.getInstance().setNumeroFicha(getGenerarNumeroFicha());
+                    } 
                     salida += "&pacienteId=" + paciente.getId();
                 } else {
                     FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");

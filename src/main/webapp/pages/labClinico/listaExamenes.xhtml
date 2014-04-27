@@ -39,12 +39,15 @@
                         <f:param name="examenLabId" value="#{examenLabListaServicio.examenSeleccionado.id}"></f:param>
                         <f:param name="backView" value="listaExamenes"></f:param>
                     </h:link>   
+                    <h:commandLink value="Imprimir" styleClass="btn" action="#{reporteListas.renderExamenes()}" style="float: right">  
+                        <!--<p:printer target="tablaExamenes"/>-->
+                    </h:commandLink>
                 </div>                
-                <p:dataTable id="tablaExamenes"  var="examenLab_" value="#{examenLabListaServicio.resultList}"
-                             paginator="true" rows="20" paginatorPosition="top"
+                <p:dataTable id="tablaExamenes"  var="examenLab_" value="#{examenLabListaServicio}"
+                             paginator="true" rows="50" paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100" 
-                             lazy="true" rendered="true" selectionMode="single"                             
+                             lazy="true" selectionMode="single"                             
                              rowKey="#{examenLab_.id}" selection="#{examenLabListaServicio.examenSeleccionado}">
                              <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
                              
@@ -61,41 +64,49 @@
                             update=":form:button-edit :form:messages :form:tablaExamenes"/>
                     <!--Columnas para mostrar en la tabla -->
                     
-                    <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.code}"
-                               headerText="#{messages['common.code']}">                        
+                    <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.code}" 
+                               headerText="#{messages['common.code']}" >
                         <h:outputText value="#{examenLab_.code}" />                        
                     </p:column>
                     <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.name}"
                                headerText="#{messages['Examen.Nombre1']}">                        
                         <h:outputText value="#{examenLab_.name}" />                        
                     </p:column>
-                    <p:column sortBy="#{examenLab_.tipo}" style="text-align: center;" >
+                    <p:column sortBy="#{examenLab_.tipo}" style="width: 15%; text-align: center;" >
                               <!--filterMatchMode="contains" filterBy="# {examenLab_.tipo}" -->
                         <f:facet name="header">  
                             <h:outputText value="#{messages['Examen.Tipo']}" />  
                         </f:facet> 
                         <h:outputText value="#{examenLab_.tipo}" />
                     </p:column>
-                    <p:column sortBy="#{examenLab_.valorReferencia}" style="text-align: center;" 
+                    <p:column sortBy="#{examenLab_.valorReferencia}" style="width: 15%; text-align: center;" 
                               filterMatchMode="startsWith">
                         <f:facet name="header">  
-                            <h:outputText value="#{messages['Examen.ValorReferencial']}" />  
+                            <h:outputText value="Referencia" />  
                         </f:facet> 
                         <h:outputText value="#{examenLab_.valorReferencia}" />
                     </p:column>
-                    <p:column sortBy="#{examenLab_.costo}" style="text-align: center;" 
+                    <p:column sortBy="#{examenLab_.valorRefInferior}" style="width: 10%; text-align: center;" >
+                        <f:facet name="header">  
+                            <h:outputText value="ref Inferior" />  
+                        </f:facet> 
+                        <h:outputText value="#{examenLab_.valorRefInferior}" />
+                    </p:column>
+                    <p:column sortBy="#{examenLab_.valorRefSuperior}" style="width: 10%; text-align: center;" >
+                        <f:facet name="header">  
+                            <h:outputText value="ref Superior" />  
+                        </f:facet> 
+                        <h:outputText value="#{examenLab_.valorRefSuperior}" />
+                    </p:column>
+                    <p:column sortBy="#{examenLab_.costo}" style="width: 10%; text-align: center;" 
                               filterMatchMode="startsWith">
                         <f:facet name="header">  
-                            <h:outputText value="#{messages['examen.costo']}" />  
+                            <h:outputText value="Costo" />  
                         </f:facet> 
                         <h:outputText value="#{examenLab_.costo}" />
                     </p:column>
                 </p:dataTable>
-                <h:panelGrid id="export" class="columns" >
-                    <h:commandLink value="Imprimir" styleClass="btn">  
-                        <p:printer target="tablaExamenes"/>
-                    </h:commandLink>
-                </h:panelGrid>
+                
             </h:form>
         </ui:define>
 

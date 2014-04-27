@@ -19,6 +19,7 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.controller.odontologia.TratamientoDataModel;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
+import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.FichaMedica;
@@ -174,7 +175,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
     @TransactionAttribute
     public String guardar() {
         Date now = Calendar.getInstance().getTime();
-
+        System.out.println("INGRESo a Guardar _________");
         try {
             if (getInstance().isPersistent()) {
                 save(getInstance());
@@ -196,12 +197,19 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
 
                     create(getInstance());
                     save(getInstance());
+                    update();
+                    System.out.println("Guardo Con exito 0_________");
                     ResultadoExamenLabClinico resultadoExa;
+                    List<Parametros> pl = null;
                     for (ExamenLabClinico ex : this.listaPedidoExamenLabC) {
                         resultadoExa = new ResultadoExamenLabClinico();
                         resultadoExa.setExamenLab(ex);
                         resultadoExa.setPedidoExamenLab(getInstance());
+                        pl = examenLabService.getParametrosPorExamen(ex);
+                        System.out.println("PARAM________"+pl.toString());
+                        resultadoExa.agregarValoresResultados(pl);
                         save(resultadoExa);
+                        update();
                     }
                     System.out.println("Guardo Con exito_________--");
                 }
@@ -210,6 +218,7 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }

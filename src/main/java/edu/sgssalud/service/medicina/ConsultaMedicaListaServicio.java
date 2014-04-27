@@ -60,7 +60,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
     private EntityManager em;
     @Inject
     private ConsultaMedicaServicio cms;
-    private List<ConsultaMedica> resultList;
+    private List<ConsultaMedica> resultList = new ArrayList<ConsultaMedica>();
     private int primerResult = 0;
     private ConsultaMedica[] consulMedicSeleccionadas;
     private ConsultaMedica consulMedicSeleccionada;
@@ -130,7 +130,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
     }
 
     public List<ConsultaMedica> getResultList() {
-        Collections.sort(resultList);
+        //Collections.sort(resultList);
         return resultList;
     }
 

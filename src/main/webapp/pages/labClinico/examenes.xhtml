@@ -49,20 +49,122 @@
                         <span class="help-inline"><br/>#{messages['Examen.Tipo.lineaAyuda']} <ocp:message forId="tipo_" /></span>
                     </div>
                 </h:panelGroup>
-                <glue:input id="valorRef" name="valorRef" type="decimal" label="#{messages['Examen.ValorReferencial']}" value="#{examenHome.instance.valorReferencia}" 
-                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="true" execute="@this save" render="valorRef" styleClass="xLarge"/>
+                <glue:input id="valorRef" name="valorRef" type="text" label="#{messages['Examen.ValorReferencial']}" value="#{examenHome.instance.valorReferencia}" 
+                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']} cuando es Positivo o Negativo" required="false" execute="@this save" render="valorRef" styleClass="xLarge"/>
+                <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.instance.valorRefInferior}" 
+                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
+                <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.instance.valorRefSuperior}" 
+                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
                 <glue:input id="costo" name="costo" type="decimal" label="#{messages['examen.costo']}" value="#{examenHome.instance.costo}" 
                             inlinehelp="#{messages['examen.costo.lineaAyuda']}" required="true" execute="@this save" render="costo" styleClass="xLarge"/>
 
+                <h:panelGroup layout="block" class="clearfix" >                                
+                    <label for="categ">#{messages['comun.categoria']}s</label>
+                    <div class="input">
+                        <p:inputText id="categ" value="#{examenHome.instance.categorias}" styleClass="span4" label="#{messages['comun.categoria']}s" 
+                                     rendered="true" >                            
+                            <!--<f:ajax execute="@this :form:save" render=":form:save"/>
+                            <p:ajax event="keyup" rendered=":form:save" update="@parent :form:save :edit-dialog:cate" listener="# {examenHome.listarCategorias()}"/>-->
+                            <p:ajax event="keyup" rendered=":form:save" update="@parent :form:save :edit-dialog " listener="#{examenHome.listarCategorias()}"/>
+                        </p:inputText>                        
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.instance.categorias != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>#{'Ingrese los bloques de parametros separados por ,'}<ocp:message forId="categ" /></span>
+                    </div>
+                </h:panelGroup> 
+                <p:panel header="PARAMETROS DEL EXAMEN" rendered="#{examenHome.instance.persistent}">
+                    <p:commandButton id="button-add" value="#{messages['common.add']} Parametros" styleClass="btn primary"
+                                     onclick="#{'editDlg.show();'}"
+                                     ajax="true">
+                        <p:ajax process="@this" update=":edit-dialog"/>
+                    </p:commandButton> 
+                    <br/>
+                    <p:dataTable id="parametros1" value="#{examenHome.parametros}" 
+                                 var="_p">
+                        <p:column headerText="Categoria">
+                            <h:outputText value="#{_p.categoria}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{_p.nombre}" />
+                        </p:column>
+                        <p:column headerText="Valor por defecto">
+                            <h:outputText value="#{_p.valor}" />
+                        </p:column>
+                        <p:column headerText="Unidad de Medida">
+                            <h:outputText value="#{_p.unidadMedida}" />
+                        </p:column>
+                        <p:column headerText="Opción">
+                            <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" 
+                                           onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" >                                 
+                                <f:setPropertyActionListener value="#{_p}" target="#{examenHome.parametro}"/>
+                                <p:ajax process="@this" update=":cancel-dialog" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
                 <div class="admin-actions ">
                     <p:commandButton id="save" action="#{examenHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4" immediate="true"/>
-                    
+
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/labClinico/listaExamenes.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
                     </h:link>
                 </div>
             </h:form>            
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} Parametro de examen " 
+                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="80%">
+                <h:form id="form-dialog">
+                    <!--<glue:input id="cate" name="cate" type="text" label="# {messages['comun.categoria']}" value="# {examenHome.parametro.categoria}" 
+                                required="false" inlinehelp="# {'categoria del parametro'}" execute="@this save1" render="cate"/>-->
+                    <h:panelGroup id="catep" layout="block" class="clearfix" >
+                        <label for="cate" >#{messages['comun.categoria']}</label>
+                        <div class="input" >
+                            <p:selectOneMenu id="cate" value="#{examenHome.parametro.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
+                                             effect="fade" var="m" styleClass="xLarge" >  
+                                <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                <f:selectItems value="#{examenHome.categorias}" var="c"/>    
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>        
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.categoria != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="cate" /></span>
+                        </div>
+                    </h:panelGroup>  
+                    
+                    <glue:input id="nomb" name="nomb" type="text" label="#{messages['common.name']}" value="#{examenHome.parametro.nombre}" 
+                                required="false" inlinehelp="#{'Nombre del parametro'}" execute="@this save1" render="nomb"/>
+                    <glue:input id="val1" name="val1" type="text" label="Valor por defecto" value="#{examenHome.parametro.valor}" 
+                                required="false" inlinehelp="#{'valor por defecto del parametro'}" execute="@this save1" render="val1"/>
+                    <glue:input id="uniMed" name="uniMed" type="text" label="Unidad de Medida" value="#{examenHome.parametro.unidadMedida}" 
+                                required="false" inlinehelp="#{'una unidad de medida en caso la tiene'}" execute="@this save1" render="uniMed"/>
+                    <div class="admin-actions">
+                        <p:commandButton id="save1" value="#{messages['common.add']}" oncomplete="editDlg.hide();"                                           
+                                         action="#{examenHome.agregarParametro()}" update=":form:parametros1 :edit-dialog"                                             
+                                         style="margin: 0 0 0 30%">  
+                            <!--recetaListaServicio.entregarReceta()--> 
+                        </p:commandButton> 
+                        &nbsp;&nbsp;                        
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();" update=":form:parametros1">
+                        </p:commandButton>
+
+                    </div>
+                </h:form>
+            </p:dialog>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{examenHome.borrarParametro()}"
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
         </ui:define>
     </ui:composition>
 </html>                

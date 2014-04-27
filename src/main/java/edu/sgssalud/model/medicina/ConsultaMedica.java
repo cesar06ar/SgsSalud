@@ -17,6 +17,7 @@ package edu.sgssalud.model.medicina;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.farmacia.Receta;
+import edu.sgssalud.model.paciente.Paciente;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -211,5 +212,6 @@ public class ConsultaMedica extends BussinesEntity implements Serializable, Comp
 //            return 1;
 //        }        
         return (int)(o.getId() - this.getId());
-    }
+    }     
+    
 }

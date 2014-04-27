@@ -25,6 +25,9 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -52,6 +55,9 @@ import javax.persistence.Transient;
 public class FichaMedica extends BussinesEntity implements Serializable {    
 
     private static final long serialVersionUID = 1L;   
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    private Long id;
     
     private Long numeroFicha;
     @Temporal(javax.persistence.TemporalType.DATE)

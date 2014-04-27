@@ -114,11 +114,11 @@
                         <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column sortBy="#{consultaOdontologica_.responsable}" style="text-align: center;">
+                <p:column sortBy="#{consultaOdontologica_.responsable.fullName}" style="text-align: center;">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['consultaMedica.medicoResponsable']}" />  
                     </f:facet> 
-                    <h:outputText value="#{consultaOdontologica_.responsable}" />
+                    <h:outputText value="#{consultaOdontologica_.responsable.fullName}" />
                 </p:column>                           
                 <p:column sortBy="#{consultaOdontologica_.code}" style="text-align: center;" 
                           filterBy="#{consultaOdontologica_.code}" filterMatchMode="contains">

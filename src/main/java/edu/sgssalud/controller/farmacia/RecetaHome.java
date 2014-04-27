@@ -404,7 +404,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void cargarMedicamento() {
         Medicamento med = getMedicamentoSeleccionado();
-        String name = "" + med.getNombreComercial() + " (" + med.getUnidades() + " " + med.getPresentacion() + ") ";
+        String name = med.getNombreComercial() + " (" + med.getUnidades() + " " + med.getPresentacion() + ") ";
         this.setNombreMedic(name);
         System.out.println("cargar Medicamento____:" + nombreMedic);
     }
@@ -423,11 +423,11 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     //if (this.noContieneMedicamento(medicamentoSeleccionado)) {                    
                     if (!this.contieneMedicamento(nombreMedic)) {
                         recetaMed.setMedicamento(medicamentoSeleccionado);
-                        String med = nombreMedic + " # " + this.getUnidadesMedicacion() + " \n ";
+                        String med = nombreMedic.toUpperCase() + " # " + this.getUnidadesMedicacion() + "\n";
                         this.getListaRecetaMed().add(recetaMed);
 
                         this.getListaMedicaciones().add(med);
-                        this.getListaIndicaciones().add(indicacion + " \n ");
+                        this.getListaIndicaciones().add(indicacion + "\n");
                         System.out.println(med);
                         System.out.println(indicacion);
                     } else {
@@ -461,7 +461,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         Medicamento med = getMedicamentoSeleccionado();
         String name = "(" + med.getNombreComercial() + ", " + med.getNombreGenerico() + " ) " + med.getPresentacion();
         this.setNombreMedic(name);
-        this.setIndicacion(med.getNombreComercial() + ": ");
+        this.setIndicacion(med.getNombreComercial().toUpperCase() + ": ");
         System.out.println("cargar Medicamento____:" + nombreMedic);
     }
 
