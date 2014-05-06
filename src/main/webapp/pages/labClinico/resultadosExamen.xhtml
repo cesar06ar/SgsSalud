@@ -89,16 +89,7 @@
                         </p:column>  
                         <p:column headerText="#{messages['Examen.Nombre1']}" style="width:30%">                             
                             <h:outputText value="#{Object_.examenLab.name}" />  
-                        </p:column>  
-                        <p:column headerText="Valor " style="width:30%">  
-                            <h:outputText value="#{Object_.valorResultado}" />  
-                        </p:column>  
-                        <p:column headerText="Ref inferior" style="width:30%">   
-                            <h:outputText value="#{Object_.examenLab.valorRefInferior}" title="#{messages['Examen.ValorRefInf']}"/>
-                        </p:column>                         
-                        <p:column headerText="Ref Superior" style="width:30%">   
-                            <h:outputText value="#{Object_.examenLab.valorRefSuperior}" title="#{messages['Examen.ValorRefSup']}"/>
-                        </p:column>                         
+                        </p:column>                                           
                         <p:column headerText="opciones " style="width:30%">
                             <h:link id="button-edit" value="#{messages['common.edit']}" outcome="resultado" styleClass="btn primary" >                                
                                 <f:param name="pedidoExamenId" value="#{resultadosExamenHome.pedidoExamenId}"/>

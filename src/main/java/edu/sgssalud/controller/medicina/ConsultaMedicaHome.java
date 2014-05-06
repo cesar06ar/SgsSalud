@@ -497,6 +497,10 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
      FacesContext.getCurrentInstance().addMessage(null, msg);
      }*/
 
+    /**
+     *
+     * @return Retorna el valor del indice de masa corporal
+     */
     public String getInidicadorIMC() {
         if (getInstance().isPersistent()) {
             if (paciente.getEdad() < 5) {
@@ -528,6 +532,9 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         }
     }
 
+    /**
+     * Metodo para crear un grafico estadistico de primefaces
+     */
     public void crearModeloLineal() {
         linearModel = new CartesianChartModel();
         ChartSeries serieImc = new ChartSeries();
@@ -537,6 +544,20 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         serieImc.set("SOBRE PESO", 25);
         serieImc.set("OBESIDAD", 30);
         linearModel.addSeries(serieImc);
+    }
+
+    /**
+     *
+     * @return verdadero si se puede editar la consulta medica
+     */
+    public boolean isEditable() {
+        Date now = Calendar.getInstance().getTime();
+        Date fechaCon = FechasUtil.sumarRestarHorasFecha(getInstance().getFechaConsulta(), 24);
+        if (now.after(fechaCon)) {
+            System.out.println("FECHA EDITABLE______________ "+fechaCon);
+            return true;
+        }
+        return false;
     }
 
 }

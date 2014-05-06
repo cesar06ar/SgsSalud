@@ -172,7 +172,7 @@ limitations under the License.
                                 value="#{messages['common.cancel']}" styleClass="btn"/>                         
                     </div>                     
                     <p:dataTable var="property" value="#{e.properties}" 
-                                 editable="false" 
+                                 editable="false" resizableColumns="true" liveResize="true" 
                                  id="properties"
                                  rowKey="#{property.id}"
                                  selection="#{propertyHome.instance}" 

@@ -53,7 +53,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
 
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
-    private static Logger log = Logger.getLogger(ConsultaMedicaListaServicio.class);
+    //private static Logger log = Logger.getLogger(ConsultaMedicaListaServicio.class);
 
     @Inject
     @Web

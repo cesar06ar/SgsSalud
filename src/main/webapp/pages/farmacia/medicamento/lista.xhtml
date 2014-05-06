@@ -47,7 +47,7 @@
                         <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
-                    <h:panelGroup style="float: right">
+                    <h:panelGroup  styleClass="offset2" >
                         <p:inputText id="criterioBuscar" size ="25" value="#{medicamentoListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                             <p:ajax event="keyup" update="tablaMedicamentos"/>
                         </p:inputText>
@@ -60,7 +60,7 @@
                              paginator="true" rows="20"  paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100"
-                             lazy="true"
+                             lazy="true" resizableColumns="true" liveResize="true"
                              rowKey="#{medicamento_.id}"
                              selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
                              rendered="true"
@@ -72,47 +72,47 @@
                             update=":form:button-edit :form:messages :form:button-cardex"/>
                     <!--Columnas para mostrar en la tabla-->
 
-                    <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 5%; text-align: center;">
+                    <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 8%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{'Nro. Factura'}" />  
                         </f:facet>  
                         <h:outputText value="#{medicamento_.numeroFactura}" />                        
                     </p:column>
-                    <p:column sortBy="#{medicamento_.nombreComercial}" style="text-align: center;">
+                    <p:column sortBy="#{medicamento_.nombreComercial}" style="width: 15%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.nombre.comercial']}" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.nombreComercial}" />
                     </p:column>
 
-                    <p:column sortBy="#{medicamento_.nombreGenerico}" style="text-align: center;">
+                    <p:column sortBy="#{medicamento_.nombreGenerico}" style=" width: 15%;text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.nombre.generico']}" />  
                         </f:facet>                         
                         <h:outputText value="#{medicamento_.nombreGenerico}" />                            
                     </p:column>
 
-                    <p:column sortBy="#{medicamento_.unidades}" style="text-align: center;">
+                    <p:column sortBy="#{medicamento_.unidades}" style="width: 5%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{'Unidades'}" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.unidades}" />
                     </p:column>
-                    <p:column style="width: 8%; text-align: center;">
+                    <p:column style="width: 4%; text-align: center;">
                         <f:facet name="header">  
-                            <h:outputText value="Genérico" />  
+                            <h:outputText value="Genérico" title="Medicamento Genérico"/>  
                         </f:facet> 
                         <p:selectBooleanCheckbox value="#{medicamento_.generico}" disabled="true"/>
                     </p:column>
-                    <p:column style="width: 15%; text-align: center;">
+                    <p:column style="width: 10%; text-align: center;">
                         <f:facet name="header">  
-                            <h:outputText value="#{messages['common.fechacaducidadmedicamento']}" />  
+                            <h:outputText value="Fecha Caducidad" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.fechaCaducidad}" >
                             <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                         </h:outputText>  
                     </p:column>
-                    <p:column style="width: 15%; text-align: center;">
+                    <p:column style="width: 10%; text-align: center;">
                         <f:facet name="header">                               
                             <h:outputText value="ALERTAS" />  
                         </f:facet> 

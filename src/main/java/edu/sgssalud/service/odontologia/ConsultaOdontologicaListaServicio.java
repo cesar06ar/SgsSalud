@@ -43,7 +43,8 @@ import org.primefaces.model.SortOrder;
 /**
  *
  * @author tania
- */@Named("consultaOdontListaS")
+ */
+@Named("consultaOdontListaS")
 @ViewScoped
 public class ConsultaOdontologicaListaServicio implements Serializable{
     
@@ -56,7 +57,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
     private EntityManager em;
     @Inject
     private ConsultaOdontologicaServicio cos;    
-    private List<ConsultaOdontologica> resultList;
+    private List<ConsultaOdontologica> resultList = new ArrayList<ConsultaOdontologica>();;
     private int primerResult = 0;
     private ConsultaOdontologica[] consulOdontSeleccionadas;
     private ConsultaOdontologica consulOdontSeleccionada;
@@ -67,7 +68,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
     /*Método para inicializar tabla*/
     public ConsultaOdontologicaListaServicio() {
 //        setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<ConsultaOdontologica>();
+        //resultList = new ArrayList<ConsultaOdontologica>();
     }
     
     @PostConstruct
@@ -141,11 +142,8 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
         this.resultList = null;
     }
 
-    public List<ConsultaOdontologica> getResultList() {
-//        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-//            resultList = pacienteServicio.getPacientes(firstResult, firstResult);
-//        }
-        Collections.sort(resultList);
+    public List<ConsultaOdontologica> getResultList() {       
+        //Collections.sort(resultList);// ORDENA SEGUN CRITERIO DE COMPARACION REVISARA CONSULTA ODONT
         return resultList;
     }
 

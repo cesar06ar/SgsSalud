@@ -39,9 +39,9 @@
                             <div class="span7">
                                 <h:panelGroup  layout="block" class="clearfix">
                                     <h:panelGroup id="dnip" layout="block" class="clearfix">
-                                        <p:commandButton id="cargar" value="Buscar" icon="ui-icon-search" styleClass="btn primary btn-short" title="Buscar Estudiante por Cédula" > 
-                                            <!--<p:graphicImage value="/resources/images/buscar.png"/> -->                                            
-                                        </p:commandButton>
+                                       <p:commandButton id="cargar" value="Cargar"  action="#{pacienteHome.actualizarDatosSGA()}" rendered="#{pacienteHome.instance.persistent}"
+                                                         ajax="true" immediate="true" title="Actualizar datos del SGA"
+                                                         icon="ui-icon-search" styleClass="btn primary btn-short" /> 
                                         <label for="fdni">#{messages['profile.dni']}</label>
                                         <div class="input" > 
                                             <h:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">

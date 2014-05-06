@@ -134,10 +134,10 @@ public class ConsultaMedicaServicio extends PersistenceUtil<ConsultaMedica> impl
         CriteriaQuery<ConsultaMedica> query = builder.createQuery(ConsultaMedica.class);
         Root<ConsultaMedica> entity = query.from(ConsultaMedica.class);
         query.where(builder.between(entity.get(ConsultaMedica_.fechaConsulta), inicio, fin));        
-        List<ConsultaMedica> temp = getResultList(query);
-        Collections.sort(temp);
+        //List<ConsultaMedica> temp = getResultList(query);
+        //Collections.sort(temp);
         //System.out.println("lista de consultas_____-- " + temp.toString());
-        return temp;
+        return getResultList(query);
     }
 
     public boolean borrarConsultaMedica(ConsultaMedica cm) {

@@ -37,10 +37,7 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "ExamenLabClinico")
 public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> implements Comparable<ExamenLabClinico>{
-    
-    private Double valorRefInferior;
-    private Double valorRefSuperior;
-    private String valorReferencia;
+            
     private String categorias;
     private Double costo;
     @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
@@ -56,12 +53,10 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
     public ExamenLabClinico() {
     }
 
-    public ExamenLabClinico(String nombre, String codigo, Double valorRefInferior, Double valorRefSuperior, String valorReferencia, String categorias, Double costo, Tipo tipo, Date fecha) {
+    public ExamenLabClinico(String nombre, String codigo, String categorias, Double costo, Tipo tipo, Date fecha) {
         this.setName(nombre);
-        this.setCode(codigo);        
-        this.valorRefInferior = valorRefInferior;
-        this.valorRefSuperior = valorRefSuperior;
-        this.valorReferencia = valorReferencia;
+        this.setCode(codigo);                
+        //this.valorReferencia = valorReferencia;
         this.categorias = categorias;
         this.costo = costo;
         this.tipo = tipo;
@@ -79,23 +74,8 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
     public void setTipo(Tipo tipo) {
         this.tipo = tipo;
     }    
-
-    public Double getValorRefInferior() {
-        return valorRefInferior;
-    }
-
-    public void setValorRefInferior(Double valorRefInferior) {
-        this.valorRefInferior = valorRefInferior;
-    }
-
-    public Double getValorRefSuperior() {
-        return valorRefSuperior;
-    }
-
-    public void setValorRefSuperior(Double valorRefSuperior) {
-        this.valorRefSuperior = valorRefSuperior;
-    }  
-     
+    
+         
     public Double getCosto() {
         return costo;
     }
@@ -138,13 +118,13 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
         }
     }
 
-    public String getValorReferencia() {
-        return valorReferencia;
-    }
-
-    public void setValorReferencia(String valorReferencia) {
-        this.valorReferencia = valorReferencia;
-    }  
+//    public String getValorReferencia() {
+//        return valorReferencia;
+//    }
+//
+//    public void setValorReferencia(String valorReferencia) {
+//        this.valorReferencia = valorReferencia;
+//    }  
         
     @Override
     public int compareTo(ExamenLabClinico o) {

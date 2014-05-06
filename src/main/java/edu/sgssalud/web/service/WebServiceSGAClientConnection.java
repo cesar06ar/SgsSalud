@@ -62,7 +62,7 @@ public class WebServiceSGAClientConnection {
                     p.setFechaNacimiento(Dates.getFormatoFecha1(listaDatos.get(3)));
                     p.setTelefono(listaDatos.get(4));
                     p.setCelular(listaDatos.get(5));
-                    String s = listaDatos.get(8) + "--" + listaDatos.get(6);
+                    String s = listaDatos.get(8) + " -- " + listaDatos.get(6);
                     p.setDireccion(s);
                     p.setNacionalidad(listaDatos.get(7));
                     p.setEmail(listaDatos.get(9));

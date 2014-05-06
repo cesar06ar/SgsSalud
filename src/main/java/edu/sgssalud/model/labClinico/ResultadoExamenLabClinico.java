@@ -129,6 +129,10 @@ public class ResultadoExamenLabClinico implements Serializable {
                 r.setNombre(p.getNombre());
                 r.setValor(p.getValor());
                 r.setResultadoExamenLabClinico(this);
+                r.setValorReferenciaInf(p.getValorReferenciaInf());
+                r.setValorReferenciaSup(p.getValorReferenciaSup());
+                r.setCategoria(p.getCategoria());
+                r.setUnidadMedida(p.getUnidadMedida());
                 r.setParametro(p);
                 resultadosParametros.add(r);           
             }

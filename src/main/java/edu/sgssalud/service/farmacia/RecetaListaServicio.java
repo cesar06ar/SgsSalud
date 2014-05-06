@@ -60,12 +60,13 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     @Web
     private EntityManager em;
     @Inject
-    private RecetaServicio recetaServicio;    
+    private RecetaServicio recetaServicio;
     @Inject
-    private Identity identity;   
+    private Identity identity;
     @Inject
     private ProfileService profileServicio;
-    @Inject ReporteReceta reportes;
+    @Inject
+    ReporteReceta reportes;
     private List<Receta> resultList = new ArrayList<Receta>();
     private int primerResult = 0;
     private Receta[] recetasSeleccionados;
@@ -81,7 +82,7 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         //resultList = new ArrayList<Receta>();
     }
 
-    public List<Receta> getResultList() {        
+    public List<Receta> getResultList() {
         Collections.sort(resultList);
         return resultList;
     }
@@ -129,9 +130,9 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));                       
-    }     
- 
+        this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));
+    }
+
     public List<String> getListaIndicaciones() {
         return listaIndicaciones;
     }
@@ -164,7 +165,7 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         this.fechaF = fechaF;
     }
 
-   @Override
+    @Override
     public List<Receta> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
@@ -178,10 +179,10 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
 
         QueryData<Receta> qData = recetaServicio.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());                
-        return resultList;        
+        this.setResultList(qData.getResult());
+        return resultList;
     }
-    
+
     @PostConstruct
     public void init() {
         recetaServicio.setEntityManager(em);
@@ -219,34 +220,34 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     public void buscarPorParametro() {
         this.setResultList(recetaServicio.BuscarRecetasPorParametro(parametroBusqueda));
     }
-    
+
     public void buscarPorFechas() {
         this.setResultList(recetaServicio.buscarRecetaPorFechas(fechaI, fechaF));
     }
-    
+
     public void buscarTodos() {
         this.setResultList(recetaServicio.buscarTodos());
     }
-    
-    public void entregarReceta(){
-        
+
+    public String entregarReceta() {
+
         Date now = Calendar.getInstance().getTime();
         this.recetaSeleccionada.setEstado("Entregada");
         this.recetaSeleccionada.setFechaEntrega(now);
-        this.recetaSeleccionada.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));        
-        
+        this.recetaSeleccionada.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+
         if (recetaSeleccionada.isPersistent()) {
-        //    em.getTransaction().begin();
+            //    em.getTransaction().begin();
             em.merge(recetaSeleccionada);
-          //  em.getTransaction().commit();
+            //  em.getTransaction().commit();
             this.setResultList(recetaServicio.buscarTodos());
-        }        
-        FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado" , "");
+        }
+        FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado", "");
         FacesContext.getCurrentInstance().addMessage("", msg);
-        
-        //return "/pages/farmacia/medicamento/listaReceta.xhtml?faces-redirect=true";
-        reportes.init();        
-        reportes.setReceta(recetaSeleccionada);
-        reportes.renderReceta();
+//        reportes.init();
+//        reportes.setReceta(recetaSeleccionada);
+//        reportes.renderReceta();
+        return "/pages/farmacia/receta/listaReceta.xhtml";
+
     }
 }

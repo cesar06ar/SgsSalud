@@ -134,8 +134,8 @@
                 <br/>
                 <h:commandLink action="#{reporteListas.renderConsultasOdont()}" >                    
                     <p:graphicImage value="/resources/images/pdf.png" />                          
-                    <f:setPropertyActionListener value="#{consultaMedicaListaServicio.inicio}" target="#{reporteListas.fechaInf}"/>
-                    <f:setPropertyActionListener value="#{consultaMedicaListaServicio.fin}" target="#{reporteListas.fechaSup}"/>
+                    <f:setPropertyActionListener value="#{consultaOdontListaS.fechaI}" target="#{reporteListas.fechaInf}"/>
+                    <f:setPropertyActionListener value="#{consultaOdontListaS.fechaF}" target="#{reporteListas.fechaSup}"/>
                 </h:commandLink>                
             </h:panelGroup>
         </h:form>

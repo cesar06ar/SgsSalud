@@ -28,85 +28,68 @@
         <ui:define name="content" class="span20">
             <h:form id="form">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />   
-
-                <div class="admin-actions ">
-                    <p:commandLink id="newEnf" title="#{messages['common.new1']} Enfermedad CIE 10"  style="float: right">
-                        <p:graphicImage value="/resources/img/new2.png" width="30" height="30" />
-                    </p:commandLink>        
-                    <br/><br/>
-                </div>
-                <p:overlayPanel id="medPanel" for="newEnf" hideEffect="fade" dynamic="false" widgetVar="cie10Dlg" >
-                    <glue:input id="code1" name="codigo" type="text" label="#{messages['common.code']}" value="#{enfermedadesCieHome.instance.codigo}" required="false" inlinehelp="" execute="@this save1" render="code1"/>
-                    <glue:input id="name1" name="nombre" type="text" label="#{messages['common.name']}" value="#{enfermedadesCieHome.instance.nombre}" required="false" inlinehelp="" execute="@this save1" render="name1"/> 
-                    <div class="admin-actions ">                        
-                        <p:commandButton id="save1" action="#{enfermedadesCieHome.guardar()}" value="#{messages['common.save']}" immediate="true"
-                                         styleClass="btn primary offset1" update="@form" >
-                        </p:commandButton>
-                        &nbsp;&nbsp;
-                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="cie10Dlg.hide();"  
-                                         style="margin-top:10px;"/>  
-                    </div>
-                </p:overlayPanel>
+                
                 <p:dataTable id="tablaEnf" value="#{enfermedadesCieHome.listaEnfermedades}" var="enfcie10" 
                              rows="20" paginator="true" 
+                              resizableColumns="true" liveResize="true"
                              paginatorPosition="top" emptyMessage="No hay ningun Servicio" 
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"  
-                             rowsPerPageTemplate="10,20,30,50,100" 
-                             selectionMode="single">
+                             rowsPerPageTemplate="10,20,30,50,100" >
                     <!--
                     <p:ajax event="rowSelect" listener="# {enfermedadesCieHome.onRowSelect}" 
                             update=":form:messages" />  
                     <p:ajax event="rowUnselect" listener="# {enfermedadesCieHome.onRowUnselect}" update=":form:messages "/>-->
-                    <p:column headerText="#{messages['common.code']}" filterBy="#{enfcie10.codigo}" filterMatchMode="contains" style="width: 5%">
+                    <p:column headerText="#{messages['common.code']}" filterBy="#{enfcie10.codigo}" filterMatchMode="contains" style="width: 15%">
                         <h:outputText value="#{enfcie10.codigo}"/>
                     </p:column>                       
                     <p:column headerText="#{messages['common.name']}" filterBy="#{enfcie10.nombre}" filterMatchMode="contains" style="width: 70%">
                         <h:inputTextarea value="#{enfcie10.nombre}" style="height: 30px; width:90%; margin-left: 3%" disabled="true" />
-                    </p:column>                       
-                    <p:column headerText="Opción">
-                        <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}" 
-                                       onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                    </p:column>             
+                    <!--
+                    <p:column headerText="Opción" style="width: 10%">
+                        <p:commandLink id="button-delete" type="button" title="# {messages['common.delete']}" 
+                                       onclick="# {'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
                                        style="width: 20px; height: 10px;">                                                        
                             <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
-                            <f:setPropertyActionListener value="#{enfcie10}" target="#{enfermedadesCieHome.enfermedad}"/>
+                            <f:setPropertyActionListener value="# {enfcie10}" target="# {enfermedadesCieHome.enfermedad}"/>
                             <p:ajax process="@this" update=":cancel-dialog" />
                         </p:commandLink>
-                    </p:column>                       
+                    </p:column>          -->             
                 </p:dataTable>
             </h:form>  
             <!--
-            <p:dialog id="edit-dialog" header="# {enfermedadesCieHome.instance.id == null? 'Agregar' : 'Editar'} #{'Enfermedad Cie 10'} 
+            <p:dialog id="edit-dialog" header="# {enfermedadesCieHome.instance.id == null? 'Agregar' : 'Editar'} # {'Enfermedad Cie 10'} 
                       # {enfermedadesCieHome.instance.id}" 
                       widgetVar="editDlg" modal="true" resizable="true" width="70%">
                 <h:form id="form-dialog">
-                    <glue:input id="code" name="codigo" type="text" label="#{messages['common.code']}" value="# {enfermedadesCieHome.instance.codigo}" required="true" inlinehelp="" execute="@this save" render="code"/>
-                    <glue:input id="name" name="nombre" type="text" label="#{messages['common.name']}" value="# {enfermedadesCieHome.instance.nombre}" required="true" inlinehelp="" execute="@this save" render="name"/>
+                    <glue:input id="code" name="codigo" type="text" label="# {messages['common.code']}" value="# {enfermedadesCieHome.instance.codigo}" required="true" inlinehelp="" execute="@this save" render="code"/>
+                    <glue:input id="name" name="nombre" type="text" label="# {messages['common.name']}" value="# {enfermedadesCieHome.instance.nombre}" required="true" inlinehelp="" execute="@this save" render="name"/>
                     <glue:input id="description" name="descrip" type="text" label="Categoria" value="# {enfermedadesCieHome.instance.descripcion}" required="false" inlinehelp="" execute="@this save" render="description"/>
                     <div class="admin-actions ">
-                        <p:commandButton id="save" action="# {enfermedadesCieHome.guardar()}" value="#{messages['common.save']}" 
+                        <p:commandButton id="save" action="# {enfermedadesCieHome.guardar()}" value="# {messages['common.save']}" 
                                          styleClass="btn primary offset2" update=":form" onclick="editDlg.hide();">
 
                         </p:commandButton>
                         &nbsp;&nbsp;
-                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();"  
+                        <p:commandButton value="# {messages['common.cancel']}" type="button" onclick="editDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </div>
                 </h:form>
-            </p:dialog>-->
-            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+            </p:dialog>
+            <p:dialog id="cancel-dialog" header="# {messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
                 <h:form id="form-dialog-confirm-delete">
                     <h:panelGroup layout="block" style="padding:5px;">  
-                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                        <h:outputText value="# {messages['common.delete.confirm.message']}"/>  
                     </h:panelGroup>  
-                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
-                                     action="#{enfermedadesCieHome.borrar()}" update=":form"                                         
+                    <p:commandButton value="# {messages['common.yes']}" oncomplete="deletedDlg.hide();"                                           
+                                     action="# {enfermedadesCieHome.borrar()}" update=":form"                                         
                                      ajax="true" process="@this"  
                                      style="margin-top:10px;">  
                     </p:commandButton>  
-                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                    <p:commandButton value="# {messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
                 </h:form>
-            </p:dialog>
+            </p:dialog>-->
         </ui:define>
     </ui:composition>
 </html>                

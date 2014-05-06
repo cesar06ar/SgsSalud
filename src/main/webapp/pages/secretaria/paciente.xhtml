@@ -35,10 +35,10 @@
                             <div class="span7">
                                 <h:panelGroup  layout="block" class="clearfix">
                                     <h:panelGroup id="dnip" layout="block" class="clearfix">
-                                        <p:commandButton id="cargar" value="Cargar"  action="#{pacienteHome.consultar()}" rendered="#{pacienteHome.instance.persistent}"
-                                                         ajax="true" immediate="true" title="Actualizar datos del SGA"
+                                        <p:commandButton id="cargar" value="Cargar"  action="#{pacienteHome.actualizarDatosSGA()}" rendered="#{pacienteHome.instance.persistent}"
+                                                         ajax="true" immediate="true" title="Actualizar datos del SGA" update="@form"
                                                          icon="ui-icon-search" styleClass="btn primary btn-short" > 
-                                            <!--<p:graphicImage value="/resources/images/buscar.png"/> -->                                            
+                                            <f:ajax render=":form:datapersonal"/>
                                         </p:commandButton>
                                         <label for="fdni">#{messages['profile.dni']} *</label>
                                         <div class="input" > 
@@ -311,14 +311,14 @@
 
                     </h:panelGrid> 
                     <div class="admin-actions ">
-                    <p:commandButton value="Buscar" oncomplete="buscarDlg.hide();"                                           
-                                     action="#{pacienteHome.consultar()}" update="@form"                                         
-                                     ajax="true" process="@this"  
-                                     style="margin-top:10px;" styleClass="offset2">  
-                    </p:commandButton>  
+                        <p:commandButton value="Buscar" oncomplete="buscarDlg.hide();"                                           
+                                         action="#{pacienteHome.consultar()}" update="@form"                                         
+                                         ajax="true" process="@this"  
+                                         style="margin-top:10px;" styleClass="offset2">  
+                        </p:commandButton>  
                         &nbsp;&nbsp;
-                    <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="buscarDlg.hide();"  
-                                     style="margin-top:10px;"/>  
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="buscarDlg.hide();"  
+                                         style="margin-top:10px;"/>  
                     </div>
                 </h:form>
             </p:dialog>

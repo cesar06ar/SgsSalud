@@ -189,8 +189,15 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
          setInstance(createInstance());
          }
          }*/
-
-        log.info("sgssalud --> cargar instance " + getInstance());
+        if (getInstance().isPersistent()) {
+            //log.info("ingreso a fijar tipo: " + t);
+            this.setTipoEstudiante(getInstance().getTipoEstudiante());
+        } else {
+            log.info("ingreso a fijar tipo Nuevo");
+            this.rendPanelEstUni = false;
+            this.rendPanelEstCol = false;
+            this.rendPanelEstEsc = false;
+        }
         return getInstance();
     }
     /*....==>*/
@@ -199,16 +206,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @TransactionAttribute
     public void wire() {
         getInstance();
-        if (getInstance().isPersistent()) {
-            String t = getInstance().getTipoEstudiante();
-            log.info("ingreso a fijar tipo: " + t);
-            this.setTipoEstudiante(t);
-        } else {
-            log.info("ingreso a fijar tipo Nuevo");
-            this.rendPanelEstUni = false;
-            this.rendPanelEstCol = false;
-            this.rendPanelEstEsc = false;
-        }
     }
     /*....==>*/
 
@@ -220,6 +217,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         conexionSGA = new WebServiceSGAClientConnection();
+
     }
     /*....==>*/
 
@@ -262,7 +260,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             try {
                 System.out.println("ingreso a guardar ");
                 register();
-                
+
                 FacesMessage msg = new FacesMessage("Se creo nuevo paciente: " + getInstance().getNombres() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 salida = "/pages/" + getBackView() + "?faces-redirect=true"
@@ -284,7 +282,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         System.out.println("Ingreso a consultar________");
         try {
 
-            Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());            
+            Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());
             if (p != null && pcs.buscarPorCedula(getInstance().getCedula()) == null) {
                 //getInstance().setCedula(listaDatos.get(0));
                 getInstance().setNombreUsuario(p.getNombres());
@@ -292,15 +290,46 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
                 getInstance().setApellidos(p.getApellidos());
                 getInstance().setFechaNacimiento(p.getFechaNacimiento());
                 getInstance().setTelefono(p.getTelefono());
-                getInstance().setCelular(p.getCedula());
+                getInstance().setCelular(p.getCelular());
                 getInstance().setDireccion(p.getDireccion());
                 getInstance().setNacionalidad(p.getNacionalidad());
                 getInstance().setEmail(p.getEmail());
                 getInstance().setGenero(p.getGenero());
+                getInstance().setTipoEstudiante("Universitario");
                 FacesMessage msg = new FacesMessage("Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", null);
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El estudiante ya ha sido agregado ", "O no consta en el Sistema de Gestión Académica");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            }
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            FacesMessage msg = new FacesMessage("No se pudo conectar con el web service");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+    }
+
+    public void actualizarDatosSGA() {
+        System.out.println("Ingreso a consultar________");
+        try {
+
+            Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());
+            if (p != null) {
+                //getInstance().setCedula(listaDatos.get(0));                
+                getInstance().setNombres(p.getNombres());
+                getInstance().setApellidos(p.getApellidos());
+                getInstance().setFechaNacimiento(p.getFechaNacimiento());
+                getInstance().setTelefono(p.getTelefono());
+                getInstance().setCelular(p.getCelular());
+                getInstance().setDireccion(p.getDireccion());
+                getInstance().setNacionalidad(p.getNacionalidad());
+                getInstance().setEmail(p.getEmail());
+                getInstance().setGenero(p.getGenero());
+                //getInstance().setTipoEstudiante("Universitario");
+                FacesMessage msg = new FacesMessage("Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", null);
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            } else {
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se pudo conectar con el SGA", "O no consta en el Sistema de Gestión Académica");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
         } catch (Exception ex) {
@@ -366,7 +395,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 //                Paciente.class.getName()));
 //        getInstance()
 //                .buildAttributes(bussinesEntityService);
-        
+
         save(getInstance()); //Actualizar estructura de datos  
         System.out.println("Ingreso crear User________3");
     }
@@ -406,6 +435,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         list.add("Universitario");
         list.add("Colegio");
         list.add("Escuela");
+        list.add("Otro");
         return list;
     }
 

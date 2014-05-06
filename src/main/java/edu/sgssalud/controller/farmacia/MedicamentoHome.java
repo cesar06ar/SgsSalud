@@ -199,6 +199,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public String guardarMedicamento() {
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
+        String salida = null;
         try {
             if (getInstance().isPersistent()) {
                 if (devolucion == false) {
@@ -214,40 +215,35 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                     }
                     getInstance().setCantidadIngreso(cantidad);
                     getInstance().setUnidades(getInstance().getUnidades() + cantidad);
-                } else {
-                    Receta_Medicamento cardex = new Receta_Medicamento();
-                    cardex.setCantidad(getInstance().getUnidades());
-                    
-                    cardex.setMedicamento(getInstance());
-                    //int saldo = this.saldoCardexAnterior() - getInstance().getUnidades();
-                    //System.out.println("Guardar Medicamento_______--" + saldo);
-                    cardex.setSaldo(0);
-                    cardex.setFecha(now);                    
-                    save(cardex);                    
-                    getInstance().setUnidades(0);
                 }
                 save(getInstance());
-
+                salida = "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
             } else {
-                create(getInstance());
-                getInstance().setCantidadIngreso(cantidad);
-                getInstance().setUnidades(getInstance().getUnidades() + cantidad);
-                save(getInstance());
-                //if(getCantidad() != getInstance().getUnidades()){
-                Receta_Medicamento cardex = new Receta_Medicamento();
-                cardex.setIngreso(getCantidad());
-                cardex.setMedicamento(getInstance());
-                cardex.setSaldo(getCantidad());
-                cardex.setFecha(now);
-                save(cardex);
-                //}   
-                FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
-                FacesContext.getCurrentInstance().addMessage("", msg);
+                if (getInstance().getCantidadIngreso() > 0) {
+                    create(getInstance());
+                    getInstance().setCantidadIngreso(cantidad);
+                    getInstance().setUnidades(getInstance().getUnidades() + cantidad);
+                    save(getInstance());
+                    //if(getCantidad() != getInstance().getUnidades()){
+                    Receta_Medicamento cardex = new Receta_Medicamento();
+                    cardex.setIngreso(getCantidad());
+                    cardex.setMedicamento(getInstance());
+                    cardex.setSaldo(getCantidad());
+                    cardex.setFecha(now);
+                    save(cardex);
+                    //}   
+                    FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                    salida = "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
+                } else {
+                    FacesMessage msg = new FacesMessage("Debe ingresar una cantidad mayor 0");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
+        return salida;
     }
 
     public void validarFC() {
@@ -279,7 +275,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public Integer saldoCardexAnterior() {
 
         List<Receta_Medicamento> listaC = cardexService.obtenerPorMedicamento(getInstance());
-        System.out.println("lista Cardex____-" + listaC.toString() + " Medicamento ____"+getInstance().getId());
+        System.out.println("lista Cardex____-" + listaC.toString() + " Medicamento ____" + getInstance().getId());
         if (!listaC.isEmpty()) {
             Receta_Medicamento cardex = new Receta_Medicamento();
             cardex = listaC.get(0);

@@ -48,13 +48,7 @@
                                         styleClass="validation-status" />
                         <span class="help-inline"><br/>#{messages['Examen.Tipo.lineaAyuda']} <ocp:message forId="tipo_" /></span>
                     </div>
-                </h:panelGroup>
-                <glue:input id="valorRef" name="valorRef" type="text" label="#{messages['Examen.ValorReferencial']}" value="#{examenHome.instance.valorReferencia}" 
-                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']} cuando es Positivo o Negativo" required="false" execute="@this save" render="valorRef" styleClass="xLarge"/>
-                <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.instance.valorRefInferior}" 
-                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
-                <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.instance.valorRefSuperior}" 
-                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
+                </h:panelGroup>               
                 <glue:input id="costo" name="costo" type="decimal" label="#{messages['examen.costo']}" value="#{examenHome.instance.costo}" 
                             inlinehelp="#{messages['examen.costo.lineaAyuda']}" required="true" execute="@this save" render="costo" styleClass="xLarge"/>
 
@@ -80,7 +74,7 @@
                     </p:commandButton> 
                     <br/>
                     <p:dataTable id="parametros1" value="#{examenHome.parametros}" 
-                                 var="_p">
+                                 var="_p" >
                         <p:column headerText="Categoria">
                             <h:outputText value="#{_p.categoria}" />
                         </p:column>
@@ -121,7 +115,7 @@
                         <label for="cate" >#{messages['comun.categoria']}</label>
                         <div class="input" >
                             <p:selectOneMenu id="cate" value="#{examenHome.parametro.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
-                                             effect="fade" var="m" styleClass="xLarge" >  
+                                             effect="fade" var="m" styleClass="xLarge" required="#{not empty examenHome.instance.categorias}">  
                                 <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
                                 <f:selectItems value="#{examenHome.categorias}" var="c"/>    
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
@@ -138,6 +132,10 @@
                                 required="false" inlinehelp="#{'valor por defecto del parametro'}" execute="@this save1" render="val1"/>
                     <glue:input id="uniMed" name="uniMed" type="text" label="Unidad de Medida" value="#{examenHome.parametro.unidadMedida}" 
                                 required="false" inlinehelp="#{'una unidad de medida en caso la tiene'}" execute="@this save1" render="uniMed"/>
+                    <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.parametro.valorReferenciaInf}"
+                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
+                    <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.parametro.valorReferenciaSup}"
+                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.add']}" oncomplete="editDlg.hide();"                                           
                                          action="#{examenHome.agregarParametro()}" update=":form:parametros1 :edit-dialog"                                             

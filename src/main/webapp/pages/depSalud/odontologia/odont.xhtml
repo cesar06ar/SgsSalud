@@ -41,7 +41,6 @@
                                      styleClass="btn success offset4" >
                         <p:ajax process="@this" update=":form" rendered=":form" />
                     </p:commandButton>
-
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
                             value="#{messages['common.cancel']}" styleClass="btn success" >
@@ -54,197 +53,198 @@
         </ui:define>
         <ui:define name="content" >
             <h:form id="form" rendered="#{odontogramaHome.instance.persistent}">                
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <h5 class="title_odon"><center>ODONTOGRAMA</center></h5> 
-                <div class="container-fluid" >
-                    <div class="row-fluid" style="margin-left: 0.6%; width: 85%" >   
-                        <div style="width: 1020px; " >
-                            <h:panelGroup id="odontC1" >
-                                <span style="margin: 0 0 0 5%; width: 10px;"></span>
-                                <sgs:denteS id="d18"  title="#{odontogramaHome.diente18.nombre} #{odontogramaHome.diente18.posicion}" 
-                                            diente="#{odontogramaHome.diente18}" check="#{odontogramaHome.diente18.select}" 
-                                            tratamientos="#{odontogramaHome.diente18.tratamientos}" 
-                                            update=":form:opciones" render=":form:opciones" >
-                                </sgs:denteS> 
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />                                     
+                <!--<h:panelGroup id="odontograma" >  -->
+                <p:panel id="panel" style="width: 1000px; margin-top: -2px " widgetVar="Odont">
+                    <h5 class="title_odon"><center>ODONTOGRAMA</center></h5> 
+                    <div class="container-fluid" >
+                        <div class="row-fluid" style="width: 90%">   
+                            <div style="width: 1020px; " >
+                                <h:panelGroup id="odontC1" >                                        
+                                    <sgs:denteS id="d18"  title="#{odontogramaHome.diente18.nombre} #{odontogramaHome.diente18.posicion}" 
+                                                diente="#{odontogramaHome.diente18}" check="#{odontogramaHome.diente18.select}" 
+                                                tratamientos="#{odontogramaHome.diente18.tratamientos}" 
+                                                update=":form:opciones" render=":form:opciones" >
+                                    </sgs:denteS> 
 
-                                <sgs:denteS id="d17" title="#{odontogramaHome.diente17.nombre} #{odontogramaHome.diente17.posicion}"
-                                            diente="#{odontogramaHome.diente17}" check="#{odontogramaHome.diente17.select}" 
-                                            tratamientos="#{odontogramaHome.diente17.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" >  
-                                </sgs:denteS>  
-                                <sgs:denteS id="d16"  title="#{odontogramaHome.diente16.nombre} #{odontogramaHome.diente16.posicion}"
-                                            diente="#{odontogramaHome.diente16}" check="#{odontogramaHome.diente16.select}" 
-                                            tratamientos="#{odontogramaHome.diente16.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" >                            
-                                </sgs:denteS>
-                                <sgs:denteS id="d15" title="#{odontogramaHome.diente15.nombre} #{odontogramaHome.diente15.posicion}"
-                                            diente="#{odontogramaHome.diente15}" check="#{odontogramaHome.diente15.select}"
-                                            tratamientos="#{odontogramaHome.diente15.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d14" title="#{odontogramaHome.diente14.nombre} #{odontogramaHome.diente14.posicion}"
-                                            diente="#{odontogramaHome.diente14}" check="#{odontogramaHome.diente14.select}" 
-                                            tratamientos="#{odontogramaHome.diente14.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d13" title="#{odontogramaHome.diente13.nombre} #{odontogramaHome.diente13.posicion}"
-                                            diente="#{odontogramaHome.diente13}" check="#{odontogramaHome.diente13.select}" 
-                                            tratamientos="#{odontogramaHome.diente13.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d12" title="#{odontogramaHome.diente12.nombre} #{odontogramaHome.diente12.posicion}"
-                                            diente="#{odontogramaHome.diente12}" check="#{odontogramaHome.diente12.select}" 
-                                            tratamientos="#{odontogramaHome.diente12.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d11" title="#{odontogramaHome.diente11.nombre} #{odontogramaHome.diente11.posicion}" 
-                                            check="#{odontogramaHome.diente11.select}" diente="#{odontogramaHome.diente11}" 
-                                            tratamientos="#{odontogramaHome.diente11.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>                
-                            </h:panelGroup>    
+                                    <sgs:denteS id="d17" title="#{odontogramaHome.diente17.nombre} #{odontogramaHome.diente17.posicion}"
+                                                diente="#{odontogramaHome.diente17}" check="#{odontogramaHome.diente17.select}" 
+                                                tratamientos="#{odontogramaHome.diente17.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" >  
+                                    </sgs:denteS>  
+                                    <sgs:denteS id="d16"  title="#{odontogramaHome.diente16.nombre} #{odontogramaHome.diente16.posicion}"
+                                                diente="#{odontogramaHome.diente16}" check="#{odontogramaHome.diente16.select}" 
+                                                tratamientos="#{odontogramaHome.diente16.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" >                            
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d15" title="#{odontogramaHome.diente15.nombre} #{odontogramaHome.diente15.posicion}"
+                                                diente="#{odontogramaHome.diente15}" check="#{odontogramaHome.diente15.select}"
+                                                tratamientos="#{odontogramaHome.diente15.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d14" title="#{odontogramaHome.diente14.nombre} #{odontogramaHome.diente14.posicion}"
+                                                diente="#{odontogramaHome.diente14}" check="#{odontogramaHome.diente14.select}" 
+                                                tratamientos="#{odontogramaHome.diente14.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d13" title="#{odontogramaHome.diente13.nombre} #{odontogramaHome.diente13.posicion}"
+                                                diente="#{odontogramaHome.diente13}" check="#{odontogramaHome.diente13.select}" 
+                                                tratamientos="#{odontogramaHome.diente13.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d12" title="#{odontogramaHome.diente12.nombre} #{odontogramaHome.diente12.posicion}"
+                                                diente="#{odontogramaHome.diente12}" check="#{odontogramaHome.diente12.select}" 
+                                                tratamientos="#{odontogramaHome.diente12.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d11" title="#{odontogramaHome.diente11.nombre} #{odontogramaHome.diente11.posicion}" 
+                                                check="#{odontogramaHome.diente11.select}" diente="#{odontogramaHome.diente11}" 
+                                                tratamientos="#{odontogramaHome.diente11.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>                
+                                </h:panelGroup>    
 
-                            <h:panelGroup id="odontC2" >                        
-                                <sgs:denteS id="d21" title="#{odontogramaHome.diente21.nombre} #{odontogramaHome.diente21.posicion}"
-                                            check="#{odontogramaHome.diente21.select}" diente="#{odontogramaHome.diente21}" 
-                                            tratamientos="#{odontogramaHome.diente21.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>                           
-                                <sgs:denteS id="d22" title="#{odontogramaHome.diente22.nombre} #{odontogramaHome.diente22.posicion}"
-                                            check="#{odontogramaHome.diente22.select}" diente="#{odontogramaHome.diente22}" 
-                                            tratamientos="#{odontogramaHome.diente22.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d23" title="#{odontogramaHome.diente23.nombre} #{odontogramaHome.diente23.posicion}"
-                                            check="#{odontogramaHome.diente23.select}" diente="#{odontogramaHome.diente23}" 
-                                            tratamientos="#{odontogramaHome.diente23.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d24" title="#{odontogramaHome.diente24.nombre} #{odontogramaHome.diente24.posicion}"
-                                            check="#{odontogramaHome.diente24.select}" diente="#{odontogramaHome.diente24}" 
-                                            tratamientos="#{odontogramaHome.diente24.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d25" title="#{odontogramaHome.diente25.nombre} #{odontogramaHome.diente25.posicion}"
-                                            check="#{odontogramaHome.diente25.select}" diente="#{odontogramaHome.diente25}" 
-                                            tratamientos="#{odontogramaHome.diente25.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d26" title="#{odontogramaHome.diente26.nombre} #{odontogramaHome.diente26.posicion}"
-                                            check="#{odontogramaHome.diente26.select}" diente="#{odontogramaHome.diente26}" 
-                                            tratamientos="#{odontogramaHome.diente26.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d27" title="#{odontogramaHome.diente27.nombre} #{odontogramaHome.diente27.posicion}"
-                                            check="#{odontogramaHome.diente27.select}" diente="#{odontogramaHome.diente27}" 
-                                            tratamientos="#{odontogramaHome.diente27.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                                <sgs:denteS id="d28" title="#{odontogramaHome.diente28.nombre} #{odontogramaHome.diente28.posicion}"
-                                            check="#{odontogramaHome.diente28.select}" diente="#{odontogramaHome.diente28}" 
-                                            tratamientos="#{odontogramaHome.diente28.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteS>
-                            </h:panelGroup> 
-                        </div>                       
-                    </div>
-                </div>
-                <!--DIENTES INFERIORES-->
-                <div class="container-fluid" >
-                    <div class="row-fluid" style="margin-left: 0.6%; width: 85%" >   
-                        <div style="width: 1020px; " >
-                            <h:panelGroup id="odontC3" >
-                                <sgs:denteI id="d48" title="#{odontogramaHome.diente48.nombre} #{odontogramaHome.diente48.posicion}"
-                                            check="#{odontogramaHome.diente48.select}" diente="#{odontogramaHome.diente48}" 
-                                            tratamientos="#{odontogramaHome.diente48.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>  
-                                <sgs:denteI id="d47" title="#{odontogramaHome.diente47.nombre} #{odontogramaHome.diente47.posicion}"
-                                            check="#{odontogramaHome.diente47.select}" diente="#{odontogramaHome.diente47}" 
-                                            tratamientos="#{odontogramaHome.diente47.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>       
-                                <sgs:denteI id="d46" title="#{odontogramaHome.diente46.nombre} #{odontogramaHome.diente46.posicion}"
-                                            check="#{odontogramaHome.diente46.select}" diente="#{odontogramaHome.diente46}" 
-                                            tratamientos="#{odontogramaHome.diente46.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>
-                                <sgs:denteI id="d45" title="#{odontogramaHome.diente45.nombre} #{odontogramaHome.diente45.posicion}"
-                                            check="#{odontogramaHome.diente45.select}" diente="#{odontogramaHome.diente45}" 
-                                            tratamientos="#{odontogramaHome.diente45.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d44" title="#{odontogramaHome.diente44.nombre} #{odontogramaHome.diente44.posicion}"
-                                            check="#{odontogramaHome.diente44.select}" diente="#{odontogramaHome.diente44}" 
-                                            tratamientos="#{odontogramaHome.diente44.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d43" title="#{odontogramaHome.diente43.nombre} #{odontogramaHome.diente43.posicion}"
-                                            check="#{odontogramaHome.diente43.select}" diente="#{odontogramaHome.diente43}" 
-                                            tratamientos="#{odontogramaHome.diente43.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d42" title="#{odontogramaHome.diente42.nombre} #{odontogramaHome.diente42.posicion}"
-                                            check="#{odontogramaHome.diente42.select}" diente="#{odontogramaHome.diente42}" 
-                                            tratamientos="#{odontogramaHome.diente42.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>
-                                <sgs:denteI id="d41" title="#{odontogramaHome.diente41.nombre} #{odontogramaHome.diente41.posicion}"
-                                            check="#{odontogramaHome.diente41.select}" diente="#{odontogramaHome.diente41}" 
-                                            tratamientos="#{odontogramaHome.diente41.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>
-                            </h:panelGroup>
-                            <h:panelGroup id="odontC4" >
-                                <sgs:denteI id="d31" title="#{odontogramaHome.diente31.nombre} #{odontogramaHome.diente31.posicion}"
-                                            check="#{odontogramaHome.diente31.select}" diente="#{odontogramaHome.diente31}" 
-                                            tratamientos="#{odontogramaHome.diente31.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d32" title="#{odontogramaHome.diente32.nombre} #{odontogramaHome.diente32.posicion}"
-                                            check="#{odontogramaHome.diente32.select}" diente="#{odontogramaHome.diente32}" 
-                                            tratamientos="#{odontogramaHome.diente32.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>                                
-                                <sgs:denteI id="d33" title="#{odontogramaHome.diente33.nombre} #{odontogramaHome.diente33.posicion}"
-                                            check="#{odontogramaHome.diente33.select}" diente="#{odontogramaHome.diente33}" 
-                                            tratamientos="#{odontogramaHome.diente33.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d34" title="#{odontogramaHome.diente34.nombre} #{odontogramaHome.diente34.posicion}"
-                                            check="#{odontogramaHome.diente34.select}" diente="#{odontogramaHome.diente34}" 
-                                            tratamientos="#{odontogramaHome.diente34.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d35" title="#{odontogramaHome.diente35.nombre} #{odontogramaHome.diente35.posicion}"
-                                            check="#{odontogramaHome.diente35.select}" diente="#{odontogramaHome.diente35}" 
-                                            tratamientos="#{odontogramaHome.diente35.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d36" title="#{odontogramaHome.diente36.nombre} #{odontogramaHome.diente36.posicion}"
-                                            check="#{odontogramaHome.diente36.select}" diente="#{odontogramaHome.diente36}" 
-                                            tratamientos="#{odontogramaHome.diente36.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI> 
-                                <sgs:denteI id="d37" title="#{odontogramaHome.diente37.nombre} #{odontogramaHome.diente37.posicion}"
-                                            check="#{odontogramaHome.diente37.select}" diente="#{odontogramaHome.diente37}" 
-                                            tratamientos="#{odontogramaHome.diente37.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>   
-                                <sgs:denteI id="d38" title="#{odontogramaHome.diente38.nombre} #{odontogramaHome.diente38.posicion}"
-                                            check="#{odontogramaHome.diente38.select}" diente="#{odontogramaHome.diente38}" 
-                                            tratamientos="#{odontogramaHome.diente38.tratamientos}"
-                                            update=":form:opciones" render=":form:opciones" > 
-                                </sgs:denteI>                   
-                            </h:panelGroup>                            
+                                <h:panelGroup id="odontC2" >                        
+                                    <sgs:denteS id="d21" title="#{odontogramaHome.diente21.nombre} #{odontogramaHome.diente21.posicion}"
+                                                check="#{odontogramaHome.diente21.select}" diente="#{odontogramaHome.diente21}" 
+                                                tratamientos="#{odontogramaHome.diente21.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>                           
+                                    <sgs:denteS id="d22" title="#{odontogramaHome.diente22.nombre} #{odontogramaHome.diente22.posicion}"
+                                                check="#{odontogramaHome.diente22.select}" diente="#{odontogramaHome.diente22}" 
+                                                tratamientos="#{odontogramaHome.diente22.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d23" title="#{odontogramaHome.diente23.nombre} #{odontogramaHome.diente23.posicion}"
+                                                check="#{odontogramaHome.diente23.select}" diente="#{odontogramaHome.diente23}" 
+                                                tratamientos="#{odontogramaHome.diente23.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d24" title="#{odontogramaHome.diente24.nombre} #{odontogramaHome.diente24.posicion}"
+                                                check="#{odontogramaHome.diente24.select}" diente="#{odontogramaHome.diente24}" 
+                                                tratamientos="#{odontogramaHome.diente24.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d25" title="#{odontogramaHome.diente25.nombre} #{odontogramaHome.diente25.posicion}"
+                                                check="#{odontogramaHome.diente25.select}" diente="#{odontogramaHome.diente25}" 
+                                                tratamientos="#{odontogramaHome.diente25.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d26" title="#{odontogramaHome.diente26.nombre} #{odontogramaHome.diente26.posicion}"
+                                                check="#{odontogramaHome.diente26.select}" diente="#{odontogramaHome.diente26}" 
+                                                tratamientos="#{odontogramaHome.diente26.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d27" title="#{odontogramaHome.diente27.nombre} #{odontogramaHome.diente27.posicion}"
+                                                check="#{odontogramaHome.diente27.select}" diente="#{odontogramaHome.diente27}" 
+                                                tratamientos="#{odontogramaHome.diente27.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                    <sgs:denteS id="d28" title="#{odontogramaHome.diente28.nombre} #{odontogramaHome.diente28.posicion}"
+                                                check="#{odontogramaHome.diente28.select}" diente="#{odontogramaHome.diente28}" 
+                                                tratamientos="#{odontogramaHome.diente28.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteS>
+                                </h:panelGroup> 
+                            </div>                       
                         </div>
                     </div>
-                </div>                
-
-                <p:panel id="opciones" header="Opciones" styleClass="span16" style=" width: 975px;">
+                    <!--DIENTES INFERIORES-->
+                    <div class="container-fluid" >
+                        <div class="row-fluid" style="width: 90%" >   
+                            <div style="width: 1020px; " >
+                                <h:panelGroup id="odontC3" >
+                                    <sgs:denteI id="d48" title="#{odontogramaHome.diente48.nombre} #{odontogramaHome.diente48.posicion}"
+                                                check="#{odontogramaHome.diente48.select}" diente="#{odontogramaHome.diente48}" 
+                                                tratamientos="#{odontogramaHome.diente48.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>  
+                                    <sgs:denteI id="d47" title="#{odontogramaHome.diente47.nombre} #{odontogramaHome.diente47.posicion}"
+                                                check="#{odontogramaHome.diente47.select}" diente="#{odontogramaHome.diente47}" 
+                                                tratamientos="#{odontogramaHome.diente47.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>       
+                                    <sgs:denteI id="d46" title="#{odontogramaHome.diente46.nombre} #{odontogramaHome.diente46.posicion}"
+                                                check="#{odontogramaHome.diente46.select}" diente="#{odontogramaHome.diente46}" 
+                                                tratamientos="#{odontogramaHome.diente46.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>
+                                    <sgs:denteI id="d45" title="#{odontogramaHome.diente45.nombre} #{odontogramaHome.diente45.posicion}"
+                                                check="#{odontogramaHome.diente45.select}" diente="#{odontogramaHome.diente45}" 
+                                                tratamientos="#{odontogramaHome.diente45.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d44" title="#{odontogramaHome.diente44.nombre} #{odontogramaHome.diente44.posicion}"
+                                                check="#{odontogramaHome.diente44.select}" diente="#{odontogramaHome.diente44}" 
+                                                tratamientos="#{odontogramaHome.diente44.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d43" title="#{odontogramaHome.diente43.nombre} #{odontogramaHome.diente43.posicion}"
+                                                check="#{odontogramaHome.diente43.select}" diente="#{odontogramaHome.diente43}" 
+                                                tratamientos="#{odontogramaHome.diente43.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d42" title="#{odontogramaHome.diente42.nombre} #{odontogramaHome.diente42.posicion}"
+                                                check="#{odontogramaHome.diente42.select}" diente="#{odontogramaHome.diente42}" 
+                                                tratamientos="#{odontogramaHome.diente42.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>
+                                    <sgs:denteI id="d41" title="#{odontogramaHome.diente41.nombre} #{odontogramaHome.diente41.posicion}"
+                                                check="#{odontogramaHome.diente41.select}" diente="#{odontogramaHome.diente41}" 
+                                                tratamientos="#{odontogramaHome.diente41.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>
+                                </h:panelGroup>
+                                <h:panelGroup id="odontC4" >
+                                    <sgs:denteI id="d31" title="#{odontogramaHome.diente31.nombre} #{odontogramaHome.diente31.posicion}"
+                                                check="#{odontogramaHome.diente31.select}" diente="#{odontogramaHome.diente31}" 
+                                                tratamientos="#{odontogramaHome.diente31.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d32" title="#{odontogramaHome.diente32.nombre} #{odontogramaHome.diente32.posicion}"
+                                                check="#{odontogramaHome.diente32.select}" diente="#{odontogramaHome.diente32}" 
+                                                tratamientos="#{odontogramaHome.diente32.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>                                
+                                    <sgs:denteI id="d33" title="#{odontogramaHome.diente33.nombre} #{odontogramaHome.diente33.posicion}"
+                                                check="#{odontogramaHome.diente33.select}" diente="#{odontogramaHome.diente33}" 
+                                                tratamientos="#{odontogramaHome.diente33.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d34" title="#{odontogramaHome.diente34.nombre} #{odontogramaHome.diente34.posicion}"
+                                                check="#{odontogramaHome.diente34.select}" diente="#{odontogramaHome.diente34}" 
+                                                tratamientos="#{odontogramaHome.diente34.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d35" title="#{odontogramaHome.diente35.nombre} #{odontogramaHome.diente35.posicion}"
+                                                check="#{odontogramaHome.diente35.select}" diente="#{odontogramaHome.diente35}" 
+                                                tratamientos="#{odontogramaHome.diente35.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d36" title="#{odontogramaHome.diente36.nombre} #{odontogramaHome.diente36.posicion}"
+                                                check="#{odontogramaHome.diente36.select}" diente="#{odontogramaHome.diente36}" 
+                                                tratamientos="#{odontogramaHome.diente36.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI> 
+                                    <sgs:denteI id="d37" title="#{odontogramaHome.diente37.nombre} #{odontogramaHome.diente37.posicion}"
+                                                check="#{odontogramaHome.diente37.select}" diente="#{odontogramaHome.diente37}" 
+                                                tratamientos="#{odontogramaHome.diente37.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>   
+                                    <sgs:denteI id="d38" title="#{odontogramaHome.diente38.nombre} #{odontogramaHome.diente38.posicion}"
+                                                check="#{odontogramaHome.diente38.select}" diente="#{odontogramaHome.diente38}" 
+                                                tratamientos="#{odontogramaHome.diente38.tratamientos}"
+                                                update=":form:opciones" render=":form:opciones" > 
+                                    </sgs:denteI>                   
+                                </h:panelGroup>                            
+                            </div>
+                        </div>
+                    </div>                
+                </p:panel>           
+                <p:panel id="opciones" header="Opciones" style=" width: 1000px;">
                     <div class="container-fluid">   
                         <div class="row-fluid">
-                            <div class="span4">
+                            <div class="span6">
                                 <br/>                                
                                 <p:commandLink title="#{messages['tratamiento.carie']}" action="#{odontogramaHome.mostrarPanel(2)}"
                                                styleClass="btn" ajax="true" update="@form" >
@@ -254,7 +254,7 @@
                                     <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel2}"/>
                                     <p:ajax process="@this" update=":form:opciones:panel2" rendered=":form:opciones:panel2"/>                                    
                                 </p:commandLink>   
-                                <p:spacer  width="4" height="5"/>
+                                <p:spacer  width="4" height="6"/>
                                 <p:commandLink title="#{messages['tratamiento.obturacionProvicional']}" action="#{odontogramaHome.mostrarPanel(2)}"
                                                styleClass="btn" ajax="true" update="@form">
                                     <p:graphicImage value="/resources/tratamientoDentales/obturacionProvicional.gif" width="25" height="30"  />
@@ -335,7 +335,6 @@
                                     <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
                                     <p:ajax process="@this" update=":form:opciones:panel1" rendered=":form:opciones:panel1"/>
                                 </p:commandLink>
-
                                 <p:spacer  width="4" height="5"/>
                                 <p:commandLink ajax="true" title="#{messages['tratamiento.protesisParcialRemovible']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(1)}"
                                                update="@form">
@@ -354,6 +353,7 @@
                                     <f:setPropertyActionListener value="#{true}" target="#{odontogramaHome.panel1}"/>
                                     <p:ajax process="@this" update=":form:opciones:panel3" rendered=":form:opciones:panel3"/>
                                 </p:commandLink>
+                                <p:spacer  width="4" height="5"/>
                                 <p:commandLink ajax="true" title="#{messages['tratamiento.protesisTotal']}" styleClass="btn" action="#{odontogramaHome.mostrarPanel(3)}"
                                                update="@form">
                                     <p:graphicImage value="/resources/odontograma/odontograma3.png" width="85" height="30"  />
@@ -363,14 +363,14 @@
                                     <p:ajax process="@this" update=":form:opciones:panel3" rendered=":form:opciones:panel3"/>
                                 </p:commandLink>
                             </div>
-                            <div class="span12" >        
+                            <div class="span10" >        
                                 <p:panelGrid columns="3">                                  
                                     <p:panel id="panel1" rendered="#{odontogramaHome.panel1}" header="#{odontogramaHome.nombreTratamiento}" >
 
-                                        <p:graphicImage value="#{odontogramaHome.ruta}" width="45" height="40"/>
+                                        <p:graphicImage value="#{odontogramaHome.ruta}" width="55" height="45"/>
                                         <br/> 
                                     </p:panel>                                                        
-                                    <p:panel id="panel2" rendered="#{odontogramaHome.panel2}" header="#{odontogramaHome.nombreTratamiento}" style="width: 240px;">                                  
+                                    <p:panel id="panel2" rendered="#{odontogramaHome.panel2}" header="#{odontogramaHome.nombreTratamiento}" style="width: 260px;"> 
 
                                         <!--Tratamientos que se realizan a partes del diente-->
                                         <p:graphicImage value="#{odontogramaHome.ruta}" width="35" height="40" title="Vista previa"/>                                    
@@ -395,7 +395,7 @@
                                                         <f:ajax execute="@this" render="saveTratamiento"  />
                                                     </p:selectBooleanCheckbox>  
                                                 </div>
-                                                <div style="margin: 9px 0 0 35px">
+                                                <div style="margin: 7px 0 0 35px">
                                                     <p:selectBooleanCheckbox value="#{odontogramaHome.c3}" label="Cuadrante Inferior" style="margin-left: 5px;">
                                                         <f:ajax execute="@this" render="saveTratamiento"  />
                                                     </p:selectBooleanCheckbox>  
@@ -409,59 +409,72 @@
                                         <br/> 
                                     </p:panel> 
 
-                                    <h:panelGroup class="span6" layout="block" rendered="#{odontogramaHome.tipo ne 0}">
+                                    <h:panelGroup class="span4" layout="block" rendered="#{odontogramaHome.tipo ne 0}">
                                         <label for="procedimient" style="margin-left: -35px;">#{messages['tratamiento.procedimiento']}:</label>
-                                        <br/>
-                                        <br/>
+                                        <br/>                                        
                                         <div >
-                                            <h:inputTextarea id="procedimient" value="#{odontogramaHome.procedimiento}"  style="width: 90%; height: 80px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
+                                            <h:inputTextarea id="procedimient" value="#{odontogramaHome.procedimiento}"  style="width: 97%; height: 75px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
                                                 <f:ajax execute="@this" render="saveTratamiento" event="keyup" />
                                                 <!--<p:ajax event="keyup" process="@this"  update="saveTratamiento"  />-->
                                             </h:inputTextarea>
                                         </div>
                                     </h:panelGroup>
-                                    <h:panelGroup>
-                                        <div class="admin-actions">                   
-                                            <p:commandButton id="saveTratamiento" value="#{messages['common.add']}" rendered="true" title="#{messages['common.add']} #{messages['tratamiento.nombre']}"
-                                                             action="#{odontogramaHome.guardarTratamiento()}"   
-                                                             styleClass="btn primary " ajax="true" immediate="true"
-                                                             style="margin:5% 0 0 0; width: 80px; height: 50px;" >
-                                                <p:ajax process="@this" update=":form:opciones " rendered=":form:odont "/>
-                                            </p:commandButton>     
-                                            <br/><br/>
-                                            <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica"
-                                                    value="#{messages['common.cancel']}" styleClass="btn success" style="width: 50px; height: 22px; margin-top: 0">
-                                                <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
-                                                <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
-                                                <f:param name="backView" value="#{odontogramaHome.backView}"/>
-                                            </h:link>
-                                            <br/>
+                                    <h:panelGroup >                                        
+                                        <p:commandButton id="saveTratamiento" value="#{messages['common.add']}" rendered="true" title="#{messages['common.add']} #{messages['tratamiento.nombre']}"
+                                                         action="#{odontogramaHome.guardarTratamiento()}"   
+                                                         styleClass="btn primary " ajax="true" immediate="true"
+                                                         style="margin:5% 0 0 0; width: 90px; height: 50px;" >
+                                            <p:ajax process="@this" update=":form:opciones " rendered=":form:odont "/>
+                                        </p:commandButton> 
+                                        <p:spacer  width="0" height="8"/>
+                                        <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica" style="margin:5% 0 0 0; width: 60px; height: 30px;"
+                                                value="#{messages['common.cancel']}" styleClass="btn " >
+                                            <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
+                                            <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
+                                            <f:param name="backView" value="#{odontogramaHome.backView}"/>
+                                        </h:link>
+                                        <p:spacer  width="0" height="5"/>
+                                        <h:commandLink value="Imprimir" styleClass="btn " title="Imprimir odontograma" style="margin:5% 0 0 0; width: 60px; height: 20px;">  
+                                            <p:printer target=":form:panel" />
+                                        </h:commandLink> 
+                                        <!--<p:commandButton type="button" value="Export" icon="ui-icon-extlink" onclick="exportChart()"/>
 
-                                        </div>
+                                        <p:dialog widgetVar="dlg" showEffect="fade" modal="true" header="Chart as an Image">
+                                            <p:outputPanel id="output" layout="block" style="width:500px;height:300px"/>
+                                        </p:dialog>
+                                        <script>
+                                            function exportChart() {
+                                                //export image
+                                                $('#output').empty().append(PF('\\form\\Odont').exportAsImage());
+
+                                                //show the dialog
+                                                PF('dlg').show();
+                                            }
+                                        </script>-->
+
                                     </h:panelGroup>                                    
                                 </p:panelGrid>                              
                             </div>
                         </div>                            
                     </div>
-                </p:panel>            
-
-                <p:panel id="tratam" header="Tratamientos" styleClass="span16" style=" width: 975px;">
+                </p:panel>           
+                <p:panel id="tratam" header="Tratamientos" styleClass="span16" style=" width: 1000px;">
 
                     <p:dataTable id="tablaTratamientos" value="#{odontogramaHome.tratamientosData}" var="tratam_" 
                                  paginator="true" paginatorPosition="top"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                                  rowsPerPageTemplate="5,10,20,50,100" 
-                                 rows="100" editable="true" 
+                                 rows="20" editable="true" 
                                  selection="#{odontogramaHome.listaTratamientSelect}" 
                                  rowKey="#{tratam_.id}">
 
                         <!--selection="# {odontogramaHome.tratamiento}"  >-->
 
-                        <p:column headerText="Diente">
+                        <p:column headerText="Diente" >
                             <h:outputText value="#{tratam_.diente.nombre}"/>&nbsp;&nbsp; 
                             <h:outputText value="#{tratam_.diente.posicion}"/>
                         </p:column>
-                        <p:column headerText="Nombre">
+                        <p:column headerText="Nombre" >
                             <h:outputText value="#{tratam_.nombre}" styleClass="span2"/>
                         </p:column>                        
                         <p:column headerText="Fecha realizada">
@@ -472,16 +485,18 @@
                         <p:column headerText="Procedimiento" rendered="#{odontogramaHome.tipo ne 0}">
                             <h:outputText value="#{tratam_.procedimiento}" styleClass="span2"/>
                         </p:column>                         
-                        <p:column selectionMode="multiple" style="width:2%" />  
-                        <f:facet name="footer" class="offset1"> 
-                            <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" 
-                                           oncomplete="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
-                                           style="width: 50px; height: 20px; margin-top: 8px"> 
-                                <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                                
-                                <p:ajax process="@this" update=":form:cancel-dialog" />
-                            </p:commandLink>
-                        </f:facet>  
-                    </p:dataTable>   
+                        <p:column selectionMode="multiple" style="width:2%" />                          
+                    </p:dataTable>
+                    <h:commandLink value="Imprimir" styleClass="btn" title="Imprimir tratamientos">  
+                        <p:printer target=":form:tablaTratamientos" />
+                    </h:commandLink>  
+                    &nbsp;
+                    <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" 
+                                   oncomplete="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
+                                   style="width: 50px; height: 20px; margin-top: -5px; float: right"> 
+                        <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                                
+                        <p:ajax process="@this" update=":form:cancel-dialog" />
+                    </p:commandLink>
                 </p:panel>                 
                 <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
                     <h:form id="form-dialog-confirm-delete">
@@ -495,6 +510,7 @@
                                          style="margin-top:10px;">  
                             <p:ajax listener="#{odontogramaHome.cargar}" update=":form"/>
                         </p:commandButton>  
+                        &nbsp;
                         <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
                                          style="margin-top:10px;"/>  
                     </h:form>

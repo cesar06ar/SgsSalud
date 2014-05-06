@@ -56,8 +56,8 @@
                             <p:selectOneMenu id="nombreServicio" value="#{serviciosMedicosHome.instance.name}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" 
                                              var="img" rendered="true"  label="#{messages['common.name']}" panelStyleClass="span5" >
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                             
-                                <f:selectItem  itemLabel = "CURACION"  itemValue="CURACI0N" /> 
-                                <f:selectItem  itemLabel = "INYECCION"  itemValue="INYECI0N" /> 
+                                <f:selectItem  itemLabel = "CURACIÓN"  itemValue="CURACIÓN" /> 
+                                <f:selectItem  itemLabel = "INYECCIÓN"  itemValue="INYECIÓN" /> 
                                 <p:ajax event="change" update=":form:save" partialSubmit="true" />
                             </p:selectOneMenu>                                                                                             
                         </div>                   

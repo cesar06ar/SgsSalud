@@ -36,11 +36,12 @@ public class Parametros implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull(message = "ingrese un nombre")
-    private String nombre;
-    
+    private String nombre;    
     private String valor;
     private String unidadMedida;
     private String categoria;
+    private String valorReferenciaInf;
+    private String valorReferenciaSup;
 
     @ManyToOne
     @JoinColumn(name = "examenLabClinico_id")
@@ -93,7 +94,23 @@ public class Parametros implements Serializable {
     public void setExamenLabClinico(ExamenLabClinico examenLabClinico) {
         this.examenLabClinico = examenLabClinico;
     }    
-    
+
+    public String getValorReferenciaInf() {
+        return valorReferenciaInf;
+    }
+
+    public void setValorReferenciaInf(String valorReferenciaInf) {
+        this.valorReferenciaInf = valorReferenciaInf;
+    }
+
+    public String getValorReferenciaSup() {
+        return valorReferenciaSup;
+    }
+
+    public void setValorReferenciaSup(String valorReferenciaSup) {
+        this.valorReferenciaSup = valorReferenciaSup;
+    }  
+        
     @Override
     public int hashCode() {
         int hash = 0;
@@ -117,7 +134,7 @@ public class Parametros implements Serializable {
     @Override
     public String toString() {
         //return "edu.sgssalud.model.labClinico.Parametros[ id=" + id + " ]";
-        return getUnidadMedida();
+        return getCategoria();
     }
 
 }

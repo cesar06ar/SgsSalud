@@ -18,8 +18,10 @@ package edu.sgssalud.controller.reportes;
 import com.smartics.common.action.report.JasperReportAction;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.farmacia.Receta;
+import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
+import org.jboss.seam.security.Identity;
 
 /**
  *
@@ -40,8 +43,8 @@ import javax.servlet.ServletContext;
 public class ReporteReceta {
 
     //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ReporteReceta.class);
-    private static final String REPORTE_RECETA = "recetaMedica";  //nombre del reporte .jasper   
-    
+    private static final String REPORTE_RECETA = "recetaMedica1";  //nombre del reporte .jasper   
+
     @Inject
     @Web
     private EntityManager em;
@@ -49,6 +52,10 @@ public class ReporteReceta {
     JasperReportAction JasperReportAction;
     @Inject
     private RecetaServicio recetaServicio;
+    @Inject
+    private Identity identity;
+    @Inject
+    private ProfileService profileServicio;
 
     private Receta receta;
 
@@ -63,20 +70,27 @@ public class ReporteReceta {
     @PostConstruct
     public void init() {
         recetaServicio.setEntityManager(em);
+        profileServicio.setEntityManager(em);
     }
 
     public void renderReceta() {
-        
+
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
-        final String attachFileName = "receta.pdf";                      
+        final String attachFileName = "receta.pdf";
         if (receta.isPersistent()) {
+//            receta.setFechaEntrega(new Date());
+//            receta.setEstado("Entregada");
+//            receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+//            em.merge(receta);
+
             Map<String, Object> _values = new HashMap<String, Object>();
-            _values.put("nombres", receta.getPaciente().getNombres()+" "+receta.getPaciente().getApellidos());           
+            _values.put("nombres", receta.getPaciente().getNombres() + " " + receta.getPaciente().getApellidos());
             _values.put("numReceta", receta.getNumvalue());
-            _values.put("fechaE", receta.getFechaEntrega());                  
+            _values.put("fechaE", receta.getFechaEntrega());
             _values.put("logo", logo);
             _values.put("medico", receta.getResponsableEmision().getFullName());
+            _values.put("cedula", receta.getPaciente().getCedula());
             _values.put("usd", "$");
 
             //Exportar a pdf 
@@ -84,6 +98,6 @@ public class ReporteReceta {
             recetas.add(receta);
             //System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
             JasperReportAction.exportToPdf(REPORTE_RECETA, recetas, _values, attachFileName);
-        } 
+        }
     }
 }

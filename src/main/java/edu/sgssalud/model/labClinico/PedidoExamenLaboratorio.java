@@ -189,7 +189,7 @@ public class PedidoExamenLaboratorio implements Serializable, Comparable<PedidoE
 
     @Override
     public int compareTo(PedidoExamenLaboratorio o) {
-        return (int) (this.getId() - o.getId());
+        return (int) (o.getId() - this.getId());
     }
 
 }

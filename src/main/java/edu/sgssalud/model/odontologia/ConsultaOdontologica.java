@@ -94,8 +94,8 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
 
     public void setHoraConsulta(Date horaConsulta) {
         this.horaConsulta = horaConsulta;
-    }
-
+    }     
+    
     public Date getTiempoConsulta() {
         return tiempoConsulta;
     }
@@ -215,7 +215,7 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
 
     @Override
     public int compareTo(ConsultaOdontologica o) {
-        return (int)(o.getId() - this.getId());
+        return (int)(o.getId() - this.getId());  //PERMITE HACER UNA COMPARACION PARA ORDENAR LAS CONSULTAS SIEMPRE LA ULTIMA CREADA SE MUESTRA PRIMERO 
     }
     
     @Override

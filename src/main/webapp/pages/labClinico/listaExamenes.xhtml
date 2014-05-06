@@ -47,7 +47,8 @@
                              paginator="true" rows="50" paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100" 
-                             lazy="true" selectionMode="single"                             
+                             lazy="true" selectionMode="single"   
+                             resizableColumns="true" liveResize="true"
                              rowKey="#{examenLab_.id}" selection="#{examenLabListaServicio.examenSeleccionado}">
                              <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
                              
@@ -78,26 +79,7 @@
                             <h:outputText value="#{messages['Examen.Tipo']}" />  
                         </f:facet> 
                         <h:outputText value="#{examenLab_.tipo}" />
-                    </p:column>
-                    <p:column sortBy="#{examenLab_.valorReferencia}" style="width: 15%; text-align: center;" 
-                              filterMatchMode="startsWith">
-                        <f:facet name="header">  
-                            <h:outputText value="Referencia" />  
-                        </f:facet> 
-                        <h:outputText value="#{examenLab_.valorReferencia}" />
-                    </p:column>
-                    <p:column sortBy="#{examenLab_.valorRefInferior}" style="width: 10%; text-align: center;" >
-                        <f:facet name="header">  
-                            <h:outputText value="ref Inferior" />  
-                        </f:facet> 
-                        <h:outputText value="#{examenLab_.valorRefInferior}" />
-                    </p:column>
-                    <p:column sortBy="#{examenLab_.valorRefSuperior}" style="width: 10%; text-align: center;" >
-                        <f:facet name="header">  
-                            <h:outputText value="ref Superior" />  
-                        </f:facet> 
-                        <h:outputText value="#{examenLab_.valorRefSuperior}" />
-                    </p:column>
+                    </p:column>                    
                     <p:column sortBy="#{examenLab_.costo}" style="width: 10%; text-align: center;" 
                               filterMatchMode="startsWith">
                         <f:facet name="header">  

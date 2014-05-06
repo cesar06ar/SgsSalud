@@ -51,6 +51,7 @@ import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.config.Setting;
+import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.odontologia.*;
@@ -102,11 +103,10 @@ public class InitializeDatabase {
     @Transactional
     public void validate(@Observes @Initialized final WebApplication webapp) throws IdentityException {
         bussinesEntityService.setEntityManager(entityManager);
-        validateDB();        
+        validateDB();
         validateStructure();
         validateIdentityObjectTypes();
         validateSecurity();
-        
 
     }
 
@@ -1102,31 +1102,31 @@ public class InitializeDatabase {
         if (query.getResultList().isEmpty()) {
             try {
                 /*
-                ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+                 ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
 
-                //String CSV = "/home/cesar/NetBeansProjects/SgsSalud/src/main/webapp/resources/otros/XLS_Cie10.csv";
-                String rutaCsv = context.getRealPath("/resources/otros/XLS_Cie10.csv");
-                FileInputStream fstream = new FileInputStream(rutaCsv);
-                DataInputStream entrada = new DataInputStream(fstream);
-                BufferedReader buffer = new BufferedReader(new InputStreamReader(entrada));
-                String strLinea;
-                EnfermedadCIE10 enf;
-                List<String> ls1;//= new ArrayList<String>();
-                //int id = 0;
-                while ((strLinea = buffer.readLine()) != null) {
-                    String[] v = strLinea.split(";");
-                    ls1 = Arrays.asList(v);
-                    enf = new EnfermedadCIE10();
-                    enf.setId(Long.parseLong(ls1.get(0)));
-                    enf.setCodigo(ls1.get(1));
-                    enf.setNombre(ls1.get(2));
-                    entityManager.persist(enf);
-                    //entityManager.flush();
-                    //id++;
-                }
-                // Cerramos el archivo
-                entrada.close();
-                */
+                 //String CSV = "/home/cesar/NetBeansProjects/SgsSalud/src/main/webapp/resources/otros/XLS_Cie10.csv";
+                 String rutaCsv = context.getRealPath("/resources/otros/XLS_Cie10.csv");
+                 FileInputStream fstream = new FileInputStream(rutaCsv);
+                 DataInputStream entrada = new DataInputStream(fstream);
+                 BufferedReader buffer = new BufferedReader(new InputStreamReader(entrada));
+                 String strLinea;
+                 EnfermedadCIE10 enf;
+                 List<String> ls1;//= new ArrayList<String>();
+                 //int id = 0;
+                 while ((strLinea = buffer.readLine()) != null) {
+                 String[] v = strLinea.split(";");
+                 ls1 = Arrays.asList(v);
+                 enf = new EnfermedadCIE10();
+                 enf.setId(Long.parseLong(ls1.get(0)));
+                 enf.setCodigo(ls1.get(1));
+                 enf.setNombre(ls1.get(2));
+                 entityManager.persist(enf);
+                 //entityManager.flush();
+                 //id++;
+                 }
+                 // Cerramos el archivo
+                 entrada.close();
+                 */
                 //String cargarDatos = " COPY EnfermedadCIE10 (id, codigo, nombre) FROM '" + CSV + "' USING DELIMITERS ';' csv ";
                 //int cargar = entityManager.createNativeQuery(cargarDatos).executeUpdate();
                 //Query q = entityManager.createNativeQuery(cargarDatos);
@@ -1137,6 +1137,7 @@ public class InitializeDatabase {
 
             }
         }
+
     }
 
     public void validarDatosExamenLabCLinico() {
@@ -1149,41 +1150,41 @@ public class InitializeDatabase {
             ExamenLabClinico exam = null;
             List<ExamenLabClinico> enfs = new ArrayList<ExamenLabClinico>();
 
-            exam = new ExamenLabClinico("Biometría", "001", 200.0, 300.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
+            exam = new ExamenLabClinico("Biometría", "001", "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Sangre", "002", 200.0, 300.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
+            exam = new ExamenLabClinico("Sangre", "002", "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Glucosa Basal", "010", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.BIOQUIMÍCO_Y_ENZIMÁTICOS, now);
+            exam = new ExamenLabClinico("Glucosa Basal", "010", null, 0.0, ExamenLabClinico.Tipo.BIOQUIMÍCO_Y_ENZIMÁTICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Colesterol", "011", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.BIOQUIMÍCO_Y_ENZIMÁTICOS, now);
+            exam = new ExamenLabClinico("Colesterol", "011", null, 0.0, ExamenLabClinico.Tipo.BIOQUIMÍCO_Y_ENZIMÁTICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Sodio", "020", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.ELECTROLITOS, now);
+            exam = new ExamenLabClinico("Sodio", "020", null, 0.0, ExamenLabClinico.Tipo.ELECTROLITOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("PCR", "030", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.MARCADORES_TUMORALES, now);
+            exam = new ExamenLabClinico("PCR", "030", null, 0.0, ExamenLabClinico.Tipo.MARCADORES_TUMORALES, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("T 3", "040", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.HORMONAS, now);
+            exam = new ExamenLabClinico("T 3", "040", null, 0.0, ExamenLabClinico.Tipo.HORMONAS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("T 4", "041", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.HORMONAS, now);
+            exam = new ExamenLabClinico("T 4", "041", null, 0.0, ExamenLabClinico.Tipo.HORMONAS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("ASTO", "050", 0.0, 0.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.INMUNOLÓGICOS, now);
+            exam = new ExamenLabClinico("ASTO", "050", "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.INMUNOLÓGICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("VDRL", "051", 0.0, 0.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.INMUNOLÓGICOS, now);
+            exam = new ExamenLabClinico("VDRL", "051", "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.INMUNOLÓGICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Citológico", "056", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.LÍQUIDOS_BIOLÓGICOS, now);
+            exam = new ExamenLabClinico("Citológico", "056",  null, 0.0, ExamenLabClinico.Tipo.LÍQUIDOS_BIOLÓGICOS, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Orina", "060", 0.0, 0.0, null, "FÍSICO,ELEMENTAL,MICROSCÓPICO", 0.0, ExamenLabClinico.Tipo.ORINA, now);
+            exam = new ExamenLabClinico("Orina", "060",  "FÍSICO,ELEMENTAL,MICROSCÓPICO", 0.0, ExamenLabClinico.Tipo.ORINA, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("Gota Fresca", "061", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.ORINA, now);
+            exam = new ExamenLabClinico("Gota Fresca", "061",  null, 0.0, ExamenLabClinico.Tipo.ORINA, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("UROANÁLISIS", "062", 0.0, 0.0, null, "FÍSICO,ELEMENTAL,MICROSCÓPICO", 0.0, ExamenLabClinico.Tipo.ORINA, now);
+            exam = new ExamenLabClinico("UROANÁLISIS", "062", "FÍSICO,ELEMENTAL,MICROSCÓPICO", 0.0, ExamenLabClinico.Tipo.ORINA, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("COPROPARASITARIO", "070", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.HECES, now);
+            exam = new ExamenLabClinico("COPROPARASITARIO", "070",  null, 0.0, ExamenLabClinico.Tipo.HECES, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("GLICEMIA BASAL", "070", 0.0, 0.0, null, "EN FRESCO,GRAM", 0.0, ExamenLabClinico.Tipo.SECRECIONES, now);
+            exam = new ExamenLabClinico("GLICEMIA BASAL", "070",  "EN FRESCO,GRAM", 0.0, ExamenLabClinico.Tipo.SECRECIONES, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("GLICEMIA BASAL", "070", 0.0, 0.0, null, "EN FRESCO,GRAM", 0.0, ExamenLabClinico.Tipo.SECRECIONES, now);
+            exam = new ExamenLabClinico("GLICEMIA BASAL", "070", "EN FRESCO,GRAM", 0.0, ExamenLabClinico.Tipo.SECRECIONES, now);
             enfs.add(exam);
-            exam = new ExamenLabClinico("ESPERMATOGRAMA", "070", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.OTROS, now);
+            exam = new ExamenLabClinico("ESPERMATOGRAMA", "070", null, 0.0, ExamenLabClinico.Tipo.OTROS, now);
             enfs.add(exam);
 
             for (ExamenLabClinico e : enfs) {

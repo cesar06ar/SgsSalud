@@ -282,7 +282,7 @@
 
                 <div class="admin-actions" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" 
-                                     update=":form:growl" styleClass="btn primary offset4"/>
+                                     update=":form:growl" styleClass="btn primary offset4" disabled="#{consultaMedicaHome.editable}"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud#{consultaMedicaHome.backView}?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >

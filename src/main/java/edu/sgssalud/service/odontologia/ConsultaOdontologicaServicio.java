@@ -112,7 +112,7 @@ public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdonto
         Root<ConsultaOdontologica> entity = query.from(ConsultaOdontologica.class);
         query.where(builder.between(entity.get(ConsultaOdontologica_.fechaConsulta), fechaI, fechaF));        
         List<ConsultaOdontologica> temp = getResultList(query);
-        Collections.sort(temp);
+        //Collections.sort(temp);
         return temp;
     }
 

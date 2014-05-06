@@ -22,6 +22,7 @@ import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
+import edu.sgssalud.model.labClinico.ResultadoParametro;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
@@ -70,7 +71,7 @@ public class ReporteListas {
     private static final String REPORTE_PEDIDO = "pedidoExamen";
     private static final String REPORTE_EXAMENES = "listaExamenes";
     private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
-    //private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
+    private static final String REPORTE_RESULTADO_EXAMEN = "";
     @Inject
     @Web
     private EntityManager em;
@@ -262,6 +263,7 @@ public class ReporteListas {
         final String attachFileName = "consultasMedicas.pdf";
         List<ConsultaMedica> consulMed = consultaMedicaServicio.getConsulasMedicas();
         if (fechaInf != null && fechaSup != null) {
+            System.out.println("INGRESO A BUSCAR POR FECHAS ");
             consulMed = consultaMedicaServicio.buscarPorRangoFechas(fechaInf, fechaSup);
         }
         Map<String, Object> _values = new HashMap<String, Object>();
@@ -365,6 +367,28 @@ public class ReporteListas {
         //_values.put("usd", "$");
         //Exportar a pdf 
         JasperReportAction.exportToPdf(REPORTE_PEDIDO, examenes, _values, attachFileName);
+    }
+    
+     public void renderResultadoExamen() {
+        final String attachFileName = "pedidoExamen.pdf";
+
+        List<ResultadoParametro> resultado = new ArrayList<ResultadoParametro>();
+        List<ResultadoExamenLabClinico> listR = resultadoEService.getResultadosExamenPorPedidoExamen(pedido);
+        if (!listR.isEmpty()) {
+            
+        }
+        //System.out.println("examenes _______-"+examenes.toString());
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String logo = context.getRealPath("/reportes/unl.png");
+        //parametros 
+        Map<String, Object> _values = new HashMap<String, Object>();
+        _values.put("nombres", pedido.getPaciente().getNombres() + " " + pedido.getPaciente().getApellidos());
+        _values.put("fechaE", pedido.getFechaPedido());
+        _values.put("logo", logo);
+        _values.put("medico", pedido.getResponsableEmision().getFullName());
+        //_values.put("usd", "$");
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_PEDIDO, resultado, _values, attachFileName);
     }
 
     public Date getFechaInf() {
