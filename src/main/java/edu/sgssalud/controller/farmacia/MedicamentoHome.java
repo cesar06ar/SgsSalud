@@ -112,7 +112,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         this.listaMedicamentos = listaMedicamentos;
     }
 
-    public boolean isDevolucion() {
+    public boolean getDevolucion() {
         return devolucion;
     }
 
@@ -219,7 +219,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                 save(getInstance());
                 salida = "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
             } else {
-                if (getInstance().getCantidadIngreso() > 0) {
+                if (getCantidad() > 0) {
                     create(getInstance());
                     getInstance().setCantidadIngreso(cantidad);
                     getInstance().setUnidades(getInstance().getUnidades() + cantidad);

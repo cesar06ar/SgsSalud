@@ -73,7 +73,8 @@
                         <p:ajax process="@this" update=":edit-dialog"/>
                     </p:commandButton> 
                     <br/>
-                    <p:dataTable id="parametros1" value="#{examenHome.parametros}" 
+                    <p:dataTable id="parametros1" value="#{examenHome.parametros}"
+                                 lazy="true" resizableColumns="true" liveResize="true"
                                  var="_p" >
                         <p:column headerText="Categoria">
                             <h:outputText value="#{_p.categoria}" />
@@ -86,6 +87,12 @@
                         </p:column>
                         <p:column headerText="Unidad de Medida">
                             <h:outputText value="#{_p.unidadMedida}" />
+                        </p:column>
+                        <p:column headerText="Ref. Inferior">
+                            <h:outputText value="#{_p.valorReferenciaInf}" />
+                        </p:column>
+                        <p:column headerText="Ref. Seperior">
+                            <h:outputText value="#{_p.valorReferenciaSup}" />
                         </p:column>
                         <p:column headerText="Opción">
                             <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" 

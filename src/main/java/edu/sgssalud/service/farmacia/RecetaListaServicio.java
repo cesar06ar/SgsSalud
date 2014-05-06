@@ -247,7 +247,7 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
 //        reportes.init();
 //        reportes.setReceta(recetaSeleccionada);
 //        reportes.renderReceta();
-        return "/pages/farmacia/receta/listaReceta.xhtml";
+        return "/pages/farmacia/receta/listaReceta.xhtml?faces-redicet=true";
 
     }
 }

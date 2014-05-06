@@ -552,9 +552,11 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
      */
     public boolean isEditable() {
         Date now = Calendar.getInstance().getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
         Date fechaCon = FechasUtil.sumarRestarHorasFecha(getInstance().getFechaConsulta(), 24);
-        if (now.after(fechaCon)) {
-            System.out.println("FECHA EDITABLE______________ "+fechaCon);
+        if (fechaCon.before(now)) {
+            System.out.println("FECHA NO EDITABLE______________ "+fechaCon);
             return true;
         }
         return false;
