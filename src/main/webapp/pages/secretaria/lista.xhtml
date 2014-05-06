@@ -55,24 +55,30 @@
                 </h:link>
                 #{' '}
                 <h:link id="button-servicioM" title="#{messages['common.add']} #{messages['servicioMedico.nombre']}" outcome="/pages/depSalud/enfermeria/serviciosMedicos/servicioMedico" styleClass="btn btn-img" 
-                               disabled="#{empty pacienteListaServicio.pacienteSelecionado}" rendered="#{account.tienePermiso('ENFERMEROS')}">
+                        disabled="#{empty pacienteListaServicio.pacienteSelecionado}" rendered="#{account.tienePermiso('ENFERMEROS')}">
                     <p:graphicImage value="/resources/img/servicioMed.png" width="40" height="40"/>
                     <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>                    
                     <f:param name="backView" value="lista"></f:param>
                 </h:link>
-                 #{' '}
+                #{' '}
                 <h:link id="button-Turno" title="#{messages['common.add']} #{messages['turno.nombre']}" outcome="/pages/depSalud/turno" styleClass="btn btn-img" 
-                               disabled="#{empty pacienteListaServicio.pacienteSelecionado}" >
+                        disabled="#{empty pacienteListaServicio.pacienteSelecionado}" >
                     <p:graphicImage value="/resources/img/turno.png" width="40" height="40"/>
                     <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>                    
                     <f:param name="backView" value="depSalud/agenda"></f:param>
                 </h:link>
-                 #{' '}
-                <h:link id="button-labC" title="#{messages['common.add']} #{messages['turno.nombre']}" outcome="/pages/labClinico/pedidoE" styleClass="btn btn-img" 
+                #{' '}
+                <h:link id="button-labC" title="#{messages['common.add']} #{messages['Examen.pedidos']}" outcome="/pages/labClinico/pedidoE" styleClass="btn btn-img" 
                         disabled="#{empty pacienteListaServicio.pacienteSelecionado}" rendered="#{account.tienePermiso('LABORATORISTAS')}">
                     <p:graphicImage value="/resources/img/labClinic.png" width="40" height="40"/>
                     <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>                    
                     <f:param name="backView" value="/labClinico/listaPedidosExam"></f:param>
+                </h:link>
+                #{' '}
+                <h:link id="buscar" title="Cargar Estudiante del Sistema de Gestion de " outcome="/pages/secretaria/search" styleClass="btn btn-img" 
+                         >
+                    <p:graphicImage value="/resources/images/buscar.png" width="50" height="40"/>
+                    <f:param name="backView" value="secretaria/lista"></f:param>
                 </h:link>
                 <div style="float: right">
                     <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
@@ -97,9 +103,11 @@
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                 <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM :form:button-labC :form:button-Turno"/>                 
+                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM 
+                        :form:button-labC :form:button-Turno :form:buscar"/>                 
                 <p:ajax event="rowUnselect" listener="#{pacienteListaServicio.onRowUnselect}" 
-                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM :form:button-labC :form:button-Turno"/>
+                        update=":form:button-edit :form:messages :form:button-abrirFM :form:button-servicioM 
+                        :form:button-labC :form:button-Turno :form:buscar"/>
 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{paciente_.cedula}" style="width: 15%; text-align: center;">

@@ -28,12 +28,23 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.controller.security.SecurityGroupService;
+import edu.sgssalud.model.DeletableObject_;
 import edu.sgssalud.model.profile.Profile;
+import edu.sgssalud.model.profile.Profile_;
+import edu.sgssalud.model.security.IdentityObjectAttribute;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import java.util.logging.Level;
+import javax.ejb.TransactionAttribute;
+import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.logging.Logger;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.PersistenceManager;
+import org.picketlink.idm.api.User;
+import org.picketlink.idm.common.exception.IdentityException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -54,20 +65,33 @@ public class ProfileListService extends LazyDataModel<Profile> {
     private EntityManager entityManager;
     @Inject
     private ProfileService profileService;
-    private List<Profile> resultList;
+    @Inject
+    private SecurityGroupService securityRol;
+    private List<Profile> resultList = new ArrayList<Profile>();
     private int firstResult = 0;
     private String typeName;
     private Profile[] selectedProfiles;
     private Profile selectedProfile;
-    
+    private String estado;
+
+    @Inject
+    private IdentitySession security;
+
     public ProfileListService() {
         setPageSize(MAX_RESULTS);
-        resultList = new ArrayList<Profile>();
+        //resultList = new ArrayList<Profile>();
     }
 
     @PostConstruct
     public void init() {
         profileService.setEntityManager(entityManager);
+        securityRol.setSecurity(security);
+        if ("inactivo".equals(estado)) {
+            resultList = profileService.findAllA(true);
+        } else {
+            resultList = resultList = profileService.findAllA(false);
+        }
+
     }
 
     @Override
@@ -80,36 +104,42 @@ public class ProfileListService extends LazyDataModel<Profile> {
             order = QuerySortOrder.DESC;
         }
         Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+        /*filters.put(Profile_.deleted.getName(), estado);
          _filters.putAll(filters);*/
 
         QueryData<Profile> qData = profileService.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
+        this.setResultList(qData.getResult());
+
         return qData.getResult();
     }
-    
+
     @Override
     public Profile getRowData(String rowKey) {
-
+        //return profileService.find(Long.parseLong(rowKey));
         return profileService.findByName(rowKey);
     }
 
     @Override
     public Object getRowKey(Profile entity) {
-        return entity.getName();
+        return entity.getId();
+    }
+
+    public void inactivos() {
+        resultList = profileService.findAllA(true);
     }
 
     public List<Profile> getResultList() {
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = profileService.getProfiles(this.getPageSize(), firstResult);
-        }
+//        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+//            resultList = profileService.getProfiles(this.getPageSize(), firstResult);
+//        }
         return resultList;
     }
 
     public void setResultList(List<Profile> resultList) {
         this.resultList = resultList;
     }
-    
+
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
@@ -117,12 +147,12 @@ public class ProfileListService extends LazyDataModel<Profile> {
     public int getPreviousFirstResult() {
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
-    
+
     public int getFirstResult() {
         return firstResult;
     }
 
-    public void setFirstResult(int firstResult) {         
+    public void setFirstResult(int firstResult) {
         this.firstResult = firstResult;
         this.resultList = null;
     }
@@ -133,7 +163,7 @@ public class ProfileListService extends LazyDataModel<Profile> {
 
     public void setTypeName(String typeName) {
         this.typeName = typeName;
-    }     
+    }
 
     public Profile[] getSelectedProfiles() {
         return selectedProfiles;
@@ -150,15 +180,28 @@ public class ProfileListService extends LazyDataModel<Profile> {
     public void setSelectedProfile(Profile selectedProfile) {
         this.selectedProfile = selectedProfile;
     }
-    public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.selected"), ((Profile) event.getObject()).getName());
 
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        if ("inactivo".equals(estado)) {
+            setResultList(profileService.findAllA(true));
+        }else{
+            resultList = profileService.findAllA(false);
+        }
+        this.estado = estado;
+    }
+
+    public void onRowSelect(SelectEvent event) {
+        //this.setSelectedProfile((Profile) event.getObject());
+        FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.selected"), ((Profile) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         FacesMessage msg = new FacesMessage(UI.getMessages("profile") + " " + UI.getMessages("common.unselected"), ((Profile) event.getObject()).getName());
-
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setSelectedProfile(null);
     }
@@ -169,5 +212,33 @@ public class ProfileListService extends LazyDataModel<Profile> {
 
     public void setEntityManager(EntityManager entityManager) {
         this.entityManager = entityManager;
-    }    
+    }
+
+    @TransactionAttribute
+    public void inavilitarCuenta() {
+        System.out.println("PROFILE_________init");
+
+        try {
+            //PersistenceManager identityManager = security.getPersistenceManager();
+            //AttributesManager attributesManager = security.getAttributesManager();
+            //User user = identityManager.findUser(selectedProfile.getUsername());            
+            IdentityObjectAttribute ida = profileService.getAttributos(selectedProfile.getUsername(), "estado").get(0);
+            //securityRol.disassociate(selectedProfile.getUsername());
+            System.out.println("PROFILE_________0");
+            ida.setValue("INACTIVO");
+            entityManager.merge(ida);
+            entityManager.flush();
+            FacesMessage msg = new FacesMessage("EL Usuario: " + selectedProfile.getFullName(), "ha sido deshabilitado");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+            System.out.println("PROFILE_________2");
+        } catch (IdentityException ex) {
+            ex.printStackTrace();
+            System.out.println("PROFILE_________3");
+            java.util.logging.Logger.getLogger(ProfileListService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+//        } else {
+//            System.out.println("PROFILE_________x");
+//        }
+
+    }
 }

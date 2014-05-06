@@ -121,9 +121,9 @@
                 <p:tabView id="infoFM" style="width: 99%; padding-bottom: 1.5%">
                     <p:tab title="#{'INF. MÉDICA'}" titletip="Información Medica General">
                         <h:panelGroup layout="block" class="clearfix">
-                            <label for="gs_" class="control-label">#{messages['fichaMedica.grupoSangineo']}</label>
+                            <label for="gs_" class="control-label">#{messages['fichaMedica.grupoSangineo']} *</label>
                             <div class="input">
-                                <p:selectOneMenu id="gs_" value="#{fichaMedicaHome.instance.grupoSangineo}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="false" requiredMessage="false" 
+                                <p:selectOneMenu id="gs_" value="#{fichaMedicaHome.instance.grupoSangineo}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
                                                  rendered="true" label="#{messages['fichaMedica.grupoSanguineo']}">
                                     <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
                                     <f:selectItems value="#{fichaMedicaHome.listaGruposSangineos}" var="grupoS" itemLabel="#{grupoS}" itemValue="#{grupoS}"/>                          
@@ -300,11 +300,11 @@
                                 <f:convertDateTime pattern="HH:mm"/>
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="#{messages['consultaMedica.motivo']}" style="width: 30%">
-                            <h:outputText value="#{consultaM_.motivoConsulta}" />
+                        <p:column headerText="#{messages['consultaMedica.motivo']}" style="width: 30%">                            
+                            <h:inputTextarea value="#{consultaM_.motivoConsulta}" style="height: 30px; width:96%;" disabled="true" />
                         </p:column>
                         <p:column headerText="#{messages['consultaMedica.Tratamiento']}" style="width: 29%">
-                            <h:outputText value="#{consultaM_.tratamiento}" />
+                            <h:inputTextarea value="#{consultaM_.tratamiento}" style="height: 30px; width:96%;" disabled="true" />
                         </p:column>
                         <p:column headerText="#{messages['comun.estado']}"  style="width: 10%">
                             <h:outputText value="#{consultaM_.code}" title="Estado de la consulta puede ser (PENDIENTE o REALIZADA)" escape="false"/>
@@ -344,11 +344,11 @@
                                 <f:convertDateTime pattern="HH:mm"/>
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="#{messages['consultaMedica.diagnostico']}" style="width: 40%">
-                            <h:outputText value="#{consultaM1_.diagnostico}" />
+                        <p:column headerText="#{messages['consultaMedica.diagnostico']}" style="width: 40%">                           
+                            <h:inputTextarea value="#{consultaM1_.diagnostico}" style="height: 30px; width:96%;" disabled="true" />
                         </p:column>
                         <p:column headerText="#{messages['consultaMedica.Tratamiento']}" style="width: 40%">
-                            <h:outputText value="#{consultaM1_.tratamiento}" />
+                            <h:inputTextarea value="#{consultaM1_.tratamiento}" style="height: 30px; width:96%;" disabled="true" />
                         </p:column>                        
                     </p:dataTable>
                     <br/>
@@ -375,8 +375,8 @@
                                 <f:convertDateTime pattern="HH:mm"/>
                             </h:outputText>
                         </p:column>                                                    
-                        <p:column headerText="#{messages['consultaMedica.motivo']}" style="width: 35%">
-                            <h:outputText value="#{consultaO_.motivoConsulta}" styleClass="span3"/>
+                        <p:column headerText="#{messages['consultaMedica.motivo']}" style="width: 35%">                            
+                            <h:inputTextarea value="#{consultaO_.motivoConsulta}" style="height: 30px; width:96%;" disabled="true" />
                         </p:column>                                                
                         <p:column headerText="#{messages['comun.estado']}" style="width: 10%">
                             <h:outputText value="#{consultaO_.code}" />

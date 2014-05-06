@@ -18,7 +18,7 @@
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container-header">
-                        <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
+                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
                         <h2>#{profileHome.managed ? messages['common.edit'] : messages['common.add']} #{profileHome.instance.fullName}</h2>   
                     </div>
                 </div>
@@ -28,8 +28,8 @@
             <h:form id="profile">
 
                 <!-- Attributos para usuario -->
-                <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{profileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn"/>
-                <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save"/>               
+                <glue:input id="fstn" name="firstname" type="text" label="#{messages['common.firstname']}" value="#{profileHome.instance.firstname}" required="true" inlinehelp="#{messages['common.firstname.inlinehelp']}" execute="@this save" render="fstn" validator="stringValidator"/>
+                <glue:input id="srn" name="surname" type="text" label="#{messages['common.surname']}" value="#{profileHome.instance.surname}" required="true" inlinehelp="#{messages['common.surname.inlinehelp']}" execute="@this save" validator="stringValidator"/>
                 <!--<glue:input id="cod" name="code" type="text" label="#{messages['profile.dni']}" value="#{profileHome.instance.code}" required="false" inlinehelp="#{messages['profile.dni.inlinehelp']}" execute="@this save" validator="ciValidator" />-->
                 <h:panelGroup id="cod" layout="block" class="clearfix" rendered="true">
                     <label for="dni">#{messages['profile.dni']}</label>
@@ -50,7 +50,7 @@
 
                 <glue:input id="bio" name="bio" type="textarea" label="#{messages['common.bio']}" value="#{profileHome.instance.bio}" required="false" inlinehelp="#{messages['common.bio.inlinehelp']}" execute="@this save"/>
 
-                 <h:panelGroup id="eml" layout="block" class="clearfix">
+                <h:panelGroup id="eml" layout="block" class="clearfix">
                     <label for="email">#{messages['common.email']}</label>
                     <div class="input">
                         <h:inputText id="email" value="#{profileHome.instance.email}" styleClass="xLarge" required="true" label="#{messages['common.email']}">
@@ -63,7 +63,7 @@
                         <span class="help-inline"><br/>Prometemos <b>nunca</b> compartir su dirección de correo. <ocp:message forId="email" /></span>
                     </div>
                 </h:panelGroup>
-               
+
 
                 <!--<glue:input id="showBootcamp" name="showBootcamp" type="checkbox" value="# {profileHome.instance.showBootcamp}" required="true" inlinehelp="# {messages['common.bootcamp.inlinehelp']}" execute="@this save"/>-->
 
@@ -122,13 +122,35 @@
                 <div class="actions">
                     <h:commandButton id="save" action="#{profileHome.saveProfile()}" value="#{messages['common.save']}" styleClass="btn primary"/>
                     &nbsp;
-                    <h:commandButton action="/pages/admin/listProfile.xhtml?faces-redirect=true"
-                                     value="#{messages['common.cancel']}" styleClass="btn primary" immediate="true" rendered="#{profileHome.backView eq('listProfile')}"/>
-                    <h:commandButton action="/pages/home"
-                                     value="#{messages['common.cancel']}" styleClass="btn" immediate="true" rendered="#{empty profileHome.backView}"/>
+                    <p:commandLink action="/pages/admin/listProfile.xhtml?faces-redirect=true"
+                                   value="#{messages['common.cancel']}" styleClass="btn primary"  rendered="#{profileHome.backView eq('/admin/listProfile')}"/>
+                    <p:commandLink action="/pages/home?faces-redirect=true"
+                                   value="#{messages['common.cancel']}" styleClass="btn" rendered="#{profileHome.backView eq('/home')}"/>
+                    &nbsp;
+                    <p:commandLink id="delete" type="button" value="Desactivar Cuenta" title="#{messages['common.delete']}" 
+                                   onclick="#{'deletedDlg.show();'}"  styleClass="btn success" 
+                                   rendered="#{profileHome.instance.persistent and not profileHome.instance.deleted and account.tienePermiso('ADMIN') }"> 
+                        <p:ajax process="@this" update=":cancel-dialog"/>
+                    </p:commandLink>
+                     &nbsp;
+                    <h:commandButton id="active" action="#{profileHome.activarCuenta()}" value="Activar cuenta" styleClass="btn primary"
+                                     rendered="#{profileHome.instance.persistent and profileHome.instance.deleted and account.tienePermiso('ADMIN')}"/>
                 </div>
             </h:form>
+            <p:dialog id="cancel-dialog" header="Desactivar Cuenta de Usuario" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
 
-        </ui:define>
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="Esta seguro que quiere deshabilitar esta cuenta de usuario de #{profileHome.instance.fullName}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" action="#{profileHome.inavilitarCuenta()}" 
+                                     oncomplete="#{'deletedDlg.hide();'}" update=":profile" ajax="true"
+                                     style="margin-top:10px;" process="@this"> 
+                    </p:commandButton>  #{' '}
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/> 
+                </h:form>
+            </p:dialog>
+        </ui:define>        
     </ui:composition>
 </html>

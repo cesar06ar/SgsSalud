@@ -1,94 +1,93 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"                
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
-
-    <!--Metadato que se realiza antes de renderizarse la vista-->
-    <f:metadata>
-        <f:viewParam name="result" value="#{pacienteListaServicio.firstResult}" />            
-        <f:viewParam name="" value="#{pacienteListaServicio.parametroBusqueda}"/>
-    </f:metadata>
-    <!--Formulario dentro de un contenedor-->
-    <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">
-
-        <h:form id="form">            
-            <!--Opción de mensaje, cuando se realiza una acción-->
-            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-
-            <!--Botones de admin-->
-            <div class="admin-actions ">
-
-                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="paciente" styleClass="btn success">
-                    <f:param name="pacienteId"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
-                </h:link>
-                #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="paciente" styleClass="btn" 
-                        disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
-                    <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
-                </h:link>
-                #{' '}
-                <h:link id="button-abrirFM" value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="/pages/depSalud/fichaMedica" styleClass="btn" 
-                        disabled="#{empty pacienteListaServicio.pacienteSelecionado}">
-                    <f:param name="pacienteId" value="#{pacienteListaServicio.pacienteSelecionado.id}"></f:param>
-                    <f:param name="backView" value="lista"></f:param>
-                </h:link>
-
-                <div style="float: right">
-                    <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
-                        <p:ajax event="keyup" update="tablaPacientes"/>
-                    </p:inputText>
-                    &nbsp;
-                    <p:commandButton value="Buscar" action="#{pacienteListaServicio.buscarPorParametro()}" update="tablaPacientes" styleClass="btn info"/>                    
-                    <br/>
-                </div>             
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"                
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:glue="http://eqaula.org/jsf/facelets"
+    xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+    >
+    <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
+        <!--Metadato que se realiza antes de renderizarse la vista-->
+        <f:metadata>
+            <f:viewParam name="backView" value="#{pacienteHome.backView}" />
+            <f:viewParam name="pacienteId" value="#{pacienteHome.pacienteId}" />
+        </f:metadata>
+        <!--Formulario dentro de un contenedor-->
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >  
+                        <h2>#{'Cargar Estudiante del Sistema de Gestión Académica'}</h2>   
+                    </div>
+                </div>
             </div>
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="form">            
+                <!--Opción de mensaje, cuando se realiza una acción-->
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <h:panelGrid columns="3">
+                    <label for="fdni">#{messages['profile.dni']} *</label>
+                    <p:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">
+                        <f:validator validatorId="ciValidator" />                        
+                    </p:inputText>                                           
 
-            <!--tabla de datos-->
-            <p:dataTable id="tablaPacientes"  var="paciente_" value="#{pacienteListaServicio.resultList}"
-                         paginator="true" rows="30" 
-                         paginatorPosition="top"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
-                         rowsPerPageTemplate="10,20,30,50,100"
-                         rendered="true"
-                         >                                
+                    <p:commandButton id="cargar" value="Buscar"  action="#{pacienteHome.consultar()}" update="@form"
+                                     icon="ui-icon-search" styleClass="btn-success" title="Buscar Estudiante por Cédula" />                
+                </h:panelGrid>            
 
-                <!--Columnas para mostrar en la tabla-->
-                <p:column sortBy="#{paciente_.cedula}" style="width: 15%; text-align: center;">
-                    <f:facet name="header">  
-                        <h:outputText value="#{messages['profile.dni']}" />  
-                    </f:facet> 
-                    <h:outputText value="#{paciente_.cedula}" />
-                </p:column>
-                <p:column sortBy="#{paciente_.nombres}" style="text-align: center;">
-                    <f:facet name="header">  
-                        <h:outputText value="#{messages['common.firstname']}" />  
-                    </f:facet> 
-                    <h:outputText value="#{paciente_.nombres}" />
-                </p:column>
-                <p:column sortBy="#{paciente_.apellidos}" style="text-align: center;">
-                    <f:facet name="header">  
-                        <h:outputText value="#{messages['common.surname']}" />  
-                    </f:facet> 
-                    <h:outputText value="#{paciente_.apellidos}" />
-                </p:column>               
-                <p:column >
-                    <f:facet name="header">  
-                        <h:outputText value="Cargar" />  
-                    </f:facet> 
-                    <h:commandLink action="#{reporteListas.renderPacientes()}" >                    
-                        <p:graphicImage value="/resources/images/pdf.png" />                          
-                    </h:commandLink>
-                </p:column>
-            </p:dataTable>            
-        </h:form>
-    </p:dialog>  
-</ui:composition>
+                <glue:output id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pacienteHome.instance.nombres}" required="false" execute="@this save" render="fstn" styleClass="xLarge" disabled="true"/>            
+                <glue:output id="srn" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{pacienteHome.instance.apellidos}" required="false" execute="@this save" render="srn" styleClass="xLarge" disabled="true"/> 
+                <glue:output id="email" name="email" type="text" label="#{messages['common.email']}" value="#{pacienteHome.instance.email}"  required="false" execute="@this save" render="email" styleClass="xLarge" disabled="true"/> 
+                <h:panelGroup id="fnp" layout="block" class="clearfix">
+                    <label for="fnacim">#{messages['common.fecha.nacimiento']}*</label>
+                    <div class="input" >
+                        <p:calendar  id="fnacim" value="#{pacienteHome.instance.fechaNacimiento}" styleClass="xLarge" required="false" label="edad" 
+                                     rendered="true" pattern="dd-MM-yyyy" navigator="true" showButtonPanel="true" disabled="true"> 
+                            <p:ajax event="dateSelect" process="fnacim" rendered="save fnp edadp:edad" update="@parent fnp edadp" />                                                  
+                        </p:calendar>                             
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.fechaNacimiento != null}"
+                                        styleClass="validation-status" />                        
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="edadp" layout="block" class="clearfix">
+                    <label for="edad">#{messages['common.edad']} </label>
+                    <div class="input" >
+                        <p:inputText  id="edad" value="#{pacienteHome.instance.edad}" styleClass="xLarge" required="false" label="edad" 
+                                      rendered="true" disabled="true" title="Edad en años"  >
+                            <p:ajax event="keyup" rendered="fnp" update="@parent fnp" />  
+                        </p:inputText>                            
+                        <h:graphicImage value="#{resources['success.gif']}" rendered="#{pacienteHome.instance.edad != null}"
+                                        styleClass="validation-status" />                        
+                    </div>
+                </h:panelGroup>
+
+                <glue:output id="genero" name="genero" type="text" label="#{messages['comun.genero']}" value="#{pacienteHome.instance.genero}"  
+                             required="false" execute="@this save" render="genero" styleClass="xLarge" disabled="true"/>
+                <glue:output id="dir" name="direccion" type="text" label="#{messages['common.dir']}" value="#{pacienteHome.instance.direccion}" 
+                             required="false"  execute="@this save" render="dir"  disabled="true"/>
+                <glue:output id="telf" name="telefono" type="text" label="#{messages['common.telefono']}" value="#{pacienteHome.instance.telefono}" minLength="7" validateLength="true" validator="digitValidator"
+                             required="false"  execute="@this save" render="telf" disabled="true"/>
+                <glue:output id="cel" name="celular" type="text" label="#{messages['common.cel']}" value="#{pacienteHome.instance.celular}" minLength="9" validateLength="true" validator="digitValidator"
+                             required="false"  execute="@this save" render="cel" disabled="true"/>
+                <br/>
+                <!--Botones de admin-->
+                <div class="admin-actions ">
+                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" immediate="true"
+                                     value="#{messages['common.save']}" styleClass="btn primary offset4"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/secretaria/lista.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                    </h:link>
+                </div>
+            </h:form>
+        </ui:define>    
+    </ui:composition>
+</html>   
 
 
 

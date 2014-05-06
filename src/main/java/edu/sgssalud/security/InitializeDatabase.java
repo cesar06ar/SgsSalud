@@ -56,11 +56,20 @@ import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.odontologia.*;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
+import edu.sgssalud.model.security.IdentityObjectAttribute;
 import edu.sgssalud.model.security.IdentityObjectCredentialType;
 import edu.sgssalud.model.security.IdentityObjectRelationshipType;
 import edu.sgssalud.model.security.IdentityObjectType;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.Dates;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import javax.faces.context.FacesContext;
+import javax.persistence.Query;
+import javax.servlet.ServletContext;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
 import org.jboss.seam.transaction.TransactionPropagation;
 import org.jboss.seam.transaction.Transactional;
@@ -93,10 +102,11 @@ public class InitializeDatabase {
     @Transactional
     public void validate(@Observes @Initialized final WebApplication webapp) throws IdentityException {
         bussinesEntityService.setEntityManager(entityManager);
-        validateDB();
+        validateDB();        
         validateStructure();
         validateIdentityObjectTypes();
         validateSecurity();
+        
 
     }
 
@@ -171,8 +181,9 @@ public class InitializeDatabase {
         query.setParameter("name", Profile.class.getName());
         Profile p = null;
         Profile admin = null;
-        List<User> members = new ArrayList<User>();
+        //List<User> members = new ArrayList<User>();
         org.picketlink.idm.api.Group g = session.getPersistenceManager().findGroup("ADMIN", "GROUP");
+        //session.getAttributesManager().
         if (g == null) {
             g = session.getPersistenceManager().createGroup("MEDICOS", "GROUP");
             g = session.getPersistenceManager().createGroup("ODONTOLOGOS", "GROUP");
@@ -189,7 +200,8 @@ public class InitializeDatabase {
             User u = session.getPersistenceManager().createUser("admin");
             session.getAttributesManager().updatePassword(u, "adminadmin");
             session.getAttributesManager().addAttribute(u, "email", "sgssalud@unl.edu");
-            members.add(u);
+            session.getAttributesManager().addAttribute(u, "estado", "ACTIVO");
+            //members.add(u);
             //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
             session.getRelationshipManager().associateUser(g, u);
 
@@ -1088,36 +1100,41 @@ public class InitializeDatabase {
         TypedQuery<EnfermedadCIE10> query = entityManager.createQuery("from EnfermedadCIE10 b",
                 EnfermedadCIE10.class);
         if (query.getResultList().isEmpty()) {
-            Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            EnfermedadCIE10 enf = null;
+            try {
+                /*
+                ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
 
-            List<EnfermedadCIE10> enfs = new ArrayList<EnfermedadCIE10>();
-            enf = new EnfermedadCIE10("A00", "Colera", "Enfermedades infecciosas intestinales", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A01", "Fiebre tifoidea y paratifoidea", "Enfermedades infecciosas intestinales", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A02", "Otras infecciones debidas a Salmonella", "Enfermedades infecciosas intestinales", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A03", "Shigelosis", "Enfermedades infecciosas intestinales", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A15", "Tuberculosis respiratoria, confirmada bacteriológica e histológicamente", "Tuberculosis", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A16", "Tuberculosis respiratoria, no confirmada bacteriológica o histológicamente", "Tuberculosis", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A20", "Peste", "Ciertas zoonosis bacterianas", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A21", "Tularemia", "Ciertas zoonosis bacterianas", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A22", "Carbunco [ántrax]", "Ciertas zoonosis bacterianas", now);
-            enfs.add(enf);
-            enf = new EnfermedadCIE10("A23", "Brucelosis", "Ciertas zoonosis bacterianas", now);
-            enfs.add(enf);
+                //String CSV = "/home/cesar/NetBeansProjects/SgsSalud/src/main/webapp/resources/otros/XLS_Cie10.csv";
+                String rutaCsv = context.getRealPath("/resources/otros/XLS_Cie10.csv");
+                FileInputStream fstream = new FileInputStream(rutaCsv);
+                DataInputStream entrada = new DataInputStream(fstream);
+                BufferedReader buffer = new BufferedReader(new InputStreamReader(entrada));
+                String strLinea;
+                EnfermedadCIE10 enf;
+                List<String> ls1;//= new ArrayList<String>();
+                //int id = 0;
+                while ((strLinea = buffer.readLine()) != null) {
+                    String[] v = strLinea.split(";");
+                    ls1 = Arrays.asList(v);
+                    enf = new EnfermedadCIE10();
+                    enf.setId(Long.parseLong(ls1.get(0)));
+                    enf.setCodigo(ls1.get(1));
+                    enf.setNombre(ls1.get(2));
+                    entityManager.persist(enf);
+                    //entityManager.flush();
+                    //id++;
+                }
+                // Cerramos el archivo
+                entrada.close();
+                */
+                //String cargarDatos = " COPY EnfermedadCIE10 (id, codigo, nombre) FROM '" + CSV + "' USING DELIMITERS ';' csv ";
+                //int cargar = entityManager.createNativeQuery(cargarDatos).executeUpdate();
+                //Query q = entityManager.createNativeQuery(cargarDatos);
+                //q.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println(" --> error cargar enfermedades cie10: " + e.getMessage());
 
-            for (EnfermedadCIE10 enf1 : enfs) {
-                entityManager.persist(enf1);
-                entityManager.flush();
             }
         }
     }
@@ -1129,9 +1146,9 @@ public class InitializeDatabase {
             Date now = Calendar.getInstance().getTime();
             Calendar ago = Calendar.getInstance();
             //ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            ExamenLabClinico exam = null;            
+            ExamenLabClinico exam = null;
             List<ExamenLabClinico> enfs = new ArrayList<ExamenLabClinico>();
-           
+
             exam = new ExamenLabClinico("Biometría", "001", 200.0, 300.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
             enfs.add(exam);
             exam = new ExamenLabClinico("Sangre", "002", 200.0, 300.0, null, "PRINCIPAL,FORMULA LEUCOCITARIA", 0.0, ExamenLabClinico.Tipo.HEMATOLÓGICOS, now);
@@ -1168,7 +1185,7 @@ public class InitializeDatabase {
             enfs.add(exam);
             exam = new ExamenLabClinico("ESPERMATOGRAMA", "070", 0.0, 0.0, null, null, 0.0, ExamenLabClinico.Tipo.OTROS, now);
             enfs.add(exam);
-            
+
             for (ExamenLabClinico e : enfs) {
                 entityManager.persist(e);
                 entityManager.flush();

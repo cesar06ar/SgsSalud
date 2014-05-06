@@ -61,11 +61,10 @@ public class validadorDniDisponiblePaciente implements Validator {
         if (!currentDni.equals(value)) {
             if (!currentDni.equals(value)) {
                 if (value instanceof String) {
-
                     ps.setEntityManager(em);
                     //System.out.println("dni ingresada diferente al valor en la base de datos: ");
                     if (!ps.isDniDisponible((String) value)) {
-                        throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("validator.dni"), null));
+                        throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, "El número de cédula pertenece a otro paciente", ""));
                     }
                 }
             }

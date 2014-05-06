@@ -47,7 +47,8 @@
                             value="#{messages['common.cancel']}" styleClass="btn success" >
                         <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
                         <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
-                    </h:link>
+                        <f:param name="backView" value="#{odontogramaHome.backView}"/>
+                    </h:link>                     
                 </div>
             </h:form>                
         </ui:define>

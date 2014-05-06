@@ -16,6 +16,8 @@
 package edu.sgssalud.service.farmacia;
 
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.controller.reportes.ReporteListas;
+import edu.sgssalud.controller.reportes.ReporteReceta;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.util.Lists;
@@ -63,6 +65,7 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     private Identity identity;   
     @Inject
     private ProfileService profileServicio;
+    @Inject ReporteReceta reportes;
     private List<Receta> resultList = new ArrayList<Receta>();
     private int primerResult = 0;
     private Receta[] recetasSeleccionados;
@@ -225,7 +228,7 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         this.setResultList(recetaServicio.buscarTodos());
     }
     
-    public String entregarReceta(){
+    public void entregarReceta(){
         
         Date now = Calendar.getInstance().getTime();
         this.recetaSeleccionada.setEstado("Entregada");
@@ -236,9 +239,14 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         //    em.getTransaction().begin();
             em.merge(recetaSeleccionada);
           //  em.getTransaction().commit();
+            this.setResultList(recetaServicio.buscarTodos());
         }        
         FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado" , "");
         FacesContext.getCurrentInstance().addMessage("", msg);
-        return "/pages/labClinico/listaReceta.xhtml?faces-redirect=true";
+        
+        //return "/pages/farmacia/medicamento/listaReceta.xhtml?faces-redirect=true";
+        reportes.init();        
+        reportes.setReceta(recetaSeleccionada);
+        reportes.renderReceta();
     }
 }

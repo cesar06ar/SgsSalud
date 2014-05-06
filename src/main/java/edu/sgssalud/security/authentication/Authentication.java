@@ -6,6 +6,8 @@ package edu.sgssalud.security.authentication;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
+import edu.sgssalud.model.security.IdentityObjectAttribute;
+import edu.sgssalud.model.security.IdentityObjectCredential;
 import edu.sgssalud.profile.ProfileService;
 import java.io.IOException;
 import javax.enterprise.context.RequestScoped;
@@ -34,11 +36,18 @@ import org.ocpsoft.rewrite.servlet.impl.HttpInboundRewriteImpl;
 import org.picketlink.idm.api.Credential;
 import org.picketlink.idm.api.User;
 import edu.sgssalud.service.paciente.PacienteServicio;
+import edu.sgssalud.web.service.WebServiceSGAClientConnection;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Event;
+import javax.servlet.ServletContext;
 import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.jboss.seam.security.Authenticator;
+import org.jboss.seam.security.external.api.ResponseHolder;
+import org.jboss.seam.security.external.openid.api.OpenIdPrincipal;
 import org.picketlink.idm.api.AttributesManager;
 import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.PersistenceManager;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.PasswordCredential;
 
@@ -53,6 +62,9 @@ public class Authentication {
     Logger logger = Logger.getLogger(Authentication.class);
     @Inject
     private HttpSession session;
+    @Inject
+    private ServletContext servletContext;
+
     @Inject
     private FacesContext context;
     @Inject
@@ -72,12 +84,19 @@ public class Authentication {
     @Inject
     private PacienteServicio pacienteServic;
     @Inject
+    private IdmAuthenticator idmAuth;
+    @Inject
     private OpenIdAuthenticator openAuth;
+    @Inject
+    Event<DeferredAuthenticationEvent> deferredAuthentication;
+
+    private WebServiceSGAClientConnection conexionSGA;
 
     @PostConstruct
     public void init() {
         pacienteServic.setEntityManager(em);
         profileService.setEntityManager(em);
+        conexionSGA = new WebServiceSGAClientConnection();
     }
 
     public void loginSuccess(@Observes final LoggedInEvent event, final NavigationHandler navigation,
@@ -123,6 +142,20 @@ public class Authentication {
         }
     }
 
+    public void loginSucceeded(OpenIdPrincipal principal, ResponseHolder responseHolder) {
+
+        try {
+            openAuth.success(principal);
+            deferredAuthentication.fire(new DeferredAuthenticationEvent(true));
+            responseHolder.getResponse().sendRedirect(servletContext.getContextPath() + "/pages/home.xhtml");
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+
+        }
+
+    }
+
     public void loginFailed(@Observes final LoginFailedEvent event, final NavigationHandler navigation)
             throws InterruptedException {
         if (!(OpenIdAuthenticator.class.equals(identity.getAuthenticatorClass())
@@ -134,7 +167,7 @@ public class Authentication {
                         + identity.getAuthenticatorClass()
                         + ", " + identity); // TODO , exception );
                 //messages.warn("Whoops! Something went wrong with your login. Care to try again? We'll try to figure out what went wrong.");
-                messages.warn(UI.getMessages("common.login.fail"));
+                //messages.warn(UI.getMessages("common.login.fail"));
 
             } else {
                 //messages.warn("Whoops! We don't recognize that username or password. Care to try again?");
@@ -156,29 +189,33 @@ public class Authentication {
     }
 
     public void login1() throws InterruptedException, IdentityException {
-        identity.setAuthenticatorClass(IdmAuthenticator.class);
-        //identity.
-        String userName = credencials.getUsername();
-        String pass = ((PasswordCredential) credencials.getCredential()).getValue();
-        System.out.println("USER NAME_ " + userName + "   PASS  " + pass);
-        try {
-            User u = security.getPersistenceManager().findUser(userName);
-            //AttributesManager attributesManager = security.getAttributesManager();                        
-            if (u != null) {
-                boolean ispass = security.getAttributesManager().validatePassword(u, pass);
-                if (ispass) {
-                    System.out.println("INGRESO correcto ____");
-                    identity.login();
-                } else {
-                    System.out.println("FALLO al ingresar");
-                    //identity.login();
-                    identity.login();
+        PersistenceManager identityManager = security.getPersistenceManager();
+        User user = identityManager.findUser(credencials.getUsername());
+        if (user != null) {
+            IdentityObjectAttribute ida = profileService.getAttributos(user.getKey(), "estado").get(0);
+            //Profile userP = profileService.getProfileByUsername(credencials.getUsername());
+            //Paciente p = pacienteServic.getPacientePorNombreUsuario(credencials.getUsername());
+            if (ida != null && "ACTIVO".equals(ida.getValue())) {
+                try {
+                    this.login();
+                } catch (Exception ex) {
+                    System.out.println("ERROR_");
+                    String pass = ((PasswordCredential) credencials.getCredential()).getValue();
+                    boolean autenticacion = conexionSGA.autenticarUsuariosWSSGA(credencials.getUsername(), pass);
+                    System.out.println("autenticado sga  " + autenticacion);
+                    if (autenticacion) {
+                        this.actualizarPass(pass, user);
+                        //identity.login();
+                        System.out.println("Ingreso");
+                    }
+
                 }
+            } else {
+                messages.warn("!El usuario esta inactivo o no existe¡");  //los datos no son correctos                    
             }
-        } catch (IdentityException ex) {
-            System.out.println("ERROR_");
-            //java.util.logging.Logger.getLogger(Authenticate.class.getName()).log(Level.SEVERE, null, ex);            
-            identity.login();
+
+        } else {
+            messages.warn(UI.getMessages("common.login.bad.usernamepassword"));
         }
         //buscar usuario si esta habilitado para realizar ingresar al sistema y realizar las acciones solicitadas
     }
@@ -189,29 +226,58 @@ public class Authentication {
         //session.invalidate();
         return "/pages/loggedOffHome.xhtml?faces-redirect=true";
     }
+    /*
+     public boolean isUserLoggedIn() throws InterruptedException, IdentityException {
+     bloque de codigo para descifrar la clave
+     System.out.println("ERROR 0_______-");
+     User user = security.getPersistenceManager().findUser(credencials.getUsername());
+     //security.getPersistenceManager().
 
-    public boolean isUserLoggedIn() throws InterruptedException, IdentityException {
-        /*bloque de codigo para descifrar la clave*/
-        System.out.println("ERROR 0_______-");
-        User user = security.getPersistenceManager().findUser(credencials.getUsername());
-        //security.getPersistenceManager().
-        //AttributesManager attributesManager = security.getAttributesManager();
-        if (user != null) {
-            //credencials.setUsername(user.getKey());  
-            System.out.println("ERROR 1_______-");
-            Profile userPro = profileService.getProfileByIdentityKey(user.getKey());
-            String pass = ((PasswordCredential) credencials.getCredential()).getValue();
-            if (userPro.isPersistent()) {
-                System.out.println("ERROR 2_______-" + pass);
-                return new BasicPasswordEncryptor().checkPassword(pass, userPro.getUsername());
-            } else {
-                System.out.println("ERROR 3_______-");
-                Paciente p = pacienteServic.getPacientePorIdentityKey(user.getKey());
-                if (p.isPersistent()) {
-                    return new BasicPasswordEncryptor().checkPassword(pass, p.getClave());
-                }
+     IdentityObjectAttribute ida = profileService.getAttributos(user.getKey(), "estado").get(0);
+     if (user != null) {
+     //credencials.setUsername(user.getKey());  
+     System.out.println("ERROR 1_______-");
+     Profile userPro = profileService.getProfileByIdentityKey(user.getKey());
+     String pass = ((PasswordCredential) credencials.getCredential()).getValue();
+     if (userPro.isPersistent()) {
+     System.out.println("ERROR 2_______-" + pass);
+     return new BasicPasswordEncryptor().checkPassword(pass, userPro.getUsername());
+     } else {
+     System.out.println("ERROR 3_______-");
+     Paciente p = pacienteServic.getPacientePorIdentityKey(user.getKey());
+     if (p.isPersistent()) {
+     return new BasicPasswordEncryptor().checkPassword(pass, p.getClave());
+     }
+     }
+     }
+     return false;
+     }*/
+
+    public String actualizarPass(String pass, User user) throws InterruptedException {
+        try {
+            //IdentityObjectCredential credent = profileService.getCredencial(user.getKey()).get(0);
+            System.out.println("cambio password  " + user.getKey());
+            //credent.setValue(pass);            
+            //em.merge(credent);
+            AttributesManager attributesManager = security.getAttributesManager();
+            attributesManager.updatePassword(user, user.getKey());
+            System.out.println("cambio password 1 " + pass);
+            credencials.setUsername(user.getKey());
+            credencials.setCredential(new PasswordCredential(pass));
+            idmAuth.setStatus(Authenticator.AuthenticationStatus.FAILURE);
+            identity.setAuthenticatorClass(IdmAuthenticator.class);
+            System.out.println("cambio password con exito 1");
+            String result = identity.login();
+            if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
+                result = identity.login();
             }
+            return "/pages/home.xhtml?faces-redirect=true";
+        } catch (IdentityException ex) {
+            System.out.println("Error____");
+            ex.printStackTrace();
+            java.util.logging.Logger.getLogger(Authentication.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+        return null;
     }
+
 }

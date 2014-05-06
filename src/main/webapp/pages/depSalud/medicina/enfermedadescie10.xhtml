@@ -36,9 +36,8 @@
                     <br/><br/>
                 </div>
                 <p:overlayPanel id="medPanel" for="newEnf" hideEffect="fade" dynamic="false" widgetVar="cie10Dlg" >
-                    <glue:input id="code1" name="codigo" type="text" label="#{messages['common.code']}" value="#{enfermedadesCieHome.instance.code}" required="false" inlinehelp="" execute="@this save1" render="code1"/>
-                    <glue:input id="name1" name="nombre" type="text" label="#{messages['common.name']}" value="#{enfermedadesCieHome.instance.name}" required="false" inlinehelp="" execute="@this save1" render="name1"/>
-                    <glue:input id="description1" name="descrip" type="text" label="Categoria" value="#{enfermedadesCieHome.instance.description}" required="false" inlinehelp="" execute="@this save1" render="description1"/>
+                    <glue:input id="code1" name="codigo" type="text" label="#{messages['common.code']}" value="#{enfermedadesCieHome.instance.codigo}" required="false" inlinehelp="" execute="@this save1" render="code1"/>
+                    <glue:input id="name1" name="nombre" type="text" label="#{messages['common.name']}" value="#{enfermedadesCieHome.instance.nombre}" required="false" inlinehelp="" execute="@this save1" render="name1"/> 
                     <div class="admin-actions ">                        
                         <p:commandButton id="save1" action="#{enfermedadesCieHome.guardar()}" value="#{messages['common.save']}" immediate="true"
                                          styleClass="btn primary offset1" update="@form" >
@@ -49,26 +48,23 @@
                     </div>
                 </p:overlayPanel>
                 <p:dataTable id="tablaEnf" value="#{enfermedadesCieHome.listaEnfermedades}" var="enfcie10" 
-                             rows="20" rowKey="#{enfcie10.id}" paginator="true" 
+                             rows="20" paginator="true" 
                              paginatorPosition="top" emptyMessage="No hay ningun Servicio" 
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"  
                              rowsPerPageTemplate="10,20,30,50,100" 
-                             selectionMode="single" selection="#{enfermedadesCieHome.instance}">
-
-                    <p:ajax event="rowSelect" listener="#{enfermedadesCieHome.onRowSelect}" 
-                            update=":edit-dialog :form:messages"  oncomplete="editDlg.show();"/>  
-                    <p:ajax event="rowUnselect" listener="#{enfermedadesCieHome.onRowUnselect}" update=":form:messages "/>
-                    <p:column headerText="#{messages['common.code']}" filterBy="#{enfcie10.code}" filterMatchMode="contains">
-                        <h:outputText value="#{enfcie10.code}"/>
+                             selectionMode="single">
+                    <!--
+                    <p:ajax event="rowSelect" listener="# {enfermedadesCieHome.onRowSelect}" 
+                            update=":form:messages" />  
+                    <p:ajax event="rowUnselect" listener="# {enfermedadesCieHome.onRowUnselect}" update=":form:messages "/>-->
+                    <p:column headerText="#{messages['common.code']}" filterBy="#{enfcie10.codigo}" filterMatchMode="contains" style="width: 5%">
+                        <h:outputText value="#{enfcie10.codigo}"/>
                     </p:column>                       
-                    <p:column headerText="#{messages['common.name']}" filterBy="#{enfcie10.name}" filterMatchMode="contains">
-                        <h:outputText value="#{enfcie10.name}"/>
-                    </p:column>                       
-                    <p:column headerText="#{messages['comun.categoria']}" filterBy="#{enfcie10.description}" filterMatchMode="contains">
-                        <h:outputText value="#{enfcie10.description}"/>
+                    <p:column headerText="#{messages['common.name']}" filterBy="#{enfcie10.nombre}" filterMatchMode="contains" style="width: 70%">
+                        <h:inputTextarea value="#{enfcie10.nombre}" style="height: 30px; width:90%; margin-left: 3%" disabled="true" />
                     </p:column>                       
                     <p:column headerText="Opción">
-                        <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}" rendered="#{empty enfcie10.historiasClinicas}"
+                        <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}" 
                                        onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" 
                                        style="width: 20px; height: 10px;">                                                        
                             <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
@@ -77,16 +73,17 @@
                         </p:commandLink>
                     </p:column>                       
                 </p:dataTable>
-            </h:form>            
-            <p:dialog id="edit-dialog" header="#{enfermedadesCieHome.instance.id == null? 'Agregar' : 'Editar'} #{'Enfermedad Cie 10'} 
-                      #{enfermedadesCieHome.instance.id}" 
+            </h:form>  
+            <!--
+            <p:dialog id="edit-dialog" header="# {enfermedadesCieHome.instance.id == null? 'Agregar' : 'Editar'} #{'Enfermedad Cie 10'} 
+                      # {enfermedadesCieHome.instance.id}" 
                       widgetVar="editDlg" modal="true" resizable="true" width="70%">
                 <h:form id="form-dialog">
-                    <glue:input id="code" name="codigo" type="text" label="#{messages['common.code']}" value="#{enfermedadesCieHome.instance.code}" required="true" inlinehelp="" execute="@this save" render="code"/>
-                    <glue:input id="name" name="nombre" type="text" label="#{messages['common.name']}" value="#{enfermedadesCieHome.instance.name}" required="true" inlinehelp="" execute="@this save" render="name"/>
-                    <glue:input id="description" name="descrip" type="text" label="Categoria" value="#{enfermedadesCieHome.instance.description}" required="false" inlinehelp="" execute="@this save" render="description"/>
+                    <glue:input id="code" name="codigo" type="text" label="#{messages['common.code']}" value="# {enfermedadesCieHome.instance.codigo}" required="true" inlinehelp="" execute="@this save" render="code"/>
+                    <glue:input id="name" name="nombre" type="text" label="#{messages['common.name']}" value="# {enfermedadesCieHome.instance.nombre}" required="true" inlinehelp="" execute="@this save" render="name"/>
+                    <glue:input id="description" name="descrip" type="text" label="Categoria" value="# {enfermedadesCieHome.instance.descripcion}" required="false" inlinehelp="" execute="@this save" render="description"/>
                     <div class="admin-actions ">
-                        <p:commandButton id="save" action="#{enfermedadesCieHome.guardar()}" value="#{messages['common.save']}" 
+                        <p:commandButton id="save" action="# {enfermedadesCieHome.guardar()}" value="#{messages['common.save']}" 
                                          styleClass="btn primary offset2" update=":form" onclick="editDlg.hide();">
 
                         </p:commandButton>
@@ -95,7 +92,7 @@
                                          style="margin-top:10px;"/>  
                     </div>
                 </h:form>
-            </p:dialog>
+            </p:dialog>-->
             <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
                 <h:form id="form-dialog-confirm-delete">
                     <h:panelGroup layout="block" style="padding:5px;">  

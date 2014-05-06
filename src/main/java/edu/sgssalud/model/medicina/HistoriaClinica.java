@@ -61,13 +61,11 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
     @OneToMany(mappedBy = "historiaClinica", orphanRemoval = true)
     private List<ConsultaMedica> consultas = new ArrayList<ConsultaMedica>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "enfCIE10_HC", joinColumns = {
-        @JoinColumn(name = "historiaClin_id", referencedColumnName = "id")}, inverseJoinColumns = {
-        @JoinColumn(name = "enfermedadCIE10_id", referencedColumnName = "id")})
-    private List<EnfermedadCIE10> enfermedadesCIE10 = new ArrayList<EnfermedadCIE10>();
+    
+    @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)        
+    private List<Hc_Cie10> lista_enfcie10 = new ArrayList<Hc_Cie10>();
 
-    @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "historiaClinica", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PedidoExamenLaboratorio> pedidosExamenLab = new ArrayList<PedidoExamenLaboratorio>();
 
     public FichaMedica getFichaMedica() {
@@ -90,13 +88,18 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
         this.consultas = consultas;
     }
 
-    public List<EnfermedadCIE10> getEnfermedadesCIE10() {
-        Collections.sort(enfermedadesCIE10);
-        return enfermedadesCIE10;
+    public List<Hc_Cie10> getLista_enfcie10() {
+        Collections.sort(lista_enfcie10);
+        return lista_enfcie10;
     }
 
-    public void setEnfermedadesCIE10(List<EnfermedadCIE10> enfermedadesCIE10) {
-        this.enfermedadesCIE10 = enfermedadesCIE10;
+    public void setLista_enfcie10(List<Hc_Cie10> lista_enfcie10) {
+        for (Hc_Cie10 enf : lista_enfcie10) {
+            if(!this.lista_enfcie10.contains(enf)){
+                enf.setHistoriaClinica(this);
+            }            
+        }
+        this.lista_enfcie10 = lista_enfcie10;
     }
 
     public void agregarConsulta(ConsultaMedica c) {
@@ -105,11 +108,22 @@ public class HistoriaClinica extends BussinesEntity implements Serializable {
             this.consultas.add(c);
         }
     }
-
-    public void agregarEnfermedad(EnfermedadCIE10 enfermedad) {
-        if (!this.enfermedadesCIE10.contains(enfermedad)) {
-            enfermedadesCIE10.add(enfermedad);
-        }
+    
+    public void agregarEnfermedad(Hc_Cie10 enf) {
+        if(!this.lista_enfcie10.contains(enf)){
+            enf.setHistoriaClinica(this);
+            this.lista_enfcie10.add(enf);
+            System.out.println("AGREGO ENFERMEDAD  ");
+        }        
+    }
+    
+    public void borrarEnfermedad(Hc_Cie10 enf) {
+        if(this.lista_enfcie10.contains(enf)){
+            enf.setHistoriaClinica(null);
+            enf.setEnf_cieE10(null);
+            this.lista_enfcie10.remove(enf);
+            System.out.println("AGREGO ENFERMEDAD  ");
+        }        
     }
 
     public List<PedidoExamenLaboratorio> getPedidosExamenLab() {

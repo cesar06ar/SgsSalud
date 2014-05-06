@@ -31,21 +31,26 @@
             <h:form id="form">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <div class="admin-actions">
-                    <p:commandButton id="button-add" value="#{messages['common.add']} #{messages['pedido.codMuestra']}" rendered="#{true}" styleClass="btn primary"
+                    <p:commandButton id="button-add" value="Agregar muestra" title="#{messages['common.add']} #{messages['pedido.codMuestra']}" rendered="#{true}" styleClass="btn primary"
                                      disabled="#{ empty pedidoExamenListaServicio.pedidoExamenSeleccionado}" onclick="#{'editDlg.show();'}"
                                      ajax="true">
                         <p:ajax process="@this" update=":edit-dialog"/>
                     </p:commandButton>                        
-                    #{' '}                    
-                    <h:link id="button-edit" value="#{messages['common.add']} #{messages['Examen.resultado']}" rendered="#{true}" outcome="resultadosExamen" styleClass="btn" 
+                    &nbsp;                   
+                    <h:link id="button-edit" value="Agregar resultados" title="#{messages['common.add']} #{messages['Examen.resultado']}" rendered="#{true}" outcome="resultadosExamen" styleClass="btn" 
                             disabled="#{ empty pedidoExamenListaServicio.pedidoExamenSeleccionado}">
                         <f:param name="pedidoExamenId" value="#{pedidoExamenListaServicio.pedidoExamenSeleccionado.id}"></f:param>
                         <f:param name="backView" value="listaPedidosExam"></f:param>
-                    </h:link>  #{' '}
-                    <p:commandLink id="delete" type="button" value="Borrar" title="#{messages['common.delete']}" ajax="true"
-                                   onclick="#{'deletedDlg1.show();'}"  styleClass="btn success" disabled="#{pedidoExamenListaServicio.pedidoExamenSeleccionado.estado ne 'Nuevo'}"> 
+                    </h:link> &nbsp;
+                    <p:commandButton id="delete" value="Borrar" title="#{messages['common.delete']}"   onclick="#{'deletedDlg1.show();'}"  styleClass="btn"
+                                   disabled="#{pedidoExamenListaServicio.pedidoExamenSeleccionado.estado ne 'Nuevo'}"
+                                   ajax="true"> 
                         <p:ajax process="@this" update=":cancel-dialog1"/>
-                    </p:commandLink>
+                    </p:commandButton>
+                    &nbsp;
+                    <h:commandLink id="print" value="Imprimir" styleClass="btn" action="#{reporteListas.renderPedido()}" disabled="#{empty pedidoExamenListaServicio.pedidoExamenSeleccionado}">  
+                        <f:setPropertyActionListener value="#{pedidoExamenListaServicio.pedidoExamenSeleccionado}" target="#{reporteListas.pedido}"/>
+                    </h:commandLink>
                     <h:panelGroup style="float: right">
                         <p:calendar id="criterioBuscar" size ="15" value="#{pedidoExamenListaServicio.fecha}" title="Ingrese una fecha"
                                     locale="es" navigator="true" showButtonPanel="true" disabledWeekends="false" >
@@ -60,7 +65,7 @@
                              paginator="true" rows="20" paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100" 
-                             lazy="true" rendered="true" selectionMode="single"                             
+                             lazy="true" rendered="true" selectionMode="single"
                              rowKey="#{object_.id}" selection="#{pedidoExamenListaServicio.pedidoExamenSeleccionado}">
                     <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
                     
@@ -72,9 +77,9 @@
            </f:facet>-->
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{pedidoExamenListaServicio.onRowSelect}" 
-                            update=":form:button-edit :form:messages :form:button-add :edit-dialog :cancel-dialog1 :form:delete"/>   
+                            update=":form:button-edit :form:messages :form:button-add :edit-dialog :cancel-dialog1 :form:delete :form:print"/>   
                     <p:ajax event="rowUnselect" listener="#{pedidoExamenListaServicio.onRowUnselect}" 
-                            update=":form:button-edit :form:messages :form:button-add :edit-dialog :cancel-dialog1 :form:delete"/>
+                            update=":form:button-edit :form:messages :form:button-add :edit-dialog :cancel-dialog1 :form:delete :form:print"/>
                     <!--Columnas para mostrar en la tabla -->
 
                     <p:column  style="width: 10%; text-align: center;" sortBy="#{object_.id}"

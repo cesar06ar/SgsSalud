@@ -132,6 +132,10 @@ public class SecurityGroupService implements Serializable {
         listUser.add(u);
         security.getRelationshipManager().disassociateUsers(g, listUser);
     }
+    
+    public void disassociate(String nameUser) throws IdentityException {
+        security.getRelationshipManager().disassociateGroups(nameUser);
+    }
 
     public User findUser(String usr) throws IdentityException {
         return security.getPersistenceManager().findUser(usr);

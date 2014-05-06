@@ -16,6 +16,7 @@
 package edu.sgssalud.service.labClinico;
 
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.controller.security.SecurityGroupService;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.util.QueryData;
@@ -58,8 +59,7 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
     private PedidoExamenService pedidosExamenLabService;
     @Inject
     private ResultadoExamenLCService resultadosExamenesService;
-//    @Inject
-//    private Identity identity;
+    
 //    @Inject
 //    private ProfileService profileServicio;
     private List<PedidoExamenLaboratorio> resultList = new ArrayList<PedidoExamenLaboratorio>();
@@ -151,7 +151,7 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
     }
 
     @PostConstruct
-    public void init() {        
+    public void init() {
         pedidosExamenLabService.setEntityManager(em);
         resultadosExamenesService.setEntityManager(em);
         //profileServicio.setEntityManager(em);
@@ -202,6 +202,7 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
         FacesMessage msg = new FacesMessage("Los Códigos de muestra han sido agregados" + " ", "");
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
+
     @TransactionAttribute
     public void borrar() {
         System.out.println("Ingreso a borrar______________-");
@@ -214,12 +215,12 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
                     aux = result;
                     em.remove(aux);
                     em.flush();
-                }   
-                em.flush();                
+                }
+                em.flush();
                 em.remove(em.merge(p));
                 PedidoExamenSeleccionado = null;
                 FacesMessage msg = new FacesMessage("Se elimino correctamente. ", "");
-                FacesContext.getCurrentInstance().addMessage("", msg);                
+                FacesContext.getCurrentInstance().addMessage("", msg);
             }
         } catch (Exception e) {
 

@@ -106,14 +106,13 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
 
     /*Metodo para buscar paciente por nombre de usuario*/
     public Paciente getPacientePorNombreUsuario(final String nombreUsuario) throws NoResultException {
-        TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.nombreUsuario = :nombreUsuario", Paciente.class);
-        query.setParameter("nombreUsuario", nombreUsuario);        
-        Paciente result = query.getSingleResult();
-        if(result.isPersistent()){
-            return result;
-        }else{
+        try {
+            TypedQuery<Paciente> query = em.createQuery("SELECT p FROM Paciente p WHERE p.nombreUsuario = :nombreUsuario", Paciente.class);
+            query.setParameter("nombreUsuario", nombreUsuario);
+            return query.getSingleResult() == null ? null : query.getSingleResult();
+        } catch (Exception e) {
             return null;
-        }        
+        }
     }
 
     public Paciente getPacientePorEmail(final String email) throws NoResultException {
@@ -214,6 +213,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         Root<Paciente> bussinesEntityType = query.from(Paciente.class);
         query.where(builder.equal(bussinesEntityType.get(Paciente_.nombres), nombres));
         return getSingleResult(query);
+
         //return  null;
     }
 

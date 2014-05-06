@@ -19,15 +19,15 @@
 
         <ui:define name="header-replace">
             <div class="header-replace">
-                    <div class="container-header" >
-                        <div class="row lf row-title" >  
+                <div class="container-header" >
+                    <div class="row lf row-title" >  
                         <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
                     </div>
                 </div>
             </div>
         </ui:define>
         <ui:define name="content" >                    
-              <h:form id="form" >
+            <h:form id="form" >
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="datapersonal" header="#{messages['module.profile.data.personal']}">                    
                     <div class="container-fluid">   
@@ -35,7 +35,9 @@
                             <div class="span7">
                                 <h:panelGroup  layout="block" class="clearfix">
                                     <h:panelGroup id="dnip" layout="block" class="clearfix">
-                                        <p:commandButton id="cargar" value="Buscar" icon="ui-icon-search" styleClass="btn primary btn-short" title="Buscar Estudiante por Cédula" > 
+                                        <p:commandButton id="cargar" value="Cargar"  action="#{pacienteHome.consultar()}" rendered="#{pacienteHome.instance.persistent}"
+                                                         ajax="true" immediate="true" title="Actualizar datos del SGA"
+                                                         icon="ui-icon-search" styleClass="btn primary btn-short" > 
                                             <!--<p:graphicImage value="/resources/images/buscar.png"/> -->                                            
                                         </p:commandButton>
                                         <label for="fdni">#{messages['profile.dni']} *</label>
@@ -85,7 +87,7 @@
                                                           rendered="true" disabled="true" title="Edad en años">
                                                 <p:ajax event="keyup" rendered="fnp" update="@parent fnp" />  
                                             </p:inputText>                            
-                                            <h:graphicImage value="#{resources['success.gif']}" rendered="#{pacienteHome.instance.edad != null}"
+                                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.edad != 0}"
                                                             styleClass="validation-status" />
                                             <span class="help-inline"><br/>#{messages['common.edad.inlinehelp']}<ocp:message forId="edad" /></span>
                                         </div>
@@ -93,7 +95,7 @@
                                     <h:panelGroup layout="block" class="clearfix">
                                         <label for="genero_" class="control-label">#{messages['comun.genero']} *</label>
                                         <div class="input">
-                                            <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                            <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false" 
                                                              rendered="true" label="#{messages['comun.genero']}">
                                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
                                                 <f:selectItems value="#{pacienteHome.listaGeneros}" var="genero" itemLabel="#{genero}" itemValue="#{genero}"/>                          
@@ -124,14 +126,14 @@
                                                       sizeLimit="512000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />                                                         
                                         
                                     </h:form> -->
-                                                                          
+
                                     <p:graphicImage id="imgFoto" value="#{imageViewer.pacienteFoto}" alt="#{pacienteHome.instance.foto != null? pacienteHome.instance.foto.name : 'no existe imagen del paciente'}"
                                                     width="105" height="125" style="background-color: #CAD0D2; margin-bottom: -30px; margin-left: 5px; " cache="false" rendered="#{pacienteHome.instance.foto != null}">
                                         <f:param name="pacienteId" value="#{pacienteHome.instance.id}" rendered="true"/>
                                     </p:graphicImage>    
-                                   <!--<p:graphicImage id="imgFoto" value="/resources/images/paciente.png" width="105" height="125" 
-                                                   style="margin-left: 5px; " cache="false" rendered="#{empty pacienteHome.instance.foto}">                                        
-                                    </p:graphicImage> -->
+                                    <!--<p:graphicImage id="imgFoto" value="/resources/images/paciente.png" width="105" height="125" 
+                                                    style="margin-left: 5px; " cache="false" rendered="#{empty pacienteHome.instance.foto}">                                        
+                                     </p:graphicImage> -->
                                 </div>
 
                                 <p:spacer width="30" height="30" />
@@ -299,8 +301,28 @@
                     </h:link>
                 </div>
             </h:form>
-            
-            
+            <p:dialog id="cancel-dialog" header="Cargar de Estudiante del Sistema de Gestion Academica" widgetVar="buscarDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGrid columns="3">
+                        <label for="fdni">#{messages['profile.dni']} *</label>
+                        <h:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">
+
+                        </h:inputText>                                           
+
+                    </h:panelGrid> 
+                    <div class="admin-actions ">
+                    <p:commandButton value="Buscar" oncomplete="buscarDlg.hide();"                                           
+                                     action="#{pacienteHome.consultar()}" update="@form"                                         
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;" styleClass="offset2">  
+                    </p:commandButton>  
+                        &nbsp;&nbsp;
+                    <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="buscarDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                    </div>
+                </h:form>
+            </p:dialog>
+
         </ui:define>
     </ui:composition>
 </html>                

@@ -46,10 +46,15 @@ import javax.persistence.criteria.Root;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.model.profile.Profile_;
+import edu.sgssalud.model.security.IdentityObject;
+import edu.sgssalud.model.security.IdentityObjectAttribute;
+import edu.sgssalud.model.security.IdentityObjectAttribute_;
+import edu.sgssalud.model.security.IdentityObjectCredential;
 
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.Strings;
+import org.picketlink.idm.common.exception.IdentityException;
 
 /**
  *
@@ -110,7 +115,6 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
     public Profile getProfileByUsername(final String username) throws NoResultException {
         TypedQuery<Profile> query = em.createQuery("SELECT p FROM Profile p WHERE p.username = :username", Profile.class);
         query.setParameter("username", username);
-
         Profile result = query.getSingleResult();
         return result;
     }
@@ -185,20 +189,52 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
     }
 
     public Profile findByName(final String name) {
-
-        log.info("find Profile with name " + name);
-
+        //log.info("find Profile with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Profile> query = builder.createQuery(Profile.class);
-
         Root<Profile> bussinesEntityType = query.from(Profile.class);
-
         query.where(builder.equal(bussinesEntityType.get(Profile_.name), name));
-
         return getSingleResult(query);
     }
-    
-    public List<Profile> findAll(){
+
+    /**
+     *
+     * @param deleted estado de la cuenta
+     * @return las cuentas segun el estado es falso cuando la cuenta esta activa
+     */
+    public List<Profile> findAllA(boolean deleted) {
+        //log.info("find Profile with name " + name);
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Profile> query = builder.createQuery(Profile.class);
+        Root<Profile> bussinesEntityType = query.from(Profile.class);
+        query.where(builder.equal(bussinesEntityType.get(Profile_.deleted), deleted));
+        return getResultList(query);
+    }
+
+    public List<Profile> findAll() {
         return findAll(Profile.class);
+    }
+
+    public List<IdentityObjectAttribute> getAttributos(final String userName, final String name) throws IdentityException {
+        try {
+            TypedQuery<IdentityObjectAttribute> query = em.createQuery(
+                    "SELECT a FROM IdentityObjectAttribute a WHERE a.identityObject.name = :userName AND a.name = :name", IdentityObjectAttribute.class);
+            query.setParameter("userName", userName);
+            query.setParameter("name", name);
+            return query.getResultList().isEmpty() ? null : query.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<IdentityObjectCredential> getCredencial(final String userName) throws IdentityException {
+        try {
+            TypedQuery<IdentityObjectCredential> query = em.createQuery(
+                    "SELECT a FROM IdentityObjectCredential a WHERE a.identityObject.name = :userName ", IdentityObjectCredential.class);
+            query.setParameter("userName", userName);            
+            return query.getResultList().isEmpty() ? null : query.getResultList();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

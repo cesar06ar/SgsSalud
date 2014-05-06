@@ -28,6 +28,7 @@ import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
 import edu.sgssalud.model.medicina.FichaMedica;
+import edu.sgssalud.model.medicina.Hc_Cie10;
 import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.paciente.Paciente;
@@ -40,6 +41,7 @@ import edu.sgssalud.service.medicina.EnfermedadesCie10Servicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
+import edu.sgssalud.util.FechasUtil;
 import edu.sgssalud.util.Lists;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
@@ -102,11 +104,11 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private Paciente paciente;
     private PedidoExamenLaboratorio pedidoExamen;
     private Receta receta;
-
+    private Hc_Cie10 enfermedadCie;
     private List<EnfermedadCIE10> listaEnfCie10 = new ArrayList<EnfermedadCIE10>();
-    private List<EnfermedadCIE10> listaEnfPosee = new ArrayList<EnfermedadCIE10>();
+    private List<Hc_Cie10> listaEnfPosee = new ArrayList<Hc_Cie10>();
 
-    private DualListModel<EnfermedadCIE10> pickListEnfermedades = new DualListModel<EnfermedadCIE10>();
+    //private DualListModel<EnfermedadCIE10> pickListEnfermedades = new DualListModel<EnfermedadCIE10>();
     private List<PedidoExamenLaboratorio> listaPedidos = new ArrayList<PedidoExamenLaboratorio>();
     private CartesianChartModel linearModel = new CartesianChartModel();
 
@@ -130,15 +132,18 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         this.setHc(hcs.buscarPorFichaMedica(fm));
         this.setPaciente(fm.getPaciente());
         //crearModeloLineal();
-        if (hc.isPersistent()) {
-            if (!hc.getEnfermedadesCIE10().isEmpty()) {
-                this.setListaEnfPosee(hc.getEnfermedadesCIE10());
-                this.setListaEnfCie10(cie10servicio.getEnfermedadesSinHistoriaClinica(listaEnfPosee));
-                //this.setListaEnfCie10(cie10servicio.getEnfermedadesCIE10());
-            } else {
-                this.setListaEnfCie10(cie10servicio.getEnfermedadesCIE10());
-            }
-            pickListEnfermedades = new DualListModel<EnfermedadCIE10>(listaEnfCie10, listaEnfPosee);
+        if (hc != null) {
+            listaEnfPosee = hc.getLista_enfcie10();
+            listaEnfCie10 = cie10servicio.getEnfermedadesCIE10();
+            /* if (!hc.getEnfermedadesCIE10().isEmpty()) {
+             this.setListaEnfPosee(hc.getEnfermedadesCIE10());
+             this.setListaEnfCie10(cie10servicio.getEnfermedadesSinHistoriaClinica(listaEnfPosee));
+             //this.setListaEnfCie10(cie10servicio.getEnfermedadesCIE10());
+             } else {
+             this.setListaEnfCie10(cie10servicio.getEnfermedadesCIE10());
+             }
+             pickListEnfermedades = new DualListModel<EnfermedadCIE10>(listaEnfCie10, listaEnfPosee);
+             */
         }
     }
 
@@ -175,21 +180,20 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         this.listaEnfCie10 = listaEnfCie10;
     }
 
-    public List<EnfermedadCIE10> getListaEnfPosee() {
-        Collections.sort(listaEnfPosee);
+    public List<Hc_Cie10> getListaEnfPosee() {
         return listaEnfPosee;
     }
 
-    public void setListaEnfPosee(List<EnfermedadCIE10> listaEnfPosee) {
+    public void setListaEnfPosee(List<Hc_Cie10> listaEnfPosee) {
         this.listaEnfPosee = listaEnfPosee;
     }
 
-    public DualListModel<EnfermedadCIE10> getPickListEnfermedades() {
-        return pickListEnfermedades;
+    public Hc_Cie10 getEnfermedadCie() {
+        return enfermedadCie;
     }
 
-    public void setPickListEnfermedades(DualListModel<EnfermedadCIE10> pickListEnfermedades) {
-        this.pickListEnfermedades = pickListEnfermedades;
+    public void setEnfermedadCie(Hc_Cie10 enfermedadCie) {
+        this.enfermedadCie = enfermedadCie;
     }
 
     public CartesianChartModel getLinearModel() {
@@ -241,11 +245,11 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         receta = new Receta();
         resultadosExamenesService.setEntityManager(em);
         if (getInstance().isPersistent()) {
-            if (getInstance().getResponsable() == null) {
+            if (getInstance().getResponsable() == null && identity.isLoggedIn()) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
             }
         }
-
+        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));
     }
 
     @TransactionAttribute
@@ -298,7 +302,10 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                  *PENDIENTE o REALIZADA*/
                 getInstance().setCode("REALIZADA");
                 save(getInstance());
+                System.out.println("enfermedades____________" + listaEnfPosee.toString());
                 hc.setLastUpdate(now);
+                hc.setLista_enfcie10(listaEnfPosee);
+                update();
                 save(hc);
                 FacesMessage msg = new FacesMessage("Se actualizo Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
@@ -308,7 +315,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 getInstance().setCode("REALIZADA");
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
                 create(getInstance());
-                hc.setEnfermedadesCIE10(pickListEnfermedades.getTarget());
+                //hc.setEnfermedadesCIE10(pickListEnfermedades.getTarget());
                 save(hc);
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se creo nueva Consulta Médica: " + getInstance().getId() + " con éxito");
@@ -324,6 +331,39 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         }
         //return "/pages/medicina/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId="+getFichaMedicaId();
         return salida;
+    }
+
+    public void agregarEnfermedad(EnfermedadCIE10 enfcie10) {
+        System.out.println("INGRESO METODO___" + enfcie10.toString());
+        try {
+            boolean b = false;
+            if (!listaEnfPosee.isEmpty()) {
+                System.out.println("INGRESO METODO___1");
+                for (Hc_Cie10 lhc : hc.getLista_enfcie10()) {
+                    if (lhc.getEnf_cieE10().getId().equals(enfcie10.getId())) {
+                        b = true;
+                    }
+                }
+            }
+            System.out.println("INGRESO METODO___2");
+            if (!b && hc.isPersistent()) {
+                Hc_Cie10 enf = new Hc_Cie10();
+                enf.setHistoriaClinica(hc);
+                enf.setEnf_cieE10(enfcie10);
+                hc.agregarEnfermedad(enf);
+                save(hc);
+                setListaEnfPosee(hc.getLista_enfcie10());
+                System.out.println("AGREGO ENF  " + listaEnfPosee.size());
+                FacesMessage msg = new FacesMessage("Se agrego enfermedad del cie 10: " + enf.getEnf_cieE10().getCodigo() + " con éxito");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            } else {
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Esta enfermedad ya ha sido agregada!", "");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        enfcie10 = null;
     }
 
     @Transactional
@@ -346,6 +386,30 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
+        }
+        return null;
+    }
+
+    @TransactionAttribute
+    public String borrarEnfermedad() {
+        System.out.println("Borro enfermedad___0");
+        if (enfermedadCie != null) {
+
+            try {
+                System.out.println("Borro enfermedad___");
+                delete(enfermedadCie);
+                //hc.borrarEnfermedad(enfermedadCie);
+                setListaEnfPosee(hc.getLista_enfcie10());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + enfermedadCie.getEnf_cieE10().getCodigo(), ""));
+                RequestContext.getCurrentInstance().execute("deletedDlg2.hide()"); //cerrar el popup si se grabo correctamente
+                return "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaMedicaId=" + getInstance().getId()
+                        + "&backView=" + this.getBackView();
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR AL BORRAR", ""));
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -418,42 +482,44 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         listaEnfCie10 = new ArrayList<EnfermedadCIE10>();
         this.setListaEnfCie10(cie10servicio.getEnfermedadesCIE10());
     }
+    /*
+     public void onTransfer(TransferEvent event) {
+     StringBuilder builder = new StringBuilder();
+     for (Object item : event.getItems()) {
+     builder.append(((EnfermedadCIE10) item).getName()).append("<br />");
+     hc.agregarEnfermedad((EnfermedadCIE10) item);
+     }
 
-    public void onTransfer(TransferEvent event) {
-        StringBuilder builder = new StringBuilder();
-        for (Object item : event.getItems()) {
-            builder.append(((EnfermedadCIE10) item).getName()).append("<br />");
-            hc.agregarEnfermedad((EnfermedadCIE10) item);
-        }
-
-        FacesMessage msg = new FacesMessage();
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        msg.setSummary("Enfermerdad Agregada");
-        msg.setDetail(builder.toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
+     FacesMessage msg = new FacesMessage();
+     msg.setSeverity(FacesMessage.SEVERITY_INFO);
+     msg.setSummary("Enfermerdad Agregada");
+     msg.setDetail(builder.toString());
+     FacesContext.getCurrentInstance().addMessage(null, msg);
+     }*/
 
     public String getInidicadorIMC() {
         if (getInstance().isPersistent()) {
             if (paciente.getEdad() < 5) {
-                int peso = (paciente.getEdad() * 2) + 8;
+                int peso = ((paciente.getEdad() * 2) + 8);
                 return "Peso del Niño = " + peso;
             } else if (paciente.getEdad() == 5 && paciente.getEdad() <= 10) {
                 int peso = (paciente.getEdad() * 3) + 3;
                 return "Peso del Niño = " + peso;
             } else if (paciente.getEdad() >= 15) {
-                double tallam = (getInstance().getSignosVitales().getTalla() / 100) * (getInstance().getSignosVitales().getTalla() / 100);
-                double imc = getInstance().getSignosVitales().getPeso() / tallam;
-                String indicador = String.valueOf(imc);
-                indicador = indicador.substring(0, 6);
-                if (imc < 18.5) {
-                    return "Bajo de Peso. IMC ( " + indicador + " )";
-                } else if (imc >= 18.5 && imc <= 24.99) {
-                    return "Normal . IMC ( " + indicador + " )";
-                } else if (imc >= 25 && imc <= 29.99) {
-                    return "Sobre Peso . IMC ( " + indicador + " )";
-                } else if (imc > 30) {
-                    return "Obesidad. IMC ( " + indicador + " )";
+                if (getInstance().getSignosVitales().getTalla() != 0.0 && getInstance().getSignosVitales().getPeso() != 0.0) {
+                    double tallam = (getInstance().getSignosVitales().getTalla() / 100) * (getInstance().getSignosVitales().getTalla() / 100);
+                    double imc = getInstance().getSignosVitales().getPeso() / tallam;
+                    String indicador = String.valueOf(imc);
+                    indicador = indicador.substring(0, 6);
+                    if (imc < 18.5) {
+                        return "Bajo de Peso. IMC ( " + indicador + " )";
+                    } else if (imc >= 18.5 && imc <= 24.99) {
+                        return "Normal . IMC ( " + indicador + " )";
+                    } else if (imc >= 25 && imc <= 29.99) {
+                        return "Sobre Peso . IMC ( " + indicador + " )";
+                    } else if (imc > 30) {
+                        return "Obesidad. IMC ( " + indicador + " )";
+                    }
                 }
             }
             return "";

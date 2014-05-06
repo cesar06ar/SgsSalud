@@ -89,7 +89,6 @@ public class UI {
         q.setParameter("bussinesEntityTypeName", entity.getType().getName());
         Collections.sort(q.getResultList());
         return q.getResultList();
-
     }
 
     public List<BussinesEntityAttribute> getAttributes(BussinesEntity entity, String names) {

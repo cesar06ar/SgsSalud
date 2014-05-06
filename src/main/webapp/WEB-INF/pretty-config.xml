@@ -108,6 +108,10 @@
       <pattern value="/paciente/paciente"></pattern>
       <view-id value="/pages/secretaria/paciente.xhtml"></view-id>       
    </url-mapping>   
+   <url-mapping id="paciente">
+      <pattern value="/paciente/buscar"></pattern>
+      <view-id value="/pages/secretaria/search.xhtml"></view-id>       
+   </url-mapping>   
    <url-mapping id="pacienteTest">
       <pattern value="/paciente/test"></pattern>
       <view-id value="/pages/paciente/test.xhtml"></view-id>       
@@ -116,10 +120,11 @@
        <pattern value="/paciente/view"></pattern>
        <view-id value="/pages/paciente/view.xhtml"></view-id>
    </url-mapping>
+   <!--
    <url-mapping id="solicitarTurno">
        <pattern value="/paciente/turno"></pattern>
        <view-id value="/pages/paciente/turnoP.xhtml"></view-id>
-   </url-mapping>
+   </url-mapping>-->
    
    <!-- Vistas de Medicamento-->
    <url-mapping id="MedicamentoLista">

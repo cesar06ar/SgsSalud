@@ -154,7 +154,8 @@
                             value="Limpiar" styleClass="btn primary" >                        
                         <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param> 
                         <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />
-                        <f:param name="backView" value="/medicina/consultaMedica"></f:param>
+                        <f:param name="backView" value="#{recetaHome.backView}" />
+                        <f:param name="previous" value="#{recetaHome.previous}" />
                     </h:link>  
                 </div>
                 <p:panel id="recetasId" header="Receta">

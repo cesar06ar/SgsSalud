@@ -111,11 +111,8 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
 
     @Override
     protected EnfermedadCIE10 createInstance() {
-        //prellenado estable para cualquier clase         
-        Date now = Calendar.getInstance().getTime();
+        //prellenado estable para cualquier clase                 
         EnfermedadCIE10 enf = new EnfermedadCIE10();
-        enf.setCreatedOn(now);
-        enf.setLastUpdate(now);
         return enf;
     }
 
@@ -131,20 +128,25 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
         try {
             if (getInstance().isPersistent()) {
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getName() + " con éxito");
+                FacesMessage msg = new FacesMessage("Se actualizo los Signos Vitales: " + getInstance().getNombre() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 salida = "";
                 init();
             } else {
-                create(getInstance());
-                save(getInstance());
-                System.out.println("GUARDO 3_______________");
-                FacesMessage msg = new FacesMessage("Se agrego enfermedad Cie 10 :" + getInstance().getName() + " con exito");
-                FacesContext.getCurrentInstance().addMessage("", msg);
-                System.out.println("GUARDO 4_______________");
-                listaEnfermedades = enfcie10service.getEnfermedadesCIE10();
-                this.init();
-                salida = "/pages/depSalud/medicina/enfermedadescie10?faces-redirect=true";
+                if (!this.existe(getInstance().getCodigo())) {
+                    create(getInstance());
+                    save(getInstance());
+                    System.out.println("GUARDO 3_______________");
+                    FacesMessage msg = new FacesMessage("Se agrego enfermedad Cie 10 :" + getInstance().getNombre() + " con exito");
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                    System.out.println("GUARDO 4_______________");
+                    listaEnfermedades = enfcie10service.getEnfermedadesCIE10();
+                    this.init();
+                    salida = "/pages/depSalud/medicina/enfermedadescie10?faces-redirect=true";
+                } else {
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "otra enfermedad tiene el mismo codigo ", null);
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                }
             }
 
         } catch (Exception e) {
@@ -158,12 +160,12 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
     public String borrar() {
         try {
             //boolean datos = enfcie10service.consultarDatos(getInstance().getId());
-            if (enfermedad.isPersistent()) {
+            if (enfermedad.isPersistent() && enfcie10service.buscarPorEnfermedad(enfermedad)) {
                 delete(enfermedad);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + enfermedad.getName(), ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + enfermedad.getNombre(), ""));
                 RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede borrar esta enfermedad " + enfermedad.getName(), ""));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "No se puede borrar esta enfermedad " + enfermedad.getNombre(), ""));
                 RequestContext.getCurrentInstance().execute("deletedDlg.hide()"); //cerrar el popup si se grabo correctamente                    
             }
         } catch (Exception e) {
@@ -184,5 +186,14 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
         FacesMessage msg = new FacesMessage(UI.getMessages("Enfermedad CIE 10") + " " + UI.getMessages("common.unselected"), "" + ((EnfermedadCIE10) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setInstance(null);
+    }
+
+    public boolean existe(String codigo) {
+        for (EnfermedadCIE10 enf : listaEnfermedades) {
+            if (enf.getCodigo().equals(codigo)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

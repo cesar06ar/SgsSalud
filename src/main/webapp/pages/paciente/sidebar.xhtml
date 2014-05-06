@@ -16,17 +16,17 @@
                     <f:param name="backView" value="home"/>
                 </h:link>
                 <br/>
-                <h:link value="Modificar Foto" rendered="#{true}" 
+                <!--<h:link value="Modificar Foto" rendered="#{true}" 
                         outcome="/pages/paciente/foto">
                     <f:param name="pacienteId" value="#{account.loggedId}"/>
                     <f:param name="backView" value="home"/>
                 </h:link>
                 <br/>
-                <h:link value="Solicitar Turno" rendered="#{true}" 
+                <h:link value="Solicitar Turno" rendered="# {true}" 
                         outcome="/pages/paciente/turnoP">
-                    <f:param name="pacienteId" value="#{account.loggedId}"/>
+                    <f:param name="pacienteId" value="# {account.loggedId}"/>
                     <f:param name="backView" value="paciente/turnoP"/>
-                </h:link>
+                </h:link>-->
                 <br/>
                 <h:link value="Ver consultas" rendered="#{true}" 
                         outcome="/pages/paciente/consultas">

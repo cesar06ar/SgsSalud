@@ -34,6 +34,7 @@ package edu.sgssalud.util;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -51,11 +52,28 @@ public class Dates {
             try {
                 return DateUtils.parseDate(fecha, parrents);
             } catch (ParseException ex) {
-            //Logger.getLogger(Dates.class.getName()).log(Level.SEVERE, null, ex.getMessage());
+                //Logger.getLogger(Dates.class.getName()).log(Level.SEVERE, null, ex.getMessage());
                 //System.out.println("erro");
                 return null;
             }
-        }else{
+        } else {
+            return null;
+        }
+    }
+
+    public static Date getFormatoFecha1(String fecha) {
+        if (fecha != null) {
+            String[] parrents = {"yyyy-MM-dd"};
+            List<String> l = Arrays.asList(fecha.split("-"));
+            int anio = Integer.parseInt(l.get(0));
+            int mes = Integer.parseInt(l.get(1));
+            int dia = Integer.parseInt(l.get(2));
+            //return DateUtils.parseDate(fecha, parrents);
+            Calendar time = Calendar.getInstance();
+            time.set(anio, mes, dia);
+            System.out.println("FECHA "+time.getTime());
+            return time.getTime();
+        } else {
             return null;
         }
     }

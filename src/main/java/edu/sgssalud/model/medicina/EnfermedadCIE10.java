@@ -15,11 +15,14 @@
  */
 package edu.sgssalud.model.medicina;
 
-import edu.sgssalud.model.PersistentObject;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -29,44 +32,72 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "EnfermedadCIE10")
-public class EnfermedadCIE10 extends PersistentObject<EnfermedadCIE10> implements Comparable<EnfermedadCIE10>{
-    
+public class EnfermedadCIE10 implements Serializable, Comparable<EnfermedadCIE10> {
+
     private static final long serialVersionUID = -1;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+    private String codigo;
+    @Column(length = 400)
+    private String nombre;
+    private String descripcion;
 
     public EnfermedadCIE10() {
-    }    
-    
-    public EnfermedadCIE10(String codigo, String nombre, String categoria, Date fechaCreacion) {
-        this.setCode(codigo);
-        this.setName(nombre);
-        this.setDescription(categoria);
-        this.setCreatedOn(fechaCreacion);
-        this.setLastUpdate(fechaCreacion);
-    }
-    
-    @ManyToMany(mappedBy = "enfermedadesCIE10")    
-    private List<HistoriaClinica> historiasClinicas = new ArrayList<HistoriaClinica>();
-
-    public List<HistoriaClinica> getHistoriasClinicas() {
-        return historiasClinicas;
     }
 
-    public void setHistoriasClinicas(List<HistoriaClinica> historiasClinicas) {        
-        this.historiasClinicas = historiasClinicas;
-    }   
+    public EnfermedadCIE10(String codigo, String nombre) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public boolean isPersistent() {
+        return getId() != null;
+    }
 
     @Override
     public int compareTo(EnfermedadCIE10 o) {
-        return this.getCode().compareToIgnoreCase(o.getCode());
+        return (int) (this.getId() - o.getId());
     }
 
     @Override
     public String toString() {
-        return "edu.edu.sgssalud.model.medicina.EnfermedadCIE10[ " 
+        return "edu.edu.sgssalud.model.medicina.EnfermedadCIE10[ "
                 + "id=" + getId() + ","
-                + "codigo=" + getCode() + ","
-                + "nombre" + getName() + ","
-                + "categoria" + getDescription() + ","
+                + "codigo=" + this.codigo + ","
+                + "nombre" + this.nombre + ","
                 + " ]";
     }
 }

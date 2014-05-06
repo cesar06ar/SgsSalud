@@ -59,4 +59,6 @@ public class ExamenLabService extends PersistenceUtil<ExamenLabClinico> {
         query.where(builder.equal(entity.get(Parametros_.examenLabClinico), exam));
         return getResultList(query);
     }
+    
+    
 }

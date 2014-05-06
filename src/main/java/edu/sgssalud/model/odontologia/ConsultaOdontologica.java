@@ -217,4 +217,9 @@ public class ConsultaOdontologica extends BussinesEntity implements Serializable
     public int compareTo(ConsultaOdontologica o) {
         return (int)(o.getId() - this.getId());
     }
+    
+    @Override
+    public String toString(){
+        return null;
+    }
 }

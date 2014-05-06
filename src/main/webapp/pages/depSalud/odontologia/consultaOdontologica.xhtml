@@ -35,37 +35,45 @@
             <h:form id="form">                
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <p:panel id="consultaM" header="#{messages['consultaOdontologica.info']}" toggleable="true" >
-                    <p:panelGrid columns="3" >
-                        <h:panelGroup layout="block"  >
-                            <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
-                            <div class="input">                                                         
-                                <p:calendar id="fechaC" value="#{consultaOdontHome.instance.fechaConsulta}"  label="" dir="rtl"
-                                            disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es">
-                                </p:calendar>                                                                                                      
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.fechaConsulta != null}"
-                                                styleClass="validation-status" />                                                        
+                    <div class="container-fluid" >
+                        <div class="row-fluid" >
+                            <div class="span7" >                                
+                                <h:panelGroup layout="block"  >
+                                    <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
+                                    <div class="input">                                                         
+                                        <p:calendar id="fechaC" value="#{consultaOdontHome.instance.fechaConsulta}"  label="" dir="rtl"
+                                                    disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es">
+                                        </p:calendar>                                                                                                      
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.fechaConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>                    
                             </div>
-                        </h:panelGroup>                    
-                        <h:panelGroup layout="block"  >
-                            <label for="horaC" >#{messages['consultaMedica.horaConsulta']}</label>
-                            <div class="input"> 
-                                <pe:timePicker id="horaC" value="#{consultaOdontHome.instance.horaConsulta}"  label="" 
-                                               disabled="true"  style="width: 50px;" mode="popup">                                            
+                            <div class="span5" style="margin-right: -2%" >
+                                <h:panelGroup layout="block"  >
+                                    <label for="horaC" >#{messages['consultaMedica.horaConsulta']}</label>
+                                    <div class="input"> 
+                                        <pe:timePicker id="horaC" value="#{consultaOdontHome.instance.horaConsulta}"  label="" 
+                                                       disabled="true"  style="width: 50px;" mode="popup">                                            
 
-                                </pe:timePicker>                            
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.horaConsulta != null}"
-                                                styleClass="validation-status" />                                                        
+                                        </pe:timePicker>                            
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.horaConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup> 
                             </div>
-                        </h:panelGroup>                            
-                        <h:panelGroup layout="block"  >
-                            <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
-                            <div class="input">                                                                                         
-                                <pe:timePicker id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}" />
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.tiempoConsulta != null}"
-                                                styleClass="validation-status" />                                                        
+                            <div class="span5" style="margin-right: -2%" >
+                                <h:panelGroup layout="block"  >
+                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
+                                    <div class="input">                                                                                         
+                                        <pe:timePicker id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}" />
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.tiempoConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>
                             </div>
-                        </h:panelGroup>
-                    </p:panelGrid>
+                        </div>
+                    </div>                                                        
                 </p:panel>
                 <p:tabView  >
                     <p:tab title="#{messages['signosVitales.Nombre']}" titletip="#{messages['signosVitales.peso']}" >
@@ -77,7 +85,7 @@
                                         <div class="input">                                             
                                             <pe:inputNumber id="peso" value="#{consultaOdontHome.instance.signosVitales.peso}" required="false" style="width: 190px;" 
                                                             maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left"  decimalPlaces="2" 
-                                                            disabled="#{not empty consultaOdontHome.instance.signosVitales.peso}">
+                                                            disabled="#{not empty consultaOdontHome.instance.signosVitales.peso and consultaOdontHome.instance.persistent}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                           
                                         </div>
@@ -85,7 +93,7 @@
                                         <div class="input">                                                                                
                                             <pe:inputNumber  id="presionArtDiag" value="#{consultaOdontHome.instance.signosVitales.presionArterialDiastolica}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
-                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialDiastolica}">
+                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialDiastolica and consultaOdontHome.instance.persistent}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                        
                                         </div>    
@@ -93,14 +101,14 @@
                                         <div class="input"> 
                                             <pe:inputNumber  id="presionArtSis" value="#{consultaOdontHome.instance.signosVitales.presionArterialSistolica}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
-                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialSistolica}">   
+                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.presionArterialSistolica and consultaOdontHome.instance.persistent}">   
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                                                                                                 
                                         </div>              
                                         <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
                                         <pe:inputNumber  id="pulso" value="#{consultaOdontHome.instance.signosVitales.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
                                                          rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" 
-                                                         disabled="#{consultaOdontHome.instance.signosVitales.pulso > 0}">   
+                                                         disabled="#{consultaOdontHome.instance.signosVitales.pulso > 0 and consultaOdontHome.instance.persistent}">   
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </p:panelGrid>  
@@ -111,7 +119,7 @@
                                         <div class="input">                                                                                
                                             <pe:inputNumber  id="frecuenciaResp" value="#{consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" 
-                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria}">
+                                                             disabled="#{not empty consultaOdontHome.instance.signosVitales.frecuenciaRespiratoria and consultaOdontHome.instance.persistent}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>  
                                         </div>
@@ -119,14 +127,14 @@
                                         <div class="input">                                                                                
                                             <pe:inputNumber id="talla" value="#{consultaOdontHome.instance.signosVitales.talla}" required="false" style="width: 190px;" 
                                                             rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0"
-                                                            disabled="#{not empty consultaOdontHome.instance.signosVitales.talla}">                                            
+                                                            disabled="#{not empty consultaOdontHome.instance.signosVitales.talla and consultaOdontHome.instance.persistent}">                                            
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                        
                                         </div>
                                         <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
                                         <pe:inputNumber  id="temperatura" value="#{consultaOdontHome.instance.signosVitales.temperatura}" required="false" style="width: 190px;" 
                                                          rendered="true" symbol="       mmHg" symbolPosition="rigth" maxValue="90" decimalPlaces="2" 
-                                                         disabled="#{not empty consultaOdontHome.instance.signosVitales.temperatura}">
+                                                         disabled="#{not empty consultaOdontHome.instance.signosVitales.temperatura and consultaOdontHome.instance.persistent}">
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </p:panelGrid> 

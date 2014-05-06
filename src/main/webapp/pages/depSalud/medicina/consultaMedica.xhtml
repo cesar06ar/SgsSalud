@@ -32,41 +32,49 @@
         <ui:define name="content">
             <h:form id="form">                
                 <!--<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  -->
-                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="6000" />  
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="4000" />  
                 <p:panel id="consultaM" header="Información de Consulta" toggleable="true" >
-                    <p:panelGrid columns="3">
-                        <h:panelGroup layout="block" >
-                            <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
-                            <div class="input">                                                         
-                                <p:calendar id="fechaC" value="#{consultaMedicaHome.instance.fechaConsulta}"  label="" dir="rtl"
-                                            disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es">
-                                </p:calendar>                                                                                                      
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.fechaConsulta != null}"
-                                                styleClass="validation-status" />                                                        
+                    <div class="container-fluid" >
+                        <div class="row-fluid" >
+                            <div class="span7" >                                
+                                <h:panelGroup styleClass="clearfix">
+                                    <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
+                                    <div class="input">                                                         
+                                        <p:calendar id="fechaC" value="#{consultaMedicaHome.instance.fechaConsulta}"  label="" dir="rtl"
+                                                    disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es" style="width: 100px;">
+                                        </p:calendar>                                                                                                      
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.fechaConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>
                             </div>
-                        </h:panelGroup>
-                        <h:panelGroup layout="block" >
-                            <label for="horaC" >#{messages['consultaMedica.horaConsulta']}"</label>
-                            <div class="input">                                                                                                                                                                                          
-                                <pe:timePicker id="horaC" value="#{consultaMedicaHome.instance.horaConsulta}"  label="" 
-                                               disabled="true"  style="width: 50px;" mode="popup">                                            
+                            <div class="span5" style="margin-right: -2%" >
+                                <h:panelGroup styleClass="clearfix">
+                                    <label for="horaC" >#{messages['consultaMedica.horaConsulta']}</label>
+                                    <div class="input">                                                                                                                                                                                          
+                                        <pe:timePicker id="horaC" value="#{consultaMedicaHome.instance.horaConsulta}"  label="" 
+                                                       disabled="true"  style="width: 50px;" mode="popup">                                            
 
-                                </pe:timePicker>  
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.horaConsulta != null}"
-                                                styleClass="validation-status" />                                                        
+                                        </pe:timePicker>  
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.horaConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup> 
                             </div>
-                        </h:panelGroup> 
-                        <h:panelGroup layout="block"  >
-                            <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
-                            <div class="input">                                                                                         
-                                <pe:timePicker id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}" />
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.tiempoConsulta != null}"
-                                                styleClass="validation-status" />                                                        
+                            <div class="span5" style="margin-right: -2%">
+                                <h:panelGroup styleClass="clearfix">
+                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
+                                    <div class="input">                                                                                         
+                                        <pe:timePicker id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}" />
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.tiempoConsulta != null}"
+                                                        styleClass="validation-status" />                                                        
+                                    </div>
+                                </h:panelGroup>
                             </div>
-                        </h:panelGroup>
-                    </p:panelGrid>
+                        </div>
+                    </div>                                         
                 </p:panel>
-                <p:tabView >
+                <p:tabView id="tabCons">
                     <p:tab title="#{messages['signosVitales.Nombre']}" titletip="#{messages['signosVitales.Nombre']}" >
                         <div class="container-fluid">   
                             <div class="row-fluid">
@@ -74,32 +82,32 @@
                                     <p:panelGrid columns="2">
                                         <label for="peso" class="span3">#{messages['signosVitales.peso']} *</label>
                                         <div class="input"> 
-                                            <pe:inputNumber id="peso" value="#{consultaMedicaHome.instance.signosVitales.peso}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber id="peso" value="#{consultaMedicaHome.instance.signosVitales.peso}" required="false" style="width: 190px;" 
                                                             maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left"  decimalPlaces="2" 
-                                                            disabled="#{not empty consultaMedicaHome.instance.signosVitales.peso}">
+                                                            disabled="#{not empty consultaMedicaHome.instance.signosVitales.peso and consultaMedicaHome.instance.persistent}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                                                                                                                  
                                         </div>
                                         <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} *</label>
                                         <div class="input">                                                                                
-                                            <pe:inputNumber  id="presionArtDiag" value="#{consultaMedicaHome.instance.signosVitales.presionArterialDiastolica}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber  id="presionArtDiag" value="#{consultaMedicaHome.instance.signosVitales.presionArterialDiastolica}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
-                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.presionArterialDiastolica}">
+                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.presionArterialDiastolica and consultaMedicaHome.instance.persistent}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                        
                                         </div>    
                                         <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} *</label>
                                         <div class="input"> 
-                                            <pe:inputNumber  id="presionArtSis" value="#{consultaMedicaHome.instance.signosVitales.presionArterialSistolica}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber  id="presionArtSis" value="#{consultaMedicaHome.instance.signosVitales.presionArterialSistolica}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" 
-                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.presionArterialSistolica}">   
+                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.presionArterialSistolica and consultaMedicaHome.instance.persistent}">   
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                                                                                                 
                                         </div>              
                                         <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
-                                        <pe:inputNumber  id="pulso" value="#{consultaMedicaHome.instance.signosVitales.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
+                                        <pe:inputNumber  id="pulso" value="#{consultaMedicaHome.instance.signosVitales.pulso}" required="false" styleClass="xLarge" style="width: 190px;" 
                                                          rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" 
-                                                         disabled="#{consultaMedicaHome.instance.signosVitales.pulso != 0}">   
+                                                         disabled="#{consultaMedicaHome.instance.signosVitales.pulso != 0 and consultaMedicaHome.instance.persistent}">   
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </p:panelGrid>                                                                                             
@@ -108,24 +116,24 @@
                                     <p:panelGrid columns="2">
                                         <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
                                         <div class="input">                                                                                
-                                            <pe:inputNumber  id="frecuenciaResp" value="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber  id="frecuenciaResp" value="#{consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}" required="false" style="width: 190px;" 
                                                              rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" 
-                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria}">
+                                                             disabled="#{not empty consultaMedicaHome.instance.signosVitales.frecuenciaRespiratoria and consultaMedicaHome.instance.persistent}">
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>  
                                         </div>
                                         <label for="talla" class="span3">#{messages['signosVitales.talla']} *</label>
                                         <div class="input">                                                                                
-                                            <pe:inputNumber id="talla" value="#{consultaMedicaHome.instance.signosVitales.talla}" required="true" style="width: 190px;" 
+                                            <pe:inputNumber id="talla" value="#{consultaMedicaHome.instance.signosVitales.talla}" required="false" style="width: 190px;" 
                                                             rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0"
-                                                            disabled="#{not empty consultaMedicaHome.instance.signosVitales.talla}">                                            
+                                                            disabled="#{not empty consultaMedicaHome.instance.signosVitales.talla and consultaMedicaHome.instance.persistent}">                                            
                                                 <p:ajax event="blur" update="@parent" process="@this"/>  
                                             </pe:inputNumber>                                        
                                         </div>
                                         <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
-                                        <pe:inputNumber  id="temperatura" value="#{consultaMedicaHome.instance.signosVitales.temperatura}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber  id="temperatura" value="#{consultaMedicaHome.instance.signosVitales.temperatura}" required="false" style="width: 190px;" 
                                                          rendered="true" symbol="       mmHg" symbolPosition="rigth" maxValue="90" decimalPlaces="2" 
-                                                         disabled="#{not empty consultaMedicaHome.instance.signosVitales.temperatura}">
+                                                         disabled="#{not empty consultaMedicaHome.instance.signosVitales.temperatura and consultaMedicaHome.instance.persistent}">
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </p:panelGrid>                                
@@ -219,7 +227,7 @@
                         </p:panel>
                     </p:tab>
                 </p:tabView>             
-                <p:tabView >
+                <p:tabView id="tabV">
                     <p:tab title="#{messages['consultaMedica.Motivo']}" titletip="#{messages['consultaMedica.Motivo']}" rendered="true" >
                         <glue:input id="motivoC" name="motivoC" type="textarea" label="#{messages['consultaMedica.motivo']}" value="#{consultaMedicaHome.instance.motivoConsulta}" 
                                     required="false" execute="@this :form:save" render="motivoC" helpinline=""/>                
@@ -228,23 +236,37 @@
                         <glue:input id="enfermedadAct" name="enfermedadAct" type="textarea" label="#{messages['consultaMedica.enfermedadActual']}" value="#{consultaMedicaHome.instance.enfermedadActual}" 
                                     required="false" execute="@this :form:save" render="enfermedadAct" helpinline=""/>
                     </p:tab>
-                    <p:tab title="#{messages['consultaMedica.Diagnostico']}" titletip="#{messages['consultaMedica.Diagnostico']}" closable="false" 
+                    <p:tab id="tab" title="#{messages['consultaMedica.Diagnostico']}" titletip="#{messages['consultaMedica.Diagnostico']}" closable="false" 
                            rendered="true">
-                        <h:panelGroup id="obEFP" layout="block">
-                            <label for="observ2">#{messages['consultaMedica.enfermedades']}</label>
-                            <div class="input">
-                                <p:pickList value="#{consultaMedicaHome.pickListEnfermedades}" var="enfermedad_"  showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" style="width: 50%" 
-                                            itemLabel="#{enfermedad_.code} #{enfermedad_.name}" itemValue="#{enfermedad_}" converter="enfermedadescie10Converter" showCheckbox="true">  
-                                    <f:facet name="sourceCaption">Enfermedades Cie 10</f:facet>
-                                    <f:facet name="targetCaption">Enfermedades que Posee</f:facet>
-                                    <p:ajax event="transfer" listener="#{consultaMedicaHome.onTransfer}" update=":form:growl"/>  
-                                    <p:column style="width: 100%" >
-                                        <h:outputText value="#{enfermedad_.code}&nbsp;&nbsp;#{enfermedad_.name}" 
-                                                      title="#{enfermedad_.description}"/>                                        
-                                    </p:column>
-                                </p:pickList>                                                                                      
+                        <div style="width: 85%" >
+                            <div style="float: right;">
+                                <p:commandLink id="add-enf" type="button" value="Agregar" title="Agregar enfermedad cie10"
+                                               onclick="#{'cie10Dlg.show();'}"  styleClass="btn success" 
+                                               ajax="true">                                                                        
+                                    <p:ajax update=":cie10-dialog" />
+                                </p:commandLink>
                             </div>
-                        </h:panelGroup> 
+                            <br/><br/>                            
+                            <p:dataTable id="tablaEnf" value="#{consultaMedicaHome.listaEnfPosee}" var="enf_"  emptyMessage="No contiene ninguna enfermedad" styleClass="offset1">
+                                <f:facet name="header">
+                                    <h:outputText value="Enfermedades del CIE10 que posee" />
+                                </f:facet>                                
+                                <p:column headerText="#{messages['common.code']}" style="width: 10%">
+                                    <h:outputText value="#{enf_.enf_cieE10.codigo}"/>
+                                </p:column>
+                                <p:column headerText="#{messages['common.code']}" style="width: 80%">
+                                    <h:inputTextarea value="#{enf_.enf_cieE10.nombre}" style="height: 25px; width: 98%" disabled="true"/>   
+                                </p:column>
+                                <p:column headerText="#{'Opción'}" style="width: 7%">
+                                    <p:commandLink id="delete-enf" type="button" value="Borrar" title="Borrar enfermedad cie10"
+                                                   onclick="#{'deletedDlg2.show();'}"  styleClass="btn success"
+                                                   ajax="true">                                        
+                                        <f:setPropertyActionListener value="#{enf_}" target="#{consultaMedicaHome.enfermedadCie}"/>
+                                        <p:ajax update=":cancel-dialog2" />
+                                    </p:commandLink>
+                                </p:column> 
+                            </p:dataTable>
+                        </div>
                         <glue:input id="diagnostico" name="diagnostico" type="textarea" label="#{messages['consultaMedica.diagnostico']}" value="#{consultaMedicaHome.instance.diagnostico}" 
                                     required="false" execute="@this :form:save" render="diagnostico" helpinline=""/>
                     </p:tab>
@@ -339,10 +361,16 @@
                                 <p:commandLink id="button-delete1" type="button" value="Borrar" title="#{messages['common.delete']}"
                                                onclick="#{'deletedDlg1.show();'}"  styleClass="btn success" rendered="#{pedidosExam_.estado eq 'Nuevo'}"
                                                ajax="true">
-                                    <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>                        
+                                    <p:graphicImage value="/resources/images/delete.gif" width="12" height="12"/>
                                     <f:setPropertyActionListener value="#{pedidosExam_}" target="#{consultaMedicaHome.pedidoExamen}"/>
                                     <p:ajax update=":cancel-dialog1" />
                                 </p:commandLink>
+                                &nbsp;                               
+                                &nbsp; 
+                                <h:commandLink id="print" title="Imprimir Pedido" styleClass="btn" action="#{reporteListas.renderPedido()}" >  
+                                    <p:graphicImage value="/resources/img/print.gif" width="12" height="12"/>
+                                    <f:setPropertyActionListener value="#{pedidosExam_}" target="#{reporteListas.pedido}"/>
+                                </h:commandLink>
                             </p:column>                            
                         </p:dataTable>
                     </p:tab>
@@ -382,6 +410,56 @@
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg1.hide();"  
                                      style="margin-top:10px;"/>  
 
+                </h:form>
+            </p:dialog>
+            <p:dialog id="cancel-dialog2" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg2" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete2">
+
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']} de Pedido de Exeman"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" action="#{consultaMedicaHome.borrarEnfermedad()}" 
+                                     oncomplete="deletedDlg2.hide();" ajax="true"  immediate="true"
+                                     style="margin-top:10px;" update="@form">  
+                        <p:ajax process="@this" update=":form:tabV:tablaEnf :form:growl" />
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg2.hide();"  
+                                     style="margin-top:10px;"/>  
+
+                </h:form>
+            </p:dialog>
+            <!--Enfermedad Cie 10 -->
+            <p:dialog id="cie10-dialog" header="#{messages['common.delete.confirm']}" widgetVar="cie10Dlg" resizable="false" modal="true" height="500" width="812" closable="false">  
+                <h:form id="form-cie10">
+                    <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="cie10Dlg.hide();"  
+                                     ajax="true" update="@form" style="margin-left: 86%" >                        
+                        <p:ajax process="@this" update=":form:tabV:tablaEnf :form:growl" />
+                    </p:commandButton>                                              
+                    <br/>
+                    <p:dataTable id="tablaEnfCie10" value="#{consultaMedicaHome.listaEnfCie10}" var="enfcie10" 
+                                 rows="20" rowKey="#{enfcie10.id}" paginator="true" 
+                                 paginatorPosition="top" emptyMessage="No hay ninguna Enfermedad" 
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+                                 rowsPerPageTemplate="10,20,30,50,100,500,1000" >
+
+                        <p:column headerText="#{messages['common.code']}" sortBy="#{enfcie10.codigo}"
+                                  filterBy="#{enfcie10.codigo}" filterMatchMode="contains">
+                            <h:outputText value="#{enfcie10.codigo}"/>
+                        </p:column>                       
+                        <p:column headerText="#{messages['common.name']}" sortBy="#{enfcie10.nombre}"
+                                  filterBy="#{enfcie10.nombre}" filterMatchMode="contains" style="width: 70%">
+                            <h:inputTextarea value="#{enfcie10.nombre}" style="height: 36px; width: 98%" disabled="true"/>   
+                        </p:column>                       
+                        <p:column headerText="Opción">
+                            <p:commandButton id="button-delete" value="agregar" title="Agregar Enfermedad" ajax="true" 
+                                             actionListener="#{consultaMedicaHome.agregarEnfermedad(enfcie10)}"
+                                             styleClass="btn success" 
+                                             update="@form" >
+                                <!--style="width: 20px; height: 10px;"> form:j_idt198:tablaEnf :form:tabCons:tablaEnf-->                                
+                                <p:ajax process="@this" update=":form:tabV:tablaEnf :form:growl :cie10-dialog" rendered=":form:tabV:tablaEnf :cie10-dialog"/>
+                            </p:commandButton>
+                        </p:column>                       
+                    </p:dataTable>                    
                 </h:form>
             </p:dialog>
         </ui:define>

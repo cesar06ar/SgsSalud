@@ -79,6 +79,7 @@
                         <li>
                             <h:link outcome="/pages/profile/profile" value="#{userProfile.fullName}">
                                 <f:param name="profileId" value="#{account.loggedId}"/>
+                                <f:param name="backView" value="/home"/>                                
                             </h:link>
                         </li>
                         <li class="dropdown">

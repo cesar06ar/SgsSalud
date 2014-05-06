@@ -15,51 +15,29 @@
  */
 package edu.sgssalud.web.service;
 
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
-import com.sun.xml.ws.client.BindingProviderProperties;
-import ec.edu.unl.ws.sgaws.wspersonal.soap.SGAWebServicesPersonal;
-import ec.edu.unl.ws.sgaws.wspersonal.soap.SGAWebServicesPersonalPortType;
-import ec.edu.unl.ws.sgaws.wsvalidacion.soap.SGAWebServicesValidacion;
-import ec.edu.unl.ws.sgaws.wsvalidacion.soap.SGAWebServicesValidacionPortType;
-import edu.sgssalud.Sgssalud;
-
-import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.TransactionAttribute;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.xml.ws.BindingProvider;
-import javax.xml.ws.Service;
-import org.jboss.net.axis.ServiceFactory;
+//import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.primefaces.json.JSONArray;
 
 import org.primefaces.json.JSONException;
+/*import sun.misc.BASE64Encoder;*/
 
 /**
  *
  * @author cesar
  */
 @Named
-@ViewScoped
-public class TestWebService implements Serializable {
+@RequestScoped
+public class TestWebService {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(TestWebService.class);
+    //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(TestWebService.class);
     private String cedula;
-    private String clave;
-    private String result;
+    private String clave;    
 
     public String getCedula() {
         return cedula;
@@ -77,98 +55,19 @@ public class TestWebService implements Serializable {
         this.clave = clave;
     }
 
-    public String getResult() {
-        return result;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
-
     @PostConstruct
     public void init() {
         this.setCedula("1722404041");
     }
 
-    public String validar() {
-        log.info("Ingreso a cargar 1 ");
-        SGAWebServicesValidacion wsvalidacion = new SGAWebServicesValidacion();
-        SGAWebServicesValidacionPortType port = wsvalidacion.getSGAWebServicesValidacionPortType();
 
-        if (!cedula.isEmpty() && !clave.isEmpty()) {
-            TestWebService.autenticacion_Servidor((BindingProvider) port);
-            String result = port.sgawsValidarEstudiante(cedula, clave);
-            log.info("la autenticacion es: " + result);
-        }
-        return null;
-    }
 
-    @TransactionAttribute
-    public String cargar() {
-        try {
-            //log.info("Ingreso a cargar 1 ");
-            System.out.println("Ingreso a cargar 1 ");
-//            URL url = null;
-//            try {
-//                url = new URL("http://ws.unl.edu.ec/sgaws/wspersonal/soap/api.wsdl");
-//            } catch (MalformedURLException ex) {
-//                //Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
-//                log.info(TestWebService.class.getName(), Level.SEVERE, null, ex);
-//            }
-            SGAWebServicesPersonal wscpersonal = new SGAWebServicesPersonal();
-            SGAWebServicesPersonalPortType port = wscpersonal.getSGAWebServicesPersonalPortType();
-            System.out.println("Ingreso a cargar 2 ");
-            //log.info("Ingreso a cargar 2 ");
-            if (!cedula.isEmpty()) {
-                TestWebService.autenticacion_Servidor((BindingProvider) port);
-                try {
-                    //log.info("Ingreso a cargar datos ");
-                    JsonParser parser = new JsonParser();
-                    log.info("cedula valor 1 " + cedula);
-                    String r = port.sgawsDatosEstudiante(cedula);
+    
 
-                    ///log.info("cedula valor " + cedula);
-                    System.out.println("cedula valor " + cedula);
-                    JsonElement elem = parser.parse(r);
-                    JsonArray elemArr = elem.getAsJsonArray();
-                    
-                    log.info("Resultado " + elemArr.toString());
-                    this.setResult(elemArr.toString());
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("resultado: " + elemArr.toString(), ""));
 
-                } catch (Exception ex) {
-                    Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
-                    log.info("Ingreso a cargar error ");
-                    ex.printStackTrace();
-                }
-                log.info("Ingreso a cargar datos");
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Ingrese una CedulaValida!", ""));
-            }
-            log.info("cargado con éxito");
-        } catch (Exception e) {
-            log.info("Error al cargar");
-        }
-
-        return null;
-    }
-
-    public static void autenticacion_Servidor(BindingProvider provide) {
-        try {
-
-            Map<String, Object> requestContext = provide.getRequestContext();
-            requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 17000);
-            requestContext.put("org.jboss.webservice.client.timeout", 1 * 60 * 1000);
-            requestContext.put(BindingProvider.USERNAME_PROPERTY, "sgssalud");
-            requestContext.put(BindingProvider.PASSWORD_PROPERTY, "catv3856");
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.print(e);
-        }
-    }
+   
 
     public List<String> convertirJsonArrayAString(String jsonArraylist) throws JSONException {
-
         JSONArray jsonArray = new JSONArray(jsonArraylist);
         List<String> ls = new ArrayList<String>();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -176,4 +75,107 @@ public class TestWebService implements Serializable {
         }
         return ls;
     }
+    /*
+     public static void autenticacion_Servidor(BindingProvider provide) {
+     try {
+
+     Map<String, Object> requestContext = provide.getRequestContext();
+     requestContext.put(BindingProviderProperties.CONNECT_TIMEOUT, 17000);
+     requestContext.put("org.jboss.webservice.client.timeout", 1 * 60 * 1000);
+     requestContext.put(BindingProvider.USERNAME_PROPERTY, "sgssalud");
+     requestContext.put(BindingProvider.PASSWORD_PROPERTY, "catv3856");
+     } catch (Exception e) {
+     // TODO: handle exception
+     System.out.print(e);
+     }
+     }*/
+    //    public String validar() {
+//
+//        String ruta = "http://ws.unl.edu.ec/sgaws/wspersonal/sgaws_datos_estudiante?cedula=" + cedula;
+//        //String ruta = "http://ws.unl.edu.ec/sgaws/documento_wsdl?";
+//        //String ruta = "http://sgssalud:catv3856ws.unl.edu.ec/sgaws/wsvalidacion/sgaws_validar_estudiante?cedula=" + cedula + "&clave=" + clave;
+//        //String ruta = "http://localhost:8080/demoee6/rest/members/1";
+//
+//        URL url;
+//
+//        System.out.println("Ingreso conectar ");
+//        HttpURLConnection connection = null;
+//        try {
+//            //String userpass = "sgssalud" + ":" + "catv3856";
+//            //String encod = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userpass.getBytes("UTF-8"));
+//
+//            //encod1 = new org.drools.core.util.codec.Base64().encodeToString(userpass.getBytes());
+//            url = new URL(ruta);
+//            connection = (HttpURLConnection) url.openConnection();
+//            //System.out.println("OPEN CONECION____");
+//            //connection.setDoOutput(true);
+//            //connection.setInstanceFollowRedirects(false);
+//            connection.setRequestMethod("POST");
+//            //connection.setRequestProperty("Content-Type", "application/xml");
+//            connection.setRequestProperty("Content-Type", "text/plain");
+//            //connection.setRequestProperty("Content-Type", "text/json");
+//            //connection.setRequestProperty("Content-Type", "application/json");
+//            connection.setRequestProperty("charset", "UTF-8");
+//            //conection.setRequestProperty("Authorization", "Basic " + encod);
+//            //connection.setAllowUserInteraction(false);
+//
+//            Authenticator.setDefault(new Authenticator() {
+//                @Override
+//                protected PasswordAuthentication getPasswordAuthentication() {
+//                    return new PasswordAuthentication("sgssalud", "catv3856".toCharArray());
+//                }
+//            });
+//            connection.connect();
+//
+//            //org.apache.commons.httpclient.util.HttpURLConnection c = (org.apache.commons.httpclient.util.HttpURLConnection) url.openConnection();           
+//            //InputStream in = conection.getInputStream();            
+//            int rc = connection.getResponseCode();
+//            if (rc == HttpURLConnection.HTTP_OK) {
+//                System.out.println("se conecto  ");
+//                //List<NameValuePair> params = new ArrayList<NameValuePair>();
+//                //params.add(new BasicNameValuePair("firstParam", paramValue1));
+//                /*DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+//                 wr.writeBytes(urlParam);
+//                 wr.flush();
+//                 wr.close();*/
+//                //
+//                BufferedReader bufferReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+//                String str = bufferReader.readLine();
+//                StringBuilder stringBuffer = new StringBuilder();
+//                System.out.println("se conecto  222  " + str);
+//                /*while ((str = bufferReader.readLine()) != null) {
+//                 stringBuffer.append(str);
+//                 stringBuffer.append("\n");
+//                 }*/
+//
+//                /*JsonReader lector = new JsonReader(new InputStreamReader(
+//                 connection.getInputStream()));
+//                 JsonParser parseador = new JsonParser();
+//                 JsonElement raiz = parseador.parse(lector);
+//                 JsonArray lista = raiz.getAsJsonArray();
+//                 System.out.println("RESULTADO  " + lista.getAsString());*/
+//                //System.out.println("RESULTADO 2 " + s.toString());
+//                //connection.disconnect();
+//            }
+//            System.out.println("TERMINO SIN RESPUESTA  ");
+//            /*JsonParser parser = new JsonParser();
+//             JsonElement elemS = parser.parse(stringBuffer.toString());            
+//             JsonArray elemArrS = elemS.getAsJsonArray();            
+//             System.out.println("RESULTADO Gson  " + elemArrS.toString());*/
+//            connection.disconnect();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//            System.out.println("Invalid URL");
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            System.out.println("ERRROR...... ");
+//            Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            System.out.println("ERRROR generales...... ");
+//            Logger.getLogger(TestWebService.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+
 }

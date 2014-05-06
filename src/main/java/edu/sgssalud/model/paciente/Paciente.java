@@ -88,21 +88,6 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     private static Logger log = Logger.getLogger(Paciente.class);
     private static final long serialVersionUID = 1L;
 
-    public enum Genero {
-
-        MASCULINO(0),
-        FEMENINO(1);
-        private int genero;
-
-        private Genero(int genero) {
-            this.genero = genero;
-        }
-
-        public int getGenero() {
-            return genero;
-        }
-
-    }
 
     @NotEmpty
     @Column(nullable = false, unique = true)
@@ -134,9 +119,9 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     //@Index(name = "userEmailIndex1")   //investigar
     @Column(nullable = false, length = 128, unique = false)
     private String email;
-    @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
+    //@Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
     @Column(nullable = false)
-    private Paciente.Genero genero;
+    private String genero;
     @Column(length = 50)
     private String nacionalidad;
     @Column(length = 50)
@@ -266,14 +251,14 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
         this.email = email;
     }
 
-    public Genero getGenero() {
+    public String getGenero() {
         return genero;
     }
 
-    public void setGenero(Genero genero) {
+    public void setGenero(String genero) {
         this.genero = genero;
-    }
-
+    }    
+    
     public String getNacionalidad() {
         return nacionalidad;
     }
@@ -390,7 +375,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
 //                + "nombres=" + getNombres() + ","
 //                + "IdentityKeys=" + getIdentityKeys() + ","
 //                + " ]";
-        return this.getNombres()+" "+getApellidos();
+        return this.getNombres()+" "+this.getApellidos();
     }
 
     @Override

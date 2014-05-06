@@ -31,6 +31,7 @@ import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.Strings;
 import edu.sgssalud.util.UI;
+import edu.sgssalud.web.service.WebServiceSGAClientConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -99,6 +100,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private String tipoEstudiante;
 
     private UploadedFile file;
+
+    private WebServiceSGAClientConnection conexionSGA;
     /*....==>*/
 
     /*<== Métodos get y set para obtener el Id de la clase*/
@@ -118,7 +121,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     public void setClave(String clave) {
         this.clave = clave;
-    }    
+    }
 
     public String getConfirmarClave() {
         return confirmarClave;
@@ -126,7 +129,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     public void setConfirmarClave(String confirmarClave) {
         this.confirmarClave = confirmarClave;
-    }    
+    }
 
     public String getNombreEstructura() {
         return nombreEstructura;
@@ -212,9 +215,11 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     /*<== Metodo importante para actualizar EntityManager y tener acceso a la DB*/
     @PostConstruct
     public void init() {
+        //setInstance(new Paciente());
         setEntityManager(em);
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
+        conexionSGA = new WebServiceSGAClientConnection();
     }
     /*....==>*/
 
@@ -246,6 +251,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
      * interactua con la vista en el boton guardar...==>*/
     @TransactionAttribute
     public String guardarPaciente() {
+        System.out.println("ingreso a guardar ");
         Date now = Calendar.getInstance().getTime();
         String salida = null;
         getInstance().setLastUpdate(now);
@@ -254,12 +260,16 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             salida = "/pages/" + getBackView() + "?faces-redirect=true";
         } else {
             try {
+                System.out.println("ingreso a guardar ");
                 register();
+                
                 FacesMessage msg = new FacesMessage("Se creo nuevo paciente: " + getInstance().getNombres() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-                salida = "/pages/" + getBackView() + "?faces-redirect=true";
+                salida = "/pages/" + getBackView() + "?faces-redirect=true"
+                        + "&pacienteId=" + getInstance().getId();
             } catch (IdentityException ex) {
                 //Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
                 FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getNombres() + " ¡Puede que el correo ingresado ya pertenesca a otro usuario!");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
@@ -269,60 +279,98 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
     /*....==>*/
 
+    @TransactionAttribute
+    public void consultar() {
+        System.out.println("Ingreso a consultar________");
+        try {
+
+            Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());            
+            if (p != null && pcs.buscarPorCedula(getInstance().getCedula()) == null) {
+                //getInstance().setCedula(listaDatos.get(0));
+                getInstance().setNombreUsuario(p.getNombres());
+                getInstance().setNombres(p.getNombres());
+                getInstance().setApellidos(p.getApellidos());
+                getInstance().setFechaNacimiento(p.getFechaNacimiento());
+                getInstance().setTelefono(p.getTelefono());
+                getInstance().setCelular(p.getCedula());
+                getInstance().setDireccion(p.getDireccion());
+                getInstance().setNacionalidad(p.getNacionalidad());
+                getInstance().setEmail(p.getEmail());
+                getInstance().setGenero(p.getGenero());
+                FacesMessage msg = new FacesMessage("Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", null);
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            } else {
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El estudiante ya ha sido agregado ", "O no consta en el Sistema de Gestión Académica");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+            }
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            FacesMessage msg = new FacesMessage("No se pudo conectar con el web service");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+    }
+
     /*<== Sección de métodos agrupados para crear o actulizar una cuenta de usuario para el paciente*/
     @TransactionAttribute
-    public String register() throws IdentityException {
+    public void register() throws IdentityException {
+        System.out.println("Ingreso register________");
         createUser();
+
         credentials.setUsername(getInstance().getNombreUsuario());
         credentials.setCredential(new PasswordCredential(getInstance().getClave()));
         identity.setAuthenticatorClass(IdmAuthenticator.class);
-
+        System.out.println("Ingreso register________1");
         /*
          * Try twice to work around some state bug in Seam Security
          * TODO file issue in seam security
          */
-        String result = identity.login();
-        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
-            result = identity.login();
-        }
-        return result;
+        //String result = identity.login();
+//        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
+//            result = identity.login();
+//        }
+        //return result;
     }
 
     @TransactionAttribute
     private void createUser() throws IdentityException {
+        System.out.println("Ingreso crear User________");
         // TODO validate username, email address, and user existence
         getInstance().setNombreUsuario(getInstance().getCedula());
         getInstance().setClave(getInstance().getCedula());
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.createUser(getInstance().getCedula());
-
         AttributesManager attributesManager = security.getAttributesManager();
-        attributesManager.updatePassword(user, getInstance().getCedula());
+        PasswordCredential p = new PasswordCredential(getInstance().getCedula());
+        attributesManager.updatePassword(user, p.getValue());
         attributesManager.addAttribute(user, "email", getInstance().getEmail());  //me permite agregar un atributo de cualquier tipo a un usuario 
+        attributesManager.addAttribute(user, "estado", "ACTIVO");
         em.flush();
-
+        System.out.println("Ingreso crear User________1");
         // TODO figure out a good pattern for this...
         getInstance().getIdentityKeys().add(user.getKey());
         getInstance().setShowBootcamp(true);
         create(getInstance());
         setPacienteId(getInstance().getId());
-
+        System.out.println("Ingreso crear User________2");
         //crear seguridad de paciente
         try {
             org.picketlink.idm.api.Group group = security.getPersistenceManager().findGroup("PACIENTE", "GROUP");
             security.getRelationshipManager().associateUser(group, user);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Error");
         }
-        wire();
+        System.out.println("Ingreso crear User________22545");
+        //wire();
 //        getInstance().setType(bussinesEntityService.findBussinesEntityTypeByName(
 //                Paciente.class.getName()));
 //        getInstance()
 //                .buildAttributes(bussinesEntityService);
-
+        
         save(getInstance()); //Actualizar estructura de datos  
+        System.out.println("Ingreso crear User________3");
     }
-    
+
     @TransactionAttribute
     public String cambiarClave() throws IdentityException, InterruptedException {
         PersistenceManager identityManager = security.getPersistenceManager();
@@ -345,10 +393,11 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
 
     /*<== método que retorna la lista de tipos de datos enumerados ...*/
-    public List<Paciente.Genero> getListaGeneros() {
-        wire();
-        List<Paciente.Genero> list = Arrays.asList(getInstance().getGenero().values());
-        return list;
+    public List<String> getListaGeneros() {
+        List<String> generos = new ArrayList<String>();
+        generos.add("femenino");
+        generos.add("masculino");
+        return generos;
     }
     /*....==>*/
 
@@ -443,6 +492,5 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
-        //}
     }
 }

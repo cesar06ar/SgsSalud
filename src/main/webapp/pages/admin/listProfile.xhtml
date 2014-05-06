@@ -21,6 +21,11 @@ limitations under the License.
                 xmlns:fn="http://java.sun.com/jsp/jstl/functions"
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/view/templates/glue.xhtml">
+    <f:metadata>
+        <f:viewParam name="result" value="#{profileListService.firstResult}" />
+        <f:viewParam name="estado" value="#{profileListService.estado}" />
+        <f:event listener="#{profileListService.init()}" type="preRenderView"/>
+    </f:metadata>
     <ui:param name="title" value="#{messages['module.profils']}" />
     <ui:define name="header-replace">
         <div class="header-replace">
@@ -32,45 +37,44 @@ limitations under the License.
         </div>            
     </ui:define>
     <ui:define name="content">
-
-        <f:metadata>
-            <f:viewParam name="result" value="#{profileListService.firstResult}" />
-        </f:metadata>
-
         <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <div class="admin-actions">
                 <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/profile/profile.xhtml?faces-redirect=true" styleClass="btn primary">
                     <f:param name="profileId"></f:param>
-                    <f:param name="backView" value="listProfile"></f:param>
+                    <f:param name="backView" value="/admin/listProfile"></f:param>
                 </h:link>
-                #{' '}
-                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="/pages/profile/profile.xhtml?faces-redirect=true" styleClass="btn" 
-                        disabled="#{empty profileListService.selectedProfile}">
-                    <f:param name="profileId" value="#{profileListService.selectedProfile.id}"></f:param>
-                    <f:param name="backView" value="listProfile"></f:param>
-                </h:link>                
                 #{' '}
                 <h:link id="button-authorize" value="#{messages['common.authorize']}" rendered="#{true}" outcome="/pages/admin/security/authorization.xhtml?faces-redirect=true" styleClass="btn"
                         disabled="#{empty  profileListService.selectedProfile}">
                     <f:param name="username" value="#{profileListService.selectedProfile.username}"></f:param>
                     <f:param name="backView" value="listProfile"></f:param>
-                </h:link>                              
+                </h:link> 
+                #{' '}
+                <h:panelGroup style="float: right">
+                    <h:link id="Acc" value="Activos" title="Cuentas de usuarios activas" 
+                            outcome="listProfile" styleClass="btn success" >                                        
+                    </h:link>
+                    #{' '}
+                    <h:link id="Acc1" value="Inactivos" title="Cuentas de usuarios inactivas" 
+                            outcome="listProfile" styleClass="btn success" >                                        
+                        <f:param name="estado" value="inactivo"/>
+                    </h:link>                    
+                </h:panelGroup>
             </div>
-            <p:dataTable id="profileDataTable"  var="profile_" value="#{profileListService}"
+            <p:dataTable id="profileDataTable"  var="profile_" value="#{profileListService.resultList}" 
                          paginator="true" rows="10"                         
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="5,10,20,50,100"
-                         lazy="true"
-                         selection="#{profileListService.selectedProfile}"
-                         rendered="true"
+                         lazy="true" rowKey="#{profile_.id}" 
+                         selection="#{profileListService.selectedProfile}"                         
                          selectionMode="single">
 
                 <p:ajax event="rowSelect" listener="#{profileListService.onRowSelect}"   
-                        update=":form:button-edit :form:messages  :form:button-authorize"/>                 
+                        update=":form:messages   :cancel-dialog :form:button-authorize"/>   
                 <p:ajax event="rowUnselect" listener="#{profileListService.onRowUnselect}" 
-                        update=":form:button-edit :form:messages :form:button-authorize"/>
+                        update=":form:messages  :cancel-dialog :form:button-authorize"/>
 
                 <p:column sortBy="#{profile_.username}">
                     <f:facet name="header">  
@@ -102,6 +106,12 @@ limitations under the License.
                     </f:facet> 
                     <h:outputText value="#{profile_.email}" />
                 </p:column>
+                <p:column headerText="Opcion" >                                        
+                    <h:link value="#{messages['common.edit']}" rendered="#{true}" outcome="/pages/profile/profile.xhtml?faces-redirect=true" styleClass="btn" >                          
+                        <f:param name="profileId" value="#{profile_.id}"></f:param>
+                        <f:param name="backView" value="/admin/listProfile"></f:param>
+                    </h:link>   
+                </p:column>
             </p:dataTable>          
 
             <h:panelGrid id="export" class="columns" >
@@ -110,9 +120,25 @@ limitations under the License.
                     <br/>
                     <h:commandLink action="#{reporteListas.renderProfile()}" styleClass="btn">                    
                         <p:graphicImage value="/resources/images/pdf.png" />                          
+                        <f:setPropertyActionListener target="#{reporteListas.estado}" value="#{profileListService.estado eq 'inactivo'? true: false}" />
                     </h:commandLink>                    
                 </p:panel>
             </h:panelGrid>
         </h:form>
+        <p:dialog id="cancel-dialog" header="Desactivar Cuenta de Usuario" widgetVar="deletedDlg" resizable="false" modal="true">  
+            <h:form id="form-dialog-confirm-delete1">
+
+                <h:panelGroup layout="block" style="padding:5px;">  
+                    <h:outputText value="Esta seguro que quiere deshabilitar esta cuenta de usuario de #{profileListService.selectedProfile.fullName}"/>  
+                </h:panelGroup>  
+                <p:commandButton value="#{messages['common.yes']}" action="#{profileListService.inavilitarCuenta()}" 
+                                 oncomplete="#{'deletedDlg.hide();'}" update=":form:profileDataTable" immediate="true" ajax="true"
+                                 style="margin-top:10px;" process="@this"> 
+                </p:commandButton>  #{' '}
+                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                 style="margin-top:10px;"/>  
+
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

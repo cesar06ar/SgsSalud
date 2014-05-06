@@ -100,7 +100,7 @@
                                 <h:panelGroup layout="block" class="clearfix">
                                     <label for="genero_" class="control-label">#{messages['comun.genero']}</label>
                                     <div class="input">
-                                        <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                        <p:selectOneMenu id="genero_" value="#{pacienteHome.instance.genero}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="true" requiredMessage="false" 
                                                          rendered="true" label="#{messages['comun.genero']}">
                                             <f:selectItem  itemLabel = "#{messages['common.choice']}"  />  
                                             <f:selectItems value="#{pacienteHome.listaGeneros}" var="genero" itemLabel="#{genero}" itemValue="#{genero}"/>                          

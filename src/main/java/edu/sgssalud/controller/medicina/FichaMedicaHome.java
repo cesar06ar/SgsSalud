@@ -468,10 +468,11 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         return num;
     }
 
-    public List<Paciente.Genero> getListaGeneros() {
-        wire();
-        List<Paciente.Genero> list = Arrays.asList(paciente.getGenero().values());
-        return list;
+    public List<String> getListaGeneros() {
+        List<String> generos = new ArrayList<String>();
+        generos.add("femenino");
+        generos.add("masculino");
+        return generos;
     }
 
     /*<== métodos para selección de consultas medicas en la tabla de primefaces...

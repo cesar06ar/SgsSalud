@@ -174,13 +174,21 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
 
     @TransactionAttribute
     public String guardar() {
-        Date now = Calendar.getInstance().getTime();
+        //Date now = Calendar.getInstance().getTime();
         System.out.println("INGRESo a Guardar _________");
+        boolean ning = false;
+        for (ExamenLabClinico ex : listaExamenLab) {
+            if (ex.isSelect()) {
+                ning = true;
+                break;
+            }
+        }
         try {
-            if (getInstance().isPersistent()) {
-                save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo Pedido : " + getInstance().getId() + " con éxito");
+            if (!ning) {
+                //save(getInstance());
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar minimo un examen", null);
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                return null;
             } else {
                 if (consultaMedId != null) {
                     getInstance().setHistoriaClinica(hc);
@@ -189,44 +197,44 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
                 }
                 //this.listaPedidoExamenLabC = pickListExamenesLab.getTarget();
                 //System.out.println("Lista De Examens para Pedido   PICK:_______\n" + listaPedidoExamenLabC);
-                if (!this.listaPedidoExamenLabC.isEmpty()) {
 
-                    getInstance().setPaciente(paciente);
-                    getInstance().setEstado("Nuevo");
-                    getInstance().setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+                getInstance().setPaciente(paciente);
+                getInstance().setEstado("Nuevo");
+                getInstance().setResponsableEmision(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
 
-                    create(getInstance());
-                    save(getInstance());
-                    update();
-                    System.out.println("Guardo Con exito 0_________");
-                    ResultadoExamenLabClinico resultadoExa;
-                    List<Parametros> pl = null;
-                    for (ExamenLabClinico ex : this.listaPedidoExamenLabC) {
+                create(getInstance());
+                save(getInstance());
+                update();
+                System.out.println("Guardo Con exito 0_________");
+                ResultadoExamenLabClinico resultadoExa;
+                List<Parametros> pl = null;//                    
+                for (ExamenLabClinico ex : this.listaExamenLab) {
+                    if (ex.isSelect()) {
                         resultadoExa = new ResultadoExamenLabClinico();
                         resultadoExa.setExamenLab(ex);
                         resultadoExa.setPedidoExamenLab(getInstance());
                         pl = examenLabService.getParametrosPorExamen(ex);
-                        System.out.println("PARAM________"+pl.toString());
                         resultadoExa.agregarValoresResultados(pl);
                         save(resultadoExa);
                         update();
                     }
-                    System.out.println("Guardo Con exito_________--");
                 }
 
                 FacesMessage msg = new FacesMessage("Se agrego nuevo Pedido de Examenes: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                return "/pages" + this.getBackView() + "?faces-redirect=true"
+                        + "&fichaMedicaId= " + this.fichaMedicaId
+                        + "&consultaMedicaId= " + this.consultaMedId
+                        + "&consultaOdontId= " + this.consultaOdontId
+                        + "&backView=" + this.getPrevious();
+
             }
         } catch (Exception e) {
             e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
+            return null;
         }
-        return "/pages" + this.getBackView() + "?faces-redirect=true"
-                + "&fichaMedicaId= " + this.fichaMedicaId
-                + "&consultaMedicaId= " + this.consultaMedId
-                + "&consultaOdontId= " + this.consultaOdontId
-                + "&backView=" + this.getPrevious();
     }
 
     @Transactional

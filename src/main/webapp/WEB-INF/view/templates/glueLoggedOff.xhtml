@@ -64,7 +64,7 @@
                         <h:outputText value=" " />
                         <h:inputSecret id="password" value="#{credentials.password}" style="width: 100px;"/>
                         <h:outputText value=" " />
-                        <h:commandButton action="#{authentication.login()}" value="#{messages['common.login']}" />
+                        <h:commandButton action="#{authentication.login1()}" value="#{messages['common.login']}" />
 
                     </h:form>
                 </li>
@@ -84,6 +84,7 @@
                         <li>
                             <h:link outcome="/pages/profile/profile" value="#{userProfile.fullName}">
                                 <f:param name="profileId" value="#{account.loggedId}"/>
+                                <f:param name="backView" value="/home"/>                                
                             </h:link>
                         </li>
                         <li class="dropdown">

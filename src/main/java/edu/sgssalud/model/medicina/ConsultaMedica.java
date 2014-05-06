@@ -18,6 +18,7 @@ package edu.sgssalud.model.medicina;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.util.FechasUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -109,7 +110,7 @@ public class ConsultaMedica extends BussinesEntity implements Serializable, Comp
         this.historiaClinica = historiaClinica;
     }
 
-    public void setTiempoConsulta(Date tiempoConsulta) {
+    public void setTiempoConsulta(Date tiempoConsulta) {                
         this.tiempoConsulta = tiempoConsulta;
     }
 

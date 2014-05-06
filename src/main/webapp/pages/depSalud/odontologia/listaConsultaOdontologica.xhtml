@@ -129,6 +129,15 @@
                 </p:column>
 
             </p:dataTable>
+            <h:panelGroup>
+                <h:outputText value="Exportar Datos" />  
+                <br/>
+                <h:commandLink action="#{reporteListas.renderConsultasOdont()}" >                    
+                    <p:graphicImage value="/resources/images/pdf.png" />                          
+                    <f:setPropertyActionListener value="#{consultaMedicaListaServicio.inicio}" target="#{reporteListas.fechaInf}"/>
+                    <f:setPropertyActionListener value="#{consultaMedicaListaServicio.fin}" target="#{reporteListas.fechaSup}"/>
+                </h:commandLink>                
+            </h:panelGroup>
         </h:form>
     </ui:define>
 </ui:composition>

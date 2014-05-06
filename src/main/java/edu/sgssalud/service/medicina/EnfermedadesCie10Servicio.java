@@ -17,12 +17,15 @@ package edu.sgssalud.service.medicina;
 
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
 import edu.sgssalud.model.medicina.EnfermedadCIE10_;
+import edu.sgssalud.model.medicina.Hc_Cie10;
+import edu.sgssalud.model.medicina.Hc_Cie10_;
 import edu.sgssalud.model.medicina.HistoriaClinica;
-import edu.sgssalud.model.medicina.HistoriaClinica_;
+//import edu.sgssalud.model.medicina.HistoriaClinica_;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -50,6 +53,7 @@ public class EnfermedadesCie10Servicio extends PersistenceUtil<EnfermedadCIE10> 
 
     public List<EnfermedadCIE10> getEnfermedadesCIE10() {
         List list = this.findAll(EnfermedadCIE10.class);
+        Collections.sort(list);
         return list;
     }
 
@@ -61,7 +65,7 @@ public class EnfermedadesCie10Servicio extends PersistenceUtil<EnfermedadCIE10> 
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<EnfermedadCIE10> query = builder.createQuery(EnfermedadCIE10.class);
         Root<EnfermedadCIE10> entity = query.from(EnfermedadCIE10.class);
-        query.where(builder.equal(entity.get(EnfermedadCIE10_.code), codigo));
+        query.where(builder.equal(entity.get(EnfermedadCIE10_.codigo), codigo));
         return getSingleResult(query);
     }
 
@@ -103,9 +107,9 @@ public class EnfermedadesCie10Servicio extends PersistenceUtil<EnfermedadCIE10> 
 //        Query query = em.createQuery(consulta);
 //        query.setParameter(":id", enfId);
         CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<HistoriaClinica> query = builder.createQuery(HistoriaClinica.class);
-        Root<HistoriaClinica> entity = query.from(HistoriaClinica.class);
-        query.where(builder.equal(entity.get(HistoriaClinica_.enfermedadesCIE10), enfcie10));
+        CriteriaQuery<Hc_Cie10> query = builder.createQuery(Hc_Cie10.class);
+        Root<Hc_Cie10> entity = query.from(Hc_Cie10.class);
+        query.where(builder.equal(entity.get(Hc_Cie10_.enf_cieE10), enfcie10));
         return getResultList(query).isEmpty();
 
     }

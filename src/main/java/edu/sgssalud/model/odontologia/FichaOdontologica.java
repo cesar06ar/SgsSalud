@@ -123,4 +123,9 @@ public class FichaOdontologica extends BussinesEntity implements Serializable {
 //            this.pedidosExamenLab.add(p);
 //        }
 //    }
+    
+    @Override
+    public String toString(){
+        return this.getFichaMedica().getPaciente().getNombres() + " " + getFichaMedica().getPaciente().getNombres();
+    }
 }

@@ -116,7 +116,8 @@ public class Parametros implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.labClinico.Parametros[ id=" + id + " ]";
+        //return "edu.sgssalud.model.labClinico.Parametros[ id=" + id + " ]";
+        return getUnidadMedida();
     }
 
 }

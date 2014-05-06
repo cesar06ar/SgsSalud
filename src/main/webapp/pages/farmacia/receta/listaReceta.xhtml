@@ -54,7 +54,7 @@
                     </p:commandButton>
                     &nbsp;&nbsp;
                     <h:commandLink id="button-print" value="#{messages['common.print']}" styleClass="btn primary" action="#{reporteReceta.renderReceta()}" 
-                                     disabled="#{empty recetaListaServicio.recetaSeleccionada}" >                       
+                                   disabled="#{empty recetaListaServicio.recetaSeleccionada}" >                       
                         <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>
                     </h:commandLink>
 
@@ -140,6 +140,7 @@
                             <p:graphicImage value="/resources/images/pdf.png" />                          
                             <f:setPropertyActionListener value="#{recetaListaServicio.fechaI}" target="#{reporteListas.fechaInf}"/>
                             <f:setPropertyActionListener value="#{recetaListaServicio.fechaF}" target="#{reporteListas.fechaSup}"/>
+                            <f:ajax listener="#{recetaListaServicio.entregarReceta()}"/>
                         </h:commandLink>
                         <!--#{''}
                         <h:commandLink >  
@@ -184,11 +185,13 @@
                         </p:panel>
                     </p:panelGrid>                    
                     <div class="admin-actions">
-                         <p:commandButton value="#{messages['comun.terminar']}" oncomplete="editDlg.hide();"                                           
-                                         action="#{recetaListaServicio.entregarReceta()}" update=":form:tablaRecetas"  
+                        <p:commandButton value="#{messages['comun.terminar']}" onclick="editDlg.hide();"   
+                                         action="#{recetaListaServicio.entregarReceta()}" update="@form"  
                                          immediate="true" 
                                          style="margin: 0 0 0 30%">  
-                                        <!--recetaListaServicio.entregarReceta()--> 
+                            <!--recetaListaServicio.entregarReceta() :form:tablaRecetas--> 
+                            <p:ajax process="@this" update=":form:tablaRecetas"/>
+                            <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>
                         </p:commandButton> 
                         &nbsp;&nbsp;
 

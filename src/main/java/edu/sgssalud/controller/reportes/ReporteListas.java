@@ -20,18 +20,23 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
+import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
+import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
+import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.MedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import edu.sgssalud.service.labClinico.ExamenLabService;
+import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,14 +65,17 @@ public class ReporteListas {
     private static final String REPORTE_PACIENTES = "pacientes";
     private static final String REPORTE_FICHASMEDICAS = "listaFichasMedicas";
     private static final String REPORTE_CONSULTASMEDICAS = "listaConsultasMed";
+    private static final String REPORTE_CONSULTAS_ODONT = "listaConsultasOdont";
     private static final String REPORTE_RECETAS = "listaRecetas";
+    private static final String REPORTE_PEDIDO = "pedidoExamen";
     private static final String REPORTE_EXAMENES = "listaExamenes";
     private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
     //private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
     @Inject
     @Web
     private EntityManager em;
-
+    @Inject
+    JasperReportAction JasperReportAction;
     @Inject
     private ProfileService profileService;
     @Inject
@@ -85,10 +93,13 @@ public class ReporteListas {
     @Inject
     private ExamenLabService examenesService;
     @Inject
-    JasperReportAction JasperReportAction;
+    private ResultadoExamenLCService resultadoEService;
 
     private Date fechaInf;
     private Date fechaSup;
+    private boolean estado;
+
+    private PedidoExamenLaboratorio pedido;
 
     /**
      * Default constructor.
@@ -106,6 +117,7 @@ public class ReporteListas {
         fichaMedicaServicio.setEntityManager(em);
         consultaMedicaServicio.setEntityManager(em);
         consultaOdontologicaServicio.setEntityManager(em);
+        resultadoEService.setEntityManager(em);
 
     }
 
@@ -192,7 +204,7 @@ public class ReporteListas {
 
         final String attachFileName = "usuarios.pdf";
 
-        List<Profile> p = profileService.findAll();
+        List<Profile> p = profileService.findAllA(estado);
         Map<String, Object> _values = new HashMap<String, Object>();
         _values.put("numeroP", p.size());
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -249,17 +261,33 @@ public class ReporteListas {
     public void renderConsultasMedicas() {
         final String attachFileName = "consultasMedicas.pdf";
         List<ConsultaMedica> consulMed = consultaMedicaServicio.getConsulasMedicas();
-        if(fechaInf != null && fechaSup != null){
-            consulMed = consultaMedicaServicio.buscarPorRangoFechas(fechaInf, fechaInf);
+        if (fechaInf != null && fechaSup != null) {
+            consulMed = consultaMedicaServicio.buscarPorRangoFechas(fechaInf, fechaSup);
         }
         Map<String, Object> _values = new HashMap<String, Object>();
         _values.put("numero", consulMed.size());
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
         _values.put("logo", logo);
-        _values.put("usd", "$");
+        //_values.put("usd", "$");
         //Exportar a pdf 
         JasperReportAction.exportToPdf(REPORTE_CONSULTASMEDICAS, consulMed, _values, attachFileName);
+    }
+    
+    public void renderConsultasOdont() {
+        final String attachFileName = "consultasOdontológicas.pdf";
+        List<ConsultaOdontologica> consulOdont = consultaOdontologicaServicio.TodasConsulasOdontologica();
+        if (fechaInf != null && fechaSup != null) {
+            consulOdont = consultaOdontologicaServicio.buscarPorFechas(fechaInf, fechaSup);
+        }
+        Map<String, Object> _values = new HashMap<String, Object>();
+        _values.put("numero", consulOdont.size());
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String logo = context.getRealPath("/reportes/unl.png");
+        _values.put("logo", logo);
+        //_values.put("usd", "$");
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_CONSULTAS_ODONT, consulOdont, _values, attachFileName);
     }
 
     public void renderMedicamentos() {
@@ -315,6 +343,30 @@ public class ReporteListas {
         JasperReportAction.exportToPdf(REPORTE_RECETAS, receta, _values, attachFileName);
     }
 
+    public void renderPedido() {
+        final String attachFileName = "pedidoExamen.pdf";
+
+        List<ExamenLabClinico> examenes = new ArrayList<ExamenLabClinico>();
+        List<ResultadoExamenLabClinico> listR = resultadoEService.getResultadosExamenPorPedidoExamen(pedido);
+        if (!listR.isEmpty()) {
+            for (ResultadoExamenLabClinico r : listR) {
+                examenes.add(r.getExamenLab());
+            }
+        }
+        System.out.println("examenes _______-"+examenes.toString());
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String logo = context.getRealPath("/reportes/unl.png");
+        //parametros 
+        Map<String, Object> _values = new HashMap<String, Object>();
+        _values.put("nombres", pedido.getPaciente().getNombres() + " " + pedido.getPaciente().getApellidos());
+        _values.put("fechaE", pedido.getFechaPedido());
+        _values.put("logo", logo);
+        _values.put("medico", pedido.getResponsableEmision().getFullName());
+        //_values.put("usd", "$");
+        //Exportar a pdf 
+        JasperReportAction.exportToPdf(REPORTE_PEDIDO, examenes, _values, attachFileName);
+    }
+
     public Date getFechaInf() {
         return fechaInf;
     }
@@ -329,6 +381,22 @@ public class ReporteListas {
 
     public void setFechaSup(Date fechaSup) {
         this.fechaSup = fechaSup;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public PedidoExamenLaboratorio getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(PedidoExamenLaboratorio pedido) {
+        this.pedido = pedido;
     }
 
 }

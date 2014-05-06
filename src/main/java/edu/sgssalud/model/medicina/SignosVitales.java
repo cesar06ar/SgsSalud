@@ -36,12 +36,12 @@ public class SignosVitales implements Serializable {
     
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaActual;
-    private Double peso;
+    private Double peso = 0.0;
     private Double presionArterialSistolica;
     private Double presionArterialDiastolica;
     private int pulso;
     private Double frecuenciaRespiratoria;
-    private Double talla;
+    private Double talla  = 0.0;
     private Double temperatura;
     //FALTA: mas signos vitales
     

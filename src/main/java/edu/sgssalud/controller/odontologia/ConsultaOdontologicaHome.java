@@ -39,6 +39,7 @@ import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.TratamientoServicio;
+import edu.sgssalud.util.FechasUtil;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
@@ -271,7 +272,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             //fichaOdontolog.setOdontograma(o);
             //fichaOdontolog.setOdontogramaInicial(o);            
         }
-
+        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));
         //log.info("Odont Inicial " + fichaOdontolog.getOdontogramaInicial());
         //log.info("Odont  " + fichaOdontolog.getOdontograma());
 
@@ -321,7 +322,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                 getInstance().getSignosVitales().setFechaActual(now);
                 //System.out.println("Guardar__________ 2");
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo Ficha Medica: " + getInstance().getId() + " con éxito");
+                FacesMessage msg = new FacesMessage("Se actualizo Consulta Odontológica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 System.out.println("Guardar__________3");
             } else {
@@ -332,7 +333,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                 create(getInstance().getSignosVitales());
                 create(getInstance());
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se creo nueva Ficha Medica: " + getInstance().getId() + " con éxito");
+                FacesMessage msg = new FacesMessage("Se creo nueva Consulta Odontológica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 System.out.println("SE CREO CORRECTAMENTE______");
                 salida = "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
@@ -356,7 +357,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
      tratamientos.add(tratamiento);
      this.actualizarDiente(diente);
      }*/
-
+    /*
     @TransactionAttribute
     public String agregarOdontograma(int odont) {
         String salida = null;
@@ -391,7 +392,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
         return salida;
-    }
+    }*/
 
     public void upload() {
 
