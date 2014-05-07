@@ -131,7 +131,7 @@
                                 <div class="input" >
                                     <p:selectBooleanCheckbox  id="devolucion" value="#{medicamentoHome.devolucion}" required="false" 
                                                               rendered="true" >
-
+                                        <p:ajax update="save"/>
                                     </p:selectBooleanCheckbox>
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{not medicamentoHome.devolucion}" styleClass="validation-status" />
                                     <!--<span class="help-inline"><br/>#{messages['medicamento.generico.lineaAyuda']}<ocp:message forId="devolucion" /></span>-->

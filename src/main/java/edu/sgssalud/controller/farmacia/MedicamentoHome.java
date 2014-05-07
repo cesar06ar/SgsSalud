@@ -215,6 +215,15 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                     }
                     getInstance().setCantidadIngreso(cantidad);
                     getInstance().setUnidades(getInstance().getUnidades() + cantidad);
+                } else {
+                    Receta_Medicamento cardex = new Receta_Medicamento();
+                    cardex.setCantidad(getInstance().getUnidades());
+                    cardex.setMedicamento(getInstance());
+                    //int saldo = this.saldoCardexAnterior() - getInstance().getUnidades();                    
+                    cardex.setSaldo(0);
+                    cardex.setFecha(now);
+                    save(cardex);
+                    getInstance().setUnidades(0);
                 }
                 save(getInstance());
                 salida = "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";

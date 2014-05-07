@@ -36,6 +36,7 @@
                     <div class="container-fluid">
                         <div class="row-fluid">
                             <div class="span7">                                
+                                <glue:output id="cedula" name="cedula" type="text" label="#{messages['profile.dni']}" value="#{resultadosExamenHome.pedidoExamen.paciente.cedula}" required="false" execute="@this save" render="cedula" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{resultadosExamenHome.pedidoExamen.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{resultadosExamenHome.pedidoExamen.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
 
@@ -70,7 +71,7 @@
                         </div>
                     </div>
                 </p:panel>                
-                <p:panel id="paneltitle1" header="Resultados de Examenes" styleClass="clearfix">
+                <p:panel id="paneltitle1" header="EXAMENES SOLICITADOS" styleClass="clearfix">
 
                     <p:dataTable id="tablaResultados" var="Object_" value="#{resultadosExamenHome.listaResultadosExamen}" paginator="true" rows="30" paginatorPosition="top"
                                  lazy="true"
@@ -91,20 +92,25 @@
                             <h:outputText value="#{Object_.examenLab.name}" />  
                         </p:column>                                           
                         <p:column headerText="opciones " style="width:30%">
-                            <h:link id="button-edit" value="#{messages['common.edit']}" outcome="resultado" styleClass="btn primary" >                                
+                            <h:link id="button-edit" value="#{messages['common.edit']}" title="Agregar resultados" outcome="resultado" styleClass="btn primary" >                                
                                 <f:param name="pedidoExamenId" value="#{resultadosExamenHome.pedidoExamenId}"/>
                                 <f:param name="resultadoId" value="#{Object_.id}"/>
                             </h:link>
+                            &nbsp;
+                            <h:commandLink id="print" title="Imprimir Pedido" styleClass="btn" action="#{reporteListas.renderResultadoExamen()}" >  
+                                <p:graphicImage value="/resources/img/print.gif" width="12" height="12"/>
+                                <f:setPropertyActionListener value="#{Object_}" target="#{reporteListas.resultadoExamen}"/>
+                            </h:commandLink>
                         </p:column> 
                     </p:dataTable>  
                 </p:panel>
                 <div class="admin-actions ">
-                    <p:commandButton id="save" value="#{messages['common.save']}"  styleClass="btn primary"
-                                     action="#{resultadosExamenHome.guardar()}"
-                                     immediate="true" style="margin: 0 0 0 30%"/>  
+                    <!--<p:commandButton id="save" value="# {messages['common.save']}"  styleClass="btn primary"
+                                     action="# {resultadosExamenHome.guardar()}"
+                                     immediate="true" style="margin: 0 0 0 30%"/>  -->
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/labClinico/listaPedidosExam.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >
+                            value="#{messages['common.cancel']}" styleClass="btn primary" style="margin: 0 0 0 66%">
                     </h:link>
                 </div>                 
             </h:form> 

@@ -91,7 +91,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     private Tratamiento tratamiento;
     private Long fichaMedicaId;
     private PedidoExamenLaboratorio pedidoExamen;
-    private Receta receta;    
+    private Receta receta;
 
     private UploadedFile file;
     //private List<Servicio> listaServicios = new ArrayList<Servicio>();
@@ -229,7 +229,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
     public void setReceta(Receta receta) {
         this.receta = receta;
-    }  
+    }
 
     @TransactionAttribute
     public ConsultaOdontologica load() {
@@ -358,41 +358,41 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
      this.actualizarDiente(diente);
      }*/
     /*
-    @TransactionAttribute
-    public String agregarOdontograma(int odont) {
-        String salida = null;
-        Odontograma odontog = new Odontograma();
-        //odontog.setDientes(this.agregarDientes());
-        try {
-            if (odont == 1) {  //inicial
-                create(odontog);
-                fichaOdontolog.setOdontogramaInicial(odontog);
-                save(odontog);
-                save(fichaOdontolog);
-                salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
-                        + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaOdontId=" + getInstance().getId()
-                        + "&odontogramaId=" + odontog.getId()
-                        + "&backView=consultaOdontologica"
-                        + "&tipo=1";
-            } else {  //Evolutivo
-                create(odontog);
-                fichaOdontolog.setOdontograma(odontog);
-                save(odontog);
-                save(fichaOdontolog);
-                salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
-                        + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaOdontId=" + getInstance().getId()
-                        + "&odontogramaId=" + odontog.getId()
-                        + "&backView=consultaOdontologica"
-                        + "&tipo=0";
-            }
-        } catch (Exception e) {
-            FacesMessage msg = new FacesMessage("Error", "al crear odontograma");
-            FacesContext.getCurrentInstance().addMessage(null, msg);
-        }
-        return salida;
-    }*/
+     @TransactionAttribute
+     public String agregarOdontograma(int odont) {
+     String salida = null;
+     Odontograma odontog = new Odontograma();
+     //odontog.setDientes(this.agregarDientes());
+     try {
+     if (odont == 1) {  //inicial
+     create(odontog);
+     fichaOdontolog.setOdontogramaInicial(odontog);
+     save(odontog);
+     save(fichaOdontolog);
+     salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+     + "&fichaMedicaId=" + getFichaMedicaId()
+     + "&consultaOdontId=" + getInstance().getId()
+     + "&odontogramaId=" + odontog.getId()
+     + "&backView=consultaOdontologica"
+     + "&tipo=1";
+     } else {  //Evolutivo
+     create(odontog);
+     fichaOdontolog.setOdontograma(odontog);
+     save(odontog);
+     save(fichaOdontolog);
+     salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+     + "&fichaMedicaId=" + getFichaMedicaId()
+     + "&consultaOdontId=" + getInstance().getId()
+     + "&odontogramaId=" + odontog.getId()
+     + "&backView=consultaOdontologica"
+     + "&tipo=0";
+     }
+     } catch (Exception e) {
+     FacesMessage msg = new FacesMessage("Error", "al crear odontograma");
+     FacesContext.getCurrentInstance().addMessage(null, msg);
+     }
+     return salida;
+     }*/
 
     public void upload() {
 
@@ -584,5 +584,8 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
         return salida;
     }
 
-   
+    public boolean isEditable() {
+        return FechasUtil.editable(getInstance().getHoraConsulta(), 24);
+    }
+
 }

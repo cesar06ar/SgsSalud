@@ -47,6 +47,18 @@ public class Parametros implements Serializable {
     @JoinColumn(name = "examenLabClinico_id")
     private ExamenLabClinico examenLabClinico;
 
+    public Parametros() {
+    }
+
+    public Parametros(String categoria, String nombre, String unidadMedida, String valorReferenciaInf, String valorReferenciaSup) {
+        
+        this.nombre = nombre;        
+        this.unidadMedida = unidadMedida;
+        this.categoria = categoria;
+        this.valorReferenciaInf = valorReferenciaInf;
+        this.valorReferenciaSup = valorReferenciaSup;        
+    }    
+    
     public Long getId() {
         return id;
     }

@@ -181,7 +181,7 @@ public class ResultadosExamenHome extends LazyDataModel<ResultadoExamenLabClinic
         //Date now = Calendar.getInstance().getTime();
         try {
             if (resultadoSelect.isPersistent()) {
-                resultadoSelect.setResultadosParametros(listaResultadoParam);
+                resultadoSelect.setResultadosParametros(listaResultadoParam);                
                 em.merge(resultadoSelect);
                 FacesMessage msg = new FacesMessage("Se guardo resultado de Examen: " + resultadoSelect.getId() + " con éxito", null);
                 FacesContext.getCurrentInstance().addMessage("", msg);

@@ -38,6 +38,7 @@ import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +72,7 @@ public class ReporteListas {
     private static final String REPORTE_PEDIDO = "pedidoExamen";
     private static final String REPORTE_EXAMENES = "listaExamenes";
     private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
-    private static final String REPORTE_RESULTADO_EXAMEN = "";
+    private static final String REPORTE_RESULTADO_EXAMEN = "resultadoExamen";
     @Inject
     @Web
     private EntityManager em;
@@ -101,6 +102,7 @@ public class ReporteListas {
     private boolean estado;
 
     private PedidoExamenLaboratorio pedido;
+    private ResultadoExamenLabClinico resultadoExamen;
 
     /**
      * Default constructor.
@@ -119,6 +121,7 @@ public class ReporteListas {
         consultaMedicaServicio.setEntityManager(em);
         consultaOdontologicaServicio.setEntityManager(em);
         resultadoEService.setEntityManager(em);
+        resultadoExamen = new ResultadoExamenLabClinico();
 
     }
 
@@ -275,7 +278,7 @@ public class ReporteListas {
         //Exportar a pdf 
         JasperReportAction.exportToPdf(REPORTE_CONSULTASMEDICAS, consulMed, _values, attachFileName);
     }
-    
+
     public void renderConsultasOdont() {
         final String attachFileName = "consultasOdontológicas.pdf";
         List<ConsultaOdontologica> consulOdont = consultaOdontologicaServicio.TodasConsulasOdontologica();
@@ -355,7 +358,7 @@ public class ReporteListas {
                 examenes.add(r.getExamenLab());
             }
         }
-        System.out.println("examenes _______-"+examenes.toString());
+        System.out.println("examenes _______-" + examenes.toString());
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
         //parametros 
@@ -368,27 +371,40 @@ public class ReporteListas {
         //Exportar a pdf 
         JasperReportAction.exportToPdf(REPORTE_PEDIDO, examenes, _values, attachFileName);
     }
-    
-     public void renderResultadoExamen() {
-        final String attachFileName = "pedidoExamen.pdf";
 
-        List<ResultadoParametro> resultado = new ArrayList<ResultadoParametro>();
-        List<ResultadoExamenLabClinico> listR = resultadoEService.getResultadosExamenPorPedidoExamen(pedido);
-        if (!listR.isEmpty()) {
-            
-        }
+    public void renderResultadoExamen() {
+        final String attachFileName = "resultdoExamen.pdf";
         //System.out.println("examenes _______-"+examenes.toString());
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
-        //parametros 
+        List<String> categorias = Arrays.asList(resultadoExamen.getExamenLab().getCategorias().split(","));
+
         Map<String, Object> _values = new HashMap<String, Object>();
-        _values.put("nombres", pedido.getPaciente().getNombres() + " " + pedido.getPaciente().getApellidos());
-        _values.put("fechaE", pedido.getFechaPedido());
+        String nombres = resultadoExamen.getPedidoExamenLab().getPaciente().getCedula() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getNombres() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getApellidos();
+
+        System.out.println("RESULTADO " + resultadoExamen.toString());
+        _values.put("nombres", nombres);
+        _values.put("nombreExamen", resultadoExamen.getExamenLab().getName());
         _values.put("logo", logo);
-        _values.put("medico", pedido.getResponsableEmision().getFullName());
+        _values.put("medico", "Dr. " + resultadoExamen.getResponsableEntrega().getFullName());
+        if (categorias.isEmpty()) {
+            _values.put("cat1", "");
+            _values.put("cat2", "");
+            _values.put("cat3", "");
+        } else if (categorias.size() == 1) {
+            _values.put("cat1", categorias.get(0));            
+        } else if (categorias.size() == 2) {
+            _values.put("cat1", categorias.get(0));
+            _values.put("cat2", categorias.get(1));            
+        } else if (categorias.size() == 3) {
+            _values.put("cat1", categorias.get(0));
+            _values.put("cat2", categorias.get(1));
+            _values.put("cat3", categorias.get(2));
+        }
+        //FALTA ORGANIZAR EL REPORT
         //_values.put("usd", "$");
         //Exportar a pdf 
-        JasperReportAction.exportToPdf(REPORTE_PEDIDO, resultado, _values, attachFileName);
+        JasperReportAction.exportToPdf(REPORTE_RESULTADO_EXAMEN, resultadoExamen.getResultadosParametros(), _values, attachFileName);
     }
 
     public Date getFechaInf() {
@@ -421,6 +437,14 @@ public class ReporteListas {
 
     public void setPedido(PedidoExamenLaboratorio pedido) {
         this.pedido = pedido;
+    }
+
+    public ResultadoExamenLabClinico getResultadoExamen() {
+        return resultadoExamen;
+    }
+
+    public void setResultadoExamen(ResultadoExamenLabClinico resultadoExamen) {
+        this.resultadoExamen = resultadoExamen;
     }
 
 }

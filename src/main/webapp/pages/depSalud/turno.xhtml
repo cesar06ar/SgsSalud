@@ -5,7 +5,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       template="/WEB-INF/view/templates/glue.xhtml"
       xmlns:f="http://java.sun.com/jsf/core"      
-      xmlns:p="http://primefaces.org/ui"      
+      xmlns:p="http://primefaces.org/ui"     
+      xmlns:s="http://jboss.org/seam/faces"
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:glue="http://eqaula.org/jsf/facelets"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
@@ -84,14 +85,14 @@
                         <div class="input">                                                         
                             <p:calendar id="fechaC" value="#{turnoHome.fecha}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
                                         disabled="false" pattern="dd-MMM-yyyy"  locale="es" disabledWeekends="true" required="true">
-                                <p:ajax event="dateSelect" update="@parent :form:hora :form:save" partialSubmit="true" rendered=":form:hora"/>  
+                                <p:ajax event="dateSelect" process="validadorFechas fechaC" update="@parent :form:hora :form:save" partialSubmit="true" rendered=":form:hora"/>  
                             </p:calendar>                                                                                                      
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaCita ne null}"
                                             styleClass="validation-status" />                                                        
                         </div>                    
                         <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
                     </h:panelGroup>  
-                    <!--Segun la fecha deben aparecer solo los turnos dispobles-->
+                    <s:validateForm id="validadorFechas" validatorId="dateValidatorTurno" />
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <label for="hora" >#{messages['comun.horaCita']}  </label>
                         <div class="input">
@@ -104,7 +105,7 @@
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.servicio ne null}"
                                             styleClass="validation-status" />      
                         </div>                   
-                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['servicioMedico.nombre.lineaAyuda']}<ocp:message forId="nombreServicio" /></span>
+                        <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{'Hora de la cita médica'}<ocp:message forId="nombreServicio" /></span>
                     </h:panelGroup> 
                 </p:panel>
                 <div class="actions">

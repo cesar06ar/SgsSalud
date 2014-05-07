@@ -141,6 +141,20 @@ public class FechasUtil {
         return false;
     }
 
+    public static boolean editable(Date fecha, int horas) {
+        Calendar now = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
+        Date fechaCon = FechasUtil.sumarRestarHorasFecha(fecha, 24);
+        cal.setTime(fechaCon);
+        int horaActual = now.get(Calendar.MINUTE);
+        int horaConsulta = cal.get(Calendar.MINUTE);
+        //System.out.println("HORA Actual _____  " + horaActual + " hora fecha _________ " + horaConsulta);
+        if (horaActual > horaConsulta) {
+            return true;
+        }
+        return false;
+    }
+
     public static int getFechaLimite(Date fechaActual, Date fechaPosterior) {  //retorna la diferencia en dias
         long dias = -1;
         if (fechaActual != null && fechaPosterior != null) {
@@ -174,5 +188,5 @@ public class FechasUtil {
         }
         return true;
 
-    }    
+    }
 }

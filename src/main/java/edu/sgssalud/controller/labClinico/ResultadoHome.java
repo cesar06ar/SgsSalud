@@ -20,6 +20,7 @@ import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import java.io.Serializable;
@@ -36,6 +37,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.jboss.seam.security.Identity;
 
 /**
  *
@@ -54,7 +56,10 @@ public class ResultadoHome extends BussinesEntityHome<ResultadoExamenLabClinico>
     private PacienteServicio pacienteService;
     @Inject
     private ResultadoExamenLCService resultadoService;
-
+    @Inject
+    private ProfileService profileServicio;
+    @Inject
+    private Identity identity;
     private Long pedidoExamenId;
     private PedidoExamenLaboratorio pedidoExam;
     private Paciente paciente;
@@ -107,9 +112,9 @@ public class ResultadoHome extends BussinesEntityHome<ResultadoExamenLabClinico>
     public void setCategorias(List<String> categorias) {
         this.categorias = categorias;
     }
-    
-    public void listarCategorias(){
-        if(getInstance().getExamenLab().getCategorias() != null){
+
+    public void listarCategorias() {
+        if (getInstance().getExamenLab().getCategorias() != null) {
             String c = getInstance().getExamenLab().getCategorias();
             categorias = Arrays.asList(c.split(","));
         }
@@ -134,18 +139,19 @@ public class ResultadoHome extends BussinesEntityHome<ResultadoExamenLabClinico>
         //bussinesEntityService.setEntityManager(em);        
         resultadoService.setEntityManager(em);
         pacienteService.setEntityManager(em);
-         if(getInstance().isPersistent()){
+        profileServicio.setEntityManager(em);
+        if (getInstance().isPersistent()) {
             this.listarCategorias();
         }
+        Date ahora = Calendar.getInstance().getTime();
+        getInstance().setFechaRealizacion(ahora);
     }
 
     @Override
     protected ResultadoExamenLabClinico createInstance() {
         //prellenado estable para cualquier clase 
-        //BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(ConsultaMedica.class.getName());
-        Date now = Calendar.getInstance().getTime();
+        //BussinesEntityType _type = bussinesEntityService.findBussinesEntityTypeByName(ConsultaMedica.class.getName());        
         ResultadoExamenLabClinico resultado = new ResultadoExamenLabClinico();
-        resultado.setFechaRealizacion(now);
         return resultado;
     }
 
@@ -161,6 +167,11 @@ public class ResultadoHome extends BussinesEntityHome<ResultadoExamenLabClinico>
         try {
             if (getInstance().isPersistent()) {
                 System.out.println("Guardo Con exito_________1");
+                PedidoExamenLaboratorio p = getInstance().getPedidoExamenLab();
+                p.setEstado("Realizado");
+                save(p);
+                update();
+                getInstance().setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo Pedido : " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);

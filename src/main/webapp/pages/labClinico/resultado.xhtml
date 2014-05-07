@@ -35,7 +35,8 @@
                 <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
                     <div class="container-fluid">
                         <div class="row-fluid">
-                            <div class="span7">                                
+                            <div class="span7">    
+                                <glue:output id="cedula" name="cedula" type="text" label="#{messages['profile.dni']}" value="#{resultadoHome.pedidoExam.paciente.cedula}" required="false" execute="@this save" render="cedula" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{resultadoHome.pedidoExam.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
                                 <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{resultadoHome.pedidoExam.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
 
@@ -58,9 +59,7 @@
                         </div>
                     </div>
                 </p:panel>                
-                <p:panel id="paneltitle1" header="Resultados de Examenes" styleClass="clearfix">
-                    <glue:input id="muestra" name="muestra" type="decimal" label="Resultado" value="#{resultadoHome.instance.valorResultado}" 
-                                required="false" inlinehelp="#{messages['pedido.codMuestra.lineaAyuda']}" execute="@this save" render="muestra"/>
+                <p:panel id="paneltitle1" header="Resultados Examen de #{resultadoHome.instance.examenLab.name}" styleClass="clearfix">                    
                     <!--<glue:input id="fechaR" name="fechaR" type="calendar" label="#{messages['comun.fecha']}" value="# {resultadoHome.instance.fechaRealizacion}" 
                                 required="false" inlinehelp="#{'Fecha en la que se realizo el examen'}" execute="@this save" render="fechaR"/>-->
                     <h:panelGroup id="fnp" layout="block" class="clearfix" >
@@ -68,63 +67,56 @@
                         <div class="input" >
                             <p:calendar  id="fechaIngreso" value="#{resultadoHome.instance.fechaRealizacion}" styleClass="xLarge" required="true" label="#{messages['comun.fecha']}" 
                                          rendered="true" disabled="false" locale="es" pattern="dd-MMM-yyyy">   
-                                <p:ajax event="dateSelect" rendered="save" update="@this save" />  
+                                <p:ajax event="dateSelect" rendered="save fechaIngreso" update="@this save" />  
                             </p:calendar>                        
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{resultadoHome.instance.fechaRealizacion != null}"
                                             styleClass="validation-status" />
                             <span class="help-inline"><br/>#{'Fecha en la que se realizo el examen'}<ocp:message forId="fechaIngreso" /></span>
                         </div>
-                    </h:panelGroup>
-                    <h:panelGroup >                                 
-                        <p:spacer width="200" height="5"/>                        
-                        <div class="container-fluid" >
-                            <div class="row-fluid" >
-                                <c:choose>
-                                    <c:when test="#{not empty resultadoHome.categorias}">
-                                        <ui:repeat value="#{resultadoHome.categorias}" var="cat">
-                                            <div class="span4"  style="width: 30%;">
-                                                <p:panel header="#{cat}" >
-                                                    <ui:repeat value="#{resultadoHome.instance.resultadosParametros}" var="rp_">
-                                                        <h:panelGroup layout="block" rendered="#{rp_.parametro.categoria eq cat}">   
-                                                            <label for="param-#{rp_.id}" style="width: 100px; margin-left: -15px">#{rp_.nombre}&nbsp;</label>
-                                                            <div style="margin-left: 40px">
-                                                                <p:inputText id="param-#{rp_.id}" value="#{rp_.valor}" styleClass="span2" label="#{rp_.nombre}" 
-                                                                             rendered="true" >
-                                                                    <!--<p:ajax event="keyup" update="@parent :form:save" rendered="save"/>-->
-                                                                    <f:ajax execute="@this :form:save" render=":form:save"/>
-                                                                </p:inputText>
-                                                                <h:outputText value=" #{rp_.parametro.unidadMedida}"/>
-                                                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{rp_.valor != null}"
-                                                                                styleClass="validation-status" />
-                                                                <!--<span class="help-inline"><br/><ocp:message forId="param-# {rp_.id}" /></span>-->
-                                                            </div>
-                                                        </h:panelGroup>                                                                            
-                                                    </ui:repeat> 
-                                                </p:panel>
-                                            </div>                        
-                                        </ui:repeat> 
-                                    </c:when>
-                                    <c:otherwise>
-                                        <ui:repeat value="#{resultadoHome.instance.resultadosParametros}" var="rp_">
-                                            <h:panelGroup layout="block" styleClass="clearfix">   
-                                                <label for="param-#{rp_.id}" >#{rp_.nombre}&nbsp;</label>
-                                                <div class="input">
-                                                    <p:inputText id="param-#{rp_.id}" value="#{rp_.valor}" styleClass="span3" label="#{rp_.nombre}" 
-                                                                 rendered="true" >
-                                                        <!--<p:ajax event="keyup" update="@parent :form:save" rendered="save"/>-->
-                                                        <f:ajax execute="@this :form:save" render=":form:save"/>
-                                                    </p:inputText>
-                                                    <h:outputText value=" #{rp_.parametro.unidadMedida}"/>
-                                                    <h:graphicImage value="#{resource['success.gif']}" rendered="#{rp_.valor != null}"
-                                                                    styleClass="validation-status" />
-                                                    <!--<span class="help-inline"><br/><ocp:message forId="param-# {rp_.id}" /></span>-->
-                                                </div>
-                                            </h:panelGroup>                                                                            
-                                        </ui:repeat> 
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                        </div>
+                    </h:panelGroup>                    
+                    <h:panelGroup >                                                       
+                        <table  width="500" border="1">
+                            <tr >
+                                <td width="100"><b>Nombre</b></td>
+                                <td width="100"><b>valor</b></td>
+                                <td width="200"><b>u.</b></td>
+                                <td width="300"><b>valor_ref.</b></td>
+                                <td class="span4"><b>Categoria</b>     </td>
+                            </tr>
+
+                            <ui:repeat value="#{resultadoHome.instance.resultadosParametros}" var="rp_">
+                                <tr style="height: 20px;"> 
+                                    <h:panelGroup layout="block" styleClass="clearfix" style="margin-top: -3px; ">   
+                                        <td>
+                                            <label for="param-#{rp_.id}" style="width: 150px; margin-left: -25px">#{rp_.nombre}&nbsp;</label>
+                                        </td>
+                                        <div class="input">
+                                            <td>
+                                                <p:inputText id="param-#{rp_.id}" value="#{rp_.valor}" styleClass="span3" label="#{rp_.nombre}" 
+                                                             rendered="true" >
+                                                    <!--<p:ajax event="keyup" update="@parent :form:save" rendered="save"/>-->
+                                                    <f:ajax execute="@this :form:save" render=":form:save"/>
+                                                </p:inputText>
+                                            </td>
+                                            <td>
+                                                <h:outputText value=" #{rp_.parametro.unidadMedida}" style="width: 15px;"/>
+                                            </td>
+                                            <td>
+                                                <h:outputText value=" (#{rp_.parametro.valorReferenciaInf}" style="width: 15px;"/>                                                    
+                                                <h:outputText value=" -- #{rp_.parametro.valorReferenciaSup})" style="width: 15px;"/>
+                                            </td>
+                                            <td class="span4">
+                                                <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;#{rp_.parametro.categoria}" style="width: 15px;"/>                                                    
+                                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{rp_.valor != null}"
+                                                                styleClass="validation-status" />
+                                            </td>
+                                            <!--<span class="help-inline"><br/><ocp:message forId="param-# {rp_.id}" /></span>-->
+                                        </div>
+                                    </h:panelGroup>                                                                            
+                                </tr>
+                            </ui:repeat> 
+
+                        </table>
 
                     </h:panelGroup>
                 </p:panel>

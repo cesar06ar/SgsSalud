@@ -15,6 +15,7 @@
  */
 package edu.sgssalud.model.labClinico;
 
+import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -52,17 +54,21 @@ public class ResultadoExamenLabClinico implements Serializable {
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaRealizacion;
-    private Double valorResultado;
+    //private Double valorResultado;
     //private String observacion;
 
     @ManyToOne()
     private ExamenLabClinico ExamenLab;
-    
+
     @ManyToOne()
     private PedidoExamenLaboratorio pedidoExamenLab;
-    
+
     @OneToMany(mappedBy = "resultadoExamenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ResultadoParametro> resultadosParametros = new ArrayList<ResultadoParametro>();
+
+    @ManyToOne
+    @JoinColumn(name = "responsableEntrega_id")
+    private Profile ResponsableEntrega;
 
     public Long getId() {
         return id;
@@ -84,14 +90,13 @@ public class ResultadoExamenLabClinico implements Serializable {
         this.fechaRealizacion = fechaRealizacion;
     }
 
-    public Double getValorResultado() {
-        return valorResultado;
-    }
-
-    public void setValorResultado(Double valorResultado) {
-        this.valorResultado = valorResultado;
-    }
-
+//    public Double getValorResultado() {
+//        return valorResultado;
+//    }
+//
+//    public void setValorResultado(Double valorResultado) {
+//        this.valorResultado = valorResultado;
+//    }
     public ExamenLabClinico getExamenLab() {
         return ExamenLab;
     }
@@ -118,12 +123,20 @@ public class ResultadoExamenLabClinico implements Serializable {
         }
         this.resultadosParametros = resultadosParametros;
     }
-    
-    public void agregarValoresResultados(List<Parametros> pl){
+
+    public Profile getResponsableEntrega() {
+        return ResponsableEntrega;
+    }
+
+    public void setResponsableEntrega(Profile ResponsableEntrega) {
+        this.ResponsableEntrega = ResponsableEntrega;
+    }
+
+    public void agregarValoresResultados(List<Parametros> pl) {
         System.out.println("INGRESO A AGREGAR VALORES  _________0 ");
-        if(!pl.isEmpty()){
+        if (!pl.isEmpty()) {
             System.out.println("INGRESO A AGREGAR VALORES  _________1");
-            ResultadoParametro r ;
+            ResultadoParametro r;
             for (Parametros p : pl) {
                 r = new ResultadoParametro();
                 r.setNombre(p.getNombre());
@@ -134,19 +147,19 @@ public class ResultadoExamenLabClinico implements Serializable {
                 r.setCategoria(p.getCategoria());
                 r.setUnidadMedida(p.getUnidadMedida());
                 r.setParametro(p);
-                resultadosParametros.add(r);           
+                resultadosParametros.add(r);
             }
             System.out.println(" AGREGAR VALORES exito _________1");
         }
     }
-    
-    public void agregarResultadoParametros(ResultadoParametro rp){
-        if(!resultadosParametros.contains(rp)){
+
+    public void agregarResultadoParametros(ResultadoParametro rp) {
+        if (!resultadosParametros.contains(rp)) {
             rp.setResultadoExamenLabClinico(this);
             resultadosParametros.add(rp);
         }
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -169,6 +182,11 @@ public class ResultadoExamenLabClinico implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.labClinico.ResultadoExamenLaboratorioClinico[ id=" + id + " ]";
+        return "edu.sgssalud.model.labClinico.ResultadoExamenLaboratorioClinico[ id=" + id
+                + " Nombre " + getExamenLab().getName()
+                + " fecha " + getFechaRealizacion()
+                + " estado " + getPedidoExamenLab().getEstado()
+                + " patametros " + getResultadosParametros().size()
+                + " ]";
     }
 }

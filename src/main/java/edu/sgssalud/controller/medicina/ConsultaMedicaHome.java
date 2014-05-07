@@ -551,15 +551,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
      * @return verdadero si se puede editar la consulta medica
      */
     public boolean isEditable() {
-        Date now = Calendar.getInstance().getTime();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(now);
-        Date fechaCon = FechasUtil.sumarRestarHorasFecha(getInstance().getFechaConsulta(), 24);
-        if (fechaCon.before(now)) {
-            System.out.println("FECHA NO EDITABLE______________ "+fechaCon);
-            return true;
-        }
-        return false;
+        return FechasUtil.editable(getInstance().getHoraConsulta(), 24);
     }
 
 }

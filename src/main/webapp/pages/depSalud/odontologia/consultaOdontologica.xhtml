@@ -268,7 +268,7 @@
                     </div>
                 </p:panel>                               
                 <div class="admin-actions" style="padding-right: 50px;">
-                    <p:commandButton id="save" action="#{consultaOdontHome.guardar()}" value="#{messages['common.save']}" 
+                    <p:commandButton id="save" action="#{consultaOdontHome.guardar()}" value="#{messages['common.save']}" disabled="#{consultaOdontHome.editable}"
                                      immediate="true" styleClass="btn success offset4" update=":form:messages"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud#{consultaOdontHome.backView}?faces-redirect=true" 

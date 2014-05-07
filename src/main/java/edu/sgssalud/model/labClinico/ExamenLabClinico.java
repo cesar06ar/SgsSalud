@@ -55,14 +55,13 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
 
     public ExamenLabClinico(String nombre, String codigo, String categorias, Double costo, Tipo tipo, Date fecha) {
         this.setName(nombre);
-        this.setCode(codigo);                
-        //this.valorReferencia = valorReferencia;
+        this.setCode(codigo);                       
         this.categorias = categorias;
         this.costo = costo;
         this.tipo = tipo;
         this.setCreatedOn(fecha);
         this.setActivationTime(fecha);
-        this.setLastUpdate(fecha);
+        this.setLastUpdate(fecha);        
     }
     
     
