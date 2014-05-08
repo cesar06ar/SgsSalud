@@ -232,7 +232,15 @@
                         </p:tab>
                     </c:forEach>
                 </p:tabView>
-
+                <div class="admin-actions" style="padding-right: 40px;">
+                    <br/>
+                    <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
+                                     immediate="true" update=":form:growl"/>
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                    </h:link>
+                </div>
                 <p:panel id="signosVitalesP" header="#{messages['signosVitales.toma']} #{messages['signosVitales.Nombre']}" toggleable="true" toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ENFERMEROS') }">
                     <h:link title="#{messages['common.new1']} #{messages['comun.consulta']}" rendered="#{true}" outcome="/pages/depSalud/enfermeria/signosVitales" 
@@ -391,16 +399,7 @@
                             </h:link>
                         </p:column>
                     </p:dataTable>
-                </p:panel>
-                <div class="admin-actions" style="padding-right: 40px;">
-                    <br/>
-                    <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
-                                     immediate="true" update=":form:growl"/>
-                    &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
-                    </h:link>
-                </div>
+                </p:panel>                
                 <div class="offset8" style="float: right">
                     <glue:output id="respons" name="responsable" type="text" label="Responsable" value="#{fichaMedicaHome.instance.responsable.fullName}" 
                                  required="false" execute="@this" render="edad" styleClass="xLarge" disabled="true"/>

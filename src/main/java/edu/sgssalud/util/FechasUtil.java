@@ -6,9 +6,11 @@ package edu.sgssalud.util;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  *
@@ -46,18 +48,30 @@ public class FechasUtil {
 
         Calendar fechaActual = Calendar.getInstance();
         //Se asigna la fecha recibida a la fecha de nacimiento.
+        int anio = 0;
+        int edad = 0;
+        /*
+         int anio = fechaActual.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
+         int mes = fechaActual.get(Calendar.MONTH) - fechaNacimiento.get(Calendar.MONTH);
+         int dia = fechaActual.get(Calendar.DATE) - fechaNacimiento.get(Calendar.DATE);
+         //Se ajusta el año dependiendo el mes y el día
 
-        int anio = fechaActual.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR);
-        int mes = fechaActual.get(Calendar.MONTH) - fechaNacimiento.get(Calendar.MONTH);
-        int dia = fechaActual.get(Calendar.DATE) - fechaNacimiento.get(Calendar.DATE);
-        //Se ajusta el año dependiendo el mes y el día
-
-        if (mes < 0 || (mes == 0 && dia < 0)) {
-            anio--;
+         if (mes < 0 || (mes == 0 && dia < 0)) {
+         anio--;
+         }*/
+        if (fechaActual.get(Calendar.MONTH) <= fechaNacimiento.get(Calendar.MONTH)) {
+            if (fechaActual.get(Calendar.MONTH) == fechaNacimiento.get(Calendar.MONTH)) {
+                if (fechaActual.get(Calendar.DATE) > fechaNacimiento.get(Calendar.DATE)) {
+                    anio = -1; //Aun no celebra su cumpleaÃ±os
+                }
+            } else {
+                anio = -1; //Aun no celebra su cumpleaÃ±os
+            }
         }
+        edad = (fechaActual.get(Calendar.YEAR) - fechaNacimiento.get(Calendar.YEAR)) + anio;
         //Regresa la edad en base a la fecha de nacimiento
 
-        return anio;
+        return edad;
     }
 
     public static String getFecha(Date fecha) {
@@ -141,17 +155,30 @@ public class FechasUtil {
         return false;
     }
 
-    public static boolean editable(Date fecha, int horas) {
+    public static boolean editable(Date fecha, Date hora, int horas) {
         Calendar now = Calendar.getInstance();
         Calendar cal = Calendar.getInstance();
-        Date fechaCon = FechasUtil.sumarRestarHorasFecha(fecha, 24);
+        Calendar horaCon = Calendar.getInstance();
+        List<String> horasLis = Arrays.asList(FechasUtil.getHoraActual(hora).split(":"));
+        int horaC = Integer.parseInt(horasLis.get(0));
+        int minute = Integer.parseInt(horasLis.get(1));
+        cal.set(Calendar.HOUR, horaC);
+        cal.set(Calendar.MINUTE, minute);
+        Date fechaCon = FechasUtil.sumarRestarHorasFecha(fecha, horas);
         cal.setTime(fechaCon);
-        int horaActual = now.get(Calendar.MINUTE);
-        int horaConsulta = cal.get(Calendar.MINUTE);
-        //System.out.println("HORA Actual _____  " + horaActual + " hora fecha _________ " + horaConsulta);
-        if (horaActual > horaConsulta) {
+
+        System.out.println("HORA CONSULTA " + horaC + " : " + minute);
+        int horaActual = now.get(Calendar.HOUR);
+        int horaConsulta = cal.get(Calendar.HOUR);
+        System.out.println("HORA Actual _____  " + horaActual + " hora fecha _________ " + horaConsulta);
+        System.out.println("HORA Actual 1 _____  " +now.toString() + " hora fecha 1_________ " + cal.toString());
+//        if (horaActual > horaConsulta) {
+//            return true;
+//        }
+        if(now.after(cal)){
+            System.out.println("YA NO SE PUEDE EDITAR");
             return true;
-        }
+        }        
         return false;
     }
 

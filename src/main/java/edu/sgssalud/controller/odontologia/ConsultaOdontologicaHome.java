@@ -585,7 +585,11 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     }
 
     public boolean isEditable() {
-        return FechasUtil.editable(getInstance().getHoraConsulta(), 24);
+        //return FechasUtil.editable(getInstance().getFechaConsulta(), getInstance().getHoraConsulta(), 24);
+        if ("REALIZADA".equals(getInstance().getCode())) {
+            return true;
+        }
+        return false;
     }
 
 }

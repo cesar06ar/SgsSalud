@@ -143,7 +143,10 @@ public class ResultadoParametro implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.sgssalud.model.labClinico.ResultadoParametro[ id=" + id + " ]";
+        return "edu.sgssalud.model.labClinico.ResultadoParametro[ id=" + id
+                +"  "+nombre
+                +"  "+valor
+                + " ]";
 
     }
 

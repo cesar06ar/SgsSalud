@@ -551,7 +551,11 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
      * @return verdadero si se puede editar la consulta medica
      */
     public boolean isEditable() {
-        return FechasUtil.editable(getInstance().getHoraConsulta(), 24);
+        //return FechasUtil.editable(getInstance().getFechaConsulta(), getInstance().getHoraConsulta(), 24);
+        if("REALIZADA".equals(getInstance().getCode())){
+            return true;
+        }   
+        return false;
     }
 
 }

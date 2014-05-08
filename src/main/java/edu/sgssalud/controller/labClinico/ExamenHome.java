@@ -15,6 +15,7 @@
  */
 package edu.sgssalud.controller.labClinico;
 
+import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
@@ -32,6 +33,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -104,6 +106,9 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
         }
     }    
 
+    @Produces
+    @Current
+    @Named("examen")
     @TransactionAttribute   //
     public ExamenLabClinico load() {
         if (isIdDefined()) {

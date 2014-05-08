@@ -97,8 +97,9 @@
                                 <f:param name="resultadoId" value="#{Object_.id}"/>
                             </h:link>
                             &nbsp;
-                            <h:commandLink id="print" title="Imprimir Pedido" styleClass="btn" action="#{reporteListas.renderResultadoExamen()}" >  
-                                <p:graphicImage value="/resources/img/print.gif" width="12" height="12"/>
+                            <h:commandLink id="print" title="Imprimir Pedido" styleClass="btn" action="#{reporteListas.renderResultadoExamen()}" 
+                                           disabled="#{Object_.pedidoExamenLab.estado ne 'Realizado'}">  
+                                <p:graphicImage value="/resources/img/print.gif" width="12" height="12" />
                                 <f:setPropertyActionListener value="#{Object_}" target="#{reporteListas.resultadoExamen}"/>
                             </h:commandLink>
                         </p:column> 

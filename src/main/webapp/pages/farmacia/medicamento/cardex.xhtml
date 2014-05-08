@@ -55,7 +55,7 @@
                     <div class="row-fluid">
                         <div class="span7">
                             <h:panelGroup id="fechap" layout="block" class="clearfix" >                                
-                                <label for="fechaIng">#{messages['common.fecha.ingreso.medicamento']}:</label>
+                                <label for="fechaIng" >#{messages['common.fecha.ingreso.medicamento']}:</label>
                                 <div class="input" >                                    
                                     <h:outputText id="fechaIng" escape="false" value="#{cardexHome.medicamento.fechaIngreso}" />
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty cardexHome.medicamento.fechaIngreso}"
@@ -63,7 +63,7 @@
                                 </div>
                             </h:panelGroup>    
                             <h:panelGroup id="nombrep" layout="block" class="clearfix" >                                
-                                <label for="nombreMed">#{messages['medicamento.Nombre']}:</label>
+                                <label for="nombreMed" >#{messages['medicamento.Nombre']}:</label>
                                 <div class="input" >                                    
                                     <h:outputText id="nombreMed" escape="false" value="#{cardexHome.medicamento.nombreComercial}" /> &nbsp;
                                     <h:outputText id="nombreMed1" escape="false" value="#{cardexHome.medicamento.nombreGenerico}" />

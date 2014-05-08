@@ -144,19 +144,11 @@
                     </div>
                 </p:panel>
                 <div class="admin-actions" >
-                    <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}" 
+                    <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}"  ajax=true""
                                      styleClass="btn primary" update="@form" style="margin-left: 25%" immediate="true" rendered="#{!recetaHome.instance.persistent}">
-                        <p:ajax process="@this" update=":form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
-                                rendered=":form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId"/>
-                    </p:commandButton>
-                    &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/receta?faces-redirect=true"
-                            value="Limpiar" styleClass="btn primary" >                        
-                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param> 
-                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />
-                        <f:param name="backView" value="#{recetaHome.backView}" />
-                        <f:param name="previous" value="#{recetaHome.previous}" />
-                    </h:link>  
+                        <p:ajax process="@this" update=":form:unidadesMedicacion :form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
+                                rendered=":form:messages :form:medicamentoDisponible :form:Indicacion :form:recetasId"/>
+                    </p:commandButton>                   
                 </div>
                 <p:panel id="recetasId" header="Receta">
                     <div class="container-fluid">
@@ -192,7 +184,14 @@
                         <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
                         <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />
                         <f:param name="backView" value="#{recetaHome.previous}" />
-                    </h:link>                   
+                    </h:link>    &nbsp;&nbsp;
+                    <h:link outcome="/pages/depSalud/receta?faces-redirect=true"
+                            value="Limpiar" styleClass="btn primary" >                        
+                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param> 
+                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />
+                        <f:param name="backView" value="#{recetaHome.backView}" />
+                        <f:param name="previous" value="#{recetaHome.previous}" />
+                    </h:link>                  
                 </div>
             </h:form>             
         </ui:define>       

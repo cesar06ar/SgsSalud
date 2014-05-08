@@ -102,7 +102,7 @@ public class ReporteListas {
     private boolean estado;
 
     private PedidoExamenLaboratorio pedido;
-    private ResultadoExamenLabClinico resultadoExamen;
+    private ResultadoExamenLabClinico resultadoExamen = new ResultadoExamenLabClinico();
 
     /**
      * Default constructor.
@@ -121,7 +121,7 @@ public class ReporteListas {
         consultaMedicaServicio.setEntityManager(em);
         consultaOdontologicaServicio.setEntityManager(em);
         resultadoEService.setEntityManager(em);
-        resultadoExamen = new ResultadoExamenLabClinico();
+        //resultadoExamen = new ResultadoExamenLabClinico();
 
     }
 
@@ -377,17 +377,19 @@ public class ReporteListas {
         //System.out.println("examenes _______-"+examenes.toString());
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
-        List<String> categorias = Arrays.asList(resultadoExamen.getExamenLab().getCategorias().split(","));
-
+        if(resultadoExamen.isPersistent()){
+            //List<String> categorias = Arrays.asList(resultadoExamen.getExamenLab().getCategorias().split(","));
+            
         Map<String, Object> _values = new HashMap<String, Object>();
         String nombres = resultadoExamen.getPedidoExamenLab().getPaciente().getCedula() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getNombres() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getApellidos();
 
-        System.out.println("RESULTADO " + resultadoExamen.toString());
+        System.out.println("RESULTADO " + resultadoExamen.toString() +" "+ nombres);
         _values.put("nombres", nombres);
         _values.put("nombreExamen", resultadoExamen.getExamenLab().getName());
         _values.put("logo", logo);
-        _values.put("medico", "Dr. " + resultadoExamen.getResponsableEntrega().getFullName());
-        if (categorias.isEmpty()) {
+        _values.put("medico", ("Dr. " + resultadoExamen.getResponsableEntrega().getFullName()));
+        _values.put("usd", "$");
+        /*if (categorias.isEmpty()) {
             _values.put("cat1", "");
             _values.put("cat2", "");
             _values.put("cat3", "");
@@ -400,11 +402,15 @@ public class ReporteListas {
             _values.put("cat1", categorias.get(0));
             _values.put("cat2", categorias.get(1));
             _values.put("cat3", categorias.get(2));
-        }
+        }*/
+        List<ResultadoParametro> listaP = resultadoEService.getResultadoParametros(resultadoExamen);
+        System.out.println("RESULTADO PARAMETROS" + listaP.toString());
         //FALTA ORGANIZAR EL REPORT
         //_values.put("usd", "$");
         //Exportar a pdf 
-        JasperReportAction.exportToPdf(REPORTE_RESULTADO_EXAMEN, resultadoExamen.getResultadosParametros(), _values, attachFileName);
+        JasperReportAction.exportToPdf(REPORTE_RESULTADO_EXAMEN, listaP, _values, attachFileName);
+        }
+        
     }
 
     public Date getFechaInf() {

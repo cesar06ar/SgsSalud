@@ -298,5 +298,10 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
             return 0;
         }
     }
+    
+    @TransactionAttribute
+    public void cargarFecha(){
+        getInstance().setFechaIngreso(new Date());
+    }
 
 }

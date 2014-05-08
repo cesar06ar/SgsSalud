@@ -451,6 +451,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         this.setMedicamento(null);
         this.setNombreMedic(null);
         this.setUnidadesMedicacion(0);
+        
         this.setIndicacion(null);
     }
 

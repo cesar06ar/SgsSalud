@@ -167,7 +167,6 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         } catch (NoResultException e) {
             return false;
         }
-
     }
 
     public Paciente buscarPorCedula(String cedula) {

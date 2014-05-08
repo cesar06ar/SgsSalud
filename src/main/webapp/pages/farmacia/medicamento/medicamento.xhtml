@@ -14,6 +14,7 @@
 
         <f:metadata>
             <f:viewParam name="medicamentoId" value="#{medicamentoHome.medicamentoId}"/>
+            <f:event listener="#{medicamentoHome.cargarFecha()}" type="preRenderView"/>
         </f:metadata>
 
         <ui:define name="header-replace">
@@ -37,7 +38,7 @@
                                 <label for="fechaIngreso">#{messages['common.fecha.ingreso.medicamento']}</label>
                                 <div class="input" >
                                     <p:calendar  id="fechaIngreso" value="#{medicamentoHome.instance.fechaIngreso}" styleClass="xLarge" required="true" label="#{messages['common.fecha.ingreso.medicamento']}" 
-                                                 rendered="true" disabled="false" locale="es" pattern="dd-MMM-yyyy">   
+                                                 rendered="true" disabled="true" locale="es" pattern="dd-MMM-yyyy">   
                                         <p:ajax event="change" rendered="save" />  
                                     </p:calendar>                        
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{medicamentoHome.instance.fechaIngreso != null}"
