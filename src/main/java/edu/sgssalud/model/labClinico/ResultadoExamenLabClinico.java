@@ -35,7 +35,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 
 /**
- *
+ *RESULTADO DE EXAMEN DE LAB CLINICO
  * @author cesar
  */
 @Entity
