@@ -16,28 +16,23 @@
 package edu.sgssalud.web.service;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.util.Dates;
-import edu.sgssalud.util.FechasUtil;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.inject.Inject;
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.CXFBusFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.apache.cxf.transport.http.HTTPConduitConfigurer;
-import org.primefaces.json.JSONArray;
-import org.primefaces.json.JSONException;
+import org.jboss.seam.international.status.Messages;
 
 /**
  *
@@ -45,10 +40,15 @@ import org.primefaces.json.JSONException;
  */
 public class WebServiceSGAClientConnection {
 
+    @Inject
+    private Messages messages;
+
     public Paciente validarPaciente(String cedula) {
         System.out.println("Ingreso a coneccion________");
         Paciente p = new Paciente();
         if (!cedula.isEmpty()) {
+            //verificar si esta matriculado el estudiante
+            //if (getReporteMatricula_WS_SGA(id_oferta, cedula)) {
             String URL = "http://ws.unl.edu.ec/sgaws/wspersonal/soap/api.wsdl";
             try {
                 String resultado = executeWebServiceOperation(URL, "sgaws_datos_estudiante", new Object[]{cedula});
@@ -67,37 +67,101 @@ public class WebServiceSGAClientConnection {
                     p.setNacionalidad(listaDatos.get(7));
                     p.setEmail(listaDatos.get(9));
                     p.setGenero(listaDatos.get(10));
-                    
-                    System.out.println("FECHA NACI "+listaDatos.get(3));
+
+                    //System.out.println("FECHA NACI " + listaDatos.get(3));
                     return p;
-                } else {
-                    System.out.println("CEDULA VACIA___O NO CONSTA EN EL WEB SERVICE");
                 }
             } catch (Exception ex) {
                 Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
+//            } else {
+//                messages.warn("El número de cedula no consta como estudiante matriculado");
+//            }
         } else {
-            System.out.println("CEDULA VACIA___");
+            //System.out.println("CEDULA VACIA___");
         }
         return null;
     }
 
-    public boolean autenticarUsuariosWSSGA(String user, String password) {
-        if (!user.isEmpty() && !password.isEmpty()) {
-            String URL = "http://ws.unl.edu.ec/sgaws/wsvalidacion/soap/api.wsdl";
-            try {
-                String resultado = executeWebServiceOperation(URL, "sgaws_validar_estudiante", new Object[]{user, password});
-                System.out.println("RESULTADO____"+resultado);
-                if (!resultado.isEmpty() && resultado.equals("true")) {
-                    return true;
-                } else {
-                    //System.out.println("CEDULA VACIA___O NO CONSTA EN EL WEB SERVICE");
-                }
-            } catch (Exception ex) {
-                Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+    public List<String> getPeriodosLectivosWS_SGA() {
+
+        String URL = "http://ws.unl.edu.ec/sgaws/wsacademica/soap/api.wsdl";
+        try {
+            String resultado = executeWebServiceOperation(URL, "sgaws_periodos_lectivos", new Object[]{});
+            System.out.println("RESULTADO____" + resultado);
+            if (!resultado.isEmpty()) {
+                return convertirJsonArrayAString1(resultado);
+            } else {
+//                messages.warn("No se pudo conectar al web service");
             }
-        } else {
-            //System.out.println("CEDULA VACIA___");
+        } catch (Exception ex) {
+            Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    public List<String> getOfertasAcademicas_WS_SGA(String id_perido) {
+
+        String URL = "http://ws.unl.edu.ec/sgaws/wsacademica/soap/api.wsdl";
+        try {
+            String resultado = executeWebServiceOperation(URL, "sgaws_ofertas_academicas", new Object[]{id_perido});
+            //System.out.println("RESULTADO____" + resultado);
+            if (!resultado.isEmpty()) {
+                return convertirJsonArrayAString1(resultado);
+            } else {
+//                messages.warn("No se pudo conectar al web service");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
+    }
+
+    public boolean getReporteMatricula_WS_SGA(String id_ofertaAcademica, String cedula) {
+
+        String URL = "http://ws.unl.edu.ec/sgaws/wsacademica/soap/api.wsdl";
+
+        try {
+            if (id_ofertaAcademica != null && cedula != null) {
+
+                String resultado = executeWebServiceOperation(URL, "sgaws_reporte_matricula", new Object[]{id_ofertaAcademica, cedula});
+                //System.out.println("RESULTADO____" + resultado);
+                if (!resultado.isEmpty()) {
+                    List<String> result = convertirJsonArrayAString(resultado);
+                    System.out.println("Resultado " + result.toString());
+                    return ("EstadoMatriculaMatriculada".equals(result.get(result.size() - 1))) ? true : false;
+                    //return 
+                } else {
+//                    messages.warn("No se pudo conectar al web service");
+                }
+            } else {
+//                messages.warn("Los parametros no pueden ser vacios");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public boolean getEstudianteMatriculado_WS_SGA(String cedula) {
+        String URL = "http://ws.unl.edu.ec/sgaws/wsacademica/soap/api.wsdl";
+        try {
+            if (cedula != null) {
+
+                String resultado = executeWebServiceOperation(URL, "sgaws_is_matriculado", new Object[]{cedula});
+                System.out.println("RESULTADO: " + resultado);
+                if ("true".equals(resultado)) {
+                    return true;
+                } 
+            } else {
+//                messages.warn("Los parametros no pueden ser vacios");
+            }
+        } catch (Exception ex) {
+            //Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("error__ ");
         }
         return false;
     }
@@ -160,6 +224,26 @@ public class WebServiceSGAClientConnection {
         }.getType();
         List<String> list = converter.fromJson(json.toString(), type);
         return list;
+    }
+
+    public List<String> convertirJsonArrayAString1(String json) {
+
+        org.json.JSONArray jsonArray = new org.json.JSONArray(json.toString());
+        List<String> list = null;
+        List<String> resultados = new ArrayList<String>();
+
+        if (jsonArray != null) {
+            int len = jsonArray.length();
+            for (int i = 0; i < len; i++) {
+                //vals.add(jsonArray.get(i).toString());
+                list = convertirJsonArrayAString(jsonArray.get(i).toString());
+                String r = list.toString();
+                if (!list.isEmpty()) {
+                    resultados.add(r);
+                }
+            }
+        }
+        return resultados;
     }
 
     public static void main(String[] args) {

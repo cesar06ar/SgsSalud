@@ -242,6 +242,8 @@
         </dependency>  -->
         
         <!-- Depencencia para convertir mensajes sopa... y reconosta texto xml  -->  
+        
+        <!--     
         <dependency> 
             <groupId>jboss</groupId>
             <artifactId>jbossall-client</artifactId>
@@ -252,7 +254,7 @@
             <artifactId>jaxws-tools</artifactId>
             <version>2.2.5</version>
         </dependency>
-        <!--          
+             
         <dependency>
             <groupId>com.github.fge</groupId>
             <artifactId>json-schema-validator</artifactId>

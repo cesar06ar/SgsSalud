@@ -13,6 +13,7 @@
         <f:viewParam name="result" value="#{fichaMedicaListaServicio.firstResult}" />            
         <f:viewParam name="" value="#{fichaMedicaListaServicio.fechaI}"/>
         <f:viewParam name="" value="#{fichaMedicaListaServicio.fechaF}"/>
+        <!--<f:event listener="# {fichaMedicaListaServicio.buscarFichaMedicaInit()}" type="preRenderView"/>-->
     </f:metadata>
     <ui:define name="header-replace">
         <div class="header-replace">
@@ -27,61 +28,63 @@
         <h:form id="form1">
             <h:panelGroup style="margin-top: -15px;">
                 <p:calendar value="#{fichaMedicaListaServicio.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
-                    <p:ajax event="dateSelect"/>
+                    <p:ajax event="dateSelect" update=":form:print_f" process="@this"/>
                 </p:calendar>
                 <p:calendar value="#{fichaMedicaListaServicio.fechaF}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%">
-                    <p:ajax event="dateSelect"/>  <!-- rendered="buscar1" update="buscar1"-->
+                    <p:ajax event="dateSelect" update=":form:print_f" />  <!-- rendered="buscar1" update="buscar1"-->
                 </p:calendar>
                 &nbsp;
                 <p:commandButton id="buscar1" value="Buscar" action="#{fichaMedicaListaServicio.buscarFichaMedicaPorFechas()}" immediate="true" 
-                                 update=":form:tablaFichasMedicas"/>
+                                 update="@form :form:tablaFichasMedicas :form:print_f" process="@this">
+                    
+                </p:commandButton>
                 <p:commandButton id="buscar" value="Buscar Todos" action="#{fichaMedicaListaServicio.buscarTodos()}" immediate="true" 
-                                 update=":form:tablaFichasMedicas"/>
+                                 update="@form :form:tablaFichasMedicas :form:print_f" process="@this">
+                    <!--<p:ajax process="@this" update=":form:tablaFichasMedicas :form:print_f"/>-->
+                </p:commandButton>
+
             </h:panelGroup>
         </h:form>
     </ui:define>
     <ui:define name="content">
         <!--Metadato que se realiza antes de renderizarse la vista style="float: right; margin: -20px 0 10px 0" -->        
-        <!--Formulario dentro de un contenedor-->
+        <!--Formulario dentro de un contenedor -->
         <h:form id="form">            
             <!--Opción de mensaje, cuando se realiza una acción-->            
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
             <!--Botones de admin-->
             <div class="admin-actions ">
-                <div>
-                    <h:link value="#{messages['fichaMedica.abrir']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn success">
-                        <f:param name="fichaMedicaId"></f:param>
-                        <f:param name="backView" value="listaFichaMedica"></f:param>
-                    </h:link>
-                    &nbsp;
-                    <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="fichaMedica" styleClass="btn" 
-                            disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
-                        <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
-                        <f:param name="backView" value="listaFichaMedica"></f:param>
-                    </h:link>
-                    &nbsp;
-                    <h:link id="button-print" value="#{messages['common.view']}" outcome="view" styleClass="btn" 
-                            disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
-                        <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
-                        <f:param name="backView" value="listaFichaMedica"></f:param>
-                    </h:link>
-                </div>               
-            </div>
 
+
+                <h:link id="button-edit" value="Ver Ficha Médica" rendered="#{true}" outcome="fichaMedica" styleClass="btn success" >
+                    <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
+                    <f:param name="backView" value="listaFichaMedica"></f:param>
+                </h:link>
+                &nbsp;
+                <h:link id="button-print" value="#{messages['common.print']}" outcome="view" styleClass="btn" 
+                        disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}">
+                    <f:param name="fichaMedicaId" value="#{fichaMedicaListaServicio.fichaMedicSeleccionada.id}"></f:param>
+                    <f:param name="backView" value="listaFichaMedica"></f:param>
+                </h:link>
+                &nbsp;
+                <p:commandButton id="agregar-consulta" value="Nueva Consulta" action="#{fichaMedicaListaServicio.nuevaConsulta()}" styleClass="btn"
+                                 disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}"/>   
+                
+            </div>
             <!--tabla de datos-->
             <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"
-                         paginator="true" rows="10" emptyMessage="No se ha encontrado ninguna consulta"
+                         paginator="true" rows="10" emptyMessage="No se a realizado ninguna apertura de ficha medica hoy"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"
                          lazy="true" rowKey="#{fichaMedica_.id}" selectionMode="single"
                          selection="#{fichaMedicaListaServicio.fichaMedicSeleccionada}"
                          rendered="true">
-                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica -->
+                <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica :form:agregar-consulta -->
                 <p:ajax event="rowSelect" listener="#{fichaMedicaListaServicio.onRowSelect}"   
-                        update=":form:button-edit :form:button-print :form:messages "/>                 
+                        update=":form:button-edit :form:button-print :form:messages :form:agregar-consulta"/> 
                 <p:ajax event="rowUnselect" listener="#{fichaMedicaListaServicio.onRowUnselect}" 
-                        update=":form:button-edit :form:button-print :form:messages "/>
+                        update=":form:button-edit :form:button-print :form:messages :form:agregar-consulta"/>
 
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{fichaMedica_.numeroFicha}" style="width: 15%; text-align: center;">
@@ -123,7 +126,7 @@
                 <p:panel>
                     <h:outputText value="Exportar Datos" />  
                     <br/>
-                    <h:commandLink action="#{reporteListas.renderFichasMedicas()}" >                    
+                    <h:commandLink id="print_f" action="#{reporteListas.renderFichasMedicas()}" >                    
                         <p:graphicImage value="/resources/images/pdf.png" />                          
                         <f:setPropertyActionListener value="#{fichaMedicaListaServicio.fechaI}" target="#{reporteListas.fechaInf}"/>
                         <f:setPropertyActionListener value="#{fichaMedicaListaServicio.fechaF}" target="#{reporteListas.fechaSup}"/>

@@ -31,9 +31,12 @@ import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.servicios.Servicio;
+import edu.sgssalud.util.Dates;
+import edu.sgssalud.util.FechasUtil;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import java.util.Date;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -61,17 +64,20 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
     private Setting[] selectedServicios;
     private Servicio selectedServicio;
 
+    private Date fechaI;
+    private Date fechaF;
+
     public ServicioMededicoListService() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<Servicio>();
     }
 
     public List<Servicio> getResultList() {
-        log.info("load BussinesEntityType");
-        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
-            resultList = servicioMedS.todosServicios(this.getPageSize(), firstResult);
-            log.info("eqaula --> resultlist " + resultList);
-        }
+//        log.info("load BussinesEntityType");
+//        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
+//            resultList = servicioMedS.todosServicios(this.getPageSize(), firstResult);
+//            log.info("eqaula --> resultlist " + resultList);
+//        }
         return resultList;
     }
 
@@ -103,8 +109,8 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
 
     public void setSelectedServicio(Servicio selectedServicio) {
         this.selectedServicio = selectedServicio;
-    }  
-        
+    }
+
     public int getNextFirstResult() {
         return firstResult + this.getPageSize();
     }
@@ -113,7 +119,7 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
         return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
     }
 
-     @Override
+    @Override
     public List<Servicio> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
@@ -134,8 +140,13 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
     public void init() {
         log.info("Setup entityManager into WareHouseService...");
         servicioMedS.setEntityManager(entityManager);
+        if (resultList.isEmpty()) {
+            Date now = FechasUtil.sumarRestarHorasFecha(new Date(), 12);
+            Date now1 = FechasUtil.sumarRestarHorasFecha(new Date(), -12);
+            resultList = servicioMedS.getServicioPorFechas(now1, now);
+        }
     }
-    
+
     @Transactional
     public String borrarEntidad() {
         log.info("sgssalud --> ingreso a eliminar: " + getSelectedServicio().getId());
@@ -143,9 +154,9 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
             if (selectedServicio == null) {
                 throw new NullPointerException("Servicio is null");
             }
-            if (selectedServicio.isPersistent() ) {                
+            if (selectedServicio.isPersistent()) {
                 servicioMedS.borrarEntidad(selectedServicio.getId());
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + selectedServicio.getName(), ""));                
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + selectedServicio.getName(), ""));
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una entidad para ser borrada!", ""));
             }
@@ -178,5 +189,34 @@ public class ServicioMededicoListService extends LazyDataModel<Servicio> impleme
     @Override
     public Object getRowKey(Servicio entity) {
         return entity.getName();
+    }
+
+    public void buscarPorFechas() {
+        if (fechaI != null && fechaF != null) {
+            this.setResultList(servicioMedS.getServicioPorFechas(fechaI, fechaF));
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe ingresar las fechas", " ");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+    }
+
+    public void buscarTodos() {
+        this.setResultList(servicioMedS.todosServicios());
+    }
+
+    public Date getFechaI() {
+        return fechaI;
+    }
+
+    public void setFechaI(Date fechaI) {
+        this.fechaI = fechaI;
+    }
+
+    public Date getFechaF() {
+        return fechaF;
+    }
+
+    public void setFechaF(Date fechaF) {
+        this.fechaF = fechaF;
     }
 }

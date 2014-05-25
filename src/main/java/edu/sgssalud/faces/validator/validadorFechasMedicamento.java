@@ -39,8 +39,8 @@ import org.jboss.seam.faces.validation.InputElement;
 @FacesValidator("validadorFechasMedicamento")
 public class validadorFechasMedicamento implements Validator {
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(validadorFechasMedicamento.class);
-    @Inject
-    private InputElement<Date> fechaIngreso;
+//    @Inject
+//    private InputElement<Date> fechaIngreso;
     @Inject
     private InputElement<Date> fechaElaboracion;
     @Inject
@@ -50,18 +50,18 @@ public class validadorFechasMedicamento implements Validator {
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         log.info("Ingreso a validar fechas");
         
-        Date fIngreso = fechaIngreso.getValue();
+        //Date fIngreso = fechaIngreso.getValue();
         Date fElaboracion = fechaElaboracion.getValue();
         Date fCaducidad = fechaCaducidad.getValue();        
-        log.info("fechaIng:"+fIngreso+" fechaElab:"+fElaboracion+"  fechaCad: "+fCaducidad);
-        if (fIngreso != null && fElaboracion != null && fCaducidad != null) {
+        log.info(" fechaElab:"+fElaboracion+"  fechaCad: "+fCaducidad);
+        if (fElaboracion != null && fCaducidad != null) {
             if (!fElaboracion.before(fCaducidad)) {  //metodo que compara si una fecha es anterior a la otra
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("La Fecha de Caducidad debe ser mayor a la Fecha de Elaboración"), ""));
             }
 //            if (!fElaboracion.before(fIngreso)) {  //metodo que compara si una fecha es anterior a la otra
 //                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("La Fecha de Elaboracion debe ser menor a la Fecha de Ingreso"), ""));
 //            }
-            if (FechasUtil.getFechaLimite(fIngreso, fCaducidad) < 15) {
+            if (FechasUtil.getFechaLimite(new Date(), fCaducidad) < 85) {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("El Medicamento tiene fecha de caducidad muy corta"), ""));
             }
         }

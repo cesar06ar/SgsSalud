@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"            
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:s="http://jboss.org/seam/faces"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
+        <f:metadata>
+            <f:viewParam name="settingId" value="#{settingHome.settingId}" />             
+        </f:metadata>
+
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container">
+                    <div class="row fl" style="margin-top: 5px;">
+                        <h3>#{settingHome.settingId != null? messages['common.edit'] : messages['common.add']} 
+                            #{settingHome.instance.name}</h3>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="form" acceptcharset="UTF-8">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> 
+                <glue:input id="name" name="name" type="text" label="#{messages['common.name']}" value="#{settingHome.instance.name}" required="true" inlinehelp="#{messages['common.name.inlinehelp']}" execute="@this save" render="name" validator="wordAvailabilityValidator" />
+                <glue:input id="value" name="value" type="text" label="#{messages['module.setting.value']}" value="#{settingHome.instance.value}" inlinehelp="#{messages['module.setting.value.inlinehelp']}" execute="@this save" render="value"/>
+                <glue:input id="description" name="description" type="textarea" label="#{messages['common.description']}" value="#{settingHome.instance.description}" inlinehelp="#{messages['common.description.help']}" execute="@this save" render="description"/>
+
+
+                <div class="actions">
+                    <p:commandButton id="save" action="#{settingHome.saveSetting()}" value="#{messages['common.save']}" styleClass="btn primary"/>
+
+                    <p:commandButton type="button" value="#{messages['common.delete']}" styleClass="btn" 
+                                     onclick="deletedDlg.show();" 
+                                     immediate="true"
+                                     update="form-dialog-confirm-delete" rendered="#{settingHome.instance.id != null}"/>
+
+                    <h:link outcome="/pages/admin/setting/list.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                            value="#{messages['common.cancel']}" styleClass="btn" >                         
+                    </h:link>
+                </div>
+
+            </h:form>
+
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{settingHome.deleteSetting()}"                                          
+                                     ajax="true" process="@this"  
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog> 
+        </ui:define>             
+    </ui:composition>
+</html>
+

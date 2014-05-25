@@ -26,7 +26,15 @@
                 <div class="container-header" >
                     <div class="row lf row-title" >
                         <h2>#{odontogramaHome.managed? messages['common.edit'] : messages['common.add']}#{' Odontograma'} 
-                            #{odontogramaHome.nombreOdont}</h2> 
+                            #{odontogramaHome.nombreOdont}</h2>                             
+                        <div style="float: right; margin: -3% 0 3px 0 " >
+                            <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica" style="margin:0 0 0 0; width: 60px; height: 20px;"
+                                    value="#{messages['common.cancel']}" styleClass="btn " rendered="#{odontogramaHome.instance.persistent}">
+                                <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
+                                <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
+                                <f:param name="backView" value="#{odontogramaHome.backView}"/>
+                            </h:link>                          
+                        </div>
                     </div>
                 </div>
             </div>
@@ -414,8 +422,8 @@
                                         <br/>                                        
                                         <div >
                                             <h:inputTextarea id="procedimient" value="#{odontogramaHome.procedimiento}"  style="width: 97%; height: 75px;" required="false" label="#{messages['tratamiento.procedimiento']}"  >
-                                                <f:ajax execute="@this" render="saveTratamiento" event="keyup" />
-                                                <!--<p:ajax event="keyup" process="@this"  update="saveTratamiento"  />-->
+                                                <f:ajax execute="@this" render="saveTratamiento" event="blur"/> 
+                                                <!--<p:ajax event="keyup" process="@this"  update="saveTratam iento"  />-->
                                             </h:inputTextarea>
                                         </div>
                                     </h:panelGroup>
@@ -425,32 +433,21 @@
                                                          styleClass="btn primary " ajax="true" immediate="true"
                                                          style="margin:5% 0 0 0; width: 90px; height: 50px;" >
                                             <p:ajax process="@this" update=":form:opciones " rendered=":form:odont "/>
-                                        </p:commandButton> 
-                                        <p:spacer  width="0" height="8"/>
-                                        <h:link outcome="/pages/depSalud/odontologia/consultaOdontologica" style="margin:5% 0 0 0; width: 60px; height: 30px;"
-                                                value="#{messages['common.cancel']}" styleClass="btn " >
-                                            <f:param name="fichaMedicaId" value="#{odontogramaHome.fichaMedicaId}"></f:param>
-                                            <f:param name="consultaOdontId" value="#{odontogramaHome.consultaOdontId}"></f:param>
-                                            <f:param name="backView" value="#{odontogramaHome.backView}"/>
-                                        </h:link>
+                                        </p:commandButton>                                         
                                         <p:spacer  width="0" height="5"/>
                                         <h:commandLink value="Imprimir" styleClass="btn " title="Imprimir odontograma" style="margin:5% 0 0 0; width: 60px; height: 20px;">  
                                             <p:printer target=":form:panel" />
                                         </h:commandLink> 
-                                        <!--<p:commandButton type="button" value="Export" icon="ui-icon-extlink" onclick="exportChart()"/>
-
-                                        <p:dialog widgetVar="dlg" showEffect="fade" modal="true" header="Chart as an Image">
-                                            <p:outputPanel id="output" layout="block" style="width:500px;height:300px"/>
-                                        </p:dialog>
-                                        <script>
-                                            function exportChart() {
-                                                //export image
-                                                $('#output').empty().append(PF('\\form\\Odont').exportAsImage());
-
-                                                //show the dialog
-                                                PF('dlg').show();
-                                            }
-                                        </script>-->
+                                        <p:spacer  width="0" height="5"/>
+                                        <!--<p:commandLink id="button-inicial" type="button" value="# {messages['common.view']}" 
+                                                       actionListener="# {odontogramaHome.cargarOdontogramaInicial()}"
+                                                       title="Ver odontograma inicial" update="@form"
+                                                        onclick="# {'inicialDlg.show()'}"  immediate="true" styleClass="btn" 
+                                                       style="margin:5% 0 0 0; width: 60px; height: 20px;"
+                                                       rendered="# {odontogramaHome.tipo ne 0}">                                 
+                                            <p:ajax process="@this" update=":inicial-dialog" />
+                                        </p:commandLink>-->
+                                        
 
                                     </h:panelGroup>                                    
                                 </p:panelGrid>                              
@@ -516,7 +513,39 @@
                     </h:form>
                 </p:dialog>
             </h:form>          
-        </ui:define>
+            <!--<p:dialog id="inicial-dialog" header="#{messages['common.delete.confirm']}" widgetVar="inicialDlg" resizable="false" modal="true">  
+                <h:form id="form-inicial">
+                    <p:panel id="panel" style="width: 1000px; margin-top: -2px " widgetVar="Odont1">
+                        <h5 class="title_odon"><center>ODONTOGRAMA INICIAL</center></h5> 
+                        <div class="container-fluid" >
+                            <div class="row-fluid" style="width: 90%">   
+                                <div style="width: 1020px; " >
+                                    <ui:repeat value="# {odontogramaHome.listaDientesSup}" var="ds">
+                                        
+                                        </sgs:denteS> 
+                                    </ui:repeat>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container-fluid" >
+                            <div class="row-fluid" style="width: 90%" >   
+                                <div style="width: 1020px; " >
+                                    <ui:repeat value="# {odontogramaHome.listaDientesInf}" var="di">
+                                       
+                                        </sgs:denteI>  
+                                    </ui:repeat>
+                                </div>
+                            </div>
+                        </div>
+
+                    </p:panel>
+                    <div class="admin-actions">
+                        <p:commandButton value="# {messages['common.cancel']}" type="button" onclick="inicialDlg.hide();"  
+                                         style="margin-top:10px;" styleClass="offset4"/>  
+                    </div>
+                </h:form>
+            </p:dialog>-->
+        </ui:define>        
     </ui:composition>
 </html>                
 

@@ -16,13 +16,17 @@
 package edu.sgssalud.service.paciente;
 
 import edu.sgssalud.cdi.Web;
+import edu.sgssalud.model.config.Setting;
 import org.primefaces.model.LazyDataModel;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
+import edu.sgssalud.security.authorization.SecurityRules;
+import edu.sgssalud.service.SettingService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import edu.sgssalud.web.service.WebServiceSGAClientConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,14 +40,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.solder.logging.Logger;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.SortOrder;
 
 /**
  *
- * @author cesar: Esta clase hereda de LazyDataModel de Primefaces, para hacer una carga ligera
- * de datos...
+ * @author cesar: Esta clase hereda de LazyDataModel de Primefaces, para hacer
+ * una carga ligera de datos...
  */
 @Named("pacienteListaServicio")
 @ViewScoped
@@ -64,7 +69,13 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     private Paciente[] pacientesSeleccionados;
     private Paciente pacienteSelecionado;
     private String parametroBusqueda;
+    private WebServiceSGAClientConnection coneccionSGA = new WebServiceSGAClientConnection();
+//    @Inject
+//    SettingService settingService;
+//    //private Setting setting;
+//    private List<Setting> settingList;
     /*Método para inicializar tabla*/
+
     public PacienteListaServicio() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<Paciente>();
@@ -74,8 +85,10 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     public void init() {
         pacienteServicio.setEntityManager(em);
         fichaMedServicio.setEntityManager(em);
-        if (resultList.isEmpty() ) {
-           resultList = pacienteServicio.getPacientes(getPageSize(), firstResult);
+//        settingService.setEntityManager(em);
+//        settingList = settingService.getSettingByName("id_oferta");
+        if (resultList.isEmpty()) {
+            resultList = pacienteServicio.getPacientes(getPageSize(), firstResult);
         }
     }
 
@@ -94,9 +107,9 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 
         QueryData<Paciente> qData = pacienteServicio.find(first, end, sortField, order, _filters);
         this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());        
+        this.setResultList(qData.getResult());
         Collections.sort(resultList);
-        return qData.getResult();        
+        return qData.getResult();
     }
 
     /*Métodos que me permiten seleccionar un objeto de la tabla*/
@@ -167,8 +180,8 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
         setResultList(pacienteServicio.BuscarPacientePorParametro(parametroBusqueda));
-    }    
-    
+    }
+
     /*..
      * Busca de la base de datos pacientes segun el parametro ingresado
      */
@@ -179,11 +192,39 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     public void buscarPorParametro() {
         this.setResultList(pacienteServicio.BuscarPacientePorTodosParametros(parametroBusqueda));
     }
-    
+
 //    public boolean tieneFicha(){
 //        if(pacienteSelecionado.isPersistent()){
 //            return (fichaMedServicio.getFichaMedicaPorPaciente(pacienteSelecionado) != null) ;
 //        }        
 //        return false;        
 //    }
+    public String renderizarVistaMatriculado(String ruta, String backView) {
+        //SecurityRules sr = new SecurityRules();
+        if (pacienteSelecionado.isPersistent()) {
+            if ("Universitario".equals(pacienteSelecionado.getTipoEstudiante())) {
+                boolean matriculado = coneccionSGA.getEstudianteMatriculado_WS_SGA(pacienteSelecionado.getCedula());
+                if (matriculado) {
+                    ruta += "?faces-redirect=true"
+                            + "&pacienteId=" + pacienteSelecionado.getId()
+                            + "&backView=" + backView;
+                    return ruta;
+                } else {
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El paciente no puede acceder a los servicios ya que actualmente no esta matriculado", " ");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                    RequestContext.getCurrentInstance().update(":form:tablaPacientes :form:messages");
+                }
+            } else {
+                ruta += "?faces-redirect=true"
+                        + "&pacienteId=" + pacienteSelecionado.getId()
+                        + "&backView=" + backView;
+                return ruta;
+            }
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Seleccione un Paciente", " ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        this.setPacienteSelecionado(null);
+        return null;
+    }
 }

@@ -20,13 +20,11 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.*;
-import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.seam.international.status.Messages;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.Strings;
@@ -80,7 +78,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private PacienteServicio pcs;
     /*....==>*/
     /*<== Atributos para autenticación y manejo de usuarios con seam 3 */
-    private Messages msg;
+    //private Messages msg;
     @Inject
     private Identity identity;
     @Inject
@@ -89,6 +87,9 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private IdentitySession security;
     @Inject
     private IdmAuthenticator idmAuth;
+//    @Inject
+//    SettingService settingService;
+
     /*....==>*/
     /*<== Atributos propios para interaccion con la vista*/
     private String clave;
@@ -98,7 +99,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private boolean rendPanelEstCol;
     private boolean rendPanelEstEsc;
     private String tipoEstudiante;
-
+    //private Setting setting;
+    //private List<Setting> settingList;
     private UploadedFile file;
 
     private WebServiceSGAClientConnection conexionSGA;
@@ -217,7 +219,9 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         pcs.setEntityManager(em);
         bussinesEntityService.setEntityManager(em);
         conexionSGA = new WebServiceSGAClientConnection();
-
+//        settingService.setEntityManager(em);
+//        //setting = settingService.findByName("id_oferta");
+//        settingList = settingService.getSettingByName("id_oferta");
     }
     /*....==>*/
 
@@ -281,57 +285,78 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     public void consultar() {
         System.out.println("Ingreso a consultar________");
         try {
+            boolean matriculado = conexionSGA.getEstudianteMatriculado_WS_SGA(getInstance().getCedula());
+            if (matriculado) {
+                Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());
+                if (p != null) {
+                    if (pcs.buscarPorCedula(getInstance().getCedula()) == null) {
+                        //getInstance().setCedula(listaDatos.get(0));
+                        getInstance().setNombreUsuario(p.getNombres());
+                        getInstance().setNombres(p.getNombres());
+                        getInstance().setApellidos(p.getApellidos());
+                        getInstance().setFechaNacimiento(p.getFechaNacimiento());
+                        getInstance().setTelefono(p.getTelefono());
+                        getInstance().setCelular(p.getCelular());
+                        getInstance().setDireccion(p.getDireccion());
+                        getInstance().setNacionalidad(p.getNacionalidad());
+                        getInstance().setEmail(p.getEmail());
+                        getInstance().setGenero(p.getGenero());
+                        getInstance().setTipoEstudiante("Universitario");
+                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", " ");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                    } else {
+                        setInstance(createInstance());
+                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Estudiante ya ha sido agregado como paciente", " ");
+                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                    }
+                } else {
+                    setInstance(createInstance());
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Estudiante ya ha sido", " ");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                }
 
-            Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());
-            if (p != null && pcs.buscarPorCedula(getInstance().getCedula()) == null) {
-                //getInstance().setCedula(listaDatos.get(0));
-                getInstance().setNombreUsuario(p.getNombres());
-                getInstance().setNombres(p.getNombres());
-                getInstance().setApellidos(p.getApellidos());
-                getInstance().setFechaNacimiento(p.getFechaNacimiento());
-                getInstance().setTelefono(p.getTelefono());
-                getInstance().setCelular(p.getCelular());
-                getInstance().setDireccion(p.getDireccion());
-                getInstance().setNacionalidad(p.getNacionalidad());
-                getInstance().setEmail(p.getEmail());
-                getInstance().setGenero(p.getGenero());
-                getInstance().setTipoEstudiante("Universitario");
-                FacesMessage msg = new FacesMessage("Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", null);
-                FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El estudiante ya ha sido agregado ", "O no consta en el Sistema de Gestión Académica");
-                FacesContext.getCurrentInstance().addMessage("", msg);
+                setInstance(createInstance());
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El número de cedula no consta como estudiante matriculado en el SGA", " ");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+
             }
+
         } catch (Exception ex) {
             //ex.printStackTrace();
-            FacesMessage msg = new FacesMessage("No se pudo conectar con el web service");
-            FacesContext.getCurrentInstance().addMessage("", msg);
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Problemas al conectarse al Web Service de la UNL", " ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
         }
+
     }
 
     public void actualizarDatosSGA() {
         System.out.println("Ingreso a consultar________");
         try {
+            boolean matriculado = conexionSGA.getEstudianteMatriculado_WS_SGA(getInstance().getCedula());
+            if (matriculado) {
 
-            Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());
-            if (p != null) {
-                //getInstance().setCedula(listaDatos.get(0));                
-                getInstance().setNombres(p.getNombres());
-                getInstance().setApellidos(p.getApellidos());
-                getInstance().setFechaNacimiento(p.getFechaNacimiento());
-                getInstance().setTelefono(p.getTelefono());
-                getInstance().setCelular(p.getCelular());
-                getInstance().setDireccion(p.getDireccion());
-                getInstance().setNacionalidad(p.getNacionalidad());
-                getInstance().setEmail(p.getEmail());
-                getInstance().setGenero(p.getGenero());
-                //getInstance().setTipoEstudiante("Universitario");
-                FacesMessage msg = new FacesMessage("Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", null);
-                FacesContext.getCurrentInstance().addMessage("", msg);
+                Paciente p = conexionSGA.validarPaciente(getInstance().getCedula());
+                if (p != null) {
+                    //getInstance().setCedula(listaDatos.get(0));                
+                    getInstance().setNombres(p.getNombres());
+                    getInstance().setApellidos(p.getApellidos());
+                    getInstance().setFechaNacimiento(p.getFechaNacimiento());
+                    getInstance().setTelefono(p.getTelefono());
+                    getInstance().setCelular(p.getCelular());
+                    getInstance().setDireccion(p.getDireccion());
+                    getInstance().setNacionalidad(p.getNacionalidad());
+                    getInstance().setEmail(p.getEmail());
+                    getInstance().setGenero(p.getGenero());
+                    //getInstance().setTipoEstudiante("Universitario");
+                    FacesMessage msg = new FacesMessage("Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", null);
+                    FacesContext.getCurrentInstance().addMessage("", msg);
+                }
             } else {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "No se pudo conectar con el SGA", "O no consta en el Sistema de Gestión Académica");
-                FacesContext.getCurrentInstance().addMessage("", msg);
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El número de cedula no consta como estudiante matriculado", " ");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
             }
+
         } catch (Exception ex) {
             //ex.printStackTrace();
             FacesMessage msg = new FacesMessage("No se pudo conectar con el web service");
@@ -420,8 +445,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 //        }
         return "/pages/home.xhtml?faces-redirect=true";
     }
-
     /*<== método que retorna la lista de tipos de datos enumerados ...*/
+
     public List<String> getListaGeneros() {
         List<String> generos = new ArrayList<String>();
         generos.add("femenino");
@@ -430,12 +455,13 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
     /*....==>*/
 
-    public List<String> tiposEstudiante() {
+    public List<String> tiposPaciente() {
         List<String> list = new ArrayList<String>();
         list.add("Universitario");
         list.add("Colegio");
         list.add("Escuela");
-        list.add("Otro");
+        list.add("Administrativos");
+        list.add("Trabajaroes");
         return list;
     }
 
@@ -473,6 +499,10 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
                 this.setRendPanelEstUni(false);
                 this.setRendPanelEstCol(false);
                 this.setRendPanelEstEsc(true);
+            } else {
+                this.setRendPanelEstUni(false);
+                this.setRendPanelEstCol(false);
+                this.setRendPanelEstEsc(false);
             }
         } else {
             this.setRendPanelEstUni(false);

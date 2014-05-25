@@ -15,6 +15,7 @@
  */
 package edu.sgssalud.service.farmacia;
 
+import com.smartics.common.action.report.JasperReportAction;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.reportes.ReporteListas;
 import edu.sgssalud.controller.reportes.ReporteReceta;
@@ -33,12 +34,14 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import org.jboss.seam.security.Identity;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -50,11 +53,12 @@ import org.primefaces.model.SortOrder;
  * @author tania
  */
 @Named(value = "recetaListaServicio")
-@ViewScoped
+@RequestScoped
 public class RecetaListaServicio extends LazyDataModel<Receta> {
 
     private static final long serialVersionUID = 13L;
     private static final int MAX_RESULTS = 13;
+    private static final String REPORTE_RECETA = "recetaMedica1";
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(RecetaListaServicio.class);
     @Inject
     @Web
@@ -67,6 +71,9 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     private ProfileService profileServicio;
     @Inject
     ReporteReceta reportes;
+
+    @Inject
+    JasperReportAction JasperReportAction;
     private List<Receta> resultList = new ArrayList<Receta>();
     private int primerResult = 0;
     private Receta[] recetasSeleccionados;
@@ -188,7 +195,8 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         recetaServicio.setEntityManager(em);
         profileServicio.setEntityManager(em);
         if (resultList.isEmpty()) {
-            resultList = recetaServicio.obtenerRecetas(this.getPageSize(), primerResult);
+            //resultList = recetaServicio.obtenerRecetas(this.getPageSize(), primerResult);
+            resultList = recetaServicio.buscarRecetaPorFechas(new Date(), new Date());
         }
     }
 
@@ -222,14 +230,20 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     }
 
     public void buscarPorFechas() {
-        this.setResultList(recetaServicio.buscarRecetaPorFechas(fechaI, fechaF));
+        if (fechaI != null && fechaF != null) {
+            this.setResultList(recetaServicio.buscarRecetaPorFechas(fechaI, fechaF));
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe ingresar las fechas", " ");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+
     }
 
     public void buscarTodos() {
         this.setResultList(recetaServicio.buscarTodos());
     }
 
-    public String entregarReceta() {
+    public void entregarReceta() {
 
         Date now = Calendar.getInstance().getTime();
         this.recetaSeleccionada.setEstado("Entregada");
@@ -246,8 +260,35 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         FacesContext.getCurrentInstance().addMessage("", msg);
 //        reportes.init();
 //        reportes.setReceta(recetaSeleccionada);
-//        reportes.renderReceta();
-        return "/pages/farmacia/receta/listaReceta.xhtml?faces-redicet=true";
+        this.renderReceta();
+//        return "/pages/farmacia/receta/listaReceta.xhtml?faces-redicet=true";
+    }
 
+    public void renderReceta() {
+
+        ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String logo = context.getRealPath("/reportes/unl.png");
+        final String attachFileName = "receta.pdf";
+        if (recetaSeleccionada.isPersistent()) {
+//            receta.setFechaEntrega(new Date());
+//            receta.setEstado("Entregada");
+//            receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+//            em.merge(receta);
+
+            Map<String, Object> _values = new HashMap<String, Object>();
+            _values.put("nombres", recetaSeleccionada.getPaciente().getNombres() + " " + recetaSeleccionada.getPaciente().getApellidos());
+            _values.put("numReceta", recetaSeleccionada.getNumvalue());
+            _values.put("fechaE", recetaSeleccionada.getFechaEntrega());
+            _values.put("logo", logo);
+            _values.put("medico", recetaSeleccionada.getResponsableEmision().getFullName());
+            _values.put("cedula", recetaSeleccionada.getPaciente().getCedula());
+            _values.put("usd", "$");
+
+            //Exportar a pdf 
+            List<Receta> recetas = new ArrayList<Receta>();
+            recetas.add(recetaSeleccionada);
+            //System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
+            JasperReportAction.exportToPdf(REPORTE_RECETA, recetas, _values, attachFileName);
+        }
     }
 }

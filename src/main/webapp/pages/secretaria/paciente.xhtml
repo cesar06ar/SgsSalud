@@ -108,9 +108,9 @@
                                     </h:panelGroup>
                                     <glue:input id="dir" name="direccion" type="text" label="#{messages['common.dir']}" value="#{pacienteHome.instance.direccion}" 
                                                 required="false" inlinehelp="#{messages['common.dir.inlinehelp']}" execute="@this save" render="dir" />
-                                    <glue:input id="telf" name="telefono" type="text" label="#{messages['common.telefono']}" value="#{pacienteHome.instance.telefono}" minLength="7" validateLength="true" validator="digitValidator"
-                                                required="false" inlinehelp="#{messages['common.telefono.inlinehelp']}" execute="@this save" render="telf"/>
-                                    <glue:input id="cel" name="celular" type="text" label="#{messages['common.cel']}" value="#{pacienteHome.instance.celular}" minLength="9" validateLength="true" validator="digitValidator"
+                                    <glue:input id="telf" name="telefono" type="text" label="#{messages['common.telefono']}" value="#{pacienteHome.instance.telefono}" 
+                                                required="false" inlinehelp="#{messages['common.telefono.inlinehelp']}" execute="@this save" render="telf"/> <!--minLength="7" validateLength="true" validator="digitValidator"-->
+                                    <glue:input id="cel" name="celular" type="text" label="#{messages['common.cel']}" value="#{pacienteHome.instance.celular}" 
                                                 required="false" inlinehelp="#{messages['common.cel.inlinehelp']}" execute="@this save" render="cel"/>
 
                                 </h:panelGroup>
@@ -183,12 +183,12 @@
                 <p:panel id="dataAcademic" header="#{messages['modulo.estudiante.datosAcademicos']}" >
 
                     <h:panelGroup layout="block" class="clearfix">
-                        <label for="tipoEst_" class="control-label">#{messages['comun.tipoEstudiante']}</label>
+                        <label for="tipoEst_" class="control-label">#{messages['comun.tipoPaciente']}</label>
                         <div class="input">
                             <p:selectOneMenu id="tipoEst_" value="#{pacienteHome.tipoEstudiante}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false"  
                                              rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" > <!--disabled="# {not empty pacienteHome.tipoEstudiante}"-->
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
-                                <f:selectItems value="#{pacienteHome.tiposEstudiante()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
+                                <f:selectItems value="#{pacienteHome.tiposPaciente()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
                                 <p:ajax event="change" update=":form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc" partialSubmit="true" rendered="this :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc"/> 
 
                             </p:selectOneMenu>  

@@ -14,6 +14,7 @@
             <f:viewParam name="fichaMedicaId" value="#{signosVitalesHome.fichaMedicaId}" />            
             <f:viewParam name="signosVitalesId" value="#{signosVitalesHome.signosVitalesId}" />            
             <f:viewParam name="backView" value="#{signosVitalesHome.backView}" />
+            <f:viewParam name="turnoId" value="#{signosVitalesHome.turnoId}" />
         </f:metadata>
 
 
@@ -32,7 +33,7 @@
                 <p:panel id="infoGeneral" header="Información de Consulta" toggleable="true" >
                     <div class="container-fluid">   
                         <div class="row-fluid">
-                            <div id="left" class="span7">
+                            <div id="left" class="span7" style="margin-right: 10px;">
                                 <p:fieldset legend="Seleccione el servicio a utilizar" >
                                     <glue:output id="servicioM" name="servicioMedico" type="checkbox" label="#{'Servicio Medico'}" value="#{signosVitalesHome.servicioMedico}" 
                                                  required="false" execute="@this :form:save" render="servicioM" styleClass="clearfix" />
@@ -40,7 +41,7 @@
                                                  required="false" execute="@this :form:save" render="servicioO" styleClass="clearfix" /> 
                                 </p:fieldset>                                  
                             </div>
-                            <div id="rigth" class="span7" style="margin-left: 15px; ">
+                            <div id="rigth" class="span7" >
                                 <h:panelGroup layout="block" class="clearfix" >
                                     <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
                                     <div class="input">                                                         
@@ -68,7 +69,7 @@
                 <p:panel id="consultaM" header="Signos Vitales" toggleable="true">                    
                     <div class="container-fluid">   
                         <div class="row-fluid">
-                            <div id="left" class="span8" style="margin-left: -10px;">
+                            <div id="left" class="span7" style="margin-right: 15px; ">
                                 <p:panelGrid columns="2">
                                     <label for="peso" class="span3">#{messages['signosVitales.peso']} *</label>
                                     <div class="input"> 
@@ -98,7 +99,7 @@
                                     </pe:inputNumber>                                        
                                 </p:panelGrid>                                                                                             
                             </div>
-                            <div id="left" class="span8"  style="margin-left: -40px; ">
+                            <div id="left" class="span7"  >
                                 <p:panelGrid columns="2">
                                     <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
                                     <div class="input">                                                                                
@@ -124,7 +125,7 @@
                         </div>
                     </div>
                 </p:panel>
-                <div class="admin-actions" style="padding-top: 20px;">
+                <div class="admin-actions" >
                     <p:commandButton id="save" action="#{signosVitalesHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 

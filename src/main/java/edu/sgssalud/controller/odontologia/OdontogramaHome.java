@@ -87,10 +87,12 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     private Tratamiento tratamiento;
     private List<Diente> listaDientes = new ArrayList<Diente>();
-//    private List<Servicio> listaServicios = new ArrayList<Servicio>();
     private List<Tratamiento> listaTratamient = new ArrayList<Tratamiento>();
     private TratamientoDataModel tratamientosData = new TratamientoDataModel();
     private Tratamiento[] listaTratamientSelect;
+
+    private List<Diente> listaDientesSup = new ArrayList<Diente>();
+    private List<Diente> listaDientesInf = new ArrayList<Diente>();
 
     public Long getOdontogramaId() {
         return (Long) getId();
@@ -1042,7 +1044,22 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         if (diente38.isSelect()) {
             listaDientes.add(diente38);
         }
+    }
 
+    public List<Diente> getListaDientesSup() {
+        return listaDientesSup;
+    }
+
+    public void setListaDientesSup(List<Diente> listaDientesSup) {
+        this.listaDientesSup = listaDientesSup;
+    }
+
+    public List<Diente> getListaDientesInf() {
+        return listaDientesInf;
+    }
+
+    public void setListaDientesInf(List<Diente> listaDientesInf) {
+        this.listaDientesInf = listaDientesInf;
     }
 
     public Diente extraerDiente(int posicion) {
@@ -1072,4 +1089,17 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         System.out.println("Nombre tratamiento " + t);
         return t.isPersistent();
     }
+
+    public void cargarOdontogramaInicial(){
+        System.out.println("INGRESO "+fichaOdont.getOdontogramaInicial().getDientes().size());
+        for (Diente diente : fichaOdont.getOdontogramaInicial().getDientes()) {
+            if(diente.getCuadrante() == 1 || diente.getCuadrante() == 2){
+                System.out.println("AGREGO DIENTE S");
+                listaDientesSup.add(diente);
+            }else{
+                System.out.println("AGREGO DIENTE I");
+                listaDientesInf.add(diente);
+            }
+        }
+    } 
 }

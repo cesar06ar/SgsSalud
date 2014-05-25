@@ -186,7 +186,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
         medicament.setGenerico(false);
         medicament.setResponsable(null);    //cambiar atributo a 
         medicament.setFechaIngreso(now);  //Fecha actual de ingreso 
-        medicament.buildAttributes(bussinesEntityService);  //
+        //medicament.buildAttributes(bussinesEntityService);  //
         return medicament;
     }
 
@@ -228,26 +228,25 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                 save(getInstance());
                 salida = "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
             } else {
-                if (getCantidad() > 0) {
-                    create(getInstance());
-                    getInstance().setCantidadIngreso(cantidad);
-                    getInstance().setUnidades(getInstance().getUnidades() + cantidad);
-                    save(getInstance());
-                    //if(getCantidad() != getInstance().getUnidades()){
-                    Receta_Medicamento cardex = new Receta_Medicamento();
-                    cardex.setIngreso(getCantidad());
-                    cardex.setMedicamento(getInstance());
-                    cardex.setSaldo(getCantidad());
-                    cardex.setFecha(now);
-                    save(cardex);
-                    //}   
+                if (!listaMedicamentos.isEmpty()) {
+                    for (Medicamento med : listaMedicamentos) {
+                        create(med);
+                        save(med);
+                        Receta_Medicamento cardex = new Receta_Medicamento();
+                        cardex.setIngreso(med.getCantidadIngreso());
+                        cardex.setMedicamento(med);
+                        cardex.setSaldo(med.getCantidadIngreso());
+                        cardex.setFecha(now);
+                        save(cardex);
+                    }
                     FacesMessage msg = new FacesMessage("Se creo nuevo medicamento: " + getInstance().getNombreComercial() + " con éxito");
                     FacesContext.getCurrentInstance().addMessage("", msg);
                     salida = "/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true";
                 } else {
-                    FacesMessage msg = new FacesMessage("Debe ingresar una cantidad mayor 0");
-                    FacesContext.getCurrentInstance().addMessage("", msg);
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Agrege como minimo un medicamento", " ");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -298,10 +297,28 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
             return 0;
         }
     }
-    
+
     @TransactionAttribute
-    public void cargarFecha(){
+    public void cargarFecha() {
         getInstance().setFechaIngreso(new Date());
+    }
+
+    public void agregarMedicamento() {
+        if (cantidad > 0 && getInstance().getNombreComercial() != null) {
+            getInstance().setCantidadIngreso(cantidad);
+            getInstance().setUnidades(cantidad);
+            listaMedicamentos.add(getInstance());
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se agrego un nuevo medicamento", " ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            setInstance(createInstance());
+
+            cantidad = 0;
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser mayor a 0", " ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            //this.setMedicamentoSeleccionado(null);
+        }
+
     }
 
 }

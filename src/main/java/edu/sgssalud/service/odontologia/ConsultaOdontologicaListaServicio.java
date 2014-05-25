@@ -46,9 +46,9 @@ import org.primefaces.model.SortOrder;
  */
 @Named("consultaOdontListaS")
 @ViewScoped
-public class ConsultaOdontologicaListaServicio implements Serializable{
-    
-     private static final long serialVersionUID = 5L;
+public class ConsultaOdontologicaListaServicio implements Serializable {
+
+    private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
     private static Logger log = Logger.getLogger(ConsultaOdontologicaListaServicio.class);
 
@@ -56,83 +56,83 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
     @Web
     private EntityManager em;
     @Inject
-    private ConsultaOdontologicaServicio cos;    
-    private List<ConsultaOdontologica> resultList = new ArrayList<ConsultaOdontologica>();;
+    private ConsultaOdontologicaServicio cos;
+    private List<ConsultaOdontologica> resultList = new ArrayList<ConsultaOdontologica>();
+    ;
     private int primerResult = 0;
     private ConsultaOdontologica[] consulOdontSeleccionadas;
     private ConsultaOdontologica consulOdontSeleccionada;
     private String parametroBusqueda;
-    private Date fecha; 
-    private Date fechaI;
-    private Date fechaF;
+    private Date fecha;
+    private Date fechaI;// = new Date();
+    private Date fechaF;// = new Date();
     /*Método para inicializar tabla*/
+
     public ConsultaOdontologicaListaServicio() {
 //        setPageSize(MAX_RESULTS);
         //resultList = new ArrayList<ConsultaOdontologica>();
     }
-    
+
     @PostConstruct
     public void init() {
         cos.setEntityManager(em);
-        if (resultList.isEmpty() ) {
-           resultList = cos.TodasConsulasOdontologica();
+        if (resultList.isEmpty()) {
+            resultList = cos.buscarPorFechas(new Date(), new Date());
         }
     }
-    
+
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
     /*@Override
-    public List<ConsultaOdontologica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-        int end = first + pageSize;
+     public List<ConsultaOdontologica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+     int end = first + pageSize;
 
-        QuerySortOrder order = QuerySortOrder.ASC;
-        if (sortOrder == SortOrder.DESCENDING) {
-            order = QuerySortOrder.DESC;
-        }
-        Map<String, Object> _filters = new HashMap<String, Object>();
-        _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);
+     QuerySortOrder order = QuerySortOrder.ASC;
+     if (sortOrder == SortOrder.DESCENDING) {
+     order = QuerySortOrder.DESC;
+     }
+     Map<String, Object> _filters = new HashMap<String, Object>();
+     _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+     _filters.putAll(filters);
 
-        QueryData<ConsultaOdontologica> qData = cos.find(first, end, sortField, order, _filters);
-        this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());        
-        Collections.sort(resultList);
-        return qData.getResult();        
-    }
+     QueryData<ConsultaOdontologica> qData = cos.find(first, end, sortField, order, _filters);
+     this.setRowCount(qData.getTotalResultCount().intValue());
+     this.setResultList(qData.getResult());        
+     Collections.sort(resultList);
+     return qData.getResult();        
+     }
     
-    Métodos que me permiten seleccionar un objeto de la tabla
+     Métodos que me permiten seleccionar un objeto de la tabla
     
-    @Override
-    public Object getRowKey(ConsultaOdontologica entity) {
-        return entity.getId(); 
-    }
+     @Override
+     public Object getRowKey(ConsultaOdontologica entity) {
+     return entity.getId(); 
+     }
 
-//    @Override
-//    public ConsultaOdontologica getRowData(Long t) {
-//        return cms.getConsultaOdontologicaPorId(t);
-//    }*/
-
+     //    @Override
+     //    public ConsultaOdontologica getRowData(Long t) {
+     //        return cms.getConsultaOdontologicaPorId(t);
+     //    }*/
     public void onRowSelect(SelectEvent event) {
-        this.setConsulOdontSeleccionada((ConsultaOdontologica)event.getObject());
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.selected"), ""+((ConsultaOdontologica) event.getObject()).getId());
+        this.setConsulOdontSeleccionada((ConsultaOdontologica) event.getObject());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.unselected"), ""+((ConsultaOdontologica) event.getObject()).getId());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaOdontologica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaOdontologica) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsulOdontSeleccionada(null);
     }
     /*.............*/
 
     /*Métodos GET y SET de los Atributos
-    public int getNextFirstResult() {
-        return primerResult + this.getPageSize();
-    }
+     public int getNextFirstResult() {
+     return primerResult + this.getPageSize();
+     }
 
-    public int getPreviousFirstResult() {
-        return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
-    }*/
-
+     public int getPreviousFirstResult() {
+     return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
+     }*/
     public int getFirstResult() {
         return primerResult;
     }
@@ -142,7 +142,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
         this.resultList = null;
     }
 
-    public List<ConsultaOdontologica> getResultList() {       
+    public List<ConsultaOdontologica> getResultList() {
         //Collections.sort(resultList);// ORDENA SEGUN CRITERIO DE COMPARACION REVISARA CONSULTA ODONT
         return resultList;
     }
@@ -173,7 +173,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }  
+    }
 
     public Date getFechaI() {
         return fechaI;
@@ -189,15 +189,21 @@ public class ConsultaOdontologicaListaServicio implements Serializable{
 
     public void setFechaF(Date fechaF) {
         this.fechaF = fechaF;
-    }  
-        
-    public void buscarPorFecha(){
-        this.setResultList(cos.buscarPorFechas(fechaI, fechaF));        
     }
-    
-    public void actualizar(){
+
+    public void buscarPorFecha() {
+        if (fechaI != null && fechaF != null) {
+            this.setResultList(cos.buscarPorFechas(fechaI, fechaF));
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe ingresar las fechas", " ");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+
+    }
+
+    public void actualizar() {
         this.setResultList(cos.TodasConsulasOdontologica());
         //this.setFecha(null);
-    }   
-    
+    }
+
 }

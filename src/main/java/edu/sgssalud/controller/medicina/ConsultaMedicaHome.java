@@ -20,9 +20,12 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.BussinesEntityType;
 import edu.sgssalud.model.Structure;
+import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.farmacia.Receta_Medicamento;
+import edu.sgssalud.model.labClinico.ExamenLabClinico;
+import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.model.medicina.ConsultaMedica;
@@ -32,14 +35,20 @@ import edu.sgssalud.model.medicina.Hc_Cie10;
 import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.servicios.Turno;
 import edu.sgssalud.profile.ProfileService;
+import edu.sgssalud.service.SettingService;
 import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
+import edu.sgssalud.service.labClinico.ExamenLabService;
+import edu.sgssalud.service.labClinico.PedidoExamenListaServicio;
+import edu.sgssalud.service.labClinico.PedidoExamenService;
 import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.EnfermedadesCie10Servicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
+import edu.sgssalud.service.medicina.TurnoService;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.FechasUtil;
 import edu.sgssalud.util.Lists;
@@ -97,6 +106,9 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private RecetaServicio recetasServicio;
     @Inject
     private ResultadoExamenLCService resultadosExamenesService;
+    @Inject
+    SettingService settingService;
+    private Setting setting;
 
     private HistoriaClinica hc;
     private SignosVitales signosVitales;
@@ -108,9 +120,21 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private List<EnfermedadCIE10> listaEnfCie10 = new ArrayList<EnfermedadCIE10>();
     private List<Hc_Cie10> listaEnfPosee = new ArrayList<Hc_Cie10>();
 
-    //private DualListModel<EnfermedadCIE10> pickListEnfermedades = new DualListModel<EnfermedadCIE10>();
     private List<PedidoExamenLaboratorio> listaPedidos = new ArrayList<PedidoExamenLaboratorio>();
     private CartesianChartModel linearModel = new CartesianChartModel();
+
+    //attributos para agregar pedido de examen 
+    @Inject
+    private ExamenLabService examenLabService;
+    @Inject
+    private PedidoExamenService pedidoServicio;
+    private List<ExamenLabClinico> listaExamenLab = new ArrayList<ExamenLabClinico>();
+    private PedidoExamenLaboratorio pedido;
+
+    private Long turnoId;
+    private Turno turno;
+    @Inject
+    private TurnoService turnoS;
 
     public Long getConsultaMedicaId() {
         return (Long) getId();
@@ -135,6 +159,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         if (hc != null) {
             listaEnfPosee = hc.getLista_enfcie10();
             listaEnfCie10 = cie10servicio.getEnfermedadesCIE10();
+            listaPedidos = hc.getPedidosExamenLab();
             /* if (!hc.getEnfermedadesCIE10().isEmpty()) {
              this.setListaEnfPosee(hc.getEnfermedadesCIE10());
              this.setListaEnfCie10(cie10servicio.getEnfermedadesSinHistoriaClinica(listaEnfPosee));
@@ -228,6 +253,41 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         this.listaPedidos = listaPedidos;
     }
 
+    public PedidoExamenLaboratorio getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(PedidoExamenLaboratorio pedido) {
+        this.pedido = pedido;
+    }
+
+    public List<ExamenLabClinico> getListaExamenLab() {
+        return listaExamenLab;
+    }
+
+    public void setListaExamenLab(List<ExamenLabClinico> listaExamenLab) {
+        this.listaExamenLab = listaExamenLab;
+    }
+
+    public Long getTurnoId() {
+        return turnoId;
+    }
+
+    public void setTurnoId(Long turnoId) {
+        this.turnoId = turnoId;
+        if (turnoId != null) {
+            turno = turnoS.find(turnoId);
+        }
+    }
+
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
+    }
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
@@ -244,12 +304,20 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         recetasServicio.setEntityManager(em);
         receta = new Receta();
         resultadosExamenesService.setEntityManager(em);
+        settingService.setEntityManager(em);
+        setting = settingService.findByName("consultaActiva");
         if (getInstance().isPersistent()) {
             if (getInstance().getResponsable() == null && identity.isLoggedIn()) {
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
             }
         }
         getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));
+
+        examenLabService.setEntityManager(em);
+        pedidoServicio.setEntityManager(em);
+        listaExamenLab = examenLabService.getExamenesLab();
+        pedido = new PedidoExamenLaboratorio();
+        turnoS.setEntityManager(em);
     }
 
     @TransactionAttribute
@@ -292,6 +360,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         String salida = null;
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
+        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(now, 5));
         try {
             if (getInstance().isPersistent()) {
                 if (getInstance().getResponsable() == null) {
@@ -307,6 +376,10 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 hc.setLista_enfcie10(listaEnfPosee);
                 update();
                 save(hc);
+                if (turno.isPersistent()) {
+                    turno.setEstado("Realizada");
+                    save(turno);
+                }
                 FacesMessage msg = new FacesMessage("Se actualizo Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             } else {
@@ -318,6 +391,10 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 //hc.setEnfermedadesCIE10(pickListEnfermedades.getTarget());
                 save(hc);
                 save(getInstance());
+                if (turno.isPersistent()) {
+                    turno.setEstado("Realizada");
+                    save(turno);
+                }
                 FacesMessage msg = new FacesMessage("Se creo nueva Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
@@ -482,20 +559,6 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         listaEnfCie10 = new ArrayList<EnfermedadCIE10>();
         this.setListaEnfCie10(cie10servicio.getEnfermedadesCIE10());
     }
-    /*
-     public void onTransfer(TransferEvent event) {
-     StringBuilder builder = new StringBuilder();
-     for (Object item : event.getItems()) {
-     builder.append(((EnfermedadCIE10) item).getName()).append("<br />");
-     hc.agregarEnfermedad((EnfermedadCIE10) item);
-     }
-
-     FacesMessage msg = new FacesMessage();
-     msg.setSeverity(FacesMessage.SEVERITY_INFO);
-     msg.setSummary("Enfermerdad Agregada");
-     msg.setDetail(builder.toString());
-     FacesContext.getCurrentInstance().addMessage(null, msg);
-     }*/
 
     /**
      *
@@ -552,10 +615,77 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
      */
     public boolean isEditable() {
         //return FechasUtil.editable(getInstance().getFechaConsulta(), getInstance().getHoraConsulta(), 24);
-        if("REALIZADA".equals(getInstance().getCode())){
+        //System.out.println("Config "+setting.getValue());
+
+        if ("REALIZADA".equals(getInstance().getCode()) && "false".equals(setting.getValue())) {
+            //  System.out.println("DESHABILITADO");
             return true;
-        }   
+        }
         return false;
+    }
+
+    @TransactionAttribute
+    public String agregarPedido() {
+        Date now = Calendar.getInstance().getTime();
+        System.out.println("INGRESo a Guardar _________");
+        String salida = null;
+        boolean ning = false;
+        for (ExamenLabClinico ex : listaExamenLab) {
+            if (ex.isSelect()) {
+                ning = true;
+                break;
+            }
+        }
+        try {
+            if (!ning) {
+                //save(getInstance());
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe seleccionar minimo un examen", null);
+                FacesContext.getCurrentInstance().addMessage("", msg);
+                //return null;
+            } else {
+                //this.listaPedidoExamenLabC = pickListExamenesLab.getTarget();                               
+                pedido.setHistoriaClinica(hc);
+                pedido.setPaciente(paciente);
+                pedido.setEstado("Nuevo");
+                pedido.setResponsableEmision(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                pedido.setFechaPedido(now);
+                create(pedido);
+                save(pedido);
+                update();
+                //System.out.println("Guardo Con exito 0_________");
+                ResultadoExamenLabClinico resultadoExa;
+                List<Parametros> pl = null;//                    
+                for (ExamenLabClinico ex : this.listaExamenLab) {
+                    if (ex.isSelect()) {
+                        resultadoExa = new ResultadoExamenLabClinico();
+                        resultadoExa.setExamenLab(ex);
+                        resultadoExa.setPedidoExamenLab(pedido);
+                        pl = examenLabService.getParametrosPorExamen(ex);
+                        resultadoExa.agregarValoresResultados(pl);
+                        save(resultadoExa);
+                        update();
+                    }
+                }
+
+                FacesMessage msg = new FacesMessage("Se agrego nuevo Pedido de Examenes: " + getInstance().getId() + " con éxito");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+                pedido = new PedidoExamenLaboratorio();
+                //hc = hcs.buscarPorFichaMedica(fms.getFichaMedicaPorId(fichaMedicaId));
+                listaPedidos = pedidoServicio.getPedidos(hc);
+                RequestContext.getCurrentInstance().update(":form:tabOpc:tablaPedidos :form:growl");
+                RequestContext.getCurrentInstance().execute("pedidoDlg.hide();");
+                salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaMedicaId=" + getInstance().getId()
+                        + "&backView=" + this.getBackView();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+
+        return salida;
     }
 
 }

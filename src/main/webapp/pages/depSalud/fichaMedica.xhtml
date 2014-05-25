@@ -202,7 +202,7 @@
                                                             <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                         </p:selectOneMenu>
-                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
+                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100%;" 
                                                                          rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </p:inputTextarea>
@@ -235,7 +235,7 @@
                 <div class="admin-actions" style="padding-right: 40px;">
                     <br/>
                     <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
-                                     immediate="true" update=":form:growl"/>
+                                     immediate="true" update=":form:growl" disabled="#{!fichaMedicaHome.estudientaMatriculado()}"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn primary" >                         
@@ -243,8 +243,8 @@
                 </div>
                 <p:panel id="signosVitalesP" header="#{messages['signosVitales.toma']} #{messages['signosVitales.Nombre']}" toggleable="true" toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ENFERMEROS') }">
-                    <h:link title="#{messages['common.new1']} #{messages['comun.consulta']}" rendered="#{true}" outcome="/pages/depSalud/enfermeria/signosVitales" 
-                            styleClass="btn btn-img">
+                    <h:link outcome="/pages/depSalud/enfermeria/signosVitales" styleClass="btn btn-img" 
+                            disabled="#{!fichaMedicaHome.estudientaMatriculado()}" title="#{fichaMedicaHome.titleNuevaConsulta}">
                         <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>                        
                         <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                         <f:param name="backView" value="fichaMedica"></f:param>
@@ -289,8 +289,8 @@
                 <p:panel id="consultasM" header="#{'CONSULTAS MÉDICAS'}" toggleable="true"  toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('MEDICOS')}">                    
                     <div class="admin-actions">
-                        <h:link rendered="#{true}" outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn btn-img"
-                                title="#{messages['common.add']} #{messages['consultaMedica.nombre']}">
+                        <h:link outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn btn-img" disabled="#{!fichaMedicaHome.estudientaMatriculado()}"
+                                title="#{fichaMedicaHome.titleNuevaConsulta}">
                             <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="/fichaMedica"></f:param>
@@ -361,7 +361,8 @@
                     </p:dataTable>
                     <br/>
                     <div class="admin-actions">
-                        <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success">
+                        <h:link value="#{messages['common.add']}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success"
+                                disabled="#{!fichaMedicaHome.estudientaMatriculado()}" title="#{fichaMedicaHome.titleNuevaConsulta}">
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="/fichaMedica"></f:param>
                         </h:link>

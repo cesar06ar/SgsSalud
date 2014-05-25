@@ -54,25 +54,25 @@ public class SettingService extends PersistenceUtil<Setting> {
     }
 
     public Setting findByName(final String name) {
-        log.info("find Profile with name " + name);
+        //log.info("find Profile with name " + name);
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Setting> query = builder.createQuery(Setting.class);
-        Root<Setting> bussinesEntityType = query.from(Setting.class);
-        query.where(builder.equal(bussinesEntityType.get(Setting_.name), name));
+        Root<Setting> entity = query.from(Setting.class);
+        query.where(builder.equal(entity.get(Setting_.name), name));
         return getSingleResult(query);
     }
 
     
-     public Setting getSettingByName(final String name) throws NoResultException {
+     public List<Setting> getSettingByName(final String name) throws NoResultException {
         TypedQuery<Setting> query = em.createQuery("SELECT p FROM Setting p WHERE p.name = :name", Setting.class);
         query.setParameter("name", name);
-        Setting result = query.getSingleResult();
-        return result;
+        //Setting result = query.getSingleResult();
+        return query.getResultList();
     }
     
     public boolean isNameAvailable(String name) {
         try {
-           Setting b = getSettingByName(name);
+           Setting b = findByName(name);
             if(b != null){                
                 return false;
             }else{                

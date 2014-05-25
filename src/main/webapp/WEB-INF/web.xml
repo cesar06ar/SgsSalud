@@ -50,6 +50,7 @@
         <filter-name>ResponseTimeLoggingFilter</filter-name>
         <filter-class>edu.sgssalud.web.filter.ResponseTimeLoggingFilter</filter-class>
     </filter>
+    
     <!-- Begin ResponseHeader Config -->
     <filter>
         <filter-name>ResponseHeaderFilter</filter-name>
@@ -125,6 +126,7 @@
         <extension>ico</extension>
         <mime-type>image/x-icon</mime-type>
     </mime-mapping>
+    <!--REST-->
     <servlet>
         <servlet-name>Resteasy</servlet-name>
         <servlet-class>

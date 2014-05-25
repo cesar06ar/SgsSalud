@@ -19,6 +19,9 @@ import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
+import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio_;
+import edu.sgssalud.model.medicina.HistoriaClinica;
+import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.StringValidations;
@@ -27,6 +30,9 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -69,4 +75,20 @@ public class PedidoExamenService extends PersistenceUtil<PedidoExamenLaboratorio
         //System.out.println("RESULTADO  POR FECHA " + query.getResultList());
         return lista;
     }
+    
+    public List<PedidoExamenLaboratorio> getPedidos(HistoriaClinica hc) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<PedidoExamenLaboratorio> query = builder.createQuery(PedidoExamenLaboratorio.class);
+        Root<PedidoExamenLaboratorio> entity = query.from(PedidoExamenLaboratorio.class);
+        query.where(builder.equal(entity.get(PedidoExamenLaboratorio_.historiaClinica), hc));
+        return getResultList(query);        
+    }   
+    
+    public List<PedidoExamenLaboratorio> getPedidos(FichaOdontologica fo) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<PedidoExamenLaboratorio> query = builder.createQuery(PedidoExamenLaboratorio.class);
+        Root<PedidoExamenLaboratorio> entity = query.from(PedidoExamenLaboratorio.class);
+        query.where(builder.equal(entity.get(PedidoExamenLaboratorio_.fichaOdontologica), fo));
+        return getResultList(query);        
+    }   
 }

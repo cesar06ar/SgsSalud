@@ -130,9 +130,11 @@ public class JasperReportAction implements Serializable{
             servletOutputStream.close();
                         
         } catch (JRException ex) {
+            ex.printStackTrace();
             LOGGER.log(Level.SEVERE, "-- ERROR EN JASPER REPORT ACTION {0}", ex);
             //JsfUtil.addErrorMessage(ex, "Error al generar el reporte: " + outputFileName);
         } catch (IOException e){
+            e.printStackTrace();
             LOGGER.log(Level.SEVERE, "-- ERROR EN JASPER REPORT ACTION {0}", e);
         }
         finally{

@@ -20,6 +20,7 @@ import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.controller.paciente.PacienteHome;
 import edu.sgssalud.model.BussinesEntityAttribute;
 import edu.sgssalud.model.BussinesEntityType;
+import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.HistoriaClinica;
@@ -29,6 +30,7 @@ import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.security.authorization.SecurityRules;
+import edu.sgssalud.service.SettingService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
@@ -39,6 +41,7 @@ import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.UI;
 import edu.sgssalud.util.UtilRoot;
+import edu.sgssalud.web.service.WebServiceSGAClientConnection;
 import java.io.Serializable;
 import java.util.*;
 import javax.annotation.PostConstruct;
@@ -85,6 +88,11 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     private ConsultaOdontologicaServicio consultaOdontService;
     @Inject
     private RecetaServicio recetaServicio;
+    @Inject
+    SettingService settingService;
+    private WebServiceSGAClientConnection coneccionSGA = new WebServiceSGAClientConnection();
+    //private Setting setting;
+    private List<Setting> settingList;
     private Long pacienteId;
     private Long consultaMedicaId;
     private String parametroBusqueda;
@@ -293,6 +301,8 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         }
         //getInstance().setFechaApertura(new Date());        
         this.getInstance().setNumeroFicha(this.getGenerarNumeroFicha());  //asignacion automatica de numero de ficha
+        settingService.setEntityManager(em);
+        settingList = settingService.getSettingByName("id_oferta");
     }
 
     @Override
@@ -429,9 +439,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 if (p.isPersistent()) {
                     this.setPaciente(p);
                     this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
-                    if (!getInstance().isPersistent()) {
-                        this.getInstance().setNumeroFicha(getGenerarNumeroFicha());
-                    } 
+                    this.getInstance().setNumeroFicha(getGenerarNumeroFicha());
                     salida += "&pacienteId=" + paciente.getId();
                 } else {
                     FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "No encontro resultados", "");
@@ -531,4 +539,76 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         }
     }
     /*....==>*/
+
+    public String nuevaConsulta() {
+        SecurityRules sr = new SecurityRules();
+        String salida = null;
+        if (getInstance().isPersistent()) {
+            if ("Universitario".equals(getInstance().getPaciente().getTipoEstudiante())) {
+                boolean matriculado = coneccionSGA.getEstudianteMatriculado_WS_SGA(getInstance().getPaciente().getCedula());
+                if (matriculado) {
+                    if (sr.isEnfermero(identity)) {
+                        salida = salidaVista(1);
+                    } else if (sr.isMedico(identity)) {
+                        salida = salidaVista(2);
+                    } else if (sr.isEnfermero(identity)) {
+                        salida = salidaVista(3);
+                    }
+                } else {
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El paciente no puede acceder a los servicios ya que actualmente no esta matriculado", " ");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                }
+            } else {
+                if (sr.isEnfermero(identity)) {
+                    salida = salidaVista(1);
+                } else if (sr.isMedico(identity)) {
+                    salida = salidaVista(2);
+                } else if (sr.isEnfermero(identity)) {
+                    salida = salidaVista(3);
+                }
+            }
+
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Seleccione una Ficha Médica", " ");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        return salida;
+    }
+
+    public String salidaVista(int s) {
+        if (s == 1) {
+            return "/pages/depSalud/enfermeria/signosVitales.xhtml?faces-redirect=true"
+                    + "&fichaMedicaId=" + getInstance().getId()
+                    + "&backView=fichaMedica";
+        } else if (s == 2) {
+            return "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                    + "&fichaMedicaId=" + getInstance().getId()
+                    + "&backView=/fichaMedica";
+        } else if (s == 3) {
+            return "/pages/depSalud/odontologia/consultaOdontologica.xhtml?faces-redirect=true"
+                    + "&fichaMedicaId=" + getInstance().getId()
+                    + "&backView=/fichaMedica";
+        } else {
+            return null;
+        }
+    }
+
+    public boolean estudientaMatriculado() {
+        if (getInstance().isPersistent()) {
+            if ("Universitario".equals(getInstance().getPaciente().getTipoEstudiante())) {
+                return  coneccionSGA.getEstudianteMatriculado_WS_SGA(getInstance().getPaciente().getCedula());                
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public String titleNuevaConsulta(){
+        if(estudientaMatriculado()){
+            return "Agregar Nueva Consulta";
+        }else{
+            return "El paciente no puede acceder a los servicios ya que actualmente no esta matriculado";
+        }        
+    }
 }

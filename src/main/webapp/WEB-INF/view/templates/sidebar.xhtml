@@ -9,12 +9,16 @@
 
     <ui:composition>
         <h:panelGroup rendered="true" >                
-            <p:panel  header="Panel de Administración" toggleable="true" rendered="true" style="font-size: 9; width: 115%">
+            <p:panel  header="Panel de Administración" toggleable="true" rendered="true" style="font-size: 9; width: 100%">
                 <h:panelGroup  rendered="#{account.tienePermiso('ADMIN')}" >
                     <h:link title="#{messages['module.setting.name']}" rendered="true" 
                             outcome="/pages/admin/bussinesentitytype/list">
                         <p:graphicImage value="/resources/img/setting.png" width="60" height="60" />
                     </h:link>                    
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/admin/setting/list" title="CONFIGURACIONES GENERALES">
+                        <p:graphicImage value="/resources/imgages/config.png" width="69" height="69" />                        
+                    </h:link>
                     &nbsp;&nbsp;
                     <h:link title="#{messages['module.profils']}" rendered="#{true}" 
                             outcome="/pages/admin/listProfile">

@@ -16,6 +16,8 @@
 package edu.sgssalud.service;
 
 //import edu.sgssalud.model.medicina.ConsultaMedica;
+import edu.sgssalud.model.medicina.FichaMedica;
+import edu.sgssalud.model.medicina.FichaMedica_;
 import edu.sgssalud.service.medicina.*;
 import edu.sgssalud.model.servicios.Servicio;
 import edu.sgssalud.model.servicios.Servicio_;
@@ -75,6 +77,14 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
         return getSingleResult(query);
     }
 
+    public List<Servicio> getServicioPorFechas(final Date fechaI, final Date fechaF) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Servicio> query = builder.createQuery(Servicio.class);
+        Root<Servicio> entity = query.from(Servicio.class);
+        query.where(builder.between(entity.get(Servicio_.createdOn), fechaI, fechaF));
+        return getResultList(query);
+    }
+    
     public boolean borrarEntidad(Long servicioId) {        
         try {
             String borrarServicio = "DELETE FROM servicio s WHERE s.id = " + servicioId;

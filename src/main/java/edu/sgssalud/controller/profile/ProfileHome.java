@@ -43,8 +43,6 @@ import java.util.List;
 import java.util.Map;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Attribute;
@@ -57,12 +55,11 @@ import org.jboss.seam.transaction.Transactional;
 import org.picketlink.idm.api.AttributesManager;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
-import org.picketlink.idm.api.IdentityType;
 import org.picketlink.idm.api.PersistenceManager;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.PasswordCredential;
-import org.picketlink.idm.impl.configuration.jaxb2.generated.IdentityObjectTypeType;
+
 //import org.picketlink.idm.impl.api.model.SimpleUser;
 import org.primefaces.component.commandbutton.CommandButton;
 
@@ -257,34 +254,34 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         return null;
     }
 
-    public void sendEmail1() {
-        try {
-            setInstance(ps.getProfileByEmail(getInstance().getEmail()));
-            System.out.println("Encontro usuario______________" + getInstance().toString());
-            if (getInstance().isPersistent()) {
-                HtmlEmail email = new HtmlEmail();
-                String mailTO = "sgssalud@gmail.com";
-                String mailFrom = getInstance().getEmail();
-                email.setHostName("mail.smtp.host");
-                email.addTo(mailTO, "Sgssalud Soporte Técnico");
-                email.setFrom(mailFrom, getInstance().getFullName());
-                email.setSubject("Mensaje de recuperación de contraseña");
-                email.setContent("Este mensaje se envio para verificar el cambio de contraseña"
-                        + "<br/> acceda desde este link"
-                        + "<br/>  http://localhost:8080/Sgssalud/pages/reset?faces-redirect=true&profileId=" + getInstance().getId(),
-                        "text/html");
-                email.send();
-            } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", ""));
-                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error_______ de envio");
-        }
-
-    }
+//    public void sendEmail1() {
+//        try {
+//            setInstance(ps.getProfileByEmail(getInstance().getEmail()));
+//            System.out.println("Encontro usuario______________" + getInstance().toString());
+//            if (getInstance().isPersistent()) {
+//                HtmlEmail email = new HtmlEmail();
+//                String mailTO = "sgssalud@gmail.com";
+//                String mailFrom = getInstance().getEmail();
+//                email.setHostName("mail.smtp.host");
+//                email.addTo(mailTO, "Sgssalud Soporte Técnico");
+//                email.setFrom(mailFrom, getInstance().getFullName());
+//                email.setSubject("Mensaje de recuperación de contraseña");
+//                email.setContent("Este mensaje se envio para verificar el cambio de contraseña"
+//                        + "<br/> acceda desde este link"
+//                        + "<br/>  http://localhost:8080/Sgssalud/pages/reset?faces-redirect=true&profileId=" + getInstance().getId(),
+//                        "text/html");
+//                email.send();
+//            } else {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "La dirección de correo electrónico introducida no está asociada a ningún usuario. ", ""));
+//                FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Error_______ de envio");
+//        }
+//
+//    }
 
     //TODO- Revisar implementación de envío de mensaje para cambio de contraseña
     public void activateButtonByEmail() {

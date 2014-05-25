@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+                template="/WEB-INF/view/templates/glue.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="result" value="#{settingListService.firstResult}" />
+    </f:metadata>
+
+    <ui:param name="title" value="#{messages['module.setting']}" />
+
+    <ui:define name="header-replace">
+        <div class="header-replace">
+            <div class="container-header" >
+                <div class="row lf row-title" >
+                    <h2>#{title}</h2>                      
+                </div> 
+            </div>
+        </div>            
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="form">
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+            <div class="admin-actions">
+                <h:link value="#{messages['common.add']}" rendered="#{true}" outcome="setting" styleClass="btn primary">
+                    <f:param name="settingId" value="#{settingListService.selectedSetting.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link>  
+                #{' '}
+                <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="setting" 
+                        styleClass="btn" disabled="#{empty settingListService.selectedSetting.id or (settingListService.selectedSetting.name eq 'id_oferta')}">
+                    <f:param name="settingId" value="#{settingListService.selectedSetting.id}"></f:param>
+                    <f:param name="backView" value="list"></f:param>
+                </h:link> 
+                #{' '}
+                <p:commandButton id="button-add" value="Oferta Académica" title="Actualizar Oferta Académica del SGA" rendered="#{true}" styleClass="btn primary"
+                                oncomplete="#{'editDlg.show();'}" ajax="true" >
+                                 
+                    <p:ajax process="@this" update=":edit-dialog"/>
+                    <p:effect type="pulsate" event="load" delay="3000" />
+                </p:commandButton>   
+
+            </div>
+            <p:dataTable var="setting" value="#{settingListService}"
+                         paginator="true" rows="10"
+                         paginatorAlwaysVisible="true"
+                         paginatorPosition="top"
+                         paginatorTemplate="{CurrentPageReport} {PreviousPageLink} {NextPageLink}"
+                         rowsPerPageTemplate="5,10,15"
+                         id="settingTable" lazy="true"
+                         rowKey="#{setting.id}"
+                         selection="#{settingListService.selectedSetting}"
+                         rendered="true"
+                         selectionMode="single">
+
+                <p:ajax event="rowSelect" listener="#{settingListService.onRowSelect}"   
+                        update=":form:button-edit :form:messages" rendered=":form:button-edit"/>                 
+                <p:ajax event="rowUnselect" listener="#{settingListService.onRowUnselect}" 
+                        update=":form:button-edit :form:messages" rendered=":form:button-edit"/>
+
+                <p:column headerText="#{messages['common.name']}" sortBy="#{setting.name}">
+                    <h:outputText value="#{setting.name}" />
+                </p:column>
+
+                <p:column headerText="#{messages['module.setting.value']}" sortBy="#{setting.value}">
+                    <h:outputText value="#{setting.value}" />
+                </p:column>
+
+                <p:column headerText="#{messages['common.version']}" sortBy="#{setting.version}">
+                    <h:outputText value="#{setting.version}" />
+                </p:column>
+
+                <p:column headerText="#{messages['common.description']}" sortBy="#{setting.description}">
+                    <h:outputText value="#{setting.description}" />
+                </p:column>                
+                <p:column headerText="Opción" >
+                    <p:commandLink value="editar" title="Actualizar Oferta Académica del SGA" rendered="#{setting.name eq 'id_oferta'}" styleClass="btn primary"
+                                     onclick="#{'editDlg.show();'}" 
+                                     ajax="true">
+                        <f:setPropertyActionListener value="#{setting}" target="#{settingListService.selectedSetting}"/>
+                        <p:ajax process="@this" update=":edit-dialog"/>
+                    </p:commandLink>
+                </p:column>      
+            </p:dataTable>
+        </h:form>
+        <p:dialog id="edit-dialog" appendToBody="true" header="Actualizar Oferta Académica del Sistema de Gestión Académica" 
+                  widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="70%">
+            <h:form id="form-dialog">
+
+                <h:panelGroup layout="block" class="clearfix">
+                    <label for="tipoEst_" class="control-label">Periodos Lectivos</label>
+                    <div class="input">
+                        <p:selectOneMenu id="tipoEst_" value="#{settingListService.periodoLec}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false"  
+                                         rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" > <!--disabled="# {not empty pacienteHome.tipoEstudiante}"-->
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
+                            <f:selectItems value="#{settingListService.periodosLectivos}" var="pl" itemLabel="#{pl}" itemValue="#{pl}"/>    
+                            <p:ajax event="change" update=":form-dialog:oferta_" partialSubmit="true" rendered="this :form-dialog:oferta_"/> 
+                            <p:effect type="pulsate" event="puff" delay="5000" for=":form-dialog:oferta_" />
+                        </p:selectOneMenu>   
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{settingListService.periodoLec != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>#{'Ingrese el periodo lectivo actual'} <ocp:message forId="tipoEst_" /></span>
+                    </div>
+                </h:panelGroup> 
+
+                <h:panelGroup layout="block" class="clearfix">
+                    <label for="oferta_" class="control-label">Ofertas Académicas</label>
+                    <div class="input">
+                        <p:selectOneMenu id="oferta_" value="#{settingListService.ofertaAcademica}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false"  
+                                         rendered="true" label="#{'Periodos Lectivos'}" var="oferta" disabled="#{empty settingListService.ofertasAcademicas}">
+                            <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
+                            <f:selectItems value="#{settingListService.ofertasAcademicas}" var="of" itemLabel="#{of}" itemValue="#{of}"/>    
+                            <p:ajax event="change" update="save" partialSubmit="true" rendered="this "/> 
+                        </p:selectOneMenu>  
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{settingListService.ofertaAcademica != null}"
+                                        styleClass="validation-status" />
+                        <span class="help-inline"><br/>#{'Ingrese el periodo lectivo actual'} <ocp:message forId="oferta_" /></span>
+                    </div>
+                </h:panelGroup> 
+
+                <div class="admin-actions">
+                    <p:commandButton id="save" value="#{messages['common.save']}" oncomplete="editDlg.hide();"                                           
+                                     action="#{settingListService.guardarOferta()}" update=":form:settingTable :form:button-add"    
+                                     ajax="true" 
+                                     style="margin: 0 0 0 30%">  
+                        <!--recetaListaServicio.entregarReceta()--> 
+                    </p:commandButton> 
+                    &nbsp;&nbsp;                        
+                    <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();" update=":form:settingTable :form:button-add">
+                    </p:commandButton>
+
+                </div>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

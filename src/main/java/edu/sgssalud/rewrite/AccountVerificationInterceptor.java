@@ -48,11 +48,11 @@ import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
  */
 public class AccountVerificationInterceptor extends HttpConfigurationProvider {
 
-    @Inject
-    private Account account;
-
-    @PersistenceContext
-    private EntityManager em;
+//    @Inject
+//    private Account account;
+//
+//    @PersistenceContext
+//    private EntityManager em;
 
     @Override
     public Configuration getConfiguration(final ServletContext context) {

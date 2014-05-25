@@ -33,9 +33,9 @@
                     <p:ajax event="dateSelect" />
                 </p:calendar>                    
                 <p:commandButton id="buscar1" value="Buscar" action="#{consultaMedicaListaServicio.buscarPorParametro()}"  
-                                 update=":form:tablaConsultasMedicas"/>
-                <p:commandButton id="buscar" value="actualizar" action="#{consultaMedicaListaServicio.actualizar()}"
-                                 update=":form:tablaConsultasMedicas" />
+                                 update="@form :form:tablaConsultasMedicas"/>
+                <p:commandButton id="buscar" value="Buscar Todas" action="#{consultaMedicaListaServicio.actualizar()}"
+                                 update="@form :form:tablaConsultasMedicas" />
             </h:panelGroup>
         </h:form>
     </ui:define>

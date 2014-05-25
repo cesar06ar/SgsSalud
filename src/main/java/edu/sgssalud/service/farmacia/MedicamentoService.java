@@ -35,6 +35,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import edu.sgssalud.util.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -112,7 +113,15 @@ public class MedicamentoService extends PersistenceUtil<Medicamento> implements 
     public List<Medicamento> buscarPorStockDisponible() {
         String consulta = "select m from Medicamento m where m.unidades > 0";
         TypedQuery<Medicamento> query = em.createQuery(consulta, Medicamento.class);        
-        return query.getResultList();
+        
+        List<Medicamento> lista = new ArrayList<Medicamento>();
+        for (Medicamento m : query.getResultList()) {
+            if(!"CADUCADO".equals(m.getAlerta())){
+                lista.add(m);
+            }
+                
+        }
+        return lista;
     }
 
     public boolean esNombreDisponible(String nombre) {

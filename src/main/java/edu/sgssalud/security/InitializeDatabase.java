@@ -457,10 +457,6 @@ public class InitializeDatabase {
             List<Property> attributes = new ArrayList<Property>();
 
             attributes.add(buildProperty("Personal", "estadoCivil", "java.lang.String[]", "Soltero*,Casado,Unión libre,Divorciado,Viudo", false, "Estado civil", "Indique su estado civil", false, 1L));
-            attributes.add(buildProperty("Personal", "sectorProcedencia", "java.lang.String[]", "Urbano*,Rural", false, "Sector de Procedencia", "Indique el sector del cual procede", false, 2L));
-            attributes.add(buildProperty("Personal", "etnia", "java.lang.String[]", "Blanco*,Mestizo,Indígena,Afro-Ecuatoriano,Montubio,Negro", false, "Etnia", "Seleccione su etnia a la cual pertenece", false, 3L));
-            attributes.add(buildProperty("Personal", "discapacidad", String.class.getName(), "", false, "Tipo de Discapacidad", "Indique el tipo de discapacidad en caso de padecerla", false, 4L));
-            attributes.add(buildProperty("Personal", "lugarTrabajo", String.class.getName(), "", false, "Lugar de Trabajo", "Indique el lugar de trabajo si tiene alguno", false, 5L));
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -470,7 +466,6 @@ public class InitializeDatabase {
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
-
     }
 
     private void validarEstructuraDatosAcademicosColegioDelPaciente() {
@@ -589,7 +584,8 @@ public class InitializeDatabase {
             attributes.add(buildStructureTypeProperty("alergiasFichaMedica", "ALERGIAS", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 1L));
             attributes.add(buildStructureTypeProperty("habitosFichaMedica", "HÁBITOS", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 2L));
             attributes.add(buildStructureTypeProperty("antecedentesPersonalesFichaMedica", "ANTECEDENTES PERSONALES", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 3L));
-            attributes.add(buildStructureTypeProperty("antecedentesFamiliaresFichaMedica", "ANTECEDENTES FAMILIARES", "Información Ficha Medica", "/pages/depSalud/paciente", 4L));
+            attributes.add(buildStructureTypeProperty("antecedentesFamiliaresFichaMedica", "ANTECEDENTES FAMILIARES", "Información Ficha Medica", "/pages/depSalud/fichaMedica", 4L));
+            attributes.add(buildStructureTypeProperty("otrosFichaMedica", "OTROS", "Otra información de la Ficha médica", "/pages/depSalud/fichaMedica", 5L));
             //Agregar atributos
             structure.setProperties(attributes);
 
@@ -749,6 +745,42 @@ public class InitializeDatabase {
             entityManager.persist(bussinesEntityType);
             entityManager.flush();
         }
+    }
+
+    public void validarOtrosFichaMedica() {
+        BussinesEntityType bussinesEntityType = null;
+        String name = "otrosFichaMedica";
+        try {
+            TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
+                    BussinesEntityType.class);
+            query.setParameter("name", name);
+            bussinesEntityType = query.getSingleResult();
+        } catch (NoResultException e) {
+            bussinesEntityType = new BussinesEntityType();
+            bussinesEntityType.setName(name);
+
+            //Agrupaciones de propiedades
+            Date now = Calendar.getInstance().getTime();
+            Calendar ago = Calendar.getInstance();
+            ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
+            Structure structure = null;
+            structure = new Structure();
+            structure.setName(name);
+            structure.setCreatedOn(now);
+            structure.setLastUpdate(now);
+
+            //Lista de atributos de entidad de negocios
+            List<Property> attributes = new ArrayList<Property>();
+            attributes.add(buildProperty("fichaGeneralAF", "otros", "java.lang.MultiLineString", "...", false, "Otros", "Agregar información adicional de ficha médica", false, 1L));
+            
+
+            //Agregar atributos
+            structure.setProperties(attributes);
+            bussinesEntityType.addStructure(structure);
+            entityManager.persist(bussinesEntityType);
+            entityManager.flush();
+        }
+
     }
 
     public void validarEstructuraHistoriaClinica() {
@@ -1308,7 +1340,7 @@ public class InitializeDatabase {
             p = new Parametros("GRAM", "COCOBACILOS:", "+/-", "", "");
             listaP.add(p);
             exam.setParametros(listaP);
-            enfs.add(exam);            
+            enfs.add(exam);
             exam = new ExamenLabClinico("ESPERMATOGRAMA", "070", null, 0.0, ExamenLabClinico.Tipo.OTROS, now);
             p = new Parametros(null, "resultado", "", "0", "0");
             exam.agregarParametro(p);

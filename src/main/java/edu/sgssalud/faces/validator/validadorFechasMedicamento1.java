@@ -38,26 +38,28 @@ import org.jboss.seam.faces.validation.InputElement;
 @RequestScoped
 @FacesValidator("validadorFechasMed")
 public class validadorFechasMedicamento1 implements Validator {
+
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(validadorFechasMedicamento1.class);
-    @Inject
-    private InputElement<Date> fechaIngreso;
+//    @Inject
+//    private InputElement<Date> fechaIngreso;
     @Inject
     private InputElement<Date> fechaElaboracion;
-    @Inject
-    private InputElement<Date> fechaCaducidad;
-    
+
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         //log.info("Ingreso a validar fechas");
-        
-        Date fIngreso = fechaIngreso.getValue();
-        Date fElaboracion = fechaElaboracion.getValue();
-        //Date fCaducidad = fechaCaducidad.getValue();        
-        //log.info("fechaIng:"+fIngreso+" fechaElab:"+fElaboracion+"  fechaCad: "+fCaducidad);
-        if (fIngreso != null && fElaboracion != null) {            
-            if (!fElaboracion.before(fIngreso)) {  //metodo que compara si una fecha es anterior a la otra
+
+        //Date fIngreso = fechaIngreso.getValue();
+        if (fechaElaboracion.getValue() != null) {
+            Date fElaboracion = fechaElaboracion.getValue();
+            //Date fCaducidad = fechaCaducidad.getValue();        
+            //log.info("fechaIng:"+fIngreso+" fechaElab:"+fElaboracion+"  fechaCad: "+fCaducidad);
+
+            if (!fElaboracion.before(new Date())) {  //metodo que compara si una fecha es anterior a la otra
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("La Fecha de Elaboracion debe ser menor a la Fecha de Ingreso"), ""));
-            }            
+            }
+        } else {
+            throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, UI.getMessages("Llene los datos obligatorios marcados por (*)"), ""));
         }
 
     }

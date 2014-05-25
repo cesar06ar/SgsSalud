@@ -31,13 +31,15 @@
             <h:outputScript name="bootstrap/twipsy.js" />
             <h:outputScript name="bootstrap/popover.js" />
             <h:outputScript name="bootstrap/alerts.js" />
-            <h:outputScript library="js" name="calendar_es.js" />
             <h:outputScript library="primefaces" name="jquery/jquery.js" />
+            <h:outputScript library="js" name="calendar_es.js" />            
+            <!--<h:outputScript library="js" name="jquery-1.6.3" />-->
             <!--<h:outputScript name="jquery-1.7.js"/>-->
             <!--Our customizations -->
             <h:outputStylesheet name="application.css" />
             <h:outputStylesheet name="css/odontograma.css" />
             <h:outputScript name="application.js" />
+            <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>-->
 
             <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
@@ -80,7 +82,7 @@
 
                 <div class="container-fluid" style="padding-bottom: 5px;//148px;">
                     <div class="row-fluid">
-                        <div class="span3" style="margin: 0 -2% 0 0.3%">
+                        <div class="span3" style="margin: 0 -1.5% 0 0.3%">
                             <ui:insert name="sidebar" />  
                         </div>
                         <!--<div class="container">
@@ -94,7 +96,7 @@
                             </div>   
                         </div>-->
 
-                        <div class="container-content" style="float: right;">
+                        <div class="container-content" style="float: right; margin-left: 2%">
                             <div class="container-content">
                                 <ocp:messages id="messages" globalOnly="true" />
                                 <script type="text/javascript">

@@ -74,14 +74,21 @@
       <query-param name="result" decode="false">#{bussinesEntityTypeListService.firstResult}</query-param>
    </url-mapping>
    <url-mapping id="bussinesentitytypeview">
-      <pattern value="/admin//setting/view"></pattern>
+      <pattern value="/admin/setting/view"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/view.xhtml"></view-id>
    </url-mapping>
    <url-mapping id="property">
-      <pattern value="/admin//setting/property"></pattern>
+      <pattern value="/admin/setting/property"></pattern>
       <view-id value="/pages/admin/bussinesentitytype/property.xhtml"></view-id>       
    </url-mapping>   
-   
+   <url-mapping id="setting">
+      <pattern value="/admin/setting/lista"></pattern>
+      <view-id value="/pages/admin/setting/list.xhtml"></view-id>       
+   </url-mapping> 
+   <url-mapping id="setting">
+      <pattern value="/admin/setting/config"></pattern>
+      <view-id value="/pages/admin/setting/setting.xhtml"></view-id>       
+   </url-mapping> 
    <!--vistas de Seguridad-->
    <url-mapping id="securityGroup">
       <pattern value="/admin/security/group"></pattern>
@@ -135,6 +142,10 @@
    <url-mapping id="medicamento">
       <pattern value="/medicamento/medicamento"></pattern>
       <view-id value="/pages/farmacia/medicamento/medicamento.xhtml"></view-id>       
+   </url-mapping>
+   <url-mapping id="medicamentoAdd">
+      <pattern value="/medicamento/agregar"></pattern>
+      <view-id value="/pages/farmacia/medicamento/agregarM.xhtml"></view-id>       
    </url-mapping>
    <url-mapping id="cardex">
       <pattern value="/farmacia/cardex"></pattern>

@@ -17,6 +17,7 @@
             <f:viewParam name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}" />
             <f:viewParam name="consultaOdontId" value="#{consultaOdontHome.consultaOdontologicaId}" />
             <f:viewParam name="backView" value="#{consultaOdontHome.backView}" />
+            <f:viewParam name="turnoId" value="#{consultaOdontHome.turnoId}" />
         </f:metadata>
         <ui:define name="header-replace">
             <div class="header-replace">
@@ -33,7 +34,8 @@
         </ui:define>
         <ui:define name="content" >
             <h:form id="form">                
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <!--<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  -->
+                <p:growl id="growl" showDetail="true" sticky="true" escape="false" autoUpdate="true" life="4000" />  
                 <p:panel id="consultaM" header="#{messages['consultaOdontologica.info']}" toggleable="true" >
                     <div class="container-fluid" >
                         <div class="row-fluid" >
@@ -54,7 +56,7 @@
                                     <label for="horaC" >#{messages['consultaMedica.horaConsulta']}</label>
                                     <div class="input"> 
                                         <pe:timePicker id="horaC" value="#{consultaOdontHome.instance.horaConsulta}"  label="" 
-                                                       disabled="true"  style="width: 50px;" mode="popup">                                            
+                                                       disabled="true"  style="width: 50px;" mode="popup"> 
 
                                         </pe:timePicker>                            
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.horaConsulta != null}"
@@ -66,7 +68,7 @@
                                 <h:panelGroup layout="block"  >
                                     <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
                                     <div class="input">                                                                                         
-                                        <pe:timePicker id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}" />
+                                        <pe:timePicker id="tiempoC" value="#{consultaOdontHome.instance.tiempoConsulta}" mode="popup" disabled="true"/>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaOdontHome.instance.tiempoConsulta != null}"
                                                         styleClass="validation-status" />                                                        
                                     </div>
@@ -196,7 +198,7 @@
                                             </c:when>
                                             <c:when test="#{(f.name eq 'examenDentarioConsultaOdont')}">                                                            
                                                 <h:panelGroup id="obraosp" layout="block" class="clearfix">
-                                                    <label for="observ2">#{messages['consultaOdontologica.observacionED']}  &nbsp;&nbsp;</label>
+                                                    <label for="observ2">#{'Observacion Examen Dentario'}  &nbsp;&nbsp;</label>
                                                     <div class="input">
                                                         <p:inputTextarea id="observ2" value="#{consultaOdontHome.instance.observacionExamenDentario}" styleClass="xLarge " required="false" style="width: 70%; height: 90px;" 
                                                                          rendered="true">
@@ -269,7 +271,7 @@
                 </p:panel>                               
                 <div class="admin-actions" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaOdontHome.guardar()}" value="#{messages['common.save']}" disabled="#{consultaOdontHome.editable}"
-                                     immediate="true" styleClass="btn success offset4" update=":form:messages"/>
+                                     immediate="true" styleClass="btn success offset4" update=":form:growl"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/depSalud#{consultaOdontHome.backView}?faces-redirect=true" 
                             value="#{messages['common.cancel']}" styleClass="btn success" >
@@ -277,7 +279,7 @@
                         <f:param name="backView" value="#{consultaOdontHome.backView}"/>
                     </h:link>
                 </div>
-                <p:tabView  rendered="#{consultaOdontHome.instance.persistent}">
+                <p:tabView id="tabOpc" rendered="#{consultaOdontHome.instance.persistent}">
                     <p:tab title="#{messages['tratamiento.Label']} DENTALES" rendered="true" >
                         <p:dataTable id="tablaTratamientos" value="#{consultaOdontHome.tratamientos}" var="tratam_" 
                                      paginator="true"
@@ -323,6 +325,10 @@
                                     <f:param name="backView" value="/odontologia/consultaOdontologica"></f:param>
                                     <f:param name="previous" value="#{consultaOdontHome.backView}"/>
                                 </h:link>
+                                <!--<h:commandLink id="printReceta" title="Imprimir Receta" styleClass="btn" action="# {reporteReceta.renderReceta()}" >  
+                                    <p:graphicImage value="/resources/img/print.gif" width="12" height="12"/>
+                                    <f:setPropertyActionListener value="#{recetaM_}" target="# {reporteReceta.receta}"/>
+                                </h:commandLink>-->
                                 &nbsp;
                                 <p:commandLink id="button-delete" type="button" value="Borrar" title="#{messages['common.delete']}"
                                                onclick="#{'deletedDlg.show();'}"  styleClass="btn success" rendered="#{recetaM_.estado eq 'Emitida'}"
@@ -335,12 +341,17 @@
                         </p:dataTable>
                     </p:tab>
                     <p:tab title="#{messages['Examen.label']}" rendered="true" >
-                        <h:link outcome="/pages/depSalud/pedidoExamen" value="#{messages['common.add']} #{messages['Examen.pedidos']}" styleClass="btn primary" >                            
-                            <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"></f:param>
-                            <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
+                        <!--<h:link outcome="/pages/depSalud/pedidoExamen" value="#{messages['common.add']} #{messages['Examen.pedidos']}" styleClass="btn primary" >                            
+                            <f:param name="fichaMedicaId" value="# {consultaOdontHome.fichaMedicaId}"></f:param>
+                            <f:param name="consultaOdontId" value="# {consultaOdontHome.instance.id}"></f:param>
                             <f:param name="backView" value="/depSalud/odontologia/consultaOdontologica"></f:param>
-                            <f:param name="previous" value="#{consultaOdontHome.backView}"/>
-                        </h:link>
+                            <f:param name="previous" value="# {consultaOdontHome.backView}"/>
+                        </h:link>-->
+                        <p:commandLink id="agregar_pedido" type="button" value="#{messages['common.add']} #{messages['Examen.pedidos']}" 
+                                       onclick="#{'pedidoDlg.show();'}"  styleClass="btn success" 
+                                       ajax="true">
+                            <p:ajax update=":pedido-dialog" />
+                        </p:commandLink>
                         <br/><br/>                        
                         <p:dataTable id="tablaPedidos" value="#{consultaOdontHome.fichaOdontolog.pedidosExamenLab}" var="pedidosExam_"  emptyMessage="No hay ningun pedido de examen">
                             <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%" >
@@ -407,6 +418,220 @@
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg1.hide();"  
                                      style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
+            <!--Pedido de examen para consulta Medica-->
+            <p:dialog id="pedido-dialog" header="Pedido de Examenes" widgetVar="pedidoDlg" resizable="false" modal="true" height="560" width="980" closable="false">  
+                <h:form id="form-pedido">
+                    <p:panel id="panelPrescripcion" header="Listado de Examenes disponibles"  rendered="true">
+                        <div class="container-fluid" >
+                            <div class="row-fluid" >
+                                <div class="span4"  style="width: 25%;">
+                                    <p:panel header="HEMATOLÓGICOS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam_.tipo.tipo eq 0}">                                    
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="BIOQUIMÍCO Y ENZIMÁTICOS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam1_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam1_.tipo.tipo eq 1}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam1_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam1_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="ELECTROLITOS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam3_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam3_.tipo.tipo eq 2}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam3_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam3_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                 
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="MARCADORES TUMORALES" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam4_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam4_.tipo.tipo eq 3}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam4_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam4_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="HORMONAS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam5_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam5_.tipo.tipo eq 4}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam5_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam5_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="INMUNOLÓGICOS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam2_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam2_.tipo.tipo eq 5}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam2_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam2_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="LÍQUIDOS BIOLÓGICOS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam6_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam6_.tipo.tipo eq 6}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam6_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam6_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;"> 
+                                    <p:panel header="ORINA" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam7_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam7_.tipo.tipo eq 7}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam7_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam7_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="HECES" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam8_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam8_.tipo.tipo eq 8}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam8_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam8_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="SECRECIONES" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam9_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam9_.tipo.tipo eq 9}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam9_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam9_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="OTROS" >
+                                        <c:forEach items="#{consultaOdontHome.listaExamenLab}" var="exam10_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam10_.tipo.tipo eq 10}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam10_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam10_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <glue:input id="observ" name="observ" type="textarea" label="#{messages['consultaMedica.observacion']}" value="#{consultaOdontHome.pedido.observacion}" 
+                                    helpinline="#{messages['consultaMedica.observacion']}"  
+                                    required="false" execute="@this save" render="observ" styleClass="Large" disabled="false"/>
+                    </p:panel> 
+                    <div class="admin-actions ">                        
+                        <p:commandButton id="save" action="#{consultaOdontHome.agregarPedido()}" value="#{messages['common.submit']}" 
+                                         ajax="true" update="@form" styleClass="btn primary" style="margin-left: 32%" 
+                                         >
+                            <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
+                        </p:commandButton>
+                        &nbsp;
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="pedidoDlg.hide();"  
+                                         ajax="true" update="@form" styleClass="btn" >                        
+                            <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
+                        </p:commandButton>
+                    </div>                                    
                 </h:form>
             </p:dialog>
         </ui:define>        

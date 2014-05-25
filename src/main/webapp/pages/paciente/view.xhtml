@@ -159,7 +159,7 @@
                             <p:selectOneMenu id="tipoEst_" value="#{pacienteHome.tipoEstudiante}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false"  
                                              rendered="true" label="#{messages['comun.tipoEstudiante']}" var="tipoEstSelec" >
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue = ""  />  
-                                <f:selectItems value="#{pacienteHome.tiposEstudiante()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
+                                <f:selectItems value="#{pacienteHome.tiposPaciente()}" var="tipoE" itemLabel="#{tipoE}" itemValue="#{tipoE}"/>                          
                                 <p:ajax event="change" update="@parent :form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc" partialSubmit="true" rendered=":form:panelDatosAcadEstUniv :form:panelDatosAcadEstCol :form:panelDatosAcadEstEsc"/>  
                                 <!--<f:ajax execute=":form:panelDatosAcadEstUniv" render=":form:panelDatosAcadEstUniv"/>
                                         process=":form:panelDatosAcadEstUniv" rendered=":form:panelDatosAcadEstUniv" -->

@@ -35,12 +35,13 @@ limitations under the License.
     <c:set var="render" value="#{not empty render ? render : null}" />
     <c:set var="diente" value="#{not empty diente ? diente : null}" />    
     <c:set var="update" value="#{not empty update ? update : null}" />
+    <c:set var="disabled" value="#{not empty disabled ? disabled : false}" />
     <c:set var="tratamientos" value="#{not empty tratamientos ? tratamientos : null}" />
 
     <h:panelGroup id="panel-group-#{id}" >       
         <div class="diente_grupo_inf">
             <div class="diente_check_inf">
-                <p:selectBooleanCheckbox value="#{check}"  >
+                <p:selectBooleanCheckbox value="#{check}"  disabled="#{disabled}">
                     <p:ajax process="@this" update="#{update}" rendered="#{render}" />
                 </p:selectBooleanCheckbox>   
             </div>

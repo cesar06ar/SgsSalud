@@ -105,7 +105,17 @@
                                     </h:link>                                    
                                 </center>
                             </div>
-                        </div>  
+                        </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link outcome="/pages/admin/setting/list" >
+                                        <p:graphicImage value="/resources/images/config.png" width="69" height="69" />
+                                        <h:outputText value="CONFIGURACIONES GENERALES" style="float: left"/>
+                                    </h:link>                                    
+                                </center>
+                            </div>
+                        </div>
                         <div class="span3" >
                             <div class="styleHome">
                                 <center>
@@ -121,7 +131,7 @@
                 </div>                 
 
                 <div class="row row_home">    
-                    <h5 style="margin-left: 20%">MÓDULOS DEL DEPARTAMENTO DE SALUD</h5>
+                    <h5 style="margin-left: 20%" >MÓDULOS DEL DEPARTAMENTO DE SALUD</h5>
                     <h:panelGroup  rendered="#{account.tienePermiso('SECRETARIA')}">
                         <div class="span3" >
                             <div class="styleHome">

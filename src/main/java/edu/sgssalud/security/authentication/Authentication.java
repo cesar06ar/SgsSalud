@@ -189,6 +189,7 @@ public class Authentication {
     }
 
     public void login1() throws InterruptedException, IdentityException {
+        identity.setAuthenticatorClass(IdmAuthenticator.class);
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.findUser(credencials.getUsername());
         if (user != null) {
@@ -196,20 +197,20 @@ public class Authentication {
             //Profile userP = profileService.getProfileByUsername(credencials.getUsername());
             //Paciente p = pacienteServic.getPacientePorNombreUsuario(credencials.getUsername());
             if (ida != null && "ACTIVO".equals(ida.getValue())) {
-                try {
-                    this.login();
-                } catch (Exception ex) {
-                    System.out.println("ERROR_");
-                    String pass = ((PasswordCredential) credencials.getCredential()).getValue();
-                    boolean autenticacion = conexionSGA.autenticarUsuariosWSSGA(credencials.getUsername(), pass);
-                    System.out.println("autenticado sga  " + autenticacion);
-                    if (autenticacion) {
-                        this.actualizarPass(pass, user);
-                        //identity.login();
-                        System.out.println("Ingreso");
-                    }
-
-                }
+                //try {
+                this.login();
+//                } catch (Exception ex) {
+//                    System.out.println("ERROR_");
+//                    String pass = ((PasswordCredential) credencials.getCredential()).getValue();
+////                    boolean autenticacion = conexionSGA.autenticarUsuariosWSSGA(credencials.getUsername(), pass);
+//                    //System.out.println("autenticado sga  " + autenticacion);
+////                    if (autenticacion) {
+////                        this.actualizarPass(pass, user);
+////                        //identity.login();
+////                        System.out.println("Ingreso");
+////                    }
+//                    this.login();
+//                }
             } else {
                 messages.warn("!El usuario esta inactivo o no existe¡");  //los datos no son correctos                    
             }

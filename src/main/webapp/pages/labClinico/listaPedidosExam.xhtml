@@ -13,7 +13,10 @@
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
-
+        <f:metadata>            
+            <f:viewParam name="result" value="#{pedidoExamenListaServicio.primerResult}" />
+            <f:viewParam name="" value="#{pedidoExamenListaServicio.fecha}"/>
+        </f:metadata>           
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container-header" >
@@ -23,11 +26,26 @@
                 </div>   
             </div>            
         </ui:define>
+        <ui:define name="content-pre" >
+            <h:form id="form1">
+                <h:panelGroup style="margin-top: -15px; " styleClass="offset3">
+                    <!--<p:calendar value="# {consultaMedicaListaServicio.inicio}" pattern="yyyy-MM-dd" title="fecha Inicio" >
+                        <p:ajax event="dateSelect" />
+                    </p:calendar> -->  
+                    <p:calendar id="criterioBuscar" size ="15" value="#{pedidoExamenListaServicio.fecha}" title="Ingrese una fecha"
+                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="false" >
+                        <p:ajax event="dateSelect" />
+                    </p:calendar>
+                    &nbsp;
+                    <p:commandButton value="Buscar" action="#{pedidoExamenListaServicio.buscarPorParametro()}" 
+                                     update="@form :form:tablaPedidos" styleClass="btn info"/>    
+
+                    <p:commandButton id="buscar" value="Buscar Todos" action="#{pedidoExamenListaServicio.cargarTodos()}"
+                                     update="@form :form:tablaPedidos" />
+                </h:panelGroup>
+            </h:form>
+        </ui:define>
         <ui:define name="content" >
-            <f:metadata>            
-                <f:viewParam name="result" value="#{pedidoExamenListaServicio.primerResult}" />
-                <f:viewParam name="" value="#{pedidoExamenListaServicio.fecha}"/>
-            </f:metadata>           
             <h:form id="form">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
                 <div class="admin-actions">
@@ -43,22 +61,14 @@
                         <f:param name="backView" value="listaPedidosExam"></f:param>
                     </h:link> &nbsp;
                     <p:commandButton id="delete" value="Borrar" title="#{messages['common.delete']}"   onclick="#{'deletedDlg1.show();'}"  styleClass="btn"
-                                   disabled="#{pedidoExamenListaServicio.pedidoExamenSeleccionado.estado ne 'Nuevo'}"
-                                   ajax="true"> 
+                                     disabled="#{pedidoExamenListaServicio.pedidoExamenSeleccionado.estado ne 'Nuevo'}"
+                                     ajax="true"> 
                         <p:ajax process="@this" update=":cancel-dialog1"/>
                     </p:commandButton>
                     &nbsp;
                     <h:commandLink id="print" value="Imprimir" styleClass="btn" action="#{reporteListas.renderPedido()}" disabled="#{empty pedidoExamenListaServicio.pedidoExamenSeleccionado}">  
                         <f:setPropertyActionListener value="#{pedidoExamenListaServicio.pedidoExamenSeleccionado}" target="#{reporteListas.pedido}"/>
-                    </h:commandLink>
-                    <h:panelGroup style="float: right">
-                        <p:calendar id="criterioBuscar" size ="15" value="#{pedidoExamenListaServicio.fecha}" title="Ingrese una fecha"
-                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="false" >
-                            <p:ajax event="keyup" update="tablaPedidos"/>
-                        </p:calendar>
-                        &nbsp;
-                        <p:commandButton value="Buscar" action="#{pedidoExamenListaServicio.buscarPorParametro()}" update="@form" styleClass="btn info"/>    
-                    </h:panelGroup>
+                    </h:commandLink>                        
                 </div>
 
                 <p:dataTable id="tablaPedidos"  var="object_" value="#{pedidoExamenListaServicio.resultList}"
@@ -93,19 +103,27 @@
                             <f:convertDateTime pattern="dd - MMM - yyyy"/>
                         </h:outputText>   
                     </p:column>
-                    <p:column style="text-align: center;" >                        
+                    <p:column style="width: 20%; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="Paciente" />  
+                        </f:facet> 
+                        <h:outputText value="#{object_.paciente.nombres}" />
+                        &nbsp;
+                        <h:outputText value="#{object_.paciente.apellidos}" />
+                    </p:column>
+                    <p:column style="text-align: center; width: 15%" >                        
                         <f:facet name="header">  
                             <h:outputText value="#{messages['receta.Responsable']}" />  
                         </f:facet> 
                         <h:outputText value="#{object_.responsableEmision.fullName}" />
                     </p:column>
-                    <p:column style="text-align: center;" >
+                    <p:column style="width: 10%; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['pedido.codMuestra']}" />  
                         </f:facet> 
                         <h:outputText value="#{object_.codigoMuestra}" />
                     </p:column>
-                    <p:column sortBy="#{object_.estado}" style="text-align: center;" ><!--filterMatchMode="contains" filterBy="# {object_.estado}">-->
+                    <p:column sortBy="#{object_.estado}" style="text-align: center; width: 7%" ><!--filterMatchMode="contains" filterBy="# {object_.estado}">-->
                         <f:facet name="header">  
                             <h:outputText value="#{messages['comun.estado']}" />  
                         </f:facet> 

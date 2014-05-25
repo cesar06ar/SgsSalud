@@ -135,7 +135,7 @@ public class ResultadoExamenLabClinico implements Serializable {
     public void agregarValoresResultados(List<Parametros> pl) {
         System.out.println("INGRESO A AGREGAR VALORES  _________0 ");
         if (!pl.isEmpty()) {
-            System.out.println("INGRESO A AGREGAR VALORES  _________1");
+            //System.out.println("INGRESO A AGREGAR VALORES  _________1");
             ResultadoParametro r;
             for (Parametros p : pl) {
                 r = new ResultadoParametro();

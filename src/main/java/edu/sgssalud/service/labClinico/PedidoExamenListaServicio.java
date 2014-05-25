@@ -59,14 +59,14 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
     private PedidoExamenService pedidosExamenLabService;
     @Inject
     private ResultadoExamenLCService resultadosExamenesService;
-    
+
 //    @Inject
 //    private ProfileService profileServicio;
     private List<PedidoExamenLaboratorio> resultList = new ArrayList<PedidoExamenLaboratorio>();
     //private List<ExamenLabClinico> resultListFilter = new ArrayList<ExamenLabClinico>();
     private int primerResult = 0;
     private String parametroBusqueda;
-    private Date fecha; //= new Date();
+    private Date fecha;// = new Date();
     private PedidoExamenLaboratorio[] PedidosExamenesSeleccionados;
     private PedidoExamenLaboratorio PedidoExamenSeleccionado;
 
@@ -156,7 +156,7 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
         resultadosExamenesService.setEntityManager(em);
         //profileServicio.setEntityManager(em);
         if (resultList.isEmpty()) {
-            resultList = pedidosExamenLabService.getPedidosExamenesLab();
+            resultList = pedidosExamenLabService.getPedidosExamenesLab(new Date());
         }
     }
 
@@ -180,10 +180,6 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
         FacesMessage msg = new FacesMessage(UI.getMessages("Pedido Examen") + " " + UI.getMessages("common.unselected"), "" + ((PedidoExamenLaboratorio) event.getObject()).getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setPedidoExamenSeleccionado(null);
-    }
-
-    public void buscarPorParametro() {
-        this.setResultList(pedidosExamenLabService.getPedidosExamenesLab(fecha));
     }
 
     public void agregarMuestra() {
@@ -227,6 +223,14 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERRORE", e.toString()));
             e.printStackTrace();
         }
+        resultList = pedidosExamenLabService.getPedidosExamenesLab();
+    }
+
+    public void buscarPorParametro() {
+        this.setResultList(pedidosExamenLabService.getPedidosExamenesLab(fecha));
+    }
+
+    public void cargarTodos() {
         resultList = pedidosExamenLabService.getPedidosExamenesLab();
     }
 

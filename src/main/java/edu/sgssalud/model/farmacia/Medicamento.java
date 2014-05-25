@@ -78,7 +78,7 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     private Date fechaElaboracion;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaCaducidad;
-
+    private String dosificacion;
     @Transient
     private String alerta;
 
@@ -192,13 +192,24 @@ public class Medicamento extends BussinesEntity implements Serializable, Compara
     public void setGenerico(boolean generico) {
         this.generico = generico;
     }
-            
+
+    public String getDosificacion() {
+        return dosificacion;
+    }
+
+    public void setDosificacion(String dosificacion) {
+        this.dosificacion = dosificacion;
+    }  
+                
     public String getAlerta() {
         Date now = Calendar.getInstance().getTime();
         int dias = FechasUtil.getFechaLimite(now, fechaCaducidad);
         if (dias >= 0 && dias < 90) {
             return "POR CADUCARSE";
-        } else {
+        }else if(now.after(fechaCaducidad)){
+            return "CADUCADO";
+        } 
+        else {
             return "";
         }
     }

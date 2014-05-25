@@ -17,7 +17,6 @@ import edu.sgssalud.model.BussinesEntityAttribute_;
 import edu.sgssalud.model.BussinesEntityType;
 import edu.sgssalud.model.BussinesEntityType_;
 import edu.sgssalud.model.BussinesEntity_;
-import edu.sgssalud.model.GroupType;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.QueryData;
@@ -110,13 +109,13 @@ public class BussinesEntityService extends PersistenceUtil<BussinesEntity> {
         return this.count(entityClass);
     }
 
-    public List<BussinesEntity> find(int maxresults, int firstresult, GroupType type) {
-        Map<String, Object> filters = new HashMap<String, Object>();
-        filters.put(BussinesEntity_.type.getName(), type);
-        QueryData<BussinesEntity> qData = find(firstresult, maxresults, BussinesEntity_.name.getName(), QuerySortOrder.ASC, filters);
-
-        return qData.getResult();
-    }
+//    public List<BussinesEntity> find(int maxresults, int firstresult, GroupType type) {
+//        Map<String, Object> filters = new HashMap<String, Object>();
+//        filters.put(BussinesEntity_.type.getName(), type);
+//        QueryData<BussinesEntity> qData = find(firstresult, maxresults, BussinesEntity_.name.getName(), QuerySortOrder.ASC, filters);
+//
+//        return qData.getResult();
+//    }
 
     public List<BussinesEntity> find(int maxresults, int firstresult, BussinesEntity author) {
         Map<String, Object> filters = new HashMap<String, Object>();

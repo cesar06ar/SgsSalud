@@ -30,9 +30,15 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.config.Setting;
+import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import edu.sgssalud.web.service.WebServiceSGAClientConnection;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import javax.ejb.TransactionAttribute;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -58,6 +64,9 @@ public class SettingListService extends LazyDataModel<Setting> implements Serial
     private int firstResult = 0;
     private Setting[] selectedSettings;
     private Setting selectedSetting;
+    private WebServiceSGAClientConnection coneccionSGA;
+    private String periodoLec;
+    private String ofertaAcademica;
 
     public SettingListService() {
         setPageSize(MAX_RESULTS);
@@ -103,7 +112,25 @@ public class SettingListService extends LazyDataModel<Setting> implements Serial
         this.selectedSetting = selectedSetting;
     }
 
-     @Override
+    public String getPeriodoLec() {
+        return periodoLec;
+    }
+
+    public void setPeriodoLec(String periodoLec) {
+        this.periodoLec = periodoLec;
+        this.getOfertasAcademicas();
+
+    }
+
+    public String getOfertaAcademica() {
+        return ofertaAcademica;
+    }
+
+    public void setOfertaAcademica(String ofertaAcademica) {
+        this.ofertaAcademica = ofertaAcademica;
+    }
+
+    @Override
     public List<Setting> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
         int end = first + pageSize;
 
@@ -124,6 +151,7 @@ public class SettingListService extends LazyDataModel<Setting> implements Serial
     public void init() {
         log.info("Setup entityManager into WareHouseService...");
         settingService.setEntityManager(entityManager);
+        coneccionSGA = new WebServiceSGAClientConnection();
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -140,12 +168,71 @@ public class SettingListService extends LazyDataModel<Setting> implements Serial
 
     @Override
     public Setting getRowData(String rowKey) {
-
-        return settingService.findByName(rowKey);
+        return settingService.find(Long.parseLong(rowKey));
     }
 
     @Override
     public Object getRowKey(Setting entity) {
         return entity.getName();
     }
+
+    public List<String> getPeriodosLectivos() {
+        return coneccionSGA.getPeriodosLectivosWS_SGA();
+    }
+
+    public List<String> getOfertasAcademicas() {
+        if (periodoLec != null) {
+            String id_pl = extraerId(periodoLec);
+            return coneccionSGA.getOfertasAcademicas_WS_SGA(id_pl);
+        } else {
+            return null;
+        }
+
+    }
+
+    @TransactionAttribute
+    public void guardarOferta() {
+        System.out.println("OFERTA "+ofertaAcademica);
+        if (getOfertaAcademica() != null) {
+            if (selectedSetting == null) {
+                System.out.println("SETTING ");
+                Date now = Calendar.getInstance().getTime();
+                selectedSetting = new Setting();
+                selectedSetting.setCreatedOn(now);
+                selectedSetting.setLastUpdate(now);
+                selectedSetting.setActivationTime(now);
+
+                selectedSetting.setName("id_oferta");
+                selectedSetting.setValue(extraerId(ofertaAcademica));
+                entityManager.persist(selectedSetting);
+                FacesMessage msg = new FacesMessage("Se agrego la oferta con exito", "");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+                selectedSetting = new Setting();
+            } else {
+                selectedSetting.setValue(extraerId(ofertaAcademica));
+                entityManager.merge(selectedSetting);
+                FacesMessage msg = new FacesMessage("Se Actualizo la oferta con exito", "");
+                FacesContext.getCurrentInstance().addMessage("", msg);
+                selectedSetting = new Setting();
+            }
+        } else {
+            FacesMessage msg = new FacesMessage("Debe agregar una oferta academica", "");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
+
+    }
+
+    public String extraerId(String resultado) {
+        List<String> vals = new ArrayList<String>();
+        vals = Arrays.asList(resultado.split(","));
+        String valor = vals.get(0).substring(1);
+        return valor;
+    }
+
+//    public boolean existeOfertaAcademica() {
+//        if (settingService.findByName("id_oferta") != null) {
+//            return true;
+//        }
+//        return false;
+//    }
 }

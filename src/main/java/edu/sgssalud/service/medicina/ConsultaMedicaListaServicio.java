@@ -48,7 +48,7 @@ import org.primefaces.model.SortOrder;
  * @author tania
  */
 @Named("consultaMedicaListaServicio")
-@ConversationScoped
+@ViewScoped
 public class ConsultaMedicaListaServicio implements Serializable { //extends LazyDataModel<ConsultaMedica>
 
     private static final long serialVersionUID = 5L;
@@ -66,7 +66,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
     private ConsultaMedica consulMedicSeleccionada;
     private String parametroBusqueda;
     private Date inicio;// = new Date();
-    private Date fin;// = new Date();
+    private Date fin; //= new Date();
     /*Método para inicializar tabla*/
 
     public ConsultaMedicaListaServicio() {
@@ -77,9 +77,12 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
     @PostConstruct
     public void init() {
         cms.setEntityManager(em);
+//        inicio = new Date();
+//        fin = new Date();
         if (resultList.isEmpty()) {
-            resultList = cms.getConsulasMedicas();
-        }        
+            resultList = cms.buscarPorRangoFechas(new Date(), new Date());
+        }
+
     }
 
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
@@ -108,12 +111,12 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
 //    }
     public void onRowSelect(SelectEvent event) {
         this.setConsulMedicSeleccionada((ConsultaMedica) event.getObject());
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.selected"), "" + ((ConsultaMedica) event.getObject()).getId());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.selected"), "" + consulMedicSeleccionada.getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.unselected"), "" + ((ConsultaMedica) event.getObject()).getId());
+        FacesMessage msg = new FacesMessage(UI.getMessages("ConsultaMedica") + " " + UI.getMessages("common.unselected"), "" + consulMedicSeleccionada.getId());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setConsulMedicSeleccionada(null);
     }
@@ -177,12 +180,17 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
 //        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
 //    }
 //
-    public void buscarPorParametro() {        
-        this.setResultList(cms.buscarPorRangoFechas(inicio, fin));        
+    public void buscarPorParametro() {
+        if (inicio != null && fin != null) {
+            this.setResultList(cms.buscarPorRangoFechas(inicio, fin));
+        } else {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Debe ingresar las fechas", " ");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+        }
     }
 
     public void actualizar() {
-        this.setResultList(cms.getConsulasMedicas());    
+        this.setResultList(cms.getConsulasMedicas());
     }
 
 }

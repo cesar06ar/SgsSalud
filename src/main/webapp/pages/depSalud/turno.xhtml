@@ -14,7 +14,7 @@
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
             <f:viewParam name="pacienteId" value="#{turnoHome.pacienteId}" />            
-            <f:viewParam name="servicioId" value="#{turnoHome.turnoId}" />
+            <f:viewParam name="turnoId" value="#{turnoHome.turnoId}" />
             <f:viewParam name="backView" value="#{turnoHome.backView}" />
         </f:metadata>
         <ui:define name="header-replace" >
@@ -26,6 +26,18 @@
                     </div>
                 </div>
             </div>      
+        </ui:define>
+        <ui:define name="content-pre" >
+            <h:form id="form1">
+                <h:panelGroup style="margin-top: -30px; float: right" styleClass="column">
+                    <p:inputText id="criterioBuscar" size ="25" value="#{turnoHome.criterioBusqueda}" title="Ingrese un número de cedula del paciente">
+                        <!--<p:ajax event="keyup" update="@form"/>-->
+                    </p:inputText>
+                    &nbsp;
+                    <p:commandButton value="Buscar" action="#{turnoHome.buscarPaciente()}" 
+                                     update="@form" styleClass="btn info"/>
+                </h:panelGroup>
+            </h:form>
         </ui:define>
         <ui:define name="content" >
             <h:form id="form">                      
@@ -39,7 +51,7 @@
                                  value="#{turnoHome.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
                 </p:panel>
                 <p:panel id="panelTurno" header="#{messages['citaMedica.nombre']}" styleClass="clearfix" >
-                    
+
                     <h:panelGroup id="fechaEP" layout="block" styleClass="clearfix">
                         <label for="fechaC" >#{messages['comun.fecha']} #{messages['receta.emision']}</label>
                         <div class="input">                                                         
@@ -51,7 +63,7 @@
                         </div>                    
                         <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha']} #{messages['receta.emision']}<ocp:message forId="fechaE" /></span>
                     </h:panelGroup>  
-                    
+
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <label for="nombreServicio" >#{messages['servicioMedico.nombre1']} *</label>
                         <div class="input">
@@ -60,7 +72,7 @@
                                 <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                             
                                 <f:selectItem  itemLabel = "MÉDICO"  itemValue="MÉDICO" /> 
                                 <f:selectItem  itemLabel = "ODONTOLÓGICO"  itemValue="ODONTOLÓGICO" /> 
-                                <p:ajax event="change" update="@parent" partialSubmit="true" />
+                                <p:ajax event="change" update="@parent :form:fechaC :form:hora" partialSubmit="true" rendered=":form:fechaC :form:hora"/>
                             </p:selectOneMenu> 
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.servicio ne null}"
                                             styleClass="validation-status" />      
@@ -85,14 +97,15 @@
                         <div class="input">                                                         
                             <p:calendar id="fechaC" value="#{turnoHome.fecha}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
                                         disabled="false" pattern="dd-MMM-yyyy"  locale="es" disabledWeekends="true" required="true">
-                                <p:ajax event="dateSelect" process="validadorFechas fechaC" update="@parent :form:hora :form:save" partialSubmit="true" rendered=":form:hora"/>  
+                                <!--<f:validator validatorId="dateValidatorTurno"/>-->
+                                <p:ajax event="dateSelect" process="validadorFechas fechaC " update="@parent :form:hora :form:save" partialSubmit="true" rendered=":form:hora"/>                                  
                             </p:calendar>                                                                                                      
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaCita ne null}"
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.fecha ne null}"
                                             styleClass="validation-status" />                                                        
                         </div>                    
                         <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
                     </h:panelGroup>  
-                    <s:validateForm id="validadorFechas" validatorId="dateValidatorTurno" />
+                    <s:validateForm id="validadorFechas" validatorId="dateValidatorTurno" />-
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
                         <label for="hora" >#{messages['comun.horaCita']}  </label>
                         <div class="input">
@@ -102,7 +115,7 @@
                                 <f:selectItems value="#{turnoHome.listaHoras}" var="hora_" itemLabel ="#{hora_}"  itemValue="#{hora_}" /> 
                                 <p:ajax event="change" update="@parent" partialSubmit="true" />
                             </p:selectOneMenu> 
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.servicio ne null}"
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.horaD ne null}"
                                             styleClass="validation-status" />      
                         </div>                   
                         <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{'Hora de la cita médica'}<ocp:message forId="nombreServicio" /></span>

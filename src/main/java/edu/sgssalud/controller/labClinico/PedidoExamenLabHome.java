@@ -22,6 +22,7 @@ import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
+import edu.sgssalud.model.labClinico.ResultadoParametro;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
@@ -424,6 +425,10 @@ public class PedidoExamenLabHome extends BussinesEntityHome<PedidoExamenLaborato
         }
 
         return false;
+    }
+    
+    public List<ResultadoParametro> getParametros(ResultadoExamenLabClinico r){
+        return resultadoService.getResultadoParametros(r);
     }
 
 }

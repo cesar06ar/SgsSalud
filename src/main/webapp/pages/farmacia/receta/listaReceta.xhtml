@@ -34,9 +34,9 @@
                     </p:calendar>
                     &nbsp;
                     <p:commandButton id="buscar1" value="Buscar" action="#{recetaListaServicio.buscarPorFechas()}" immediate="true" 
-                                     update=":form:tablaRecetas"/>
+                                     update="@form :form:tablaRecetas"/>
                     <p:commandButton id="buscar" value="Buscar Todos" action="#{recetaListaServicio.buscarTodos()}" immediate="true" 
-                                     update=":form:tablaRecetas"/>
+                                     update="@form :form:tablaRecetas"/>
                 </h:panelGroup>
             </h:form>
         </ui:define>
@@ -68,7 +68,7 @@
                 </div>                
                 <p:dataTable id="tablaRecetas"  var="receta_" value="#{recetaListaServicio.resultList}"
                              paginator="true" rows="20"  paginatorPosition="top" style="width: 100%"
-                             resizableColumns="true" liveResize="true"
+                             resizableColumns="true" liveResize="true" emptyMessage="En este dia no se ha encontrado ninguna receta"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100"
                              lazy="true" rowKey="#{receta_.id}"
@@ -187,14 +187,14 @@
                         </p:panel>
                     </p:panelGrid>                    
                     <div class="admin-actions">
-                        <p:commandButton value="#{messages['comun.terminar']}" onclick="editDlg.hide();"   
-                                         action="#{recetaListaServicio.entregarReceta()}" update="@form"  
+                        <h:commandLink value="#{messages['comun.terminar']}" onclick="editDlg.hide();"   
+                                         action="#{recetaListaServicio.entregarReceta()}" 
                                          immediate="true" 
                                          style="margin: 0 0 0 30%">  
                             <!--recetaListaServicio.entregarReceta() :form:tablaRecetas--> 
                             <p:ajax process="@this" update=":form:tablaRecetas"/>
                             <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>
-                        </p:commandButton> 
+                        </h:commandLink> 
                         &nbsp;&nbsp;
 
                         &nbsp;&nbsp;

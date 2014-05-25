@@ -16,6 +16,7 @@
             <f:viewParam id="fichaMedicaId" name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}" />
             <f:viewParam name="consultaMedicaId" value="#{consultaMedicaHome.consultaMedicaId}" />
             <f:viewParam name="backView" value="#{consultaMedicaHome.backView}" />
+            <f:viewParam name="turnoId" value="#{consultaMedicaHome.turnoId}" />
         </f:metadata>
 
         <ui:define name="header-replace">
@@ -63,9 +64,9 @@
                             </div>
                             <div class="span5" style="margin-right: -2%">
                                 <h:panelGroup styleClass="clearfix">
-                                    <label for="tiempoC" >#{messages['consultaMedica.tiempoConsulta']}</label>
+                                    <label for="tiempoC" >#{'Hora de salida de consulta'}</label>
                                     <div class="input">                                                                                         
-                                        <pe:timePicker id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}" />
+                                        <pe:timePicker id="tiempoC" value="#{consultaMedicaHome.instance.tiempoConsulta}" disabled="true" mode="popup"/>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.tiempoConsulta != null}"
                                                         styleClass="validation-status" />                                                        
                                     </div>
@@ -289,7 +290,7 @@
                         <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
                     </h:link>
                 </div>               
-                <p:tabView  rendered="#{consultaMedicaHome.instance.persistent}">
+                <p:tabView id="tabOpc" rendered="#{consultaMedicaHome.instance.persistent}">
                     <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
                         <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
                             <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
@@ -316,6 +317,10 @@
                                     <f:param name="backView" value="/medicina/consultaMedica"></f:param>
                                     <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
                                 </h:link>
+                                <!--<h:commandLink id="printReceta" title="Imprimir Receta" styleClass="btn" action="# {reporteReceta.renderReceta()}" >  
+                                    <p:graphicImage value="/resources/img/print.gif" width="12" height="12"/>
+                                    <f:setPropertyActionListener value="# {recetaM_}" target="# {reporteReceta.receta}"/>
+                                </h:commandLink>-->
                                 &nbsp;
                                 <p:commandLink id="button-delete" type="button" value="Borrar" title="#{messages['common.delete']}"
                                                onclick="#{'deletedDlg.show();'}"  styleClass="btn success" rendered="#{recetaM_.estado eq 'Emitida'}"
@@ -328,14 +333,15 @@
                         </p:dataTable>
                     </p:tab>
                     <p:tab title="#{messages['Examen.label']}" rendered="true" >
-                        <h:link outcome="/pages/depSalud/pedidoExamen" value="#{messages['common.add']} #{messages['Examen.pedidos']}" styleClass="btn primary" >                            
-                            <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
-                            <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
-                            <f:param name="backView" value="/depSalud/medicina/consultaMedica"></f:param>
-                            <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
-                        </h:link>
+
+                        <p:commandLink id="agregar_pedido" type="button" value="#{messages['common.add']} #{messages['Examen.pedidos']}" 
+                                       onclick="#{'pedidoDlg.show();'}"  styleClass="btn success" 
+                                       ajax="true">
+                            <p:ajax update=":pedido-dialog" />
+                        </p:commandLink>
+
                         <br/><br/>                        
-                        <p:dataTable id="tablaPedidos" value="#{consultaMedicaHome.hc.pedidosExamenLab}" var="pedidosExam_"  emptyMessage="No hay ningun pedido de examen">
+                        <p:dataTable id="tablaPedidos" value="#{consultaMedicaHome.listaPedidos}" var="pedidosExam_"  emptyMessage="No hay ningun pedido de examen">
                             <p:column headerText="#{messages['fechaReceta.fechaEmision']}" style="width: 7%" >
                                 <p:outputLabel value="#{pedidosExam_.fechaPedido}">
                                     <f:convertDateTime pattern="dd-MMM-yyyy"/>
@@ -429,7 +435,7 @@
                 </h:form>
             </p:dialog>
             <!--Enfermedad Cie 10 -->
-            <p:dialog id="cie10-dialog" header="#{messages['common.delete.confirm']}" widgetVar="cie10Dlg" resizable="false" modal="true" height="500" width="812" closable="false">  
+            <p:dialog id="cie10-dialog" header="Enfermedades CIE 10" widgetVar="cie10Dlg" resizable="false" modal="true" height="500" width="812" closable="false">  
                 <h:form id="form-cie10">
                     <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="cie10Dlg.hide();"  
                                      ajax="true" update="@form" style="margin-left: 86%" >                        
@@ -460,6 +466,243 @@
                             </p:commandButton>
                         </p:column>                       
                     </p:dataTable>                    
+                </h:form>
+            </p:dialog>
+            <!--Pedido de examen para consulta Medica-->
+            <p:dialog id="pedido-dialog" header="Pedido de Examenes" widgetVar="pedidoDlg" resizable="false" modal="true" height="560" width="980" closable="false">  
+                <h:form id="form-pedido">
+                    <p:panel id="panelPrescripcion" header="Listado de Examenes disponibles"  rendered="true">
+                        <div class="container-fluid" >
+                            <div class="row-fluid" >
+                                <div class="span4"  style="width: 25%;">
+                                    <p:panel header="HEMATOLÓGICOS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam_.tipo.tipo eq 0}">                                    
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="BIOQUIMÍCO Y ENZIMÁTICOS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam1_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam1_.tipo.tipo eq 1}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam1_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam1_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="ELECTROLITOS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam3_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam3_.tipo.tipo eq 2}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam3_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam3_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                 
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="MARCADORES TUMORALES" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam4_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam4_.tipo.tipo eq 3}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam4_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam4_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="HORMONAS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam5_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam5_.tipo.tipo eq 4}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam5_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam5_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="INMUNOLÓGICOS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam2_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam2_.tipo.tipo eq 5}">                                                                            
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam2_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam2_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="LÍQUIDOS BIOLÓGICOS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam6_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam6_.tipo.tipo eq 6}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam6_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam6_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;"> 
+                                    <p:panel header="ORINA" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam7_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam7_.tipo.tipo eq 7}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam7_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam7_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="HECES" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam8_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam8_.tipo.tipo eq 8}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam8_.select}" >
+                                                            <p:ajax update="save :form:growl"/>
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam8_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="SECRECIONES" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam9_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam9_.tipo.tipo eq 9}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam9_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam9_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                                <div class="span4" style="width: 25%;">
+                                    <p:panel header="OTROS" >
+                                        <c:forEach items="#{consultaMedicaHome.listaExamenLab}" var="exam10_"  >
+                                            <c:choose>
+                                                <c:when test="#{exam10_.tipo.tipo eq 10}">   
+                                                    <span >                                            
+                                                        <p:selectBooleanCheckbox value="#{exam10_.select}" >
+                                                            <p:ajax update="save :form:growl" />
+                                                        </p:selectBooleanCheckbox>&nbsp;
+                                                        <h:outputText value="#{exam10_.name}" />
+                                                    </span>
+                                                    <br/>
+                                                </c:when>                                
+                                            </c:choose>                            
+                                        </c:forEach>
+                                    </p:panel>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <glue:input id="observ" name="observ" type="textarea" label="#{messages['consultaMedica.observacion']}" value="#{consultaMedicaHome.pedido.observacion}" 
+                                    helpinline="#{messages['consultaMedica.observacion']}"  
+                                    required="false" execute="@this save" render="observ" styleClass="Large" disabled="false"/>
+                    </p:panel> 
+                    <div class="admin-actions ">                        
+                        <p:commandButton id="save" action="#{consultaMedicaHome.agregarPedido()}" value="#{messages['common.submit']}" 
+                                         ajax="true" update="@form" styleClass="btn primary" style="margin-left: 32%" 
+                                         >
+                            <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
+                        </p:commandButton>
+                        &nbsp;
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="pedidoDlg.hide();"  
+                                         ajax="true" update="@form" styleClass="btn" >                        
+                            <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
+                        </p:commandButton>
+                    </div>                                    
+                </h:form>
+            </p:dialog>
+
+            <p:dialog id="verR-dialog" header="Receta Medica" widgetVar="verRDlg" resizable="false" modal="true" height="300" width="600" closable="false">  
+                <h:form id="form-r">
+                    <glue:output id="numfm" name="numfm" type="calendar" label="fechaEmision" value="#{consultaMedicaHome.receta.fechaEmision}" render="numfm" styleClass="xLarge" disabled="true"/>
+
+                    <h:outputText value="#{consultaMedicaHome.receta.indicaciones}"/>
+                    <!--<glue:output id="numfm1" name="numfm1" type="calendar" label="fechaEntrega" value="#{consultaMedicaHome.receta.fechaEntrega}" render="numfm1" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="numfm2" name="numfm2" type="text" label="Medico de Emisión" value="#{consultaMedicaHome.receta.responsableEmision.fullName}" render="numfm2" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="numfm3" name="numfm3" type="text" label="Medico de Emisión" value="#{consultaMedicaHome.receta.paciente.nombres} #{consultaMedicaHome.receta.paciente.apellidos}" 
+                                 render="numfm3" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="numfm4" name="numfm4" type="text" label="Medicaciones" value="#{consultaMedicaHome.receta.medicaciones}" 
+                                 render="numfm4" styleClass="xLarge" disabled="true"/>
+                    <glue:output id="numfm5" name="numfm5" type="text" label="Indicaciones" value="#{consultaMedicaHome.receta.indicaciones}" 
+                                 render="numfm5" styleClass="xLarge" disabled="true"/>-->
+                    <br/>
+                    <div class="admin-actions">
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="verRDlg.hide();"  
+                                         ajax="true" styleClass="offset2" >                                                
+                        </p:commandButton>                                                  
+                    </div>
+
                 </h:form>
             </p:dialog>
         </ui:define>

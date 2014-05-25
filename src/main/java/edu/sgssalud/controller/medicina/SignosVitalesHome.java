@@ -23,9 +23,11 @@ import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
+import edu.sgssalud.model.servicios.Turno;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
+import edu.sgssalud.service.medicina.TurnoService;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import java.io.Serializable;
@@ -70,17 +72,22 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
     private boolean servicioMedico;
     private boolean servicioDental;
 
+    private Long turnoId;
+    private Turno turno;
+    @Inject
+    private TurnoService turnoS;
+
     public Long getSignosVitalesId() {
         return (Long) getId();
     }
 
     public void setSignosVitalesId(Long signosVitales) {
         setId(signosVitales);
-        setConsultaMed(consultaMedSer.getPorSignosVitales(getInstance()));         
+        setConsultaMed(consultaMedSer.getPorSignosVitales(getInstance()));
         setConsultaOdont(consultaOdontSer.getPorSignosVitales(getInstance()));
         servicioMedico = consultaMed != null;
-        servicioDental = consultaOdont != null; 
-        
+        servicioDental = consultaOdont != null;
+
     }
 
     public Long getFichaMedicaId() {
@@ -143,6 +150,25 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         this.consultaOdont = consultaOdont;
     }
 
+    public Long getTurnoId() {
+        return turnoId;
+    }
+
+    public void setTurnoId(Long turnoId) {
+        this.turnoId = turnoId;
+        if (turnoId != null) {
+            turno = turnoS.find(turnoId);
+        }
+    }
+
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
+    }
+
     @TransactionAttribute   //
     public SignosVitales load() {
         if (isIdDefined()) {
@@ -169,6 +195,7 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         fichaOdonServicio.setEntityManager(em);
         consultaMedSer.setEntityManager(em);
         consultaOdontSer.setEntityManager(em);
+        turnoS.setEntityManager(em);
     }
 
     @Override
@@ -223,6 +250,10 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
                 if (servicioMedico || servicioDental) {
                     create(getInstance());
                     //log.info("crear ");
+                    if (turno.isPersistent()) {
+                        turno.setEstado("Realizada");
+                        save(turno);
+                    }
                     if (servicioMedico) {
                         consultaMed.setHistoriaClinica(historiaClinica);
                         consultaMed.setSignosVitales(getInstance());

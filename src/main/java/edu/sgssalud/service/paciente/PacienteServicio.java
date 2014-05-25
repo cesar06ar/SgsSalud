@@ -24,6 +24,7 @@ import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.Strings;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.ejb.TransactionAttribute;
@@ -256,6 +257,6 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         }
         return query.getResultList();
 
-    }
+    }    
 
 }

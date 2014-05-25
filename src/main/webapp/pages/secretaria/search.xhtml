@@ -28,15 +28,25 @@
         <ui:define name="content">
             <h:form id="form">            
                 <!--Opción de mensaje, cuando se realiza una acción-->
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                <h:panelGrid columns="3">
+                <p:growl id="messages" showDetail="true" autoUpdate="true" life="3000" />
+                
+                <h:panelGrid columns="4">
                     <label for="fdni">#{messages['profile.dni']} *</label>
                     <p:inputText id="dni" value="#{pacienteHome.instance.cedula}" styleClass="span3" required="true" label="#{messages['profile.dni']}">
                         <f:validator validatorId="ciValidator" />                        
                     </p:inputText>                                           
 
-                    <p:commandButton id="cargar" value="Buscar"  action="#{pacienteHome.consultar()}" update="@form"
-                                     icon="ui-icon-search" styleClass="btn-success" title="Buscar Estudiante por Cédula" />                
+                    <p:commandButton id="cargar" value="Buscar"  action="#{pacienteHome.consultar()}" update="@form :form:save :form:messages"
+                                     onclick="imgDlg.show();"
+                                     icon="ui-icon-search" styleClass="btn-success" title="Buscar Estudiante por Cédula" >
+                        <p:effect type="load" event="click" delay="6000" >                            
+                        </p:effect>
+                    </p:commandButton>
+                    
+                    <p:panel id="img_p" widgetVar="imgDlg" style="display:none;">
+                        <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" />
+                    </p:panel>                                            
+
                 </h:panelGrid>            
 
                 <glue:output id="fstn" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{pacienteHome.instance.nombres}" required="false" execute="@this save" render="fstn" styleClass="xLarge" disabled="true"/>            
@@ -61,7 +71,7 @@
                                       rendered="true" disabled="true" title="Edad en años"  >
                             <p:ajax event="keyup" rendered="fnp" update="@parent fnp" />  
                         </p:inputText>                            
-                        <h:graphicImage value="#{resources['success.gif']}" rendered="#{pacienteHome.instance.edad != null}"
+                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.edad != null}"
                                         styleClass="validation-status" />                        
                     </div>
                 </h:panelGroup>
@@ -77,7 +87,7 @@
                 <br/>
                 <!--Botones de admin-->
                 <div class="admin-actions ">
-                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" immediate="true"
+                    <p:commandButton id="save" action="#{pacienteHome.guardarPaciente()}" immediate="true" disabled="#{empty pacienteHome.instance.nombres}"
                                      value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
                     <h:link outcome="/pages/secretaria/lista.xhtml?faces-redirect=true" 

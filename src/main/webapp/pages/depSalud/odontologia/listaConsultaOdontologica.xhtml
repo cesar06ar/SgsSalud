@@ -35,9 +35,9 @@
                 </p:calendar>
                 &nbsp;
                 <p:commandButton id="buscar1" value="Buscar" action="#{consultaOdontListaS.buscarPorFecha()}" immediate="true" 
-                                 update=":form:tablaConsultasOdontologicas"/>
+                                 update="@form :form:tablaConsultasOdontologicas"/>
                 <p:commandButton id="buscar" value="Buscar Todos" action="#{consultaOdontListaS.actualizar()}" immediate="true" 
-                                 update=":form:tablaConsultasOdontologicas"/>
+                                 update="@form :form:tablaConsultasOdontologicas"/>
             </h:panelGroup>
         </h:form>
     </ui:define>

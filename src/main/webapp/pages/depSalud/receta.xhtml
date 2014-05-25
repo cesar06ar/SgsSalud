@@ -61,7 +61,7 @@
                         </div>
                     </div>
                 </p:panel>
-                <p:panel id="panelPrescripcion" header="Ingreso de datos"  rendered="#{!recetaHome.instance.persistent}">
+                <p:panel id="panelPrescripcion" header="Ingreso de datos de Medicaciones e Indicaciones"  rendered="#{!recetaHome.instance.persistent}">
                     <div class="container-fluid">
                         <div class="row-fluid">
                             <div class="span7" style="margin-right: 3%; margin-left: 10px;">
@@ -106,6 +106,9 @@
                                             <p:column headerText="Cantidad" style="width:6px; font-size:12px" filterMatchMode="startsWith" filterBy="#{medicamento_.unidades}">  
                                                 <h:outputText value="#{medicamento_.unidades}" />  
                                             </p:column>
+                                            <p:column headerText="#{messages['consultaMedica.Tratamiento']}" style="width: 30%">
+                                                <h:inputTextarea value="#{medicamento_.dosificacion}" style="height: 25px; width:96%;" disabled="true" />
+                                            </p:column>
                                             <p:column headerText="ALERTAS" style="width: 15%; text-align: center; font-size:11px">                            
                                                 <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/>
                                             </p:column>
@@ -131,7 +134,7 @@
                                     <label for="Indicacion" style="width: 40px; margin: -5px 0 0 10px;">#{messages['receta.indicaciones']}*</label>
                                     <br/>
                                     <div class="input" style="margin: 10px 0 0 10px; ">
-                                        <h:inputTextarea  id="Indicacion" style="width: 95%; height: 90px;" required="false" value="#{recetaHome.indicacion}"
+                                        <h:inputTextarea  id="Indicacion" style="width: 80%; height: 90px;" required="false" value="#{recetaHome.indicacion}"
                                                           rendered="true" styleClass="xLarge">
                                             <p:ajax event="blur" process="@this" rendered="save"  />
                                         </h:inputTextarea>
@@ -144,11 +147,11 @@
                     </div>
                 </p:panel>
                 <div class="admin-actions" >
-                    <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}"  ajax=true""
-                                     styleClass="btn primary" update="@form" style="margin-left: 25%" immediate="true" rendered="#{!recetaHome.instance.persistent}">
+                    <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}"  ajax="true"
+                                     styleClass="btn primary offset5" update="@form"  immediate="true" rendered="#{!recetaHome.instance.persistent}">
                         <p:ajax process="@this" update=":form:unidadesMedicacion :form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
                                 rendered=":form:messages :form:medicamentoDisponible :form:Indicacion :form:recetasId"/>
-                    </p:commandButton>                   
+                    </p:commandButton>  
                 </div>
                 <p:panel id="recetasId" header="Receta">
                     <div class="container-fluid">
@@ -173,27 +176,49 @@
                         </div>
                     </div>
                 </p:panel>
-                <div class="admin-actions">
-                    <p:commandButton id="enviar" action="#{recetaHome.guardarReceta()}" value="#{messages['common.submit']}" 
+                <div class="admin-actions"> 
+                    <!--<p:commandButton id="enviar" action="# {recetaHome.guardarReceta()}" value="# {messages['common.submit']}" 
                                      update=":form:messages" styleClass="btn primary" style="margin-left: 32%" immediate="true"
-                                     disabled="#{empty recetaHome.listaIndicaciones}"/>
+                                     disabled="# {empty recetaHome.listaIndicaciones}"/>-->
+                    <p:commandLink id="enviar" type="button" value="#{messages['common.save']}" 
+                                   oncomplete="#{'saveDlg.show()'}"  immediate="true" styleClass="btn success offset4" 
+                                   disabled="#{empty recetaHome.listaIndicaciones}">                         
+                        <p:ajax process="@this" update=":save-dialog" />
+                    </p:commandLink>
                     &nbsp;
+
+                    <h:link outcome="/pages/depSalud/receta?faces-redirect=true" rendered="#{!recetaHome.instance.persistent}"
+                            value="Limpiar" styleClass="btn primary" >                        
+                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param> 
+                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />
+                        <f:param name="backView" value="#{recetaHome.backView}" />
+                        <f:param name="previous" value="#{recetaHome.previous}" />
+                    </h:link>  &nbsp;
                     <h:link outcome="/pages/depSalud#{recetaHome.backView}?faces-redirect=true"
                             value="#{messages['common.cancel']}" styleClass="btn primary" >
                         <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
                         <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
                         <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />
                         <f:param name="backView" value="#{recetaHome.previous}" />
-                    </h:link>    &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/receta?faces-redirect=true"
-                            value="Limpiar" styleClass="btn primary" >                        
-                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param> 
-                        <f:param name="consultaOdontologicaId" value="#{recetaHome.consultaOdontId}" />
-                        <f:param name="backView" value="#{recetaHome.backView}" />
-                        <f:param name="previous" value="#{recetaHome.previous}" />
-                    </h:link>                  
+                    </h:link> 
                 </div>
-            </h:form>             
+            </h:form>
+            <p:dialog id="save-dialog" header="#{messages['common.delete.confirm']}" widgetVar="saveDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;" >  
+                        <h:outputText value="Usted va ha emitir una nueva receta verifique sus datos y confirme para enviar" />  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" 
+                                     action="#{recetaHome.guardarReceta()}" update=":form:messages"  
+                                     oncomplete="saveDlg.hide();" 
+                                     ajax="true" 
+                                     style="margin-top:10px;">                              
+                    </p:commandButton>  
+                    &nbsp;
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="saveDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>       
     </ui:composition>
 </html>

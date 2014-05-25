@@ -10,6 +10,8 @@
 
     <f:metadata>
         <f:viewParam name="result" value="#{servicioMedListS.firstResult}" />
+        <f:viewParam name="" value="#{servicioMedListS.fechaI}"/>
+        <f:viewParam name="" value="#{servicioMedListS.fechaF}"/>
     </f:metadata>
 
     <ui:define name="header-replace">
@@ -21,7 +23,23 @@
             </div>
         </div>
     </ui:define>
-
+    <ui:define name="content-pre" >
+        <h:form id="form1">
+            <h:panelGroup style="margin-top: -15px;">
+                <p:calendar value="#{servicioMedListS.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
+                    <p:ajax event="dateSelect"  process="@this"/>
+                </p:calendar>
+                <p:calendar value="#{servicioMedListS.fechaF}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%">
+                    <p:ajax event="dateSelect"  process="@this"/>
+                </p:calendar>
+                &nbsp;
+                <p:commandButton id="buscar1" value="Buscar" action="#{servicioMedListS.buscarPorFechas()}" immediate="true" 
+                                 update="@form :form:serviciosMedTable" process="@this"/>
+                <p:commandButton id="buscar" value="Buscar Todos" action="#{servicioMedListS.buscarTodos()}" immediate="true" 
+                                 update="@form :form:serviciosMedTable" process="@this"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
     <ui:define name="content">
         <h:form id="form">
             <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
@@ -43,7 +61,7 @@
                                  update="form-dialog-confirm-delete" />
             </div>
             <!--   -->
-            <p:dataTable id="serviciosMedTable" var="servicio_" value="#{servicioMedListS}" paginator="true" rows="20" 
+            <p:dataTable id="serviciosMedTable" var="servicio_" value="#{servicioMedListS.resultList}" paginator="true" rows="20" 
                          paginatorPosition="top" emptyMessage="No hay ningun Servicio" paginatorAlwaysVisible="true"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"  
                          rowsPerPageTemplate="10,20,30,50,100" lazy="true" 
@@ -73,7 +91,7 @@
                     </f:facet> 
                     <h:outputText value="#{servicio_.paciente.apellidos}" />
                 </p:column>
-                <p:column headerText="#{messages['common.name']}" sortBy="#{servicio_.name}" style="text-align: center; width: 15%">
+                <p:column headerText="Servicio" sortBy="#{servicio_.name}" style="text-align: center; width: 15%">
                     <h:outputText value="#{servicio_.name}" />
                 </p:column>                               
                 <p:column headerText="#{messages['comun.fecha']} #{messages['citaMedica.nombre']}" sortBy="#{servicio_.createdOn}" style="text-align: center; width: 15%">
@@ -85,9 +103,13 @@
                     <h:outputText value="#{servicio_.description}" />
                 </p:column>
             </p:dataTable>
-            <h:panelGrid id="export" class="columns" >
-                <h:commandLink value="Imprimir" styleClass="btn">  
-                    <p:printer target="serviciosMedTable"/>
+            <h:panelGrid >             
+                <h:outputText value="Exportar Datos" />  
+                <br/>
+                <h:commandLink action="#{reporteListas.renderServiciosMedicos()}" >                    
+                    <p:graphicImage value="/resources/images/pdf.png" />                          
+                    <f:setPropertyActionListener value="#{servicioMedListS.fechaI}" target="#{reporteListas.fechaInf}"/>
+                    <f:setPropertyActionListener value="#{servicioMedListS.fechaF}" target="#{reporteListas.fechaSup}"/>
                 </h:commandLink>
             </h:panelGrid>
         </h:form>
