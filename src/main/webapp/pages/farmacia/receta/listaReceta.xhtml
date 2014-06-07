@@ -18,7 +18,7 @@
         </ui:define>
         <!--Metadato que se realiza antes de renderizarse la vista-->
         <f:metadata>
-            
+
             <f:viewParam name="" value="#{recetaListaServicio.parametroBusqueda}" />
             <f:viewParam name="" value="#{recetaListaServicio.fechaI}" />
             <f:viewParam name="" value="#{recetaListaServicio.fechaF}" />
@@ -26,6 +26,7 @@
         <ui:define name="content-pre" >
             <h:form id="form1">
                 <h:panelGroup style="margin-top: -15px;">
+                    <label style="margin-left: -30%; width: 30%"><b>#{'Ingrese Fechas de busqueda:'}</b></label>&nbsp;
                     <p:calendar value="#{recetaListaServicio.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
                         <p:ajax event="dateSelect"/>
                     </p:calendar>
@@ -49,14 +50,10 @@
                 <!--Botones de admin-->
                 <div class="admin-actions">                                           
                     <p:commandButton id="button-edit" value="#{messages['receta.entrega']}" styleClass="btn primary"
-                                     onclick="#{'editDlg.show();'}" ajax="true" disabled="#{empty recetaListaServicio.recetaSeleccionada}">
+                                     onclick="#{'editDlg.show();'}" ajax="true" disabled="#{empty recetaListaServicio.recetaSeleccionada }">
                         <p:ajax process="@this" update=":edit-dialog"/>
                     </p:commandButton>
-                    &nbsp;&nbsp;
-                    <h:commandLink id="button-print" value="#{messages['common.print']}" styleClass="btn primary" action="#{reporteReceta.renderReceta()}" 
-                                   disabled="#{empty recetaListaServicio.recetaSeleccionada and ('Entregada' eq recetaListaServicio.recetaSeleccionada.estado)}">
-                        <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>                        
-                    </h:commandLink>
+
 
                     <div style="float: right; " >
                         <p:inputText id="criterioBuscar" size ="25" value="#{recetaListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
@@ -77,9 +74,9 @@
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente
                     <p:ajax event="colResize" />-->
                     <p:ajax event="rowSelect" listener="#{recetaListaServicio.onRowSelect}"
-                            update=":form:button-edit :form:messages :form:button-print :edit-dialog"/>   
+                            update=":form:button-edit :form:messages :edit-dialog"/>   
                     <p:ajax event="rowUnselect" listener="#{recetaListaServicio.onRowUnselect}" 
-                            update=":form:button-edit :form:messages :form:button-print :edit-dialog"/>
+                            update=":form:button-edit :form:messages :edit-dialog"/>
                     <!--Columnas para mostrar en la tabla-->
 
                     <p:column sortBy="#{receta_.id}" style="width: 7%; text-align: center;">
@@ -142,7 +139,7 @@
                             <p:graphicImage value="/resources/images/pdf.png" />                          
                             <f:setPropertyActionListener value="#{recetaListaServicio.fechaI}" target="#{reporteListas.fechaInf}"/>
                             <f:setPropertyActionListener value="#{recetaListaServicio.fechaF}" target="#{reporteListas.fechaSup}"/>
-                            
+
                         </h:commandLink>
                         <!--#{''}
                         <h:commandLink >  
@@ -155,7 +152,7 @@
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['receta.entrega']} #{messages['receta.nombre']} " 
                       widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="70%">
                 <h:form id="form-dialog">
-
+                    <h3>#{'¿Verifique los medicamentos de la receta a entregar?'}</h3>
                     <p:panelGrid columns="4">
                         <label for="nombres" style="margin-top: -5px;">#{messages['common.firstname']}: </label>                        
                         <h:outputText value="#{recetaListaServicio.recetaSeleccionada.paciente.nombres}" />                                                
@@ -187,16 +184,13 @@
                         </p:panel>
                     </p:panelGrid>                    
                     <div class="admin-actions">
-                        <h:commandLink value="#{messages['comun.terminar']}" onclick="editDlg.hide();"   
-                                       action="#{recetaListaServicio.entregarReceta()}" styleClass="btn primary"
-                                         immediate="true" style="margin: 0 0 0 30%">  
-                            <!--recetaListaServicio.entregarReceta() :form:tablaRecetas--> 
-                            <p:ajax process="@this" update=":form:tablaRecetas"/>                            
-                        </h:commandLink> 
                         &nbsp;&nbsp;
-
+                        <h:commandLink id="button-print" value="#{messages['common.print']}" styleClass="btn primary offset3" action="#{reporteReceta.renderReceta()}" onclick="editDlg.hide();"
+                                       disabled="#{empty recetaListaServicio.recetaSeleccionada and ('Entregada' eq recetaListaServicio.recetaSeleccionada.estado)}">
+                            <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>                        
+                        </h:commandLink>                     
                         &nbsp;&nbsp;
-                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();" /> 
+                        <p:commandLink value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();" styleClass="btn"/> 
                     </div>
                 </h:form>
             </p:dialog>

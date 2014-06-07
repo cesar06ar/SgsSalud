@@ -29,9 +29,7 @@
         <ui:define name="content-pre" >
             <h:form id="form1">
                 <h:panelGroup style="margin-top: -15px; " styleClass="offset3">
-                    <!--<p:calendar value="# {consultaMedicaListaServicio.inicio}" pattern="yyyy-MM-dd" title="fecha Inicio" >
-                        <p:ajax event="dateSelect" />
-                    </p:calendar> -->  
+                    <label style="margin-left: -30%; width: 30%"><b>#{'Ingrese Fecha de busqueda:'}</b></label>&nbsp;
                     <p:calendar id="criterioBuscar" size ="15" value="#{pedidoExamenListaServicio.fecha}" title="Ingrese una fecha"
                                 locale="es" navigator="true" showButtonPanel="true" disabledWeekends="false" >
                         <p:ajax event="dateSelect" />

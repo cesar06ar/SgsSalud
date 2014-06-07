@@ -26,6 +26,7 @@
     <ui:define name="content-pre" >
         <h:form id="form1">
             <h:panelGroup style="margin-top: -15px;">
+                <label style="margin-left: -30%; width: 30%"><b>#{'Ingrese Fechas de busqueda:'}</b></label>&nbsp;
                 <p:calendar value="#{servicioMedListS.fechaI}" pattern="yyyy-MM-dd" title="fecha Inicio"  >
                     <p:ajax event="dateSelect"  process="@this"/>
                 </p:calendar>
