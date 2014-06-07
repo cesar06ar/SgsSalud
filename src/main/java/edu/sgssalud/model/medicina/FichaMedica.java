@@ -52,7 +52,7 @@ import javax.persistence.Transient;
      @NamedQuery(name = "FichaMedica.buscarPorFecha",
             query = "select fm from FichaMedica fm where"           
             +" fm.fechaApertura=:clave")})
-public class FichaMedica extends BussinesEntity implements Serializable {    
+public class FichaMedica extends BussinesEntity implements Serializable, Comparable<FichaMedica> {    
 
     private static final long serialVersionUID = 1L;   
 //    @Id
@@ -164,4 +164,9 @@ public class FichaMedica extends BussinesEntity implements Serializable {
         }
         
     }*/
+
+    @Override
+    public int compareTo(FichaMedica o) {
+        return (int)(o.getNumFicha() - this.numeroFicha);
+    }
 }

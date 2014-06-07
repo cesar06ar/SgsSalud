@@ -382,30 +382,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         }
     }
 
-    /*public void horasDisponiblesPostergar() {
-     System.out.println("turno seleccionado___" + turnoSelect.toString());
-     listaTurnos = turnoS.getTurnosPorFecha(fecha);
-     String hora = null;
-     List<String> listaH = new ArrayList<String>();
-     if (!listaTurnos.isEmpty()) {
-     for (Turno t : listaTurnos) {
-     System.out.println("TURNO______" + t.toString());
-     hora = FechasUtil.getHoraActual(t.getHora());
-     System.out.println("HORA ___" + hora);
-     if (turnoSelect.getServicio().equals(t.getServicio())) {
-     for (String h : listaHoras) {
-     if (h.equals(hora)) {
-     //listaHoras.remove(hora);
-     listaH.add(h);
-     System.out.println("ELIMINO HORA");
-     }
-     }
-     }
-
-     }
-     listaHoras.removeAll(listaH);
-     }
-     }*/
+   
     public void actualizarFecha_Hora() {
 
         String hor = FechasUtil.getHoraActual(getInstance().getHora());
@@ -437,19 +414,23 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         listaTurnos = turnoS.getTurnos();
     }
 
-    public void cancelarCitas() {
+    public String cancelarCitas() {
         List<Turno> turnosL = turnoS.getTurnosPor(new Date());
-        if (!turnosL.isEmpty()) {
-            for (Turno t : turnosL) {
+        System.out.println("Turnos : "+turnosL.toString());
+        if (!turnosL.isEmpty()) {            
+            for (Turno t : turnosL) {                
                 if ("Por Realizar".equals(t.getEstado())) {
+                    System.out.println("Turno no realizado"+t.getId());
                     t.setEstado("No Realizada");
                     em.merge(t);
                 }
             }
+            listaTurnos = turnoS.getTurnosPor(new Date());
+            //return "/pages/depSalud/agenda.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay ninguna cita para este día  ", ""));
         }
-
+        return null;
     }
 
     public Date getFechaBusc() {

@@ -78,6 +78,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable {
         cos.setEntityManager(em);
         if (resultList.isEmpty()) {
             resultList = cos.buscarPorFechas(new Date(), new Date());
+            Collections.sort(resultList);
         }
     }
 
@@ -143,7 +144,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable {
     }
 
     public List<ConsultaOdontologica> getResultList() {
-        //Collections.sort(resultList);// ORDENA SEGUN CRITERIO DE COMPARACION REVISARA CONSULTA ODONT
+        Collections.sort(resultList);// ORDENA SEGUN CRITERIO DE COMPARACION REVISARA CONSULTA ODONT
         return resultList;
     }
 

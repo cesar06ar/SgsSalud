@@ -81,6 +81,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
 //        fin = new Date();
         if (resultList.isEmpty()) {
             resultList = cms.buscarPorRangoFechas(new Date(), new Date());
+            Collections.sort(resultList);
         }
 
     }
@@ -138,6 +139,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
     }
 
     public void setResultList(List<ConsultaMedica> resultList) {
+        Collections.sort(resultList);
         this.resultList = resultList;
     }
 

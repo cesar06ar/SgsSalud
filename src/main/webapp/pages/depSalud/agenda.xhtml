@@ -34,30 +34,36 @@
                     <h:panelGroup style="">
                         <div class="container-fluid">   
                             <div class="row-fluid">
-                                <div class="span4" >
-                                    <p:selectOneMenu id="present" value="#{turnoHome.estado}" converter="#{omnifaces.SelectItemsConverter}" 
-                                                     effect="fade" var="m" >  
-                                        <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
-                                        <f:selectItem itemLabel="Por Realizar" itemValue="Por Realizar" />  
-                                        <f:selectItem itemLabel="Realizada" itemValue="Realizada" />      
-                                        <f:selectItem itemLabel="Postergada" itemValue="Postergada" />  
-                                        <f:selectItem itemLabel="No Realizada" itemValue="No Realizada" />
-                                        <p:ajax event="change" update=":form:buscar"/>
-                                    </p:selectOneMenu>
+                                <div class="span4 clearfix" >                                    
+                                    <label for="present" ><b>#{'Ingrese un estado para buscar:'}</b></label>&nbsp;
+                                    <div class="input" >
+                                        <p:selectOneMenu id="present" value="#{turnoHome.estado}" converter="#{omnifaces.SelectItemsConverter}" 
+                                                         effect="fade" var="m" style="margin-left: -11px">  
+                                            <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                            <f:selectItem itemLabel="Por Realizar" itemValue="Por Realizar" />  
+                                            <f:selectItem itemLabel="Realizada" itemValue="Realizada" />      
+                                            <f:selectItem itemLabel="Postergada" itemValue="Postergada" />  
+                                            <f:selectItem itemLabel="No Realizada" itemValue="No Realizada" />
+                                            <p:ajax event="change" update=":form:buscar"/>
+                                        </p:selectOneMenu>
+                                    </div>
                                 </div>
-                                <div class="span5" style="width: 80%">
-                                    <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha" 
-                                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
-                                        <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
-                                    </p:calendar>                                 
-                                    <p:calendar id="criterioBuscarF" size ="15" value="#{turnoHome.fechaBuscFin}" title="Ingrese una fecha" 
-                                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
-                                        <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
-                                    </p:calendar>                                
-                                    <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPor()}"  styleClass="btn info" update="@form :form:tablaTurnos">
-                                        <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
-                                    </p:commandButton>                                        
-                                    <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.buscarTodos()}"  styleClass="btn info" update="@form :form:tablaTurnos"/>
+                                <div class="span5 clearfix" style="width: 80%">
+                                    <label ><b>#{'Ingrese fechas de busqueda:'}</b></label>&nbsp;
+                                    
+                                        <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha" 
+                                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
+                                            <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
+                                        </p:calendar>                                 
+                                        <p:calendar id="criterioBuscarF" size ="15" value="#{turnoHome.fechaBuscFin}" title="Ingrese una fecha" 
+                                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
+                                            <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
+                                        </p:calendar>                                
+                                        <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPor()}"  styleClass="btn info" update="@form :form:tablaTurnos">
+                                            <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
+                                        </p:commandButton>                                        
+                                        <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.buscarTodos()}"  styleClass="btn info" update="@form :form:tablaTurnos"/>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -117,7 +123,7 @@
                     </p:column>
                 </p:dataTable>
                 <p:commandLink id="add-consult" type="button" value="Cancelar Citas" immediate="true" styleClass="btn info"
-                               onclick="#{'deletedDlg.show();'}" ajax="true" title="Cancela todas las citas no realizadas de este día"
+                               onclick="#{'deletedDlg.show();'}" ajax="true" title="Cambiar estado de todas las citas no realizadas de este día"
                                style="float: right">                    
                 </p:commandLink>
                 <h:panelGrid id="export" class="columns" >
@@ -141,7 +147,7 @@
                         <h:outputText value="Esta seguro que quiere cancelar toda las citas de este día"/>
                     </h:panelGroup>  
                     <p:commandButton value="#{messages['common.yes']}" action="#{turnoHome.cancelarCitas()}" 
-                                     oncomplete="#{'deletedDlg.hide();'}" update=":form:tablaTurnos" immediate="true" ajax="true"
+                                     oncomplete="#{'deletedDlg.hide();'}" update="@form :form:tablaTurnos" immediate="true" ajax="true"
                                      style="margin-top:10px;" > 
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  

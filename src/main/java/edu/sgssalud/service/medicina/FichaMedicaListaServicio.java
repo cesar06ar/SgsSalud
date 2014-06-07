@@ -91,6 +91,7 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica> {
         if (resultList.isEmpty()) {
             Date now = Calendar.getInstance().getTime();
             resultList = fms.getFichaMedicaPorFechas(now, now);
+            Collections.sort(resultList);
             //resultList = fms.getFichasMedicas();
         }
 
