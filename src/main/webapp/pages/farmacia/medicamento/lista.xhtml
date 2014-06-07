@@ -55,16 +55,16 @@
                         <p:commandButton value="Buscar" action="#{medicamentoListaServicio.buscarPorParametro()}" update="tablaMedicamentos" styleClass="btn info"/>                    
                     </h:panelGroup>
                 </div>
+                <br/>
+                <h:outputText value="TOTAL MEDICAMENTOS: #{medicamentoListaServicio.resultList.size()}" />                                    
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             paginator="true" rows="20"  paginatorPosition="top"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
-                             rowsPerPageTemplate="5,10,20,50,100"
-                             lazy="true" resizableColumns="true" liveResize="true"
+                             scrollable="true" scrollWidth="97%" scrollHeight="80%"       
+                             lazy="true" 
                              rowKey="#{medicamento_.id}"
                              selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
-                             rendered="true"
-                             selectionMode="single">
+                             rendered="true" 
+                             selectionMode="single">                    
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{medicamentoListaServicio.onRowSelect}"
                             update=":form:button-edit :form:messages :form:button-cardex"/>   
@@ -72,52 +72,63 @@
                             update=":form:button-edit :form:messages :form:button-cardex"/>
                     <!--Columnas para mostrar en la tabla-->
 
-                    <p:column sortBy="#{medicamento_.numeroFactura}" style="width: 8%; text-align: center;">
+                    <p:column style="width: 40px; text-align: center;">
                         <f:facet name="header">  
-                            <h:outputText value="#{'Nro. Factura'}" />  
+                            <h:outputText value="#{'N° Fac.'}" />  
                         </f:facet>  
                         <h:outputText value="#{medicamento_.numeroFactura}" />                        
                     </p:column>
-                    <p:column sortBy="#{medicamento_.nombreComercial}" style="width: 15%; text-align: center;">
+                    <p:column  style="width: 160px; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.nombre.comercial']}" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.nombreComercial}" />
                     </p:column>
 
-                    <p:column sortBy="#{medicamento_.nombreGenerico}" style=" width: 15%;text-align: center;">
+                    <p:column  style=" width: 160px;text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="#{messages['common.nombre.generico']}" />  
                         </f:facet>                         
                         <h:outputText value="#{medicamento_.nombreGenerico}" />                            
                     </p:column>
-
-                    <p:column sortBy="#{medicamento_.unidades}" style="width: 5%; text-align: center;">
-                        <f:facet name="header">  
-                            <h:outputText value="#{'Unidades'}" />  
-                        </f:facet> 
+                    <p:column headerText="Unidades" style="width: 50px; text-align: center;">                        
                         <h:outputText value="#{medicamento_.unidades}" />
-                    </p:column>
-                    <p:column style="width: 4%; text-align: center;">
-                        <f:facet name="header">  
-                            <h:outputText value="Genérico" title="Medicamento Genérico"/>  
-                        </f:facet> 
-                        <p:selectBooleanCheckbox value="#{medicamento_.generico}" disabled="true"/>
-                    </p:column>
-                    <p:column style="width: 10%; text-align: center;">
+                    </p:column>                    
+                    <p:column style="width: 100px; text-align: center;">
                         <f:facet name="header">  
                             <h:outputText value="Fecha Caducidad" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.fechaCaducidad}" >
                             <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                         </h:outputText>  
+                    </p:column> 
+                    <p:column style="width: 150px; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="Casa Comercial" title="Nombre casa comercial"/>  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.casaComercialProveedora}" />
                     </p:column>
-                    <p:column style="width: 10%; text-align: center;">
+                    <p:column style="width: 100px; text-align: center;">
                         <f:facet name="header">                               
                             <h:outputText value="ALERTAS" />  
                         </f:facet> 
                         <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/><br/>
                         <h:outputText value="SIN STOCK" rendered="#{medicamento_.unidades eq 0}" style="color: red;"/>
+                    </p:column>
+                    <p:column headerText="Presentación" style="width: 90px; text-align: center;">                        
+                        <h:outputText value="#{medicamento_.presentacion}" />
+                    </p:column>
+                    <p:column headerText="Genérico" style="width: 50px; text-align: center;">                        
+                        <p:selectBooleanCheckbox value="#{medicamento_.generico}" disabled="true" />
+                    </p:column>
+                    <p:column headerText="Fecha Elaboración" style="width: 100px; text-align: center;">                        
+                        <h:outputText value="#{medicamento_.fechaElaboracion}" />
+                    </p:column> 
+                    <p:column headerText="Fecha Ingreso" style="width: 90px; text-align: center;">                        
+                        <h:outputText value="#{medicamento_.fechaIngreso}" />
+                    </p:column>
+                    <p:column headerText="Dir. casa comercial" style="width: 120px; text-align: center;">                        
+                        <h:outputText value="#{medicamento_.dirCasaComercial}" />
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid id="export" class="columns" >

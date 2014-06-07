@@ -18,7 +18,7 @@
         </ui:define>
         <!--Metadato que se realiza antes de renderizarse la vista-->
         <f:metadata>
-            <f:viewParam name="result" value="#{recetaListaServicio.primerResult}" />
+            
             <f:viewParam name="" value="#{recetaListaServicio.parametroBusqueda}" />
             <f:viewParam name="" value="#{recetaListaServicio.fechaI}" />
             <f:viewParam name="" value="#{recetaListaServicio.fechaF}" />
@@ -33,9 +33,9 @@
                         <p:ajax event="dateSelect"/>  <!-- rendered="buscar1" update="buscar1"-->
                     </p:calendar>
                     &nbsp;
-                    <p:commandButton id="buscar1" value="Buscar" action="#{recetaListaServicio.buscarPorFechas()}" immediate="true" 
+                    <p:commandButton id="buscar1" value="Buscar" action="#{recetaListaServicio.buscarPorFechas()}" 
                                      update="@form :form:tablaRecetas"/>
-                    <p:commandButton id="buscar" value="Buscar Todos" action="#{recetaListaServicio.buscarTodos()}" immediate="true" 
+                    <p:commandButton id="buscar" value="Buscar Todos" action="#{recetaListaServicio.buscarTodos()}" 
                                      update="@form :form:tablaRecetas"/>
                 </h:panelGroup>
             </h:form>
@@ -54,7 +54,7 @@
                     </p:commandButton>
                     &nbsp;&nbsp;
                     <h:commandLink id="button-print" value="#{messages['common.print']}" styleClass="btn primary" action="#{reporteReceta.renderReceta()}" 
-                                   disabled="#{empty recetaListaServicio.recetaSeleccionada}" actionListener="#{recetaListaServicio.entregarReceta()}">
+                                   disabled="#{empty recetaListaServicio.recetaSeleccionada and ('Entregada' eq recetaListaServicio.recetaSeleccionada.estado)}">
                         <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>                        
                     </h:commandLink>
 
@@ -68,14 +68,14 @@
                 </div>                
                 <p:dataTable id="tablaRecetas"  var="receta_" value="#{recetaListaServicio.resultList}"
                              paginator="true" rows="20"  paginatorPosition="top" style="width: 100%"
-                             resizableColumns="true" liveResize="true" emptyMessage="En este dia no se ha encontrado ninguna receta"
+                             resizableColumns="true" liveResize="true" emptyMessage="En este día no se ha encontrado ninguna receta"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="5,10,20,50,100"
-                             lazy="true" rowKey="#{receta_.id}"
+                             rowKey="#{receta_.id}"
                              selection="#{recetaListaServicio.recetaSeleccionada}"                             
                              selectionMode="single">
-                    <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
-                    <p:ajax event="colResize" />
+                    <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente
+                    <p:ajax event="colResize" />-->
                     <p:ajax event="rowSelect" listener="#{recetaListaServicio.onRowSelect}"
                             update=":form:button-edit :form:messages :form:button-print :edit-dialog"/>   
                     <p:ajax event="rowUnselect" listener="#{recetaListaServicio.onRowUnselect}" 
@@ -188,18 +188,15 @@
                     </p:panelGrid>                    
                     <div class="admin-actions">
                         <h:commandLink value="#{messages['comun.terminar']}" onclick="editDlg.hide();"   
-                                         action="#{recetaListaServicio.entregarReceta()}" 
-                                         immediate="true" 
-                                         style="margin: 0 0 0 30%">  
+                                       action="#{recetaListaServicio.entregarReceta()}" styleClass="btn primary"
+                                         immediate="true" style="margin: 0 0 0 30%">  
                             <!--recetaListaServicio.entregarReceta() :form:tablaRecetas--> 
-                            <p:ajax process="@this" update=":form:tablaRecetas"/>
-                            <f:setPropertyActionListener value="#{recetaListaServicio.recetaSeleccionada}" target="#{reporteReceta.receta}"/>
+                            <p:ajax process="@this" update=":form:tablaRecetas"/>                            
                         </h:commandLink> 
                         &nbsp;&nbsp;
 
                         &nbsp;&nbsp;
-                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();"  
-                                         /> 
+                        <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="editDlg.hide();" /> 
                     </div>
                 </h:form>
             </p:dialog>

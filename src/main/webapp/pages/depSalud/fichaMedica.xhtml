@@ -123,10 +123,10 @@
                         <h:panelGroup layout="block" class="clearfix">
                             <label for="gs_" class="control-label">#{messages['fichaMedica.grupoSangineo']} *</label>
                             <div class="input">
-                                <p:selectOneMenu id="gs_" value="#{fichaMedicaHome.instance.grupoSangineo}" effect="fade"  converter="#{omnifaces.GenericEnumConverter}" required="true" requiredMessage="false" 
+                                <p:selectOneMenu id="gs_" value="#{fichaMedicaHome.instance.grupoSangineo}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="false" requiredMessage="false" 
                                                  rendered="true" label="#{messages['fichaMedica.grupoSanguineo']}">
                                     <f:selectItem  itemLabel = "#{messages['common.choice']}" />  
-                                    <f:selectItems value="#{fichaMedicaHome.listaGruposSangineos}" var="grupoS" itemLabel="#{grupoS}" itemValue="#{grupoS}"/>                          
+                                    <f:selectItems value="#{fichaMedicaHome.listaGruposSangineos}" var="grupoS" itemLabel="#{grupoS}" itemValue="#{grupoS}"/>
                                     <p:ajax event="change" update="@parent" partialSubmit="true" process="@this"/>
                                 </p:selectOneMenu>  
                                 <h:graphicImage value="#{resource['success.gif']}" rendered="#{fichaMedicaHome.instance.grupoSangineo != null}"
@@ -235,11 +235,14 @@
                 <div class="admin-actions" style="padding-right: 40px;">
                     <br/>
                     <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
-                                     immediate="true" update=":form:growl" disabled="#{!fichaMedicaHome.estudientaMatriculado()}"/>
-                    &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
-                    </h:link>
+                                     immediate="true" update=":form:growl" onclick="imgDlg.show();"/> <!--disabled="# {!fichaMedicaHome.estudientaMatriculado()}"-->
+                    &nbsp;&nbsp;                    
+                    <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                                     onclick="#{'opDlg.show();'}" ajax="true" />                                    
+                    <p:panel id="img_p" widgetVar="imgDlg" style="display:none; width: 30px;" >
+                        <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" style="margin-left: -5px"/>
+                    </p:panel> 
+
                 </div>
                 <p:panel id="signosVitalesP" header="#{messages['signosVitales.toma']} #{messages['signosVitales.Nombre']}" toggleable="true" toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ENFERMEROS') }">
@@ -418,6 +421,19 @@
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
+            <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                     
+                    <h:link outcome="/pages/depSalud/listaFichaMedica.xhtml?faces-redirect=true" onclick="opDlg.hide();" 
+                            value="#{messages['common.yes']}" styleClass="btn primary" style="margin-top: -5px; margin-left: 20%; height: 16px">  
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                   style="margin-top:10px;" styleClass="btn"/>  
                 </h:form>
             </p:dialog>
         </ui:define>       

@@ -50,13 +50,13 @@ import org.jboss.seam.transaction.Transactional;
 @Named
 @ViewScoped
 public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable {
-    
+
     @Inject
     @Web
     private EntityManager em;
     @Inject
     private TurnoService turnoS;
-    
+
     @Inject
     private Identity identity;
     @Inject
@@ -66,14 +66,15 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     private Long pacienteId;
     private String horaD;
     private Date fecha;
-    private Date fechaBusc = new Date();
+    private Date fechaBusc;// = new Date();fechaBuscFin
+    private Date fechaBuscFin;
     private Paciente paciente;
     private List<Turno> listaTurnos = new ArrayList<Turno>();
     private List<String> listaHoras = new ArrayList<String>();
     private String criterioBusqueda;
     private Turno turnoSelect;
     private String estado;
-    
+
     private WebServiceSGAClientConnection coneccionSGA = new WebServiceSGAClientConnection();
 //    @Inject
 //    SettingService settingService;
@@ -82,14 +83,14 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     public Long getTurnoId() {
         return (Long) getId();
     }
-    
+
     public void setTurnoId(Long turnoId) {
         setId(turnoId);
         if (getInstance().isPersistent()) {
             actualizarFecha_Hora();
         }
     }
-    
+
     @TransactionAttribute   //
     public Turno load() {
         if (isIdDefined()) {
@@ -98,30 +99,30 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         //log.info("sgssalud --> cargar instance " + getInstance());
         return getInstance();
     }
-    
+
     @TransactionAttribute
     public void wire() {
         getInstance();
     }
-    
+
     @PostConstruct
     public void init() {
         setEntityManager(em);
         pacienteS.setEntityManager(em);
         turnoS.setEntityManager(em);
         listaHoras = this.agregarHoras();
-        listaTurnos = turnoS.getTurnos();
+        listaTurnos = turnoS.getTurnosPor(Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
         fms.setEntityManager(em);
         turnoSelect = new Turno();
 
 //        settingService.setEntityManager(em);
 //        settingList = settingService.getSettingByName("id_oferta");
     }
-    
+
     public void cargarTurnosPaciente() {
         listaTurnos = turnoS.getTurnosPorFecha(paciente);
     }
-    
+
     @Override
     protected Turno createInstance() {
         //prellenado estable para cualquier clase 
@@ -130,12 +131,12 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         turno.setFechaEmision(now);
         return turno;
     }
-    
+
     @Override
     public Class<Turno> getEntityClass() {
         return Turno.class;
     }
-    
+
     @TransactionAttribute
     public String guardar() {
         System.out.println("INGRESO GUARDAR_____-");
@@ -186,7 +187,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         }
         return salida;
     }
-    
+
     @TransactionAttribute
     public String postergar() {
         System.out.println("INGRESO postergar_____-");
@@ -212,7 +213,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
                     turnoSelect = null;
                 }
             }
-            
+
         } catch (Exception e) {
             //e.printStackTrace();
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Error al guardar ", "LLene todos los datos");
@@ -221,7 +222,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         }
         return salida;
     }
-    
+
     @Transactional
     public void borrarEntidad() {
 //        log.info("sgssalud --> ingreso a eliminar: " + getInstance().getId());
@@ -235,41 +236,41 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡No existe una entidad para ser borrada!", ""));
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
         //return "/pages/serviciosMedicos/lista.xhtml?faces-redirect=true";
     }
-    
+
     public Long getPacienteId() {
         return pacienteId;
     }
-    
+
     public void setPacienteId(Long pacienteId) {
         this.pacienteId = pacienteId;
         if (pacienteId != null) {
             this.setPaciente(pacienteS.getPacientePorId(pacienteId));
         }
     }
-    
+
     public String getHoraD() {
         return horaD;
     }
-    
+
     public void setHoraD(String horaD) {
         this.horaD = horaD;
     }
-    
+
     public Paciente getPaciente() {
         return paciente;
     }
-    
+
     public Date getFecha() {
         return fecha;
     }
-    
+
     public void setFecha(Date fecha) {
         this.fecha = fecha;
         if (fecha != null) {
@@ -278,31 +279,31 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
 //                this.horasDisponiblesPostergar();
 //            } else {
             this.horasDisponibles();
-            
+
         }
     }
-    
+
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
     }
-    
+
     public List<Turno> getListaTurnos() {
         return listaTurnos;
         //return turnoS.getTurnos();
     }
-    
+
     public void setListaTurnos(List<Turno> listaTurnos) {
         this.listaTurnos = listaTurnos;
     }
-    
+
     public List<String> getListaHoras() {
         return listaHoras;
     }
-    
+
     public void setListaHoras(List<String> listaHoras) {
         this.listaHoras = listaHoras;
     }
-    
+
     public List<String> agregarHoras() {
         //listaHoras = new ArrayList<String>();
         List<String> horas = new ArrayList<String>();
@@ -355,7 +356,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         }
         return horas;
     }
-    
+
     public void horasDisponibles() {
         //System.out.println("LISTA DE TURNOS POR FECHA___" + listaTurnos.toString());
         listaTurnos = turnoS.getTurnosPor(fecha);
@@ -375,7 +376,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
                         }
                     }
                 }
-                
+
             }
             listaHoras.removeAll(listaH);
         }
@@ -406,62 +407,95 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
      }
      }*/
     public void actualizarFecha_Hora() {
-        
+
         String hor = FechasUtil.getHoraActual(getInstance().getHora());
         setHoraD(hor);
         setFecha(getInstance().getFechaCita());
-        
+
     }
-    
+
     public void buscarPor() {
-        if (fechaBusc != null && estado != null) {
+        if (fechaBusc != null && fechaBuscFin != null && !estado.isEmpty()) {
             System.out.println("Ingreso aqui");
-            listaTurnos = turnoS.getTurnosPor(fecha, estado);
-        } else if (fechaBusc != null) {
-            System.out.println("Ingreso aqui");
+            listaTurnos = turnoS.getTurnosPor(fechaBusc, fechaBuscFin, estado);
+        } else if (fechaBusc != null && fechaBuscFin != null) {
+            System.out.println("Ingreso aqui 2");
+            listaTurnos = turnoS.getTurnosPor(fechaBusc, fechaBuscFin);
+        } else if (fechaBusc != null && fechaBuscFin == null) {
+            System.out.println("Ingreso aqui 2");
             listaTurnos = turnoS.getTurnosPor(fechaBusc);
+        } else if (fechaBusc == null && fechaBuscFin != null) {
+            System.out.println("Ingreso aqui 2");
+            listaTurnos = turnoS.getTurnosPor(fechaBuscFin);
         } else if (estado != null) {
+            System.out.println("Ingreso aqui 3");
             listaTurnos = turnoS.getTurnosPor(estado);
-        }       
-        
+        }
     }
-    
+
+    public void buscarTodos() {
+        listaTurnos = turnoS.getTurnos();
+    }
+
+    public void cancelarCitas() {
+        List<Turno> turnosL = turnoS.getTurnosPor(new Date());
+        if (!turnosL.isEmpty()) {
+            for (Turno t : turnosL) {
+                if ("Por Realizar".equals(t.getEstado())) {
+                    t.setEstado("No Realizada");
+                    em.merge(t);
+                }
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "No hay ninguna cita para este día  ", ""));
+        }
+
+    }
+
     public Date getFechaBusc() {
         return fechaBusc;
     }
-    
+
     public void setFechaBusc(Date fechaBusc) {
         this.fechaBusc = fechaBusc;
         if (fechaBusc != null) {
             listaTurnos = turnoS.getTurnosPor(fechaBusc);
         }
     }
-    
+
     public String getCriterioBusqueda() {
         return criterioBusqueda;
     }
-    
+
     public void setCriterioBusqueda(String criterioBusqueda) {
         this.criterioBusqueda = criterioBusqueda;
     }
-    
+
     public Turno getTurnoSelect() {
         return turnoSelect;
     }
-    
+
     public void setTurnoSelect(Turno turnoSelect) {
         this.turnoSelect = turnoSelect;
         actualizarFecha_Hora();
     }
-    
+
     public String getEstado() {
         return estado;
     }
-    
+
     public void setEstado(String estado) {
         this.estado = estado;
     }
-    
+
+    public Date getFechaBuscFin() {
+        return fechaBuscFin;
+    }
+
+    public void setFechaBuscFin(Date fechaBuscFin) {
+        this.fechaBuscFin = fechaBuscFin;
+    }
+
     public String buscarPaciente() {
         if (criterioBusqueda != null) {
             Paciente p = pacienteS.buscarPorCedula(criterioBusqueda);
@@ -478,12 +512,12 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         }
         return null;
     }
-    
+
     public boolean renderizarVistaMatriculado(Paciente p) {
         if (p.isPersistent()) {
             if ("Universitario".equals(p.getTipoEstudiante())) {
                 boolean matriculado = coneccionSGA.getEstudianteMatriculado_WS_SGA(p.getCedula());
-                
+
                 if (matriculado) {
                     return true;
                 } else {
@@ -491,15 +525,15 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                 }
             }
-            
+
         } else {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Seleccione un Paciente", " ");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-            
+
         }
         return false;
     }
-    
+
     public String agregarConsulta() {
         SecurityRules sr = new SecurityRules();
         String s = null;
@@ -521,14 +555,14 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
         }
         return s;
     }
-    
+
     public String salidaVista(int s, FichaMedica fm) {
         if (s == 1) {
             return "/pages/depSalud/enfermeria/signosVitales.xhtml?faces-redirect=true"
                     + "&fichaMedicaId=" + fm.getId()
                     + "&turnoId=" + getInstance().getId()
                     + "&backView=fichaMedica";
-            
+
         } else if (s == 2) {
             return "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
                     + "&fichaMedicaId=" + fm.getId()

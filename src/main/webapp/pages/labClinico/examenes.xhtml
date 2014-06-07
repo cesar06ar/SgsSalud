@@ -59,13 +59,21 @@
                                      rendered="true" >                            
                             <!--<f:ajax execute="@this :form:save" render=":form:save"/>
                             <p:ajax event="keyup" rendered=":form:save" update="@parent :form:save :edit-dialog:cate" listener="# {examenHome.listarCategorias()}"/>-->
-                            <p:ajax event="keyup" rendered=":form:save" update="@parent :form:save :edit-dialog " listener="#{examenHome.listarCategorias()}"/>
+                            <p:ajax event="keyup" rendered=":form:save" update="@parent :form:save :edit-dialog :form:parametros1" listener="#{examenHome.listarCategorias()}"/>
                         </p:inputText>                        
                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.instance.categorias != null}"
                                         styleClass="validation-status" />
                         <span class="help-inline"><br/>#{'Ingrese los bloques de parametros separados por ,'}<ocp:message forId="categ" /></span>
                     </div>
                 </h:panelGroup> 
+                <div class="admin-actions ">
+                    <p:commandButton id="save" action="#{examenHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4" immediate="true"/>
+
+                    &nbsp;&nbsp;
+                    <h:link outcome="/pages/labClinico/listaExamenes.xhtml?faces-redirect=true" 
+                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
+                    </h:link>
+                </div>
                 <p:panel header="PARAMETROS DEL EXAMEN" rendered="#{examenHome.instance.persistent}">
                     <p:commandButton id="button-add" value="#{messages['common.add']} Parametros" styleClass="btn primary"
                                      onclick="#{'editDlg.show();'}"
@@ -75,45 +83,85 @@
                     <br/>
                     <p:dataTable id="parametros1" value="#{examenHome.parametros}"
                                  lazy="true" resizableColumns="true" liveResize="true"
-                                 var="_p" >
+                                 var="_p" editable="true">
+                        <f:facet name="header">
+                            <h:outputText value="Total de Parametros #{examenHome.parametros.size}"/>
+                        </f:facet>
+                        <p:ajax event="rowEdit" listener="#{examenHome.onRowEdit }" update=":form:messages" />
+                        <p:ajax event="rowEditCancel" listener="#{examenHome.onRowCancel}" update=":form:messages" />
+
                         <p:column headerText="Categoria">
-                            <h:outputText value="#{_p.categoria}" />
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.categoria}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="cate" value="#{p_.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
+                                                     effect="fade" var="m" styleClass="xLarge" required="#{not empty examenHome.instance.categorias}">  
+                                        <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                        <f:selectItems value="#{examenHome.categorias}" var="c"/>    
+                                        <p:ajax event="change" process="@this" update="@this" partialSubmit="true"/>
+                                    </p:selectOneMenu> 
+                                </f:facet>
+                            </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Nombre">
-                            <h:outputText value="#{_p.nombre}" />
+
+                        <p:column headerText="Nombre">                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.nombre}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{_p.nombre}" style="width:100%" label="Nombre">
+                                        <p:ajax event="keyup" process="@this"/>
+                                    </p:inputText></f:facet>
+                            </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Valor por defecto">
-                            <h:outputText value="#{_p.valor}" />
+                        <p:column headerText="Valor">                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.valor}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{_p.valor}" style="width:100%" label="Valor">
+                                        <p:ajax event="keyup" process="@this"/>
+                                    </p:inputText></f:facet>
+                            </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Unidad de Medida">
-                            <h:outputText value="#{_p.unidadMedida}" />
+                        <p:column headerText="Unidad de Medida">                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.unidadMedida}" /></f:facet>
+                                <f:facet name="input"><p:inputText value="#{_p.unidadMedida}" style="width:100%" label="Unidad de Medida">
+                                        <p:ajax event="keyup" process="@this"/>
+                                    </p:inputText></f:facet>
+                            </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Ref. Inferior">
-                            <h:outputText value="#{_p.valorReferenciaInf}" />
+                        <p:column headerText="Ref. Inferior">                               
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.valorReferenciaInf}" /></f:facet>
+                                <f:facet name="input"><pe:inputNumber value="#{_p.valorReferenciaInf}" style="width:100%" label="Ref. Inferior">
+                                        <p:ajax event="blur" process="@this"/>
+                                    </pe:inputNumber></f:facet>
+                            </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Ref. Seperior">
-                            <h:outputText value="#{_p.valorReferenciaSup}" />
+                        <p:column headerText="Ref. Seperior">                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.valorReferenciaSup}" /></f:facet>
+                                <f:facet name="input"><pe:inputNumber value="#{_p.valorReferenciaSup}" style="width:100%" label="Ref. Seperior">
+                                        <p:ajax event="blur" process="@this"/>
+                                    </pe:inputNumber></f:facet>
+                            </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Opción">
-                            <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" 
-                                           onclick="#{'deletedDlg.show()'}"  immediate="true" styleClass="btn success" >                                 
+                        <p:column headerText="Opción" style="width:5%">
+                            <p:column style="width:10px">
+                                <p:rowEditor >
+                                    <!--<p:ajax update=":form:parametros1"/>-->
+                                </p:rowEditor>
+                            </p:column>
+
+                            <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"  style="width: 12px; height: 10px; float: right; margin-right: 10px; margin-top: -20px;"
+                                           onclick="#{'deletedDlg.show()'}"  immediate="true"  > 
+                                <p:graphicImage value="/resources/images/delete.gif"/>
                                 <f:setPropertyActionListener value="#{_p}" target="#{examenHome.parametro}"/>
                                 <p:ajax process="@this" update=":cancel-dialog" />
                             </p:commandLink>
                         </p:column>
                     </p:dataTable>
-                </p:panel>
-
-                <div class="admin-actions ">
-                    <p:commandButton id="save" action="#{examenHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4" immediate="true"/>
-
-                    &nbsp;&nbsp;
-                    <h:link outcome="/pages/labClinico/listaExamenes.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >                         
-                    </h:link>
-                </div>
+                </p:panel>                
             </h:form>            
-            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} Parametro de examen " 
+            <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} o editar Parametro de examen " 
                       widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="80%">
                 <h:form id="form-dialog">
                     <!--<glue:input id="cate" name="cate" type="text" label="# {messages['comun.categoria']}" value="# {examenHome.parametro.categoria}" 
@@ -132,17 +180,17 @@
                             <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="cate" /></span>
                         </div>
                     </h:panelGroup>  
-                    
+
                     <glue:input id="nomb" name="nomb" type="text" label="#{messages['common.name']}" value="#{examenHome.parametro.nombre}" 
                                 required="false" inlinehelp="#{'Nombre del parametro'}" execute="@this save1" render="nomb"/>
-                    <glue:input id="val1" name="val1" type="text" label="Valor por defecto" value="#{examenHome.parametro.valor}" 
-                                required="false" inlinehelp="#{'valor por defecto del parametro'}" execute="@this save1" render="val1"/>
+                    <glue:input id="val1" name="val1" type="text" label="Valor" value="#{examenHome.parametro.valor}" 
+                                required="false" inlinehelp="#{'valor inicial del parametro'}" execute="@this save1" render="val1"/>
                     <glue:input id="uniMed" name="uniMed" type="text" label="Unidad de Medida" value="#{examenHome.parametro.unidadMedida}" 
                                 required="false" inlinehelp="#{'una unidad de medida en caso la tiene'}" execute="@this save1" render="uniMed"/>
                     <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.parametro.valorReferenciaInf}"
-                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
+                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
                     <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.parametro.valorReferenciaSup}"
-                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
+                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.add']}" oncomplete="editDlg.hide();"                                           
                                          action="#{examenHome.agregarParametro()}" update=":form:parametros1 :edit-dialog"                                             
@@ -171,6 +219,7 @@
                 </h:form>
             </p:dialog> 
         </ui:define>
-    </ui:composition>
+    </ui:composition>  
+    
 </html>                
 

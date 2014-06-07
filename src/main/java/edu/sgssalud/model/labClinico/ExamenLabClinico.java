@@ -44,7 +44,7 @@ public class ExamenLabClinico extends PersistentObject<ExamenLabClinico> impleme
     @Column(nullable = false)
     private ExamenLabClinico.Tipo tipo;
     
-    @OneToMany(mappedBy = "examenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "examenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Parametros> parametros = new ArrayList<Parametros>();
     
     @Transient

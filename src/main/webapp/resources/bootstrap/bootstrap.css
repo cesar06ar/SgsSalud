@@ -1023,13 +1023,23 @@ textarea[readonly] {
     line-height: 18px;
     color: #bfbfbf;
 }
+
 .help-inline {
     padding-left: 5px;
     *position: relative;
     /* IE6-7 */
-
     *top: -5px;
     /* IE6-7 */
+
+}
+
+.help-inline1 {
+    padding-left: 5px;
+    *position: relative;
+    *top: -5px;
+    font-size: 11px;
+    line-height: 18px;
+    color: #0069d6;
 
 }
 .help-block {

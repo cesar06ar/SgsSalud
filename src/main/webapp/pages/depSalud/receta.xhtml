@@ -83,33 +83,30 @@
                                             <p:ajax process="@this" update=":form:medicamentoDisponible :form:Indicacion save" rendered="save"/>
                                         </p:commandLink>                                           
                                     </div>
-                                    <p:overlayPanel id="medPanel" for="cargarMedicamento" hideEffect="fade" dynamic="false" widgetVar="dialogMedicamet" style="margin-left: -20%;">
+                                    <p:overlayPanel id="medPanel" for="cargarMedicamento" hideEffect="fade" dynamic="false" widgetVar="dialogMedicamet" style="width: 600px; margin-left:  6%;" >
                                         <p:dataTable id="tablaMedicamentos" var="medicamento_" value="#{recetaHome.listaMedicamentosStock}" emptyMessage="No hay medicamentos cargados"
-                                                     paginator="true" rows="10" rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single"
-                                                     > <!-- widgetVar="medTable" filteredValue="# {recetaHome.listaMedicamentosFiltrados}"
-                                            <f:facet name="header">  
-                                                <p:outputPanel>  
-                                                    <h:outputText value="Buscar Medicamento" />  
-                                                    <p:inputText id="globalFilter" onkeyup="medTable.filter();" style="width:150px" />  
-                                                </p:outputPanel>  
-                                            </f:facet>  -->
+                                                     rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single"                                                      
+                                                     scrollable="true" scrollHeight="140">                                            
                                             <p:ajax event="rowSelect" listener="#{recetaHome.onRowSelect}"   
                                                     update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos" oncomplete="dialogMedicamet.hide();" />  
                                             <p:ajax event="rowUnselect" listener="#{recetaHome.onRowUnselect}" update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos"/>
 
-                                            <p:column headerText="Nombre Comercial" style="width:6px; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreComercial}">  
+                                            <p:column headerText="Nombre Comercial" style="width:18%; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreComercial}">  
                                                 <h:outputText value="#{medicamento_.nombreComercial}" />  
                                             </p:column>
-                                            <p:column headerText="Nombre Genérico" style="width:6px; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreGenerico}">  
+                                            <p:column headerText="Nombre Genérico" style="width:18%; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreGenerico}">  
                                                 <h:outputText value="#{medicamento_.nombreGenerico}" />  
                                             </p:column>
-                                            <p:column headerText="Cantidad" style="width:6px; font-size:12px" filterMatchMode="startsWith" filterBy="#{medicamento_.unidades}">  
+                                            <p:column headerText="Cant" style="width:4%; font-size:12px" >  
                                                 <h:outputText value="#{medicamento_.unidades}" />  
                                             </p:column>
-                                            <p:column headerText="#{messages['consultaMedica.Tratamiento']}" style="width: 30%">
+                                            <p:column headerText="Presentación" style="width:12%; font-size:12px" >  
+                                                <h:outputText value="#{medicamento_.presentacion}" />  
+                                            </p:column>
+                                            <p:column headerText="#{'Dosificación'}" style="width: 12%">
                                                 <h:inputTextarea value="#{medicamento_.dosificacion}" style="height: 25px; width:96%;" disabled="true" />
                                             </p:column>
-                                            <p:column headerText="ALERTAS" style="width: 15%; text-align: center; font-size:11px">                            
+                                            <p:column headerText="ALERTAS" style="width: 10%; text-align: center; font-size:11px">                            
                                                 <h:outputText value="#{medicamento_.alerta}" rendered="#{not empty medicamento_.alerta}" style="color: red;"/>
                                             </p:column>
 
@@ -194,13 +191,10 @@
                         <f:param name="backView" value="#{recetaHome.backView}" />
                         <f:param name="previous" value="#{recetaHome.previous}" />
                     </h:link>  &nbsp;
-                    <h:link outcome="/pages/depSalud#{recetaHome.backView}?faces-redirect=true"
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >
-                        <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
-                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
-                        <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />
-                        <f:param name="backView" value="#{recetaHome.previous}" />
-                    </h:link> 
+                    <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                                     onclick="#{'opDlg.show();'}" ajax="true" />                                    
+
+
                 </div>
             </h:form>
             <p:dialog id="save-dialog" header="#{messages['common.delete.confirm']}" widgetVar="saveDlg" resizable="false" modal="true">  
@@ -217,6 +211,24 @@
                     &nbsp;
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="saveDlg.hide();"  
                                      style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>            
+            <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                     
+
+                    <h:link outcome="/pages/depSalud#{recetaHome.backView}?faces-redirect=true" style="margin-top: -5px; margin-left: 20%; height: 16px"
+                            value="#{messages['common.yes']}" styleClass="btn primary" >
+                        <f:param name="fichaMedicaId" value="#{recetaHome.fichaMedica.id}"/>
+                        <f:param name="consultaMedicaId" value="#{recetaHome.consultaMedicaId}"></f:param>                                    
+                        <f:param name="consultaOdontId" value="#{recetaHome.consultaOdontId}" />
+                        <f:param name="backView" value="#{recetaHome.previous}" />
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                   style="margin-top:10px;" styleClass="btn"/>  
                 </h:form>
             </p:dialog>
         </ui:define>       

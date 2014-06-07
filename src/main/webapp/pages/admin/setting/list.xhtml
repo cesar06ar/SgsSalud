@@ -40,13 +40,12 @@
                     <f:param name="settingId" value="#{settingListService.selectedSetting.id}"></f:param>
                     <f:param name="backView" value="list"></f:param>
                 </h:link> 
-                #{' '}
+                #{' '}<!--
                 <p:commandButton id="button-add" value="Oferta Académica" title="Actualizar Oferta Académica del SGA" rendered="#{true}" styleClass="btn primary"
-                                oncomplete="#{'editDlg.show();'}" ajax="true" >
-                                 
+                                oncomplete="# {'editDlg.show();'}" ajax="true" >                                 
                     <p:ajax process="@this" update=":edit-dialog"/>
                     <p:effect type="pulsate" event="load" delay="3000" />
-                </p:commandButton>   
+                </p:commandButton>   -->
 
             </div>
             <p:dataTable var="setting" value="#{settingListService}"

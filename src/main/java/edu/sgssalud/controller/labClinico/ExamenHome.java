@@ -41,6 +41,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.transaction.Transactional;
+import org.primefaces.event.CellEditEvent;
+import org.primefaces.event.RowEditEvent;
 
 /**
  *
@@ -98,13 +100,13 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
     public void setCategorias(List<String> categorias) {
         this.categorias = categorias;
     }
-    
-    public void listarCategorias(){
-        if(getInstance().getCategorias() != null){
+
+    public void listarCategorias() {
+        if (getInstance().getCategorias() != null) {
             String c = getInstance().getCategorias();
             categorias = Arrays.asList(c.split(","));
         }
-    }    
+    }
 
     @Produces
     @Current
@@ -164,7 +166,8 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
                 save(getInstance());
                 FacesMessage msg = new FacesMessage("Se actualizo el nombre del Examen: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-                salida = "/pages/labClinico/listaExamenes.xhtml?faces-redirect=true";
+                //salida = "/pages/labClinico/listaExamenes.xhtml?faces-redirect=true";
+                salida = null;
             } else {
                 //getInstance().setParametros(parametros);
                 create(getInstance());
@@ -190,15 +193,18 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
                 delete(parametro);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  ", "El parametro seleccionado"));
                 parametro = new Parametros();
-            }else{
+                return "/pages/labClinico/examenes.xhtml?faces-redirect=true"
+                        + "&examenLabId=" + getInstance().getId();
+            } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El parametro contiene datos asociados ", "no se puede borrar"));
+                return null;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
         }
-        return "/pages/labClinico/examenes.xhtml?faces-redirect=true"
-                        + "&examenLabId=" + getInstance().getId();
+        return null;
     }
 
     public List<ExamenLabClinico.Tipo> listaTiposExamen() {
@@ -211,18 +217,58 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
     public void agregarParametro() {
         System.out.println("agregar parametro");
         try {
+            if (parametro.getId() != null) {
+                save(parametro);
+                parametros = examenLabService.getParametrosPorExamen(getInstance());
+                parametro = new Parametros();
+                evento.fire(parametro);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Modifico parametro con éxito", ""));
+            } else {
+                parametro.setExamenLabClinico(getInstance());
+                create(parametro);
+                save(parametro);
+                parametros = examenLabService.getParametrosPorExamen(getInstance());
+                parametro = new Parametros();
+                evento.fire(parametro);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agrego parametro con éxito", ""));
+            }
             //getInstance().agregarParametro(parametro);
-            parametro.setExamenLabClinico(getInstance());
-            //save(getInstance());
-            create(parametro);
-            save(parametro);
-            parametros = examenLabService.getParametrosPorExamen(getInstance());
-            parametro = new Parametros();
-            evento.fire(parametro);
+
             System.out.println("fin agregar parametro");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
+
+    public void onRowEdit(RowEditEvent event) {
+        Parametros p = (Parametros) event.getObject();
+        System.out.println("Parametros "
+                + " C= " + p.getCategoria()
+                + " N= " + p.getNombre()
+                + " V= " + p.getValor()
+                + " UM= " + p.getUnidadMedida()
+                + " VRI= " + p.getValorReferenciaInf()
+                + " VRS= " + p.getValorReferenciaSup());
+        save(p);
+        parametros = examenLabService.getParametrosPorExamen(getInstance());
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Modifico el parametro", "" + p.getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+
+        System.out.println("Correcto");
+    }
+
+    public void onRowCancel(RowEditEvent event) {
+        FacesMessage msg = new FacesMessage("Cancelar Edición de Parametro", "" + ((Parametros) event.getObject()).getId());
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+//    public void onCellEdit(CellEditEvent event) {
+//        Object oldValue = event.getOldValue();
+//        Object newValue = event.getNewValue();
+//         
+//        if(newValue != null && !newValue.equals(oldValue)) {
+//            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+//            FacesContext.getCurrentInstance().addMessage(null, msg);
+//        }
+//    }
 }

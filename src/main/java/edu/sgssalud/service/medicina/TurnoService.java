@@ -55,12 +55,21 @@ public class TurnoService extends PersistenceUtil<Turno> implements Serializable
     public Turno getSTurnoPorId(final Long id) {
         return (Turno) findById(Turno.class, id);
     }
-
+    
     public List<Turno> getTurnosPor(final Date fecha) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Turno> query = builder.createQuery(Turno.class);
         Root<Turno> entity = query.from(Turno.class);
-        query.where(builder.equal(entity.get(Turno_.fechaCita), fecha));
+        query.where(builder.equal(entity.get(Turno_.fechaCita), fecha));         
+        return getResultList(query);
+    }
+    
+    public List<Turno> getTurnosPor(final Date fechaI, final Date fechaF) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Turno> query = builder.createQuery(Turno.class);
+        Root<Turno> entity = query.from(Turno.class);
+        //query.where(builder.equal(entity.get(Turno_.fechaCita), fecha)); 
+        query.where(builder.between(entity.get(Turno_.fechaCita), fechaI, fechaF));
         return getResultList(query);
     }
 
@@ -72,11 +81,12 @@ public class TurnoService extends PersistenceUtil<Turno> implements Serializable
         return getResultList(query);
     }
 
-    public List<Turno> getTurnosPor(final Date fecha, final String estado) {
+    public List<Turno> getTurnosPor(final Date fechaI, final Date fechaF, final String estado) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Turno> query = builder.createQuery(Turno.class);
         Root<Turno> entity = query.from(Turno.class);
-        query.where(builder.equal(entity.get(Turno_.fechaCita), fecha), builder.or(builder.equal(entity.get(Turno_.estado), estado)));
+        query.where(builder.between(entity.get(Turno_.fechaCita), fechaI, fechaF),
+                builder.or(builder.equal(entity.get(Turno_.estado), estado)));
         return getResultList(query);
     }
 

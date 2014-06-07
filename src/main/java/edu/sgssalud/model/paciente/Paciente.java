@@ -380,7 +380,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
 
     @Override
     public int compareTo(Paciente o) {
-        return (int) (this.getId() - o.getId());
+        return (int) (o.getId() - this.getId() );
     }
 //    public void vacio(){
 //        //log.info("Verifica si ingresa a metodo...");

@@ -271,13 +271,13 @@
                 </p:panel>                               
                 <div class="admin-actions" style="padding-right: 50px;">
                     <p:commandButton id="save" action="#{consultaOdontHome.guardar()}" value="#{messages['common.save']}" disabled="#{consultaOdontHome.editable}"
-                                     immediate="true" styleClass="btn success offset4" update=":form:growl"/>
+                                     immediate="true" styleClass="btn success offset4" update=":form:growl" onclick="imgDlg.show();"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud#{consultaOdontHome.backView}?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn success" >
-                        <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"/>                        
-                        <f:param name="backView" value="#{consultaOdontHome.backView}"/>
-                    </h:link>
+                    <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                               onclick="#{'opDlg.show();'}" ajax="true" />  
+                    <p:panel id="img_p" widgetVar="imgDlg" style="display:none;">
+                        <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" />
+                    </p:panel> 
                 </div>
                 <p:tabView id="tabOpc" rendered="#{consultaOdontHome.instance.persistent}">
                     <p:tab title="#{messages['tratamiento.Label']} DENTALES" rendered="true" >
@@ -300,7 +300,7 @@
                         </p:dataTable>
                     </p:tab>
                     <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
-                        <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
+                        <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn success" >                            
                             <f:param name="consultaOdontId" value="#{consultaOdontHome.instance.id}"></f:param>
                             <f:param name="backView" value="/odontologia/consultaOdontologica"></f:param>
                             <f:param name="previous" value="#{consultaOdontHome.backView}"/>
@@ -392,6 +392,22 @@
                                  required="false" execute="@this" render="user" styleClass="xLarge" disabled="true"/>
                 </div>                
             </h:form>  
+             <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                     
+
+                    <h:link outcome="/pages/depSalud#{consultaOdontHome.backView}?faces-redirect=true" 
+                            value="#{messages['common.yes']}" styleClass="btn success" style="margin-top: -5px; margin-left: 20%; height: 16px">
+                        <f:param name="fichaMedicaId" value="#{consultaOdontHome.fichaMedicaId}"/>                        
+                        <f:param name="backView" value="#{consultaOdontHome.backView}"/>
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                   style="margin-top:10px;" styleClass="btn"/>  
+                </h:form>
+            </p:dialog>
             <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
                 <h:form id="form-dialog-confirm-delete">
 
@@ -623,18 +639,18 @@
                     <div class="admin-actions ">                        
                         <p:commandButton id="save" action="#{consultaOdontHome.agregarPedido()}" value="#{messages['common.submit']}" 
                                          ajax="true" update="@form" styleClass="btn primary" style="margin-left: 32%" 
-                                         >
+                                         onclick="imgDlg.show();">
                             <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
                         </p:commandButton>
                         &nbsp;
                         <p:commandButton value="#{messages['common.cancel']}" type="button" onclick="pedidoDlg.hide();"  
                                          ajax="true" update="@form" styleClass="btn" >                        
                             <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
-                        </p:commandButton>
+                        </p:commandButton>                        
                     </div>                                    
                 </h:form>
-            </p:dialog>
-        </ui:define>        
+            </p:dialog>          
+        </ui:define>           
     </ui:composition>
 </html>                
 

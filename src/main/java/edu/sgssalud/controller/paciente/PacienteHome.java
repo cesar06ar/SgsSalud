@@ -113,6 +113,19 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
     public void setPacienteId(Long pacienteId) {
         setId(pacienteId);
+        if (pacienteId != null) {
+            //log.info("ingreso a fijar tipo: " + t);
+            Paciente p = pcs.getPacientePorId(pacienteId);
+            if (p != null) {
+                setInstance(p);
+                this.setTipoEstudiante(getInstance().getTipoEstudiante());
+            }
+        } else {
+            log.info("ingreso a fijar tipo Nuevo");
+            this.rendPanelEstUni = false;
+            this.rendPanelEstCol = false;
+            this.rendPanelEstEsc = false;
+        }
     }
 
     /*<==....*/
@@ -257,9 +270,14 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         Date now = Calendar.getInstance().getTime();
         String salida = null;
         getInstance().setLastUpdate(now);
-        if (getInstance().isPersistent()) {
-            save(getInstance());
+        if("secretaria/paciente".equals(getBackView())){
             salida = "/pages/" + getBackView() + "?faces-redirect=true";
+        }else{
+            salida = "/pages/secretaria/lista?faces-redirect=true";
+        }
+        
+        if (getInstance().isPersistent()) {
+            save(getInstance());            
         } else {
             try {
                 System.out.println("ingreso a guardar ");
@@ -267,8 +285,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 
                 FacesMessage msg = new FacesMessage("Se creo nuevo paciente: " + getInstance().getNombres() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
-                salida = "/pages/" + getBackView() + "?faces-redirect=true"
-                        + "&pacienteId=" + getInstance().getId();
+                salida += "&pacienteId=" + getInstance().getId();
             } catch (IdentityException ex) {
                 //Logger.getLogger(PacienteHome.class.getName()).log(Level.SEVERE, null, ex);
                 ex.printStackTrace();
@@ -461,7 +478,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         list.add("Colegio");
         list.add("Escuela");
         list.add("Administrativos");
-        list.add("Trabajaroes");
+        list.add("Trabajadores");
         return list;
     }
 

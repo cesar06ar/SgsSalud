@@ -68,9 +68,9 @@
                          paginator="true" rows="10" paginatorPosition="top" emptyMessage="No se ha encontrado ninguna consulta"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"                         
-                         rowKey="#{consultaOdontologica_.id}"
+                         rowKey="#{consultaOdontologica_.id}" 
                          selection="#{consultaOdontListaS.consulOdontSeleccionada}"
-                         rendered="true"
+                         rendered="true" resizableColumns="true" liveResize="true"
                          selectionMode="single">
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Consulta Odontologica-->
                 <p:ajax event="rowSelect" listener="#{consultaOdontListaS.onRowSelect}"   

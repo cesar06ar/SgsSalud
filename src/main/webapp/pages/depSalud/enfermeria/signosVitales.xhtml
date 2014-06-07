@@ -71,29 +71,29 @@
                         <div class="row-fluid">
                             <div id="left" class="span7" style="margin-right: 15px; ">
                                 <p:panelGrid columns="2">
-                                    <label for="peso" class="span3">#{messages['signosVitales.peso']} *</label>
+                                    <label for="peso" class="span3">#{messages['signosVitales.peso']} </label>
                                     <div class="input"> 
-                                        <pe:inputNumber id="peso" value="#{signosVitalesHome.instance.peso}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber id="peso" value="#{signosVitalesHome.instance.peso}" required="false" style="width: 190px;" 
                                                         maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left" decimalPlaces="2">
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                                                                                                                  
                                     </div>
-                                    <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} *</label>
+                                    <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} </label>
                                     <div class="input">                                                                                
-                                        <pe:inputNumber  id="presionArtDiag" value="#{signosVitalesHome.instance.presionArterialDiastolica}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber  id="presionArtDiag" value="#{signosVitalesHome.instance.presionArterialDiastolica}" required="false" style="width: 190px;" 
                                                          rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </div>
-                                    <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} *</label>
+                                    <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} </label>
                                     <div class="input"> 
-                                        <pe:inputNumber  id="presionArtSis" value="#{signosVitalesHome.instance.presionArterialSistolica}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber  id="presionArtSis" value="#{signosVitalesHome.instance.presionArterialSistolica}" required="false" style="width: 190px;" 
                                                          rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >                                            
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                                                                                                 
                                     </div>             
-                                    <label for="pulso" class="span3">#{messages['signosVitales.pulso']} *</label>
-                                    <pe:inputNumber  id="pulso" value="#{signosVitalesHome.instance.pulso}" required="true" styleClass="xLarge" style="width: 190px;" 
+                                    <label for="pulso" class="span3">#{messages['signosVitales.pulso']} </label>
+                                    <pe:inputNumber  id="pulso" value="#{signosVitalesHome.instance.pulso}" required="false" styleClass="xLarge" style="width: 190px;" 
                                                      rendered="true" symbol="  pulsaciones/minuto" symbolPosition="rigth" maxValue="150" decimalPlaces="0" >
                                         <p:ajax event="blur" update="@parent" process="@this"/>  
                                     </pe:inputNumber>                                        
@@ -101,22 +101,22 @@
                             </div>
                             <div id="left" class="span7"  >
                                 <p:panelGrid columns="2">
-                                    <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} *</label>
+                                    <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} </label>
                                     <div class="input">                                                                                
-                                        <pe:inputNumber  id="frecuenciaResp" value="#{signosVitalesHome.instance.frecuenciaRespiratoria}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber  id="frecuenciaResp" value="#{signosVitalesHome.instance.frecuenciaRespiratoria}" required="false" style="width: 190px;" 
                                                          rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" >
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>  
                                     </div>
-                                    <label for="talla" class="span3">#{messages['signosVitales.talla']} *</label>
+                                    <label for="talla" class="span3">#{messages['signosVitales.talla']} </label>
                                     <div class="input">                                                                                
-                                        <pe:inputNumber id="talla" value="#{signosVitalesHome.instance.talla}" required="true" style="width: 190px;" 
+                                        <pe:inputNumber id="talla" value="#{signosVitalesHome.instance.talla}" required="false" style="width: 190px;" 
                                                         rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0" >
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </div>
-                                    <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} *</label>
-                                    <pe:inputNumber  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" required="true" style="width: 190px;" 
+                                    <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} </label>
+                                    <pe:inputNumber  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" required="false" style="width: 190px;" 
                                                      rendered="true" symbol=" milimetros/mercurio" symbolPosition="rigth" maxValue="90" decimalPlaces="2" >
                                         <p:ajax event="blur" update="@parent" process="@this"/>  
                                     </pe:inputNumber>                                        
@@ -128,12 +128,24 @@
                 <div class="admin-actions" >
                     <p:commandButton id="save" action="#{signosVitalesHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >
-                        <f:param name="fichaMedicaId" value="#{signosVitalesHome.fichaMedicaId}"/>
-                    </h:link>
+                    <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                               onclick="#{'opDlg.show();'}" ajax="true" />                      
                 </div>
             </h:form>
+            
+            <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                     
+                    <h:link outcome="/pages/depSalud/fichaMedica.xhtml?faces-redirect=true" onclick="opDlg.hide();" 
+                            value="#{messages['common.yes']}" styleClass="btn primary" style="margin-top: -5px; margin-left: 20%; height: 16px">  
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                     style="margin-top:10px;" styleClass="btn"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>                

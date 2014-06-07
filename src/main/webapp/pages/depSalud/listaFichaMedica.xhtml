@@ -36,7 +36,7 @@
                 &nbsp;
                 <p:commandButton id="buscar1" value="Buscar" action="#{fichaMedicaListaServicio.buscarFichaMedicaPorFechas()}" immediate="true" 
                                  update="@form :form:tablaFichasMedicas :form:print_f" process="@this">
-                    
+
                 </p:commandButton>
                 <p:commandButton id="buscar" value="Buscar Todos" action="#{fichaMedicaListaServicio.buscarTodos()}" immediate="true" 
                                  update="@form :form:tablaFichasMedicas :form:print_f" process="@this">
@@ -68,8 +68,11 @@
                 </h:link>
                 &nbsp;
                 <p:commandButton id="agregar-consulta" value="Nueva Consulta" action="#{fichaMedicaListaServicio.nuevaConsulta()}" styleClass="btn"
-                                 disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}"/>   
-                
+                                 disabled="#{empty fichaMedicaListaServicio.fichaMedicSeleccionada}" onclick="#{'imgDlg.show();'}"/>   
+                <p:panel id="img_p" widgetVar="imgDlg" style="display:none;">
+                    <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" />
+                </p:panel> 
+
             </div>
             <!--tabla de datos-->
             <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"

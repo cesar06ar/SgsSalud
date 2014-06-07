@@ -18,6 +18,7 @@ package edu.sgssalud.service.labClinico;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
+import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.RecetaListaServicio;
 import edu.sgssalud.service.farmacia.RecetaServicio;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -39,6 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
+import org.jboss.seam.transaction.Transactional;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -60,6 +63,8 @@ public class ExamenLabListaServicio extends LazyDataModel<ExamenLabClinico> {
     private EntityManager em;
     @Inject
     private ExamenLabService examenLabService;
+    @Inject
+    private ResultadoExamenLCService resultadoExamenLabService;
 //    @Inject
 //    private Identity identity;
 //    @Inject
@@ -138,6 +143,7 @@ public class ExamenLabListaServicio extends LazyDataModel<ExamenLabClinico> {
     @PostConstruct
     public void init() {
         examenLabService.setEntityManager(em);
+        resultadoExamenLabService.setEntityManager(em);
         //profileServicio.setEntityManager(em);
         if (resultList.isEmpty()) {
             resultList = examenLabService.getExamenesLab();
@@ -167,5 +173,38 @@ public class ExamenLabListaServicio extends LazyDataModel<ExamenLabClinico> {
         FacesMessage msg = new FacesMessage(UI.getMessages("Examen") + " " + UI.getMessages("common.unselected"), ((ExamenLabClinico) event.getObject()).getName());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setExamenSeleccionado(null);
+    }
+
+    @Transactional
+    public void borrarExamen() {
+        System.out.println("Ingreso a borrar");
+        //log.info("sgssalud --> ingreso a eliminar: " + getInstance().getId());
+        try {
+            boolean ban = resultadoExamenLabService.getResultadosELCPorPedidoExamen(ExamenSeleccionado).isEmpty();
+            if (ban) {
+                System.out.println("Ingreso a borrar 1");
+//                List<Parametros> lp = examenLabService.getParametrosPorExamen(ExamenSeleccionado);
+                ExamenLabClinico exam = ExamenSeleccionado;                
+//                Parametros paux = null;
+//                for (Parametros p : lp) {
+//                    System.out.println("valor " + p.toString());
+//                    paux = p;
+//                    em.remove(paux);
+//                }
+                em.remove(em.merge(exam));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  ", "El parametro seleccionado"));
+                ExamenSeleccionado = null;
+                setResultList(examenLabService.getExamenesLab());
+                System.out.println("Ingreso a borrar exito");
+            } else {
+                System.out.println("Ingreso a borrar 2");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El Examen contiene datos asociados ", "no se puede borrar"));
+            }
+//            return "/pages/labClinico/examenes.xhtml?faces-redirect=true"
+//                    + "&examenLabId=" + getInstance().getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "ERROR", e.toString()));
+        }
     }
 }

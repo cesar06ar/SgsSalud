@@ -73,7 +73,7 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
     private boolean servicioDental;
 
     private Long turnoId;
-    private Turno turno;
+    private Turno turno = new Turno();
     @Inject
     private TurnoService turnoS;
 
@@ -248,25 +248,31 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
                 salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
             } else {
                 if (servicioMedico || servicioDental) {
+                    //System.out.println("Ingreso a crear SV ");
                     create(getInstance());
                     //log.info("crear ");
-                    if (turno.isPersistent()) {
-                        turno.setEstado("Realizada");
-                        save(turno);
-                    }
                     if (servicioMedico) {
+                        //System.out.println("Ingreso a crear CM ");
                         consultaMed.setHistoriaClinica(historiaClinica);
                         consultaMed.setSignosVitales(getInstance());
                         consultaMed.setCode("PENDIENTE");
+                        //System.out.println("Ingreso a crear CM 1");
                         save(consultaMed);
                         salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
                     }
                     if (servicioDental) {
+                        //System.out.println("Ingreso a crear CO ");
                         consultaOdont.setFichaOdontologica(fichaOdontologica);
                         consultaOdont.setSignosVitales(getInstance());
                         consultaOdont.setCode("PENDIENTE");
                         save(consultaOdont);
+                        //System.out.println("Ingreso a crear CO 1");
                         salida = "/pages/depSalud/fichaMedica.xhtml?faces-redirect=true&fichaMedicaId=" + getFichaMedicaId();
+                    }
+                    //System.out.println("Ingreso a crear  ");
+                    if (turno.isPersistent()) {
+                        turno.setEstado("Realizada");
+                        save(turno);
                     }
                 } else {
                     FacesMessage msg = new FacesMessage("Debe selecionar al menos un servicio");
@@ -275,6 +281,7 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }

@@ -61,7 +61,8 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     @Inject
     private RecetaMedicamentoService cardexService;
     private boolean devolucion;
-    private int cantidad;
+    private int cantidad;   
+    
     private List<Receta> listaRecetas;
     private Receta recetaSeleccionada;
     private List<Medicamento> listaMedicamentos;

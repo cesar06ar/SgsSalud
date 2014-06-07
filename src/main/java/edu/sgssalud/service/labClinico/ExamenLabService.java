@@ -84,5 +84,9 @@ public class ExamenLabService extends PersistenceUtil<ExamenLabClinico> {
             return false;
         }
     }
+    
+    public void borrarEntidad(Object entidad){
+        delete(entidad);
+    }
 
 }

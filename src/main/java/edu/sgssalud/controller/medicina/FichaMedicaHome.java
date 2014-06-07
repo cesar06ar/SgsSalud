@@ -92,7 +92,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     SettingService settingService;
     private WebServiceSGAClientConnection coneccionSGA = new WebServiceSGAClientConnection();
     //private Setting setting;
-    private List<Setting> settingList;
+    //private List<Setting> settingList;
     private Long pacienteId;
     private Long consultaMedicaId;
     private String parametroBusqueda;
@@ -302,7 +302,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         //getInstance().setFechaApertura(new Date());        
         this.getInstance().setNumeroFicha(this.getGenerarNumeroFicha());  //asignacion automatica de numero de ficha
         settingService.setEntityManager(em);
-        settingList = settingService.getSettingByName("id_oferta");
+//        settingList = settingService.getSettingByName("id_oferta");
     }
 
     @Override
@@ -456,9 +456,17 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
     }
 
     /*<== método que retorna la lista de tipos de datos enumerados ...*/
-    public List<FichaMedica.GrupoSangineo> getListaGruposSangineos() {
-        wire();
-        List<FichaMedica.GrupoSangineo> list = Arrays.asList(getInstance().getGrupoSangineo().values());
+    public List<String> getListaGruposSangineos() {
+	       wire();
+        List<String> list = new ArrayList<String>();
+	list.add("A +");
+	list.add("A -");
+	list.add("B +");
+	list.add("B -");
+	list.add("AB +");
+	list.add("AB -");
+	list.add("O +");
+	list.add("O -");        
         return list;
     }
     /*....==>*/

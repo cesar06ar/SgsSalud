@@ -132,7 +132,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
     private PedidoExamenLaboratorio pedido;
 
     private Long turnoId;
-    private Turno turno;
+    private Turno turno = new Turno();
     @Inject
     private TurnoService turnoS;
 
@@ -311,7 +311,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
             }
         }
-        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));
+//        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));
 
         examenLabService.setEntityManager(em);
         pedidoServicio.setEntityManager(em);
@@ -360,7 +360,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         String salida = null;
         Date now = Calendar.getInstance().getTime();
         getInstance().setLastUpdate(now);
-        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(now, 5));
+        getInstance().setTiempoConsulta(now);
         try {
             if (getInstance().isPersistent()) {
                 if (getInstance().getResponsable() == null) {
@@ -372,16 +372,21 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                 getInstance().setCode("REALIZADA");
                 save(getInstance());
                 System.out.println("enfermedades____________" + listaEnfPosee.toString());
-                hc.setLastUpdate(now);
-                hc.setLista_enfcie10(listaEnfPosee);
-                update();
-                save(hc);
+//                hc.setLastUpdate(now);
+//                hc.setLista_enfcie10(listaEnfPosee);
+                
+                
                 if (turno.isPersistent()) {
                     turno.setEstado("Realizada");
                     save(turno);
                 }
+                System.out.println("Actualizo");
                 FacesMessage msg = new FacesMessage("Se actualizo Consulta Médica: " + getInstance().getId() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
+                salida = "/pages/depSalud/medicina/consultaMedica.xhtml?faces-redirect=true"
+                        + "&fichaMedicaId=" + getFichaMedicaId()
+                        + "&consultaMedicaId=" + getInstance().getId()
+                        + "&backView=" + this.getBackView();
             } else {
                 getInstance().setHistoriaClinica(hc);
                 getInstance().getSignosVitales().setFechaActual(now);
@@ -403,6 +408,7 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
                         + "&backView=" + this.getBackView();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId() + " " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }

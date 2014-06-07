@@ -33,6 +33,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import org.jboss.seam.security.Identity;
+import org.jboss.seam.transaction.Transactional;
 
 /**
  *
@@ -72,18 +73,18 @@ public class ReporteReceta {
         recetaServicio.setEntityManager(em);
         profileServicio.setEntityManager(em);
     }
-
+    @Transactional
     public void renderReceta() {
 
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
         final String attachFileName = "receta.pdf";
         if (receta.isPersistent()) {
-//            receta.setFechaEntrega(new Date());
-//            receta.setEstado("Entregada");
-//            receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
-//            em.merge(receta);
-
+            receta.setFechaEntrega(new Date());
+            receta.setEstado("Entregada");
+            receta.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+            
+            System.out.println("Entregar Receta");
             Map<String, Object> _values = new HashMap<String, Object>();
             _values.put("nombres", receta.getPaciente().getNombres() + " " + receta.getPaciente().getApellidos());
             _values.put("numReceta", receta.getNumvalue());
@@ -97,7 +98,8 @@ public class ReporteReceta {
             List<Receta> recetas = new ArrayList<Receta>();
             recetas.add(receta);
             //System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
-            JasperReportAction.exportToPdf(REPORTE_RECETA, recetas, _values, attachFileName);
+            JasperReportAction.exportToPdf(REPORTE_RECETA, recetas, _values, attachFileName);            
+            em.merge(receta);
         }
     }
 }

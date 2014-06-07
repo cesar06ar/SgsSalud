@@ -68,9 +68,9 @@ public class FichaMedica extends BussinesEntity implements Serializable {
     private String observacionAntecedentesPersonales;
     private String observacionAntecedentesFamiliares;
     
-    @Enumerated(EnumType.STRING) //anotación tipos de datos enumerados 
-    @Column(nullable = false)  
-    private FichaMedica.GrupoSangineo grupoSangineo;
+//    @Enumerated(EnumType.STRING) 
+//    @Column(nullable = false)  
+    private String grupoSangineo;
     
     @OneToOne
     @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
@@ -114,11 +114,11 @@ public class FichaMedica extends BussinesEntity implements Serializable {
         this.observacionAntecedentesFamiliares = observacionAntecedentesFamiliares;
     } 
 
-    public GrupoSangineo getGrupoSangineo() {
+    public String getGrupoSangineo() {
         return grupoSangineo;
     }
 
-    public void setGrupoSangineo(GrupoSangineo grupoSangineo) {
+    public void setGrupoSangineo(String grupoSangineo) {
         this.grupoSangineo = grupoSangineo;
     }  
 
@@ -141,7 +141,7 @@ public class FichaMedica extends BussinesEntity implements Serializable {
 //    public void setNumFicha(int numFicha) {
 //        this.numFicha = numFicha;
 //    }  
-        
+    /*	         
     public enum GrupoSangineo {
 
         A_POSITIVO(0), 
@@ -163,5 +163,5 @@ public class FichaMedica extends BussinesEntity implements Serializable {
             return grupoSangineo;
         }
         
-    }
+    }*/
 }

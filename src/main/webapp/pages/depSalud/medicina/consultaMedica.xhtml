@@ -23,7 +23,7 @@
             <div class="header-replace">
                 <div class="container-header" >
                     <div class="row lf row-title" >
-                        <h3>#{consultaMedicaHome.managed? messages['common.edit'] : messages['common.add']} #{messages['consultaMedica.nombre']} 
+                        <h3>#{consultaMedicaHome.instance.persistent? messages['common.edit'] : messages['common.add']} #{messages['consultaMedica.nombre']} 
                             #{consultaMedicaHome.instance.id} <br/>
                             #{messages['common.for']} Paciente #{consultaMedicaHome.paciente.nombres} #{consultaMedicaHome.paciente.apellidos}</h3>   
                     </div>
@@ -42,7 +42,7 @@
                                     <label for="fechaC" >#{messages['consultaMedica.fechaConsulta']}</label>
                                     <div class="input">                                                         
                                         <p:calendar id="fechaC" value="#{consultaMedicaHome.instance.fechaConsulta}"  label="" dir="rtl"
-                                                    disabled="true" pattern="EEEE, dd-MMMM-yyyy"  locale="es" style="width: 100px;">
+                                                    disabled="true" pattern="dd-MMMM-yyyy"  locale="es" style="width: 100px;">
                                         </p:calendar>                                                                                                      
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{consultaMedicaHome.instance.fechaConsulta != null}"
                                                         styleClass="validation-status" />                                                        
@@ -282,17 +282,18 @@
                 </p:tabView>               
 
                 <div class="admin-actions" style="padding-right: 50px;">
-                    <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" 
+                    <p:commandButton id="save" action="#{consultaMedicaHome.guardar()}" value="#{messages['common.save']}" onclick="#{'imgDlg.show();'}"
                                      update=":form:growl" styleClass="btn primary offset4" disabled="#{consultaMedicaHome.editable}"/>
                     &nbsp;&nbsp;
-                    <h:link outcome="/pages/depSalud#{consultaMedicaHome.backView}?faces-redirect=true" 
-                            value="#{messages['common.cancel']}" styleClass="btn primary" >
-                        <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
-                    </h:link>
+                    <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                               onclick="#{'opDlg.show();'}" ajax="true" />                                    
+                    <p:panel id="img_p" widgetVar="imgDlg" style="display:none;">
+                        <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" />
+                    </p:panel> 
                 </div>               
                 <p:tabView id="tabOpc" rendered="#{consultaMedicaHome.instance.persistent}">
                     <p:tab title="#{messages['receta.Nombres']}" rendered="true" >
-                        <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn primary" >                            
+                        <h:link outcome="/pages/depSalud/receta" value="#{messages['common.add']} #{messages['receta.nombre']}" styleClass="btn success" > 
                             <f:param name="consultaMedicaId" value="#{consultaMedicaHome.instance.id}"></f:param>
                             <f:param name="backView" value="/medicina/consultaMedica"></f:param>
                             <f:param name="previous" value="#{consultaMedicaHome.backView}"></f:param>
@@ -670,7 +671,7 @@
                     </p:panel> 
                     <div class="admin-actions ">                        
                         <p:commandButton id="save" action="#{consultaMedicaHome.agregarPedido()}" value="#{messages['common.submit']}" 
-                                         ajax="true" update="@form" styleClass="btn primary" style="margin-left: 32%" 
+                                         ajax="true" update="@form" styleClass="btn primary" style="margin-left: 32%" onclick="imgDlg.show();"
                                          >
                             <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
                         </p:commandButton>
@@ -679,6 +680,9 @@
                                          ajax="true" update="@form" styleClass="btn" >                        
                             <p:ajax process="@this" update=":form:tabOpc:tablaPedidos :form:growl" />
                         </p:commandButton>
+                        <p:panel id="img_p" widgetVar="imgDlg" style="display:none; width: 30px;" >
+                            <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" style="margin-left: -5px"/>
+                        </p:panel>
                     </div>                                    
                 </h:form>
             </p:dialog>
@@ -705,7 +709,20 @@
 
                 </h:form>
             </p:dialog>
+             <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                                         
+                    <h:link outcome="/pages/depSalud#{consultaMedicaHome.backView}?faces-redirect=true" 
+                            value="#{messages['common.yes']}" styleClass="btn primary"  style="margin-top: -5px; margin-left: 20%; height: 16px">
+                        <f:param name="fichaMedicaId" value="#{consultaMedicaHome.fichaMedicaId}"></f:param>
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                   style="margin-top:10px;" styleClass="btn"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>                
-

@@ -16,6 +16,7 @@
 package edu.sgssalud.service.farmacia;
 
 import com.smartics.common.action.report.JasperReportAction;
+import com.smartics.common.action.report.JasperReportAction1;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.reportes.ReporteListas;
 import edu.sgssalud.controller.reportes.ReporteReceta;
@@ -25,6 +26,7 @@ import edu.sgssalud.util.Lists;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -53,8 +55,8 @@ import org.primefaces.model.SortOrder;
  * @author tania
  */
 @Named(value = "recetaListaServicio")
-@RequestScoped
-public class RecetaListaServicio extends LazyDataModel<Receta> {
+@ViewScoped
+public class RecetaListaServicio implements Serializable { //extends LazyDataModel<Receta>
 
     private static final long serialVersionUID = 13L;
     private static final int MAX_RESULTS = 13;
@@ -71,10 +73,10 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     private ProfileService profileServicio;
     @Inject
     ReporteReceta reportes;
-
+//
     @Inject
-    JasperReportAction JasperReportAction;
-    private List<Receta> resultList = new ArrayList<Receta>();
+    JasperReportAction1 JasperReportAction;
+    private List<Receta> resultList;
     private int primerResult = 0;
     private Receta[] recetasSeleccionados;
     private Receta recetaSeleccionada;
@@ -85,12 +87,12 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     private List<String> listaMedicaciones = new ArrayList<String>();
 
     public RecetaListaServicio() {
-        setPageSize(MAX_RESULTS);
-        //resultList = new ArrayList<Receta>();
+//        setPageSize(MAX_RESULTS);
+        resultList = new ArrayList<Receta>();
     }
 
     public List<Receta> getResultList() {
-        Collections.sort(resultList);
+        //Collections.sort(resultList);
         return resultList;
     }
 
@@ -123,14 +125,13 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         this.recetaSeleccionada = recetaSeleccionada;
     }
 
-    public int obtenerSiguienteResultado() {
-        return primerResult + this.getPageSize();
-    }
-
-    public int obtenerRecetaAnterior() {
-        return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
-    }
-
+//    public int obtenerSiguienteResultado() {
+//        return primerResult + this.getPageSize();
+//    }
+//
+//    public int obtenerRecetaAnterior() {
+//        return this.getPageSize() >= primerResult ? 0 : primerResult - this.getPageSize();
+//    }
     public String getParametroBusqueda() {
         return parametroBusqueda;
     }
@@ -172,55 +173,59 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
         this.fechaF = fechaF;
     }
 
-    @Override
-    public List<Receta> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-        int end = first + pageSize;
-
-        QuerySortOrder order = QuerySortOrder.ASC;
-        if (sortOrder == SortOrder.DESCENDING) {
-            order = QuerySortOrder.DESC;
-        }
-        Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
-
-        QueryData<Receta> qData = recetaServicio.find(first, end, sortField, order, _filters);
-        this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());
-        return resultList;
-    }
-
+//    @Override
+//    public List<Receta> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+//        int end = first + pageSize;
+//
+//        QuerySortOrder order = QuerySortOrder.ASC;
+//        if (sortOrder == SortOrder.DESCENDING) {
+//            order = QuerySortOrder.DESC;
+//        }
+//        Map<String, Object> _filters = new HashMap<String, Object>();
+//        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+//         _filters.putAll(filters);*/
+//
+//        QueryData<Receta> qData = recetaServicio.find(first, end, sortField, order, _filters);
+//        this.setRowCount(qData.getTotalResultCount().intValue());
+//        this.setResultList(qData.getResult());
+//        return resultList;
+//    }
     @PostConstruct
     public void init() {
         recetaServicio.setEntityManager(em);
         profileServicio.setEntityManager(em);
         if (resultList.isEmpty()) {
-            //resultList = recetaServicio.obtenerRecetas(this.getPageSize(), primerResult);
-            resultList = recetaServicio.buscarRecetaPorFechas(new Date(), new Date());
+            //resultList = recetaServicio.buscarTodos();
+            resultList = recetaServicio.buscarRecetaPorFechasEmision(new Date(), new Date());
         }
     }
 
-    @Override
-    public Receta getRowData(String id) {
-        return recetaServicio.buscarRecetaPorId(Long.parseLong(id));
-    }
-
-    @Override
-    public Object getRowKey(Receta entity) {
-        return entity.getId();
-    }
-
+//    @Override
+//    public Receta getRowData(String id) {
+//        return recetaServicio.buscarRecetaPorId(Long.parseLong(id));
+//    }
+//
+//    @Override
+//    public Object getRowKey(Receta entity) {
+//        return entity.getId();
+//    }
     public void onRowSelect(SelectEvent event) {
-        this.listaMedicaciones = Lists.stringToList(((Receta) event.getObject()).getMedicaciones());
-        this.listaIndicaciones = Lists.stringToList(((Receta) event.getObject()).getIndicaciones());
-        FacesMessage msg = new FacesMessage(UI.getMessages("Receta") + " " + UI.getMessages("common.selected"), ((Receta) event.getObject()).getNumvalue());
+//        Receta r = (Receta) event.getObject();
+        this.setRecetaSeleccionada((Receta) event.getObject());
+        //System.out.println("Ingreso a receta "+r.toString());
+        if (recetaSeleccionada.isPersistent()) {
+            this.listaMedicaciones = Lists.stringToList(recetaSeleccionada.getMedicaciones());
+            this.listaIndicaciones = Lists.stringToList(recetaSeleccionada.getIndicaciones());
+        }
+        System.out.println("Ingreso a receta 1");
+        FacesMessage msg = new FacesMessage(UI.getMessages("Receta") + " " + UI.getMessages("common.selected"), recetaSeleccionada.getNumvalue());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         this.listaMedicaciones = null;
         this.listaIndicaciones = null;
-        FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.unselected"), ((Receta) event.getObject()).getNumvalue());
+        FacesMessage msg = new FacesMessage(UI.getMessages("Medicamento") + " " + UI.getMessages("common.unselected"), recetaSeleccionada.getNumvalue());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setRecetaSeleccionada(null);
     }
@@ -240,32 +245,37 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
     }
 
     public void buscarTodos() {
+        this.setRecetaSeleccionada(null);
         this.setResultList(recetaServicio.buscarTodos());
     }
 
     public void entregarReceta() {
 
         Date now = Calendar.getInstance().getTime();
-        this.recetaSeleccionada.setEstado("Entregada");
-        this.recetaSeleccionada.setFechaEntrega(now);
-        this.recetaSeleccionada.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
-
         if (recetaSeleccionada.isPersistent()) {
+            this.recetaSeleccionada.setEstado("Entregada");
+            this.recetaSeleccionada.setFechaEntrega(now);
+            this.recetaSeleccionada.setResponsableEntrega(profileServicio.getProfileByIdentityKey(identity.getUser().getKey()));
+
             //    em.getTransaction().begin();
             em.merge(recetaSeleccionada);
             //  em.getTransaction().commit();
+            System.out.println("Actualizo estado");
             this.setResultList(recetaServicio.buscarTodos());
+            FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado", "");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+            this.renderReceta();
+        } else {
+            
         }
-        FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado", "");
-        FacesContext.getCurrentInstance().addMessage("", msg);
+
 //        reportes.init();
 //        reportes.setReceta(recetaSeleccionada);
-        this.renderReceta();
 //        return "/pages/farmacia/receta/listaReceta.xhtml?faces-redicet=true";
     }
 
     public void renderReceta() {
-
+        System.out.println("Ingreso a imprimir");
         ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
         String logo = context.getRealPath("/reportes/unl.png");
         final String attachFileName = "receta.pdf";
@@ -283,12 +293,13 @@ public class RecetaListaServicio extends LazyDataModel<Receta> {
             _values.put("medico", recetaSeleccionada.getResponsableEmision().getFullName());
             _values.put("cedula", recetaSeleccionada.getPaciente().getCedula());
             _values.put("usd", "$");
-
+            System.out.println("Ingreso a imprimir  2");
             //Exportar a pdf 
             List<Receta> recetas = new ArrayList<Receta>();
             recetas.add(recetaSeleccionada);
             //System.out.println("PASA AL JASPER_ REPORT" + recetas.toString());
             JasperReportAction.exportToPdf(REPORTE_RECETA, recetas, _values, attachFileName);
+            System.out.println("Ingreso a imprimir  fin");
         }
     }
 }

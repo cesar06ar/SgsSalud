@@ -69,13 +69,15 @@
                                                      effect="fade" var="m" styleClass="xLarge" >  
                                         <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
                                         <f:selectItem itemLabel="Ampollas" itemValue="Ampollas" />  
-                                        <f:selectItem itemLabel="Pastillas" itemValue="Pastillas" />                                          
+                                        <f:selectItem itemLabel="Comprimidos" itemValue="Comprimidos" />
                                         <f:selectItem itemLabel="Cápsulas" itemValue="Cápsulas" />
                                         <f:selectItem itemLabel="Tabletas" itemValue="Tabletas" />  
+                                        <f:selectItem itemLabel="Supositorios" itemValue="Supositorios" />
                                         <f:selectItem itemLabel="Sobres" itemValue="Sobres" />  
                                         <f:selectItem itemLabel="Jarabe" itemValue="Jarabe" />                              
+                                        <f:selectItem itemLabel="Gotero" itemValue="Gotero" />  
+                                        <f:selectItem itemLabel="Suspención" itemValue="Suspención" />
                                         <f:selectItem itemLabel="Crema" itemValue="Crema" />  
-                                        <f:selectItem itemLabel="Pomada" itemValue="Pomada" />  
                                         <p:ajax event="change" update="@parent " partialSubmit="true"/>
                                     </p:selectOneMenu>        
                                     <h:graphicImage value="#{resource['success.gif']}" rendered="#{medicamentoHome.instance.presentacion!= null}"
@@ -128,7 +130,7 @@
                             <glue:input id="referencia" name="referencia" type="textarea" label="#{messages['common.referenciaMedicamento']}" value="#{medicamentoHome.instance.referencia}" 
                                         required="false" inlinehelp="#{messages['common.referenciaMedicamento']}" execute="@this save" render="referencia"/>                            
                             <glue:input id="dosificacion" name="dosificacion" type="textarea" label="Dosifición" value="#{medicamentoHome.instance.dosificacion}" 
-                                            required="false" inlinehelp="Ingrese la dosificación del medicamento" execute="@this save" render="dosificacion"/> 
+                                        required="false" inlinehelp="Ingrese la dosificación del medicamento" execute="@this save" render="dosificacion"/> 
                             <h:panelGroup id="devp" layout="block" class="clearfix" rendered="#{medicamentoHome.instance.unidades ne 0}">
                                 <label for="devolucion">Habilitar devolución</label>
                                 <div class="input" >
@@ -144,13 +146,29 @@
                     </div>                                   
                 </div>
                 <div class="admin-actions span9">
-                    <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary offset2"/>
+                    <p:commandButton id="save" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" styleClass="btn primary offset2" onclick="imgDlg.show();"/>
                     #{' '}
-                    <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" onclick="editDlg.hide();"
-                            value="#{messages['common.cancel']}" styleClass="btn primary">                         
-                    </h:link>
+                    <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                                     onclick="#{'opDlg.show();'}" ajax="true" />                                    
+                    <p:panel id="img_p" widgetVar="imgDlg" style="display:none; width: 30px;" >
+                        <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" style="margin-left: -5px"/>
+                    </p:panel>
+
                 </div>
             </h:form>
+            <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                                        
+                    <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                            value="#{messages['common.yes']}" styleClass="btn primary" style="margin-top: -5px; margin-left: 20%; height: 16px">    
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                   style="margin-top:10px;" styleClass="btn"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>   

@@ -35,10 +35,16 @@
                     </h:link>
                     #{' '}
                     <h:link id="button-edit" value="#{messages['common.edit']}" rendered="#{true}" outcome="examenes" styleClass="btn" 
-                            >
+                            disabled="#{empty examenLabListaServicio.examenSeleccionado}">
                         <f:param name="examenLabId" value="#{examenLabListaServicio.examenSeleccionado.id}"></f:param>
                         <f:param name="backView" value="listaExamenes"></f:param>
                     </h:link>   
+                    #{' '}
+                    <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" ajax="true"
+                                   onclick="#{'deletedDlg.show();'}" immediate="true" styleClass="btn success" 
+                                   disabled="#{empty examenLabListaServicio.examenSeleccionado}">                          
+                        <p:ajax process="@this" update=":cancel-dialog" />
+                    </p:commandLink>
                     <h:commandLink value="Imprimir" styleClass="btn" action="#{reporteListas.renderExamenes()}" style="float: right">  
                         <!--<p:printer target="tablaExamenes"/>-->
                     </h:commandLink>
@@ -50,21 +56,21 @@
                              lazy="true" selectionMode="single"   
                              resizableColumns="true" liveResize="true"
                              rowKey="#{examenLab_.id}" selection="#{examenLabListaServicio.examenSeleccionado}">
-                             <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
-                             
-                    <f:facet name="header">  
-                        <p:outputPanel>  
-                            <h:outputText value="Buscar Examen" />  
-                            <p:inputText id="globalFilter" onkeyup="medTable.filter();" style="width:150px" />  
-                        </p:outputPanel>  
-                    </f:facet>-->
+                    <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
+                    
+           <f:facet name="header">  
+               <p:outputPanel>  
+                   <h:outputText value="Buscar Examen" />  
+                   <p:inputText id="globalFilter" onkeyup="medTable.filter();" style="width:150px" />  
+               </p:outputPanel>  
+           </f:facet>-->
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{examenLabListaServicio.onRowSelect}"
-                            update=":form:button-edit :form:messages :form:tablaExamenes"/>   
+                            update=":form:button-edit :form:messages :form:tablaExamenes :form:button-delete"/>   
                     <p:ajax event="rowUnselect" listener="#{examenLabListaServicio.onRowUnselect}" 
-                            update=":form:button-edit :form:messages :form:tablaExamenes"/>
+                            update=":form:button-edit :form:messages :form:tablaExamenes :form:button-delete"/>
                     <!--Columnas para mostrar en la tabla -->
-                    
+
                     <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.code}" 
                                headerText="#{messages['common.code']}" >
                         <h:outputText value="#{examenLab_.code}" />                        
@@ -74,7 +80,7 @@
                         <h:outputText value="#{examenLab_.name}" />                        
                     </p:column>
                     <p:column sortBy="#{examenLab_.tipo}" style="width: 15%; text-align: center;" >
-                              <!--filterMatchMode="contains" filterBy="# {examenLab_.tipo}" -->
+                        <!--filterMatchMode="contains" filterBy="# {examenLab_.tipo}" -->
                         <f:facet name="header">  
                             <h:outputText value="#{messages['Examen.Tipo']}" />  
                         </f:facet> 
@@ -88,9 +94,22 @@
                         <h:outputText value="#{examenLab_.costo}" />
                     </p:column>
                 </p:dataTable>
-                
-            </h:form>
-        </ui:define>
 
+            </h:form>
+            <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
+            <h:form id="form-dialog-confirm-delete">
+                <h:panelGroup layout="block" style="padding:5px;">  
+                    <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                </h:panelGroup>  
+                <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                 action="#{examenLabListaServicio.borrarExamen()}"
+                                 ajax="true" process="@this"  update="@form :form:tablaExamenes"
+                                 style="margin-top:10px;">  
+                </p:commandButton>  
+                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                 style="margin-top:10px;"/>  
+            </h:form>
+        </p:dialog>
+        </ui:define>        
     </ui:composition>
 </html>

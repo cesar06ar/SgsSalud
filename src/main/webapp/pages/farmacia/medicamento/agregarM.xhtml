@@ -190,19 +190,35 @@
                 </p:dataTable>
                 <div class="admin-actions">
                     <center>
-                        <p:commandButton id="cargar" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" 
+                        <p:commandButton id="cargar" action="#{medicamentoHome.guardarMedicamento()}" value="#{messages['common.save']}" onclick="imgDlg.show();"
                                          styleClass="btn primary " disabled="#{empty medicamentoHome.listaMedicamentos}" immediate="true">
                         </p:commandButton>
                         &nbsp;&nbsp;
-                        <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true"
-                                value="#{messages['common.cancel']}" styleClass="btn primary">                         
-                        </h:link>&nbsp;&nbsp;
+                        <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
+                                         onclick="#{'opDlg.show();'}" ajax="true" />                                    
+                        &nbsp;&nbsp;
                         <h:link outcome="/pages/farmacia/medicamento/agregarM.xhtml?faces-redirect=true" 
                                 value="Borrar todo" styleClass="btn primary">                         
                         </h:link>
+                        <p:panel id="img_p" widgetVar="imgDlg" style="display:none; width: 30px;" >
+                        <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" style="margin-left: -5px"/>
+                    </p:panel>
                     </center>
                 </div>
             </h:form>
-        </ui:define>
+            <p:dialog id="cancel-op" header="#{messages['common.delete.confirm1']}" widgetVar="opDlg" resizable="false" modal="true">  
+                <h:form id="form-op">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="¿Está seguro que desea regresar?"/>  
+                    </h:panelGroup>                                        
+                    <h:link outcome="/pages/farmacia/medicamento/lista.xhtml?faces-redirect=true" onclick="editDlg.hide();"
+                            value="#{messages['common.yes']}" styleClass="btn primary" style="margin-top: -5px; margin-left: 20%; height: 16px">    
+                    </h:link>
+                    &nbsp;                    
+                    <p:commandLink value="#{messages['common.no']}"  onclick="#{'opDlg.hide();'}"   
+                                   style="margin-top:10px;" styleClass="btn"/>  
+                </h:form>
+            </p:dialog>
+        </ui:define>        
     </ui:composition>
 </html>   

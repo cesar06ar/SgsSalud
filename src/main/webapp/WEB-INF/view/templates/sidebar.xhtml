@@ -89,6 +89,11 @@
                         <p:graphicImage value="/resources/img/servicioMed.png" width="60" height="60" />
                     </h:link>                                                   
                     &nbsp;&nbsp;  
+                    <h:link title="#{messages['modulo.admin.enfermeria']}" rendered="#{true}" 
+                            outcome="/pages/depSalud/agenda" >
+                        <p:graphicImage value="/resources/img/agendaMed.png" width="60" height="60" />
+                    </h:link>                                                   
+                    &nbsp;&nbsp;                      
                 </h:panelGroup>
                 <h:panelGroup  rendered="#{account.tienePermiso('LABORATORISTAS')}" style="margin-right: -7%">                                        
                     <h:link title="#{messages['examenesLabClinico.admin']}" rendered="#{true}" 

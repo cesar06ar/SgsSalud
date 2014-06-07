@@ -29,6 +29,7 @@ import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.model.servicios.Servicio;
+import edu.sgssalud.model.servicios.Turno;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.ServiciosMedicosService;
 import edu.sgssalud.service.farmacia.MedicamentoService;
@@ -78,6 +79,7 @@ public class ReporteListas {
     private static final String REPORTE_MEDICAMENTOS = "listaMedicamentos";
     private static final String REPORTE_RESULTADO_EXAMEN = "resultadoExamen";
     private static final String REPORTE_SERVICIOS_MEDICOS = "listaServiciosEnfermeria";
+    private static final String REPORTE_TURNOS = "listaTurnos";
     @Inject
     @Web
     private EntityManager em;
@@ -111,6 +113,7 @@ public class ReporteListas {
     private boolean estado;
     private String parametroBusqued;
     private Profile pLoggeado;
+    private List<Turno> listaOjbetos = new ArrayList<Turno>();
 
     private PedidoExamenLaboratorio pedido;
     private ResultadoExamenLabClinico resultadoExamen = new ResultadoExamenLabClinico();
@@ -473,6 +476,29 @@ public class ReporteListas {
         }
     }
 
+    public void renderCitasMedicas() {
+
+        final String attachFileName = "CitasMedicas.pdf";
+        Map<String, Object> _values = new HashMap<String, Object>();
+        if (!listaOjbetos.isEmpty()) {
+
+            String logo = getRealPath("/reportes/unl.png");
+            //parametros 
+            _values.put("numero", listaOjbetos.size());
+            _values.put("usuarioResponsable", pLoggeado.getFullName());
+            _values.put("logo", logo);
+            _values.put("fechaDesde", fechaInf);
+            _values.put("fechaHasta", fechaSup);
+            _values.put("usd", "$");            
+
+            //Exportar a pdf 
+            JasperReportAction.exportToPdf(REPORTE_TURNOS, listaOjbetos, _values, attachFileName);
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("export as pdf");
+        }
+    }
+
     //FALTA 
     // Examenes entregados
     // 
@@ -524,4 +550,11 @@ public class ReporteListas {
         this.parametroBusqued = parametroBusqued;
     }
 
+    public List<Turno> getListaOjbetos() {
+        return listaOjbetos;
+    }
+
+    public void setListaOjbetos(List<Turno> listaOjbetos) {
+        this.listaOjbetos = listaOjbetos;
+    }   
 }

@@ -120,7 +120,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
     private PedidoExamenLaboratorio pedido;
 
     private Long turnoId;
-    private Turno turno;
+    private Turno turno = new Turno();
     @Inject
     private TurnoService turnoS;
 
@@ -321,14 +321,14 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
 
         settingService.setEntityManager(em);
         setting = settingService.findByName("consultaActiva");
-        if (getInstance().isPersistent()) {
-//            this.IniciarDientes();
-            Odontograma o = new Odontograma();
-            //          o.setDientes(listaDientes);
-//            log.info("Init Dientes  " + fichaOdontolog.toString());
-            //fichaOdontolog.setOdontograma(o);
-            //fichaOdontolog.setOdontogramaInicial(o);            
-        }
+//        if (getInstance().isPersistent()) {
+////            this.IniciarDientes();
+//            Odontograma o = new Odontograma();
+//            //          o.setDientes(listaDientes);
+////            log.info("Init Dientes  " + fichaOdontolog.toString());
+//            //fichaOdontolog.setOdontograma(o);
+//            //fichaOdontolog.setOdontogramaInicial(o);            
+//        }
         //getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));
         //log.info("Odont Inicial " + fichaOdontolog.getOdontogramaInicial());
         //log.info("Odont  " + fichaOdontolog.getOdontograma());
@@ -413,7 +413,7 @@ public class ConsultaOdontologicaHome extends BussinesEntityHome<ConsultaOdontol
                         + "&backView=" + getBackView();
             }
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             FacesMessage msg = new FacesMessage("Error al guardar: " + getInstance().getId());
             FacesContext.getCurrentInstance().addMessage("", msg);
         }

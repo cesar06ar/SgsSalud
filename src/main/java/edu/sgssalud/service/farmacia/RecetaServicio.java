@@ -91,7 +91,13 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
                 builder.or(builder.between(objeto.get(Receta_.fechaEmision), fechaInf, fechaSup)));        
         return getResultList(query);
     }
-
+    public List<Receta> buscarRecetaPorFechasEmision(final Date fechaInf, final Date fechaSup) {
+        CriteriaBuilder builder = getCriteriaBuilder();
+        CriteriaQuery<Receta> query = builder.createQuery(Receta.class);
+        Root<Receta> objeto = query.from(Receta.class);
+        query.where(builder.between(objeto.get(Receta_.fechaEmision), fechaInf, fechaSup));        
+        return getResultList(query);
+    }
     public List<Receta> buscarRecetaPorConsultaMedica(final ConsultaMedica consulMedica) throws NoResultException {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta> query = builder.createQuery(Receta.class);

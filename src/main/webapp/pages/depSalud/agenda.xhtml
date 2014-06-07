@@ -19,7 +19,7 @@
             <div class="header-replace">
                 <div class="container-header" >
                     <div class="row lf row-title" >
-                        <h2>#{messages['agenda.Nombre']} </h2>   
+                        <h2>#{'AGENDA MEDICA'} </h2>   
                     </div>
                 </div>
             </div>
@@ -29,34 +29,39 @@
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
 
                 <!--Botones de admin-->
-                <div class="admin-actions ">
-
-                    <!--<h:link title="# {messages['common.add']} # {messages['turno.nombre']}" outcome="/pages/depSalud/turno" styleClass="btn btn-img" >
-                        <p:graphicImage value="/resources/img/turno.png" width="40" height="40"/>                        
-                        <f:param name="backView" value="lista"></f:param>
-                    </h:link> -->
+                <div class="admin-actions ">                   
 
                     <h:panelGroup style="">
-                        <p:selectOneMenu id="present" value="#{turnoHome.estado}" converter="#{omnifaces.SelectItemsConverter}" 
-                                             effect="fade" var="m"  >  
-                            <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
-                            <f:selectItem itemLabel="Por Realizar" itemValue="Por Realizar" />  
-                            <f:selectItem itemLabel="Realizada" itemValue="Realizada" />      
-                            <f:selectItem itemLabel="Postergada" itemValue="Postergada" />  
-                            <f:selectItem itemLabel="No Realizada" itemValue="No Realizada" />
-                            <p:ajax event="change" update=":form:buscar"/>
-                        </p:selectOneMenu>
-                        &nbsp;
-                        <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha"
-                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
-                            <!--<p:ajax event="dateSelect" />-->
-                        </p:calendar>
-                        &nbsp;
-                        <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPor()}"  styleClass="btn info" update="@form :form:tablaTurnos">
-                            <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
-                        </p:commandButton>    
-                        &nbsp;
-                        <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.init}"  styleClass="btn info" update=":form:tablaTurnos"/>
+                        <div class="container-fluid">   
+                            <div class="row-fluid">
+                                <div class="span4" >
+                                    <p:selectOneMenu id="present" value="#{turnoHome.estado}" converter="#{omnifaces.SelectItemsConverter}" 
+                                                     effect="fade" var="m" >  
+                                        <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                        <f:selectItem itemLabel="Por Realizar" itemValue="Por Realizar" />  
+                                        <f:selectItem itemLabel="Realizada" itemValue="Realizada" />      
+                                        <f:selectItem itemLabel="Postergada" itemValue="Postergada" />  
+                                        <f:selectItem itemLabel="No Realizada" itemValue="No Realizada" />
+                                        <p:ajax event="change" update=":form:buscar"/>
+                                    </p:selectOneMenu>
+                                </div>
+                                <div class="span5" style="width: 80%">
+                                    <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha" 
+                                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
+                                        <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
+                                    </p:calendar>                                 
+                                    <p:calendar id="criterioBuscarF" size ="15" value="#{turnoHome.fechaBuscFin}" title="Ingrese una fecha" 
+                                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
+                                        <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
+                                    </p:calendar>                                
+                                    <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPor()}"  styleClass="btn info" update="@form :form:tablaTurnos">
+                                        <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
+                                    </p:commandButton>                                        
+                                    <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.buscarTodos()}"  styleClass="btn info" update="@form :form:tablaTurnos"/>
+                                </div>
+                            </div>
+                        </div>
+
                     </h:panelGroup>
 
                 </div>
@@ -95,114 +100,55 @@
                             <f:setPropertyActionListener value="# {turno_}" target="# {turnoHome.turnoSelect}"/>
                             <p:ajax process="@this" update=":cancel-dialog" />
                         </p:commandLink>-->
-                        <h:link title="#{'Postergar'} #{messages['turno.nombre']}" outcome="/pages/depSalud/turno" styleClass="btn success" style="height: 10px;">
+                        <h:link title="#{'Postergar'} #{messages['turno.nombre']}" outcome="/pages/depSalud/turno" styleClass="btn success" style="height: 10px;"
+                                disabled="#{turno_.estado ne 'Por Realizar'}">
                             <p:graphicImage value="/resources/images/Icon_edit.gif" width="18" height="12"/>
                             <f:param name="backView" value="depSalud/agenda"></f:param>
                             <f:param name="turnoId" value="#{turno_.id}"></f:param>
                             <f:param name="pacienteId" value="#{turno_.paciente.id}"></f:param>
                         </h:link>
-                        &nbsp;&nbsp;
-                        <p:commandLink id="add-consult" type="button" title="agregar consulta"
-                                       action="#{turnoHome.agregarConsulta()}"  immediate="true" styleClass="btn success" 
+                        &nbsp;
+                        <p:commandLink id="add-consult" type="button" title="agregar consulta" immediate="true" styleClass="btn success"
+                                       action="#{turnoHome.agregarConsulta()}" disabled="#{turno_.estado eq 'No Realizada' or turno_.estado eq 'Realizada'}"   
                                        style="width: 20px; height: 10px;">
                             <p:graphicImage value="/resources/img/new2.png" width="18" height="13"/>
                             <f:setPropertyActionListener value="#{turno_}" target="#{turnoHome.instance}"/>  
                         </p:commandLink>
                     </p:column>
                 </p:dataTable>
-            </h:form>
-            <p:dialog id="cancel-dialog" header="Postergar Cita Médica" widgetVar="deletedDlg" resizable="false" modal="true">  
-                <h:form id="form-edit">
-                    <h:outputText value="#{turnoHome.instance.id}  t"/>
-                    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
-                    <p:panel id="paneltitle" header="Información del Paciente" styleClass="clearfix">
-                        <glue:output id="ced" name="ced" type="text" label="#{messages['profile.dni']}" 
-                                     value="#{turnoHome.instance.paciente.cedula}" required="false" execute="@this save" render="ced" styleClass="xLarge" disabled="true"/>
-                        <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" 
-                                     value="#{turnoHome.instance.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
-                        <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" 
-                                     value="#{turnoHome.instance.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+                <p:commandLink id="add-consult" type="button" value="Cancelar Citas" immediate="true" styleClass="btn info"
+                               onclick="#{'deletedDlg.show();'}" ajax="true" title="Cancela todas las citas no realizadas de este día"
+                               style="float: right">                    
+                </p:commandLink>
+                <h:panelGrid id="export" class="columns" >
+                    <p:panel>
+                        <h:outputText value="Exportar Datos" />  
+                        <br/>
+                        <h:commandLink action="#{reporteListas.renderCitasMedicas()}" >   
+                            <p:graphicImage value="/resources/images/pdf.png" /> 
+                            <f:setPropertyActionListener value="#{turnoHome.listaTurnos}" target="#{reporteListas.listaOjbetos}"/>
+                            <f:setPropertyActionListener value="#{turnoHome.fechaBusc}" target="#{reporteListas.fechaInf}"/>
+                            <f:setPropertyActionListener value="#{turnoHome.fechaBuscFin}" target="#{reporteListas.fechaSup}"/>
+                        </h:commandLink>                   
                     </p:panel>
-                    <p:panel id="panelTurno" header="#{messages['citaMedica.nombre']}" styleClass="clearfix" >
+                </h:panelGrid>
 
-                        <h:panelGroup id="fechaEP" layout="block" styleClass="clearfix">
-                            <label for="fechaC" >#{messages['comun.fecha']} #{messages['receta.emision']}</label>
-                            <div class="input">                                                         
-                                <p:calendar id="fechaE" value="#{turnoHome.instance.fechaEmision}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
-                                            disabled="true" pattern="EEE, dd-MMMM-yyyy"  locale="es" disabledWeekends="true" >                                
-                                </p:calendar>                                                                                                      
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.fechaEmision ne null}"
-                                                styleClass="validation-status" />                                                        
-                            </div>                    
-                            <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha']} #{messages['receta.emision']}<ocp:message forId="fechaE" /></span>
-                        </h:panelGroup>  
+            </h:form>    
+            <p:dialog id="cancel-dialog" header="Alerta" widgetVar="deletedDlg" resizable="false" modal="true">  
+                <h:form id="form-dialog-confirm-delete1">
 
-                        <h:panelGroup layout="block" class="clearfix" rendered="true">
-                            <label for="nombreServicio" >#{messages['servicioMedico.nombre1']} *</label>
-                            <div class="input">
-                                <p:selectOneMenu id="nombreServicio" value="#{turnoHome.instance.servicio}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" 
-                                                 var="ser" rendered="true" required="true">
-                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                             
-                                    <f:selectItem  itemLabel = "MÉDICO"  itemValue="MÉDICO" /> 
-                                    <f:selectItem  itemLabel = "ODONTOLÓGICO"  itemValue="ODONTOLÓGICO" /> 
-                                    <p:ajax event="change" update="@parent" partialSubmit="true" />
-                                </p:selectOneMenu> 
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.instance.servicio ne null}"
-                                                styleClass="validation-status" />      
-                            </div>                   
-                            <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['servicioMedico.nombre.lineaAyuda']}<ocp:message forId="nombreServicio" /></span>
-                        </h:panelGroup> 
-                        <p:spacer height="15"/>    
-                        <h:panelGroup layout="block" styleClass="clearfix">
-                            <label for="motivo" >#{messages['turno.motivo']} </label>
-                            <div class="input">                                                         
-                                <p:inputTextarea id="motivo" value="#{turnoHome.instance.motivo}"  label="" 
-                                                 style="width: 60%; height: 60px;" required="true">
-                                    <p:ajax event="blur" update="@parent" partialSubmit="true"/>
-                                </p:inputTextarea>                            
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{not empty turnoHome.instance.motivo}"
-                                                styleClass="validation-status" />                                                        
-                            </div>                    
-                            <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>Motivo por el cual solitica la cita médica<ocp:message forId="motivo" /></span>
-                        </h:panelGroup> 
-                        <h:panelGroup id="fechaCP" layout="block" styleClass="clearfix">
-                            <label for="fechaC" >#{messages['comun.fecha']} #{messages['citaMedica.nombre']}*</label>
-                            <div class="input">                                                         
-                                <p:calendar id="fechaC" value="#{turnoHome.fecha}"  label="" dir="ltr" showButtonPanel="true" navigator="true"
-                                            disabled="false" pattern="dd-MMM-yyyy"  locale="es" disabledWeekends="true" required="true">
-                                    <!--<f:validator validatorId="dateValidatorTurno"/>-->
-                                    <p:ajax event="dateSelect" process="validadorFechas fechaC " update="@parent :form-edit:hora :form-edit:save" partialSubmit="true" rendered=":form-edit:hora"/>                                  
-                                </p:calendar>                                                                                                      
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.fecha ne null}"
-                                                styleClass="validation-status" />                                                        
-                            </div>                    
-                            <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{messages['comun.fecha.now']}<ocp:message forId="fechaC" /></span>
-                        </h:panelGroup>  
-                        <s:validateForm id="validadorFechas" validatorId="dateValidatorTurno" />-
-                        <h:panelGroup layout="block" class="clearfix" rendered="true">
-                            <label for="hora" >#{messages['comun.horaCita']}  </label>
-                            <div class="input">
-                                <p:selectOneMenu id="hora" value="#{turnoHome.horaD}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" 
-                                                 var="h_" rendered="true" disabled="#{empty turnoHome.fecha}">
-                                    <f:selectItem  itemLabel = "#{messages['common.choice']}"  itemValue="" />                                                             
-                                    <f:selectItems value="#{turnoHome.listaHoras}" var="hora_" itemLabel ="#{hora_}"  itemValue="#{hora_}" /> 
-                                    <p:ajax event="change" update="@parent" partialSubmit="true" />
-                                </p:selectOneMenu> 
-                                <h:graphicImage value="#{resource['success.gif']}" rendered="#{turnoHome.horaD ne null}"
-                                                styleClass="validation-status" />      
-                            </div>                   
-                            <span class="help-inline" style="margin:-20px 0 0 150px; float: left"><br/>#{'Hora de la cita médica'}<ocp:message forId="nombreServicio" /></span>
-                        </h:panelGroup> 
-                    </p:panel>
-                    <p:commandButton id="save" value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                     action="#{turnoHome.postergar()}"                                          
-                                     ajax="true" process="@this"  
-                                     style="margin-top:10px;">  
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="Esta seguro que quiere cancelar toda las citas de este día"/>
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" action="#{turnoHome.cancelarCitas()}" 
+                                     oncomplete="#{'deletedDlg.hide();'}" update=":form:tablaTurnos" immediate="true" ajax="true"
+                                     style="margin-top:10px;" > 
                     </p:commandButton>  
                     <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
                                      style="margin-top:10px;"/>  
+
                 </h:form>
-            </p:dialog> 
+            </p:dialog>
         </ui:define>
     </ui:composition>
 </html>                
