@@ -43,6 +43,7 @@ import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.FechasUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -114,6 +115,7 @@ public class ReporteListas {
     private String parametroBusqued;
     private Profile pLoggeado;
     private List<Turno> listaOjbetos = new ArrayList<Turno>();
+    List<ConsultaOdontologica> consulOdont = new ArrayList<ConsultaOdontologica>();
 
     private PedidoExamenLaboratorio pedido;
     private ResultadoExamenLabClinico resultadoExamen = new ResultadoExamenLabClinico();
@@ -317,7 +319,7 @@ public class ReporteListas {
 
     public void renderConsultasOdont() {
         final String attachFileName = "consultasOdontológicas.pdf";
-        List<ConsultaOdontologica> consulOdont = consultaOdontologicaServicio.TodasConsulasOdontologica();
+        consulOdont = consultaOdontologicaServicio.TodasConsulasOdontologica();
         if (fechaInf != null && fechaSup != null) {
             consulOdont = consultaOdontologicaServicio.buscarPorFechas(fechaInf, fechaSup);
         }
@@ -331,6 +333,7 @@ public class ReporteListas {
         //_values.put("usd", "$");
         //Exportar a pdf 
         JasperReportAction.exportToPdf(REPORTE_CONSULTAS_ODONT, consulOdont, _values, attachFileName);
+
     }
 
     public void renderMedicamentos() {
@@ -425,7 +428,7 @@ public class ReporteListas {
             _values.put("nombres", nombres);
             _values.put("nombreExamen", resultadoExamen.getExamenLab().getName());
             _values.put("logo", logo);
-            _values.put("medico", ("Dr. " + resultadoExamen.getResponsableEntrega().getFullName()));
+            _values.put("medico", pLoggeado.getFullName());
             _values.put("usd", "$");
             /*if (categorias.isEmpty()) {
              _values.put("cat1", "");
@@ -442,7 +445,16 @@ public class ReporteListas {
              _values.put("cat3", categorias.get(2));
              }*/
             List<ResultadoParametro> listaP = resultadoEService.getResultadoParametros(resultadoExamen);
-            System.out.println("RESULTADO PARAMETROS" + listaP.toString());
+//            List<String> categorias = new ArrayList<String>();
+//            if (resultadoExamen.getExamenLab().getCategorias() != null) {
+//                String c = resultadoExamen.getExamenLab().getCategorias();
+//                categorias = Arrays.asList(c.split(","));
+//                for (String string : categorias) {
+//                    
+//                }
+//            }
+            Collections.sort(listaP);            
+            //System.out.println("RESULTADO PARAMETROS" + listaP.toString());
             //FALTA ORGANIZAR EL REPORT
             //_values.put("usd", "$");
             //Exportar a pdf 
@@ -463,7 +475,7 @@ public class ReporteListas {
         String logo = getRealPath("/reportes/unl.png");
         //parametros 
         _values.put("numero", listaServiciosEnf.size());
-        _values.put("usuarioResponsable", pLoggeado.getFullName());
+        _values.put("usuarioR", pLoggeado.getFullName());
         _values.put("logo", logo);
         _values.put("fechaDesde", fechaInf);
         _values.put("fechaHasta", fechaSup);
@@ -489,7 +501,7 @@ public class ReporteListas {
             _values.put("logo", logo);
             _values.put("fechaDesde", fechaInf);
             _values.put("fechaHasta", fechaSup);
-            _values.put("usd", "$");            
+            _values.put("usd", "$");
 
             //Exportar a pdf 
             JasperReportAction.exportToPdf(REPORTE_TURNOS, listaOjbetos, _values, attachFileName);
@@ -556,5 +568,14 @@ public class ReporteListas {
 
     public void setListaOjbetos(List<Turno> listaOjbetos) {
         this.listaOjbetos = listaOjbetos;
-    }   
+    }
+
+    public List<ConsultaOdontologica> getConsulOdont() {
+        return consulOdont;
+    }
+
+    public void setConsulOdont(List<ConsultaOdontologica> consulOdont) {
+        this.consulOdont = consulOdont;
+    }
+
 }

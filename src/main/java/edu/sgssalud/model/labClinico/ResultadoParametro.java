@@ -29,7 +29,7 @@ import javax.persistence.ManyToOne;
  * @author cesar
  */
 @Entity
-public class ResultadoParametro implements Serializable {
+public class ResultadoParametro implements Serializable, Comparable<ResultadoParametro> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -148,6 +148,11 @@ public class ResultadoParametro implements Serializable {
                 +"  "+valor
                 + " ]";
 
+    }
+
+    @Override
+    public int compareTo(ResultadoParametro o) {
+     return (int)(this.getId() - o.getId());   
     }
 
 }

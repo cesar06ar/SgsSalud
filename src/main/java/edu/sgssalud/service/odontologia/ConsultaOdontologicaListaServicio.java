@@ -144,7 +144,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable {
     }
 
     public List<ConsultaOdontologica> getResultList() {
-        Collections.sort(resultList);// ORDENA SEGUN CRITERIO DE COMPARACION REVISARA CONSULTA ODONT
+        // ORDENA SEGUN CRITERIO DE COMPARACION REVISARA CONSULTA ODONT
         return resultList;
     }
 
@@ -204,6 +204,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable {
 
     public void actualizar() {
         this.setResultList(cos.TodasConsulasOdontologica());
+        Collections.sort(resultList);
         //this.setFecha(null);
     }
 

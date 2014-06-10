@@ -22,6 +22,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -29,6 +31,12 @@ import javax.validation.constraints.NotNull;
  * @author cesar
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "Parametros.buscarTodosOrderanos",
+    query = "select p FROM Parametros p "
+            + "where p.examenLabClinico=:idExamen"
+    + "ORDER BY p.posicion")
+})
 public class Parametros implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,6 +50,8 @@ public class Parametros implements Serializable {
     private String categoria;
     private String valorReferenciaInf;
     private String valorReferenciaSup;
+    private int posicion;
+    private String tipoDato;
 
     @ManyToOne
     @JoinColumn(name = "examenLabClinico_id")
@@ -122,6 +132,23 @@ public class Parametros implements Serializable {
     public void setValorReferenciaSup(String valorReferenciaSup) {
         this.valorReferenciaSup = valorReferenciaSup;
     }  
+
+    public int getPosicion() {
+        return posicion;
+    }
+
+    public void setPosicion(int posicion) {
+        this.posicion = posicion;
+    }
+
+    public String getTipoDato() {
+        return tipoDato;
+    }
+
+    public void setTipoDato(String tipoDato) {
+        this.tipoDato = tipoDato;
+    }
+    
         
     @Override
     public int hashCode() {

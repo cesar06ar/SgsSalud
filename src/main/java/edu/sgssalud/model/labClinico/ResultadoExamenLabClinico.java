@@ -31,6 +31,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -64,6 +65,7 @@ public class ResultadoExamenLabClinico implements Serializable {
     private PedidoExamenLaboratorio pedidoExamenLab;
 
     @OneToMany(mappedBy = "resultadoExamenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //@OrderBy()
     private List<ResultadoParametro> resultadosParametros = new ArrayList<ResultadoParametro>();
 
     @ManyToOne

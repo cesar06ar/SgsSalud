@@ -176,15 +176,11 @@
                                                         </p:tooltip>
                                                     </div>
                                                 </h:panelGroup>  
-                                            </c:when>                                            
-                                            <c:otherwise>
-                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" >
-                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                                    <div class="span1" style="padding-left: 5px; padding-top: 5px;"> 
-
-                                                        <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
-                                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
-                                                        </p:selectBooleanCheckbox>                                                        
+                                            </c:when>      
+                                            <c:when test="${f.name eq 'antecedentesGineco-obstetrico'}">
+                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" style="padding-left: 5px; float: left" >
+                                                    <label for="#{a.name}" style="float: left" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                                    <div class="span6" >     
                                                         <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
                                                                     rendered="#{a.property.type eq 'java.util.Date'}">
                                                             <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
@@ -202,10 +198,42 @@
                                                             <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
                                                             <p:ajax event="change" update="@parent" partialSubmit="true"/>
                                                         </p:selectOneMenu>
-                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100%;" 
+                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100px;" 
                                                                          rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </p:inputTextarea>
+                                                        
+                                                    </div>
+                                                </h:panelGroup>  
+                                            </c:when>
+                                            <c:otherwise>
+                                                <h:panelGroup rendered="#{not a.property.survey and f.name ne 'antecedentesGineco-obstetrico'}" layout="block" >
+                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
+                                                    <div class="span1" style="padding-left: 5px; padding-top: 5px;">                                                         
+
+                                                        <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
+                                                                        rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </pe:inputNumber>                                                                                                                                                                                                                 
+                                                        <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
+                                                                      rendered="#{a.property.type eq 'java.lang.String'}">
+                                                            <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
+                                                        </p:inputText>                                                                                                     
+
+                                                        <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
+                                                                         rendered="#{a.property.type eq 'java.lang.String[]'}" >  
+                                                            <f:selectItems value="#{ui.getValuesAsSelectItem(a.property.values)}" var="v" itemLabel="#{v.label}" itemValue="#{v}"/>  
+                                                            <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                        </p:selectOneMenu>
+                                                        <p:inputTextarea value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}" style="width: 400px; height: 100%;" 
+                                                                         rendered="#{a.property.type eq 'java.lang.MultiLineString'}" title="#{a.property.helpInline}">
+                                                            <p:ajax event="blur" update="@parent" partialSubmit="true"/>
+                                                        </p:inputTextarea>          
+                                                        <h:panelGroup rendered="#{a.property.type eq 'java.lang.Boolean'}">
+                                                            <p:selectBooleanCheckbox id="asbc" value="#{a.value}" rendered="#{a.property.type eq 'java.lang.Boolean'}" required="#{a.property.required}">
+                                                                <p:ajax event="change" update="@parent" partialSubmit="true"/>
+                                                            </p:selectBooleanCheckbox>
+                                                        </h:panelGroup> 
                                                         <p:tooltip for="asbc" value="" showEffect="fade" hideEffect="fade">
                                                             <h:outputText escape="false" value="#{a.property.helpInline}"/>
                                                         </p:tooltip>

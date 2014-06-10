@@ -131,7 +131,15 @@
                         <p:column headerText="Ref. Inferior">                               
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{_p.valorReferenciaInf}" /></f:facet>
-                                <f:facet name="input"><pe:inputNumber value="#{_p.valorReferenciaInf}" style="width:100%" label="Ref. Inferior">
+                                <f:facet name="input"><pe:inputNumber style="width: 50px" value="#{_p.valorReferenciaInf}"  label="Ref. Inferior">
+                                        <p:ajax event="blur" process="@this"/>
+                                    </pe:inputNumber></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Ref. Seperior">                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.valorReferenciaSup}" /></f:facet>
+                                <f:facet name="input"><pe:inputNumber  value="#{_p.valorReferenciaSup}" style="width:50px" label="Ref. Seperior">
                                         <p:ajax event="blur" process="@this"/>
                                     </pe:inputNumber></f:facet>
                             </p:cellEditor>
@@ -140,6 +148,26 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{_p.valorReferenciaSup}" /></f:facet>
                                 <f:facet name="input"><pe:inputNumber value="#{_p.valorReferenciaSup}" style="width:100%" label="Ref. Seperior">
+                                        <p:ajax event="blur" process="@this"/>
+                                    </pe:inputNumber></f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:cellEditor>
+                            <f:facet name="output"><h:outputText value="#{_p.tipoDato}" /></f:facet>
+                            <f:facet name="input">
+                                <p:selectOneMenu id="cate" value="#{p_.tipoDato}" converter="#{omnifaces.SelectItemsConverter}" 
+                                                 effect="fade" var="m" styleClass="xLarge" >  
+                                    <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                    <f:selectItem itemLabel="Casilla" itemValue="Casilla" />  
+                                    <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />  
+                                    <p:ajax event="change" process="@this" update="@this" partialSubmit="true"/>
+                                </p:selectOneMenu> 
+                            </f:facet>
+                        </p:cellEditor>
+                        <p:column headerText="Posicion">                            
+                            <p:cellEditor>
+                                <f:facet name="output"><h:outputText value="#{_p.posicion}" /></f:facet>
+                                <f:facet name="input"><pe:inputNumber value="#{_p.posicion}" style="width:50px" label="posicion">
                                         <p:ajax event="blur" process="@this"/>
                                     </pe:inputNumber></f:facet>
                             </p:cellEditor>
@@ -191,6 +219,23 @@
                                 inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
                     <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.parametro.valorReferenciaSup}"
                                 inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
+                    <h:panelGroup id="tipoDP" layout="block" class="clearfix" >
+                        <label for="cate" >#{messages['comun.categoria']}</label>
+                        <div class="input" >
+                            <p:selectOneMenu id="tipoDato" value="#{examenHome.parametro.tipoDato}" converter="#{omnifaces.SelectItemsConverter}" 
+                                             effect="fade" var="m" styleClass="xLarge" >  
+                                <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                <f:selectItem itemLabel="Casilla" itemValue="Casilla" />  
+                                <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />  
+                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                            </p:selectOneMenu>        
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.tipoDato != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="tipoDato" /></span>
+                        </div>
+                        <glue:input id="posicion" name="posicion" type="Long" label="Posición" value="#{examenHome.parametro.posicion}"
+                                inlinehelp="Posición del parámetro" required="false" execute="@this save" render="posicion" styleClass="xLarge"/>
+                    </h:panelGroup>  
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.add']}" oncomplete="editDlg.hide();"                                           
                                          action="#{examenHome.agregarParametro()}" update=":form:parametros1 :edit-dialog"                                             
@@ -220,6 +265,6 @@
             </p:dialog> 
         </ui:define>
     </ui:composition>  
-    
+
 </html>                
 

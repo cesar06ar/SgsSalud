@@ -28,6 +28,7 @@ import edu.sgssalud.util.PersistenceUtil;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -57,10 +58,16 @@ public class ExamenLabService extends PersistenceUtil<ExamenLabClinico> {
     }
 
     public List<Parametros> getParametrosPorExamen(final ExamenLabClinico exam) {
+        TypedQuery<Parametros> query = em.createNamedQuery("Parametros.buscarTodosOrderanos", Parametros.class);              
+        query.setParameter("idExamen", exam.getId());
+        return query.getResultList();
+    }
+    
+    public List<Parametros> getParametrosPorExamen1(final ExamenLabClinico exam) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Parametros> query = builder.createQuery(Parametros.class);
         Root<Parametros> entity = query.from(Parametros.class);
-        query.where(builder.equal(entity.get(Parametros_.examenLabClinico), exam));
+        query.where(builder.equal(entity.get(Parametros_.examenLabClinico), exam));        
         return getResultList(query);
     }
 

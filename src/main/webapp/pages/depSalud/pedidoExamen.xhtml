@@ -63,8 +63,7 @@
                     <p:dataTable id="tablaResultados" var="Object_" value="#{pedidoExamenLabHome.listaResultadosExamenLab}" paginator="true" rows="30" 
                                  paginatorPosition="top">
                         <p:columnGroup type="header">
-                            <p:row>
-                                <p:column rowspan="1" headerText="Categoria" />
+                            <p:row>                                
                                 <p:column colspan="1" headerText="Nombre" />
                                 <p:column colspan="1" headerText="valor" />
                                 <p:column colspan="1" headerText="U. medida" />
@@ -75,10 +74,7 @@
                         <p:subTable value="#{Object_.resultadosParametros}" var="p_">
                             <f:facet name="header">
                                 <b>Nombre Examen: </b>#{Object_.examenLab.name}&nbsp;&nbsp;#{Object_.examenLab.tipo}
-                            </f:facet>
-                            <p:column style="width:10%">                             
-                                #{p_.categoria}
-                            </p:column>
+                            </f:facet>                            
                             <p:column style="width:10%">                             
                                 #{p_.nombre}
                             </p:column>
