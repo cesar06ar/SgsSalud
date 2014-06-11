@@ -35,9 +35,9 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "Parametros.buscarTodosOrderanos",
     query = "select p FROM Parametros p "
             + "where p.examenLabClinico=:idExamen"
-    + "ORDER BY p.posicion")
+    + " ORDER BY p.posicion")
 })
-public class Parametros implements Serializable {
+public class Parametros implements Serializable, Comparable<Parametros> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,8 +50,8 @@ public class Parametros implements Serializable {
     private String categoria;
     private String valorReferenciaInf;
     private String valorReferenciaSup;
-    private int posicion;
-    private String tipoDato;
+    private Integer posicion;
+    private String tipoDato = "Casilla";
 
     @ManyToOne
     @JoinColumn(name = "examenLabClinico_id")
@@ -174,6 +174,11 @@ public class Parametros implements Serializable {
     public String toString() {
         //return "edu.sgssalud.model.labClinico.Parametros[ id=" + id + " ]";
         return getCategoria();
+    }
+
+    @Override
+    public int compareTo(Parametros o) {
+        return (int)(this.getPosicion() - o.getPosicion());
     }
 
 }

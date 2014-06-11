@@ -78,12 +78,14 @@
                     <p:commandButton id="button-add" value="#{messages['common.add']} Parametros" styleClass="btn primary"
                                      onclick="#{'editDlg.show();'}"
                                      ajax="true">
+                        
+                        <f:setPropertyActionListener value="#{0}" target="#{examenHome.parametro.posicion}"/>
                         <p:ajax process="@this" update=":edit-dialog"/>
                     </p:commandButton> 
                     <br/>
                     <p:dataTable id="parametros1" value="#{examenHome.parametros}"
-                                 lazy="true" resizableColumns="true" liveResize="true"
-                                 var="_p" editable="true">
+                                 resizableColumns="true" liveResize="true"
+                                 var="_p" >
                         <f:facet name="header">
                             <h:outputText value="Total de Parametros #{examenHome.parametros.size}"/>
                         </f:facet>
@@ -94,7 +96,7 @@
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{_p.categoria}" /></f:facet>
                                 <f:facet name="input">
-                                    <p:selectOneMenu id="cate" value="#{p_.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
+                                    <p:selectOneMenu id="cate" value="#{_p.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
                                                      effect="fade" var="m" styleClass="xLarge" required="#{not empty examenHome.instance.categorias}">  
                                         <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
                                         <f:selectItems value="#{examenHome.categorias}" var="c"/>    
@@ -143,42 +145,36 @@
                                         <p:ajax event="blur" process="@this"/>
                                     </pe:inputNumber></f:facet>
                             </p:cellEditor>
-                        </p:column>
-                        <p:column headerText="Ref. Seperior">                            
+                        </p:column>    
+                        <p:column headerText="Tipo casilla">
                             <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{_p.valorReferenciaSup}" /></f:facet>
-                                <f:facet name="input"><pe:inputNumber value="#{_p.valorReferenciaSup}" style="width:100%" label="Ref. Seperior">
-                                        <p:ajax event="blur" process="@this"/>
-                                    </pe:inputNumber></f:facet>
+                                <f:facet name="output"><h:outputText value="#{_p.tipoDato}" /></f:facet>
+                                <f:facet name="input">
+                                    <p:selectOneMenu id="cateTable" value="#{_p.tipoDato}" converter="#{omnifaces.SelectItemsConverter}" 
+                                                     effect="fade" var="m" styleClass="xLarge" >  
+                                        <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                        <f:selectItem itemLabel="Casilla" itemValue="Casilla" />  
+                                        <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />  
+                                        <p:ajax event="change" process="@this" update="@this" partialSubmit="true"/>
+                                    </p:selectOneMenu> 
+                                </f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{_p.tipoDato}" /></f:facet>
-                            <f:facet name="input">
-                                <p:selectOneMenu id="cate" value="#{p_.tipoDato}" converter="#{omnifaces.SelectItemsConverter}" 
-                                                 effect="fade" var="m" styleClass="xLarge" >  
-                                    <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
-                                    <f:selectItem itemLabel="Casilla" itemValue="Casilla" />  
-                                    <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />  
-                                    <p:ajax event="change" process="@this" update="@this" partialSubmit="true"/>
-                                </p:selectOneMenu> 
-                            </f:facet>
-                        </p:cellEditor>
                         <p:column headerText="Posicion">                            
                             <p:cellEditor>
                                 <f:facet name="output"><h:outputText value="#{_p.posicion}" /></f:facet>
                                 <f:facet name="input"><pe:inputNumber value="#{_p.posicion}" style="width:50px" label="posicion">
-                                        <p:ajax event="blur" process="@this"/>
+                                        <p:ajax update="@this" process="@this" />
                                     </pe:inputNumber></f:facet>
                             </p:cellEditor>
                         </p:column>
-                        <p:column headerText="Opción" style="width:5%">
-                            <p:column style="width:10px">
-                                <p:rowEditor >
-                                    <!--<p:ajax update=":form:parametros1"/>-->
-                                </p:rowEditor>
-                            </p:column>
-
+                        <p:column headerText="Opción" style="width:5%">                                                      
+                            <p:commandLink id="button-edit" type="button" title="#{messages['common.edit']}"  
+                                           onclick="#{'editDlg.show()'}"  immediate="true" > 
+                                <p:graphicImage value="/resources/images/Icon_edit.gif"/>
+                                <f:setPropertyActionListener value="#{_p}" target="#{examenHome.parametro}"/>
+                                <p:ajax process="@this" update=":edit-dialog"  rendered=":edit:dialog:form-dialog"/>
+                            </p:commandLink>#{''}
                             <p:commandLink id="button-delete" type="button" title="#{messages['common.delete']}"  style="width: 12px; height: 10px; float: right; margin-right: 10px; margin-top: -20px;"
                                            onclick="#{'deletedDlg.show()'}"  immediate="true"  > 
                                 <p:graphicImage value="/resources/images/delete.gif"/>
@@ -190,7 +186,7 @@
                 </p:panel>                
             </h:form>            
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} o editar Parametro de examen " 
-                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="80%">
+                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="70%" height="400">
                 <h:form id="form-dialog">
                     <!--<glue:input id="cate" name="cate" type="text" label="# {messages['comun.categoria']}" value="# {examenHome.parametro.categoria}" 
                                 required="false" inlinehelp="# {'categoria del parametro'}" execute="@this save1" render="cate"/>-->
@@ -216,29 +212,38 @@
                     <glue:input id="uniMed" name="uniMed" type="text" label="Unidad de Medida" value="#{examenHome.parametro.unidadMedida}" 
                                 required="false" inlinehelp="#{'una unidad de medida en caso la tiene'}" execute="@this save1" render="uniMed"/>
                     <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.parametro.valorReferenciaInf}"
-                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefInf" styleClass="xLarge"/>
+                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save1" render="valorRefInf" styleClass="xLarge"/>
                     <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.parametro.valorReferenciaSup}"
-                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save" render="valorRefSup" styleClass="xLarge"/>
+                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save1" render="valorRefSup" styleClass="xLarge"/>
                     <h:panelGroup id="tipoDP" layout="block" class="clearfix" >
-                        <label for="cate" >#{messages['comun.categoria']}</label>
+                        <label for="cate" >#{'Tipo Casilla'}</label>
                         <div class="input" >
-                            <p:selectOneMenu id="tipoDato" value="#{examenHome.parametro.tipoDato}" converter="#{omnifaces.SelectItemsConverter}" 
-                                             effect="fade" var="m" styleClass="xLarge" >  
-                                <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
-                                <f:selectItem itemLabel="Casilla" itemValue="Casilla" />  
-                                <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />  
+                            <p:selectOneMenu id="tipoDato" value="#{examenHome.parametro.tipoDato}" converter="#{omnifaces.SelectItemsConverter}"
+                                             effect="fade" var="m" styleClass="xLarge" >
+                                <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
+                                <f:selectItem itemLabel="Casilla" itemValue="Casilla" />
+                                <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />
                                 <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                            </p:selectOneMenu>        
+                            </p:selectOneMenu>
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.tipoDato != null}"
                                             styleClass="validation-status" />
                             <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="tipoDato" /></span>
-                        </div>
-                        <glue:input id="posicion" name="posicion" type="Long" label="Posición" value="#{examenHome.parametro.posicion}"
-                                inlinehelp="Posición del parámetro" required="false" execute="@this save" render="posicion" styleClass="xLarge"/>
-                    </h:panelGroup>  
+                        </div>                                                
+                    </h:panelGroup> 
+                   <h:panelGroup id="posicionp" layout="block" class="clearfix" >
+                        <label for="posicion" >#{'Posición'}</label>
+                        <div class="input" >
+                            <pe:inputNumber id="posicion" value="#{examenHome.parametro.posicion}" >
+                                <p:ajax event="blur" update="@parent " rendered="save1"/>
+                            </pe:inputNumber>                                
+                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.posicion != null}"
+                                            styleClass="validation-status" />
+                            <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="posicion" /></span>
+                        </div>                                                
+                    </h:panelGroup>                     
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.add']}" oncomplete="editDlg.hide();"                                           
-                                         action="#{examenHome.agregarParametro()}" update=":form:parametros1 :edit-dialog"                                             
+                                         action="#{examenHome.agregarParametro()}" update="@form :form:parametros1 :edit-dialog"
                                          style="margin: 0 0 0 30%">  
                             <!--recetaListaServicio.entregarReceta()--> 
                         </p:commandButton> 

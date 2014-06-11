@@ -57,17 +57,18 @@ public class ExamenLabService extends PersistenceUtil<ExamenLabClinico> {
         return (ExamenLabClinico) findById(ExamenLabClinico.class, id);
     }
 
-    public List<Parametros> getParametrosPorExamen(final ExamenLabClinico exam) {
-        TypedQuery<Parametros> query = em.createNamedQuery("Parametros.buscarTodosOrderanos", Parametros.class);              
+    public List<Parametros> getParametrosPorExamen1(final ExamenLabClinico exam) {
+        TypedQuery<Parametros> query = em.createNamedQuery("Parametros.buscarTodosOrderanos", Parametros.class);
         query.setParameter("idExamen", exam.getId());
         return query.getResultList();
     }
-    
-    public List<Parametros> getParametrosPorExamen1(final ExamenLabClinico exam) {
+
+    public List<Parametros> getParametrosPorExamen(final ExamenLabClinico exam) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Parametros> query = builder.createQuery(Parametros.class);
         Root<Parametros> entity = query.from(Parametros.class);
-        query.where(builder.equal(entity.get(Parametros_.examenLabClinico), exam));        
+        query.where(builder.equal(entity.get(Parametros_.examenLabClinico), exam));
+        query.orderBy(builder.asc(entity.get(Parametros_.posicion)));
         return getResultList(query);
     }
 
@@ -78,7 +79,7 @@ public class ExamenLabService extends PersistenceUtil<ExamenLabClinico> {
         query.where(builder.equal(entity.get(ExamenLabClinico_.code), codigo));
         return getSingleResult(query);
     }
-    
+
     public boolean isCodigoDisponible(String codigo) {
         try {
             ExamenLabClinico examen = getExamenPorCodigo(codigo);
@@ -91,8 +92,8 @@ public class ExamenLabService extends PersistenceUtil<ExamenLabClinico> {
             return false;
         }
     }
-    
-    public void borrarEntidad(Object entidad){
+
+    public void borrarEntidad(Object entidad) {
         delete(entidad);
     }
 

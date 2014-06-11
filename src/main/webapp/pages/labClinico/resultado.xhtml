@@ -92,11 +92,19 @@
                                         </td>
                                         <div class="input">
                                             <td>
-                                                <p:inputText id="param-#{rp_.id}" value="#{rp_.valor}" styleClass="span3" label="#{rp_.nombre}" 
-                                                             rendered="true" >
-                                                    <!--<p:ajax event="keyup" update="@parent :form:save" rendered="save"/>-->
-                                                    <f:ajax execute="@this :form:save" render=":form:save"/>
-                                                </p:inputText>
+                                                <h:panelGroup rendered="#{rp_.parametro.tipoDato eq 'AreaTexto'}">
+                                                    <h:inputTextarea value="#{rp_.valor}" style="width: 300px; height: 65px;" label="Valor"  >
+                                                        <f:ajax execute="@this :form:save" render=":form:save"  />
+                                                    </h:inputTextarea>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{rp_.parametro.tipoDato eq 'Casilla' or rp_.parametro.tipoDato eq null}">
+                                                    <p:inputText  value="#{rp_.valor}" styleClass="span3" label="#{rp_.nombre}" 
+                                                                  rendered="true" >
+                                                        <!--<p:ajax event="keyup" update="@parent :form:save" rendered="save"/>-->
+                                                        <f:ajax execute="@this :form:save" render=":form:save"/>
+                                                    </p:inputText>
+                                                </h:panelGroup>
+
                                             </td>
                                             <td>
                                                 <h:outputText value=" #{rp_.parametro.unidadMedida}" style="width: 15px;"/>

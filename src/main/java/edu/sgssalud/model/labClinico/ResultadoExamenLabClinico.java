@@ -18,6 +18,7 @@ package edu.sgssalud.model.labClinico;
 import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -65,7 +66,7 @@ public class ResultadoExamenLabClinico implements Serializable {
     private PedidoExamenLaboratorio pedidoExamenLab;
 
     @OneToMany(mappedBy = "resultadoExamenLabClinico", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //@OrderBy()
+    //@OrderBy("parametro.posicion ASC")
     private List<ResultadoParametro> resultadosParametros = new ArrayList<ResultadoParametro>();
 
     @ManyToOne
@@ -116,6 +117,7 @@ public class ResultadoExamenLabClinico implements Serializable {
     }
 
     public List<ResultadoParametro> getResultadosParametros() {
+        Collections.sort(resultadosParametros);
         return resultadosParametros;
     }
 

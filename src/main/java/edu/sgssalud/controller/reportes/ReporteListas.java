@@ -444,6 +444,9 @@ public class ReporteListas {
              _values.put("cat2", categorias.get(1));
              _values.put("cat3", categorias.get(2));
              }*/
+           
+            
+            
             List<ResultadoParametro> listaP = resultadoEService.getResultadoParametros(resultadoExamen);
 //            List<String> categorias = new ArrayList<String>();
 //            if (resultadoExamen.getExamenLab().getCategorias() != null) {
@@ -453,7 +456,12 @@ public class ReporteListas {
 //                    
 //                }
 //            }
-            Collections.sort(listaP);            
+//            String s = "";
+//            for (ResultadoParametro r : listaP) {
+//                s += r.getNombre() +":      "+r.getValor()+"        "+r.getUnidadMedida()+"\n";
+//            }
+            Collections.sort(listaP);    
+            _values.put("resultado", "");
             //System.out.println("RESULTADO PARAMETROS" + listaP.toString());
             //FALTA ORGANIZAR EL REPORT
             //_values.put("usd", "$");

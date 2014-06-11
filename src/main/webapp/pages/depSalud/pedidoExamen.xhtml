@@ -76,10 +76,18 @@
                                 <b>Nombre Examen: </b>#{Object_.examenLab.name}&nbsp;&nbsp;#{Object_.examenLab.tipo}
                             </f:facet>                            
                             <p:column style="width:10%">                             
-                                #{p_.nombre}
+                                #{p_.nombre}                                
                             </p:column>
                             <p:column  style="width:10%">                             
-                                #{p_.valor}
+                                <h:panelGroup rendered="#{p_.parametro.tipoDato eq 'AreaTexto'}">
+                                    <h:inputTextarea value="#{p_.valor}" style="width: 300px; height: 65px;" label="Valor"  >                                        
+                                    </h:inputTextarea>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{p_.parametro.tipoDato eq 'Casilla' or p_.parametro.tipoDato eq null}">
+                                    <p:inputText  value="#{p_.valor}" styleClass="span3" label="#{rp_.nombre}" 
+                                                  rendered="true" >                                        
+                                    </p:inputText>
+                                </h:panelGroup>
                             </p:column>
                             <p:column  style="width:5%">                             
                                 <h:outputText value="#{p_.unidadMedida}" />  

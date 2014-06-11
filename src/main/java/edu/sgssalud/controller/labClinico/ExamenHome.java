@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -73,6 +74,7 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
         setId(examenId);
         if (getInstance().isPersistent()) {
             parametros = examenLabService.getParametrosPorExamen(getInstance());
+            Collections.sort(parametros);
             this.listarCategorias();
         }
     }
@@ -220,6 +222,7 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
             if (parametro.getId() != null) {
                 save(parametro);
                 parametros = examenLabService.getParametrosPorExamen(getInstance());
+                Collections.sort(parametros);
                 parametro = new Parametros();
                 evento.fire(parametro);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Modifico parametro con éxito", ""));
@@ -228,6 +231,7 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
                 create(parametro);
                 save(parametro);
                 parametros = examenLabService.getParametrosPorExamen(getInstance());
+                Collections.sort(parametros);
                 parametro = new Parametros();
                 evento.fire(parametro);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agrego parametro con éxito", ""));
@@ -240,27 +244,28 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
         }
     }
 
-    public void onRowEdit(RowEditEvent event) {
-        Parametros p = (Parametros) event.getObject();
-        System.out.println("Parametros "
-                + " C= " + p.getCategoria()
-                + " N= " + p.getNombre()
-                + " V= " + p.getValor()
-                + " UM= " + p.getUnidadMedida()
-                + " VRI= " + p.getValorReferenciaInf()
-                + " VRS= " + p.getValorReferenciaSup());
-        save(p);
-        parametros = examenLabService.getParametrosPorExamen(getInstance());
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Modifico el parametro", "" + p.getId());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-
-        System.out.println("Correcto");
-    }
-
-    public void onRowCancel(RowEditEvent event) {
-        FacesMessage msg = new FacesMessage("Cancelar Edición de Parametro", "" + ((Parametros) event.getObject()).getId());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    }
+//    public void onRowEdit(RowEditEvent event) {
+//        Parametros p = (Parametros) event.getObject();
+////        System.out.println("Parametros "
+////                + " C= " + p.getCategoria()
+////                + " N= " + p.getNombre()
+////                + " V= " + p.getValor()
+////                + " UM= " + p.getUnidadMedida()
+////                + " VRI= " + p.getValorReferenciaInf()
+////                + " VRS= " + p.getValorReferenciaSup());
+////        //save(p);
+//        parametros = examenLabService.getParametrosPorExamen(getInstance());
+//        Collections.sort(parametros);
+//        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Modifico el parametro", "" + p.getId());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//
+//        System.out.println("Correcto");
+//    }
+//
+//    public void onRowCancel(RowEditEvent event) {
+//        FacesMessage msg = new FacesMessage("Cancelar Edición de Parametro", "" + ((Parametros) event.getObject()).getId());
+//        FacesContext.getCurrentInstance().addMessage(null, msg);
+//    }
 
 //    public void onCellEdit(CellEditEvent event) {
 //        Object oldValue = event.getOldValue();

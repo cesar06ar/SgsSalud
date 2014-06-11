@@ -261,6 +261,7 @@ public class InitializeDatabase {
         validarEvaluacionPeriodontalConsultaOdont();
         validarDatosEnfermedadesCIE10();
         validarDatosExamenLabCLinico();
+        validarConsultaActiva();
     }
 
     private void validarEstructuraParaPerfilDeUsuario() {
@@ -772,7 +773,6 @@ public class InitializeDatabase {
             //Lista de atributos de entidad de negocios
             List<Property> attributes = new ArrayList<Property>();
             attributes.add(buildProperty("fichaGeneralAF", "otros", "java.lang.MultiLineString", "...", false, "Otros", "Agregar información adicional de ficha médica", false, 1L));
-            
 
             //Agregar atributos
             structure.setProperties(attributes);
@@ -1350,6 +1350,31 @@ public class InitializeDatabase {
                 entityManager.persist(e);
                 //entityManager.flush();
             }
+        } else {
+//            List<ExamenLabClinico> examenes = query.getResultList();
+//            for (ExamenLabClinico exam : examenes) {
+//                if (!exam.getParametros().isEmpty()) {
+//                    for (Parametros p : exam.getParametros()) {
+//                        p.setPosicion(0);
+//                        entityManager.merge(p);
+//                    }
+//                }
+//            }
+        }
+    }
+
+    public void validarConsultaActiva() {
+        TypedQuery<Setting> query = entityManager.createQuery("select s from Setting s where s.name = :nombre",
+                Setting.class);
+        query.setParameter("nombre", "consultaActiva");
+        if (query.getResultList().isEmpty()) {
+            Setting setting = new Setting();
+            Date now = Calendar.getInstance().getTime();
+            setting.setName("consultaActiva");
+            setting.setValue("false");
+            setting.setCreatedOn(now);
+            setting.setLastUpdate(now);
+            entityManager.persist(setting);
         }
     }
     /*FIN Estructuras del SGSSALUD*/

@@ -152,7 +152,7 @@ public class ResultadoParametro implements Serializable, Comparable<ResultadoPar
 
     @Override
     public int compareTo(ResultadoParametro o) {
-     return (int)(this.getId() - o.getId());   
+     return (int)(this.getParametro().getPosicion() - o.getParametro().getPosicion());   
     }
 
 }
