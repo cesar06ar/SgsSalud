@@ -74,7 +74,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     private String procedimiento;
     private String nombreTratamiento;
     private String ruta;
-    private boolean panel1, panel3 = false;
+    private boolean panel1, panel3, protesisTS, protesisTI = false;
     private boolean panel2 = true;
     private boolean c1, c2, c3, c4, c5 = false;
     private Diente diente11, diente12, diente13, diente14, diente15, diente16, diente17, diente18;
@@ -214,9 +214,9 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
             this.cargarDientesSeleccionados();
             //this.agregarCuadrante(tratamiento);
             ban = !listaDientes.isEmpty();
-        } else if (panel3) {  //para guardar protesis total 
+        } else if (panel3) {  //para guardar protesis total             
             ban = true;
-            listaDientes = getInstance().getDientes();
+////            listaDientes = getInstance().getDientes();
         }
         //TODO.. falta agregar responsable       
         //System.out.println("Dientes Seleccionados :__________________" + getListaDientes().size() + " " + listaDientes.toString());
@@ -224,87 +224,170 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         //System.out.println("Persistir dientes 0:__________________");
         String log1 = "";
         if (ban) {
-            for (int i = 0; i < listaDientes.size(); i++) {
-                Diente diente = listaDientes.get(i);
-                if (panel1) {
-                    if (!diente.contineTratamiento(nombreTratamiento)) {
-                        //  System.out.println("Persistir dientes 1:__________________" + diente.toString());
+            if (!panel3) {
+                listaDientesInf = new ArrayList<Diente>();
+                Diente dienteS = listaDientes.get(0);
+                Diente dienteI = listaDientes.get(listaDientes.size() - 1);
+                listaDientesSup = buscarPorPos(dienteS, dienteI);
+                for (int i = 0; i < listaDientes.size(); i++) {
+                    Diente diente = listaDientes.get(i);
+                    if (panel1) {
+                        if (!diente.contineTratamiento(nombreTratamiento)) {
+                            //  System.out.println("Persistir dientes 1:__________________" + diente.toString());
+                            tratamiento = new Tratamiento();
+                            tratamiento.setFechaRealizacion(now);
+                            tratamiento.setNombre(getNombreTratamiento());
+                            tratamiento.setProcedimiento(procedimiento);
+                            tratamiento.setConsultaOdontologica(consultaOdont);
+                            tratamiento.setDiente(diente);
+
+                            //System.out.println("Persistir dientes 2:__________________");
+                            if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisParcialRemovible"))) {
+
+                                if (listaDientes.size() >= 2) {
+                                    if (!dienteI.getId().equals(listaDientes.get(i)) && !dienteS.getId().equals(listaDientes.get(i))) {
+//                                        System.out.println("INGRESO a enlistar dientes");
+                                        for (Diente dInter : listaDientesSup) {
+                                            if (dInter.getId().equals(listaDientes.get(i).getId())) {
+                                                listaDientesInf.add(dInter);
+                                            }
+                                        }
+                                    }
+
+                                    if (i == 0) {
+                                        tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisParcialRemovible.i"));
+                                    } else if (i == (listaDientes.size() - 1)) {
+                                        tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisParcialRemovible.f"));
+                                    } else if (listaDientes.get(i).getPosicion() >= 11 && listaDientes.get(i).getPosicion() <= 18
+                                            || listaDientes.get(i).getPosicion() >= 41 && listaDientes.get(i).getPosicion() <= 48) {
+                                        tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.InternoI"));
+                                    } else if (listaDientes.get(i).getPosicion() >= 21 && listaDientes.get(i).getPosicion() <= 28
+                                            || listaDientes.get(i).getPosicion() >= 31 && listaDientes.get(i).getPosicion() <= 38) {
+                                        tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.InternoD"));
+                                    }
+//                                else {
+//                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.centro"));
+//                                }
+                                    create(tratamiento);
+                                } else {
+                                    log1 = "Para realizar este tratamiento debe seleccionar 2 o más dientes";
+                                }
+                            } else if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisFija"))) {
+                                if (listaDientes.size() >= 2) {
+                                    if (!dienteI.getId().equals(listaDientes.get(i)) && !dienteS.getId().equals(listaDientes.get(i))) {
+                                        //System.out.println("INGRESO a enlistar dientes");
+                                        for (Diente dInter : listaDientesSup) {
+                                            if (dInter.getId().equals(listaDientes.get(i).getId())) {
+                                                listaDientesInf.add(dInter);
+                                            }
+                                        }
+                                    }
+                                    if (i == 0) {
+                                        tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.inicio"));
+                                    } else if (i == (listaDientes.size() - 1)) {
+                                        tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.fin"));
+                                    }
+                                    create(tratamiento);
+                                } else {
+                                    log1 = "Para realizar este tratamiento debe seleccionar mas de 2 dientes";
+                                }
+                            } else {
+                                create(tratamiento);
+                            }
+                            log1 = "Se agrego tratamiento: " + tratamiento.getNombre() + " con éxito";
+                            //   System.out.println("Se creo con exito panel 1___________________");
+                        } else {
+                            // System.out.println("Ya contiene tratamiento:____");
+                            log1 = "El diente : " + diente.toString() + " Ya contiene el tratamiento seleccionado";
+//                        FacesMessage msg = new FacesMessage();
+//                        FacesContext.getCurrentInstance().addMessage(null, msg);
+                        }
+                    } else if (panel2) {
                         tratamiento = new Tratamiento();
                         tratamiento.setFechaRealizacion(now);
                         tratamiento.setNombre(getNombreTratamiento());
                         tratamiento.setProcedimiento(procedimiento);
                         tratamiento.setConsultaOdontologica(consultaOdont);
                         tratamiento.setDiente(diente);
-                        //System.out.println("Persistir dientes 2:__________________");
-                        if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisParcialRemovible"))) {
-                            if (listaDientes.size() >= 2) {
-                                if (i == 0) {
-                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisParcialRemovible.i"));
-                                } else if (i == (listaDientes.size() - 1)) {
-                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisParcialRemovible.f"));
-                                } else {
-                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.centro"));
-                                }
-                                create(tratamiento);
-                            } else {
-                                log1 = "Para realizar este tratamiento debe seleccionar 2 o más dientes";
-                            }
-                        } else if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisFija"))) {
-                            if (listaDientes.size() > 2) {
-                                if (i == 0) {
-                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.inicio"));
-                                } else if (i == (listaDientes.size() - 1)) {
-                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.fin"));
-                                } else {
-                                    tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.centro"));
-                                }
-                                create(tratamiento);
-                            } else {
-                                log1 = "Para realizar este tratamiento debe seleccionar mas de 2 dientes";
-                            }
-                        } else {
+                        this.agregarCuadrante(tratamiento);
+                        if (!tratamiento.getCua().isEmpty()) {
                             create(tratamiento);
+                            log1 = "Se agrego tratamiento: " + tratamiento.getNombre() + " con éxito";
+                        } else {
+                            log1 = "Debe Seleccionar almenos un cuadrant";
                         }
-                        log1 = "Se agrego tratamiento: " + tratamiento.getNombre() + " con éxito";
-                        //   System.out.println("Se creo con exito panel 1___________________");
-                    } else {
-                        // System.out.println("Ya contiene tratamiento:____");
-                        log1 = "El diente : " + diente.toString() + " Ya contiene el tratamiento seleccionado";
-//                        FacesMessage msg = new FacesMessage();
-//                        FacesContext.getCurrentInstance().addMessage(null, msg);
-                    }
-                } else if (panel2) {
-                    tratamiento = new Tratamiento();
-                    tratamiento.setFechaRealizacion(now);
-                    tratamiento.setNombre(getNombreTratamiento());
-                    tratamiento.setProcedimiento(procedimiento);
-                    tratamiento.setConsultaOdontologica(consultaOdont);
-                    tratamiento.setDiente(diente);
-                    this.agregarCuadrante(tratamiento);
-                    if (!tratamiento.getCua().isEmpty()) {
+                    } else if (!diente.contineTratamiento(nombreTratamiento)) {
+                        tratamiento = new Tratamiento();
+                        tratamiento.setFechaRealizacion(now);
+                        tratamiento.setNombre(getNombreTratamiento());
+                        tratamiento.setProcedimiento(procedimiento);
+                        tratamiento.setConsultaOdontologica(consultaOdont);
+                        tratamiento.setDiente(diente);
                         create(tratamiento);
-                        log1 = "Se agrego tratamiento: " + tratamiento.getNombre() + " con éxito";
-                    } else {
-                        log1 = "Debe Seleccionar almenos un cuadrant";
                     }
-                } else if (!diente.contineTratamiento(nombreTratamiento)) {
-                    tratamiento = new Tratamiento();
-                    tratamiento.setFechaRealizacion(now);
-                    tratamiento.setNombre(getNombreTratamiento());
-                    tratamiento.setProcedimiento(procedimiento);
-                    tratamiento.setConsultaOdontologica(consultaOdont);
-                    tratamiento.setDiente(diente);
-                    create(tratamiento);
                 }
-                FacesMessage msg = new FacesMessage(log1);
-                FacesContext.getCurrentInstance().addMessage(null, msg);
-                salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
-                        + "&fichaMedicaId=" + getFichaMedicaId()
-                        + "&consultaOdontId=" + getConsultaOdontId()
-                        + "&odontogramaId=" + getInstance().getId()
-                        + "&backView=" + getBackView()
-                        + "&tipo=" + getTipo();
-            }//fin for
+                if (!listaDientesSup.isEmpty()) {
+                    listaDientesSup.removeAll(listaDientesInf);
+                    for (Diente dAux : listaDientesSup) {
+                        if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisParcialRemovible")) ||
+                                nombreTratamiento.equals(UI.getMessages("tratamiento.protesisFija"))) {
+                            tratamiento = new Tratamiento();
+                            tratamiento.setFechaRealizacion(now);
+                            tratamiento.setNombre(getNombreTratamiento());
+                            tratamiento.setProcedimiento(procedimiento);
+                            tratamiento.setConsultaOdontologica(consultaOdont);
+                            tratamiento.setDiente(dAux);
+                            tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.centro"));
+                            create(tratamiento);
+
+                        }
+                    }
+                }
+            } else {
+                if (panel3 && (protesisTI || protesisTS)) {
+                    listaDientes = getInstance().getDientes();
+                    for (Diente dAux : listaDientes) {
+                        if (protesisTS) {
+                            if (dAux.getCuadrante() == 1 || dAux.getCuadrante() == 2) {
+                                if (!dAux.contineTratamiento(nombreTratamiento)) {
+                                    tratamiento = new Tratamiento();
+                                    tratamiento.setFechaRealizacion(now);
+                                    tratamiento.setNombre(getNombreTratamiento());
+                                    tratamiento.setProcedimiento(procedimiento);
+                                    tratamiento.setConsultaOdontologica(consultaOdont);
+                                    tratamiento.setDiente(dAux);
+                                    create(tratamiento);
+                                }
+                            }
+                        } else if (protesisTI) {
+                            if (dAux.getCuadrante() == 3 || dAux.getCuadrante() == 4) {
+                                if (!dAux.contineTratamiento(nombreTratamiento)) {
+                                    tratamiento = new Tratamiento();
+                                    tratamiento.setFechaRealizacion(now);
+                                    tratamiento.setNombre(getNombreTratamiento());
+                                    tratamiento.setProcedimiento(procedimiento);
+                                    tratamiento.setConsultaOdontologica(consultaOdont);
+                                    tratamiento.setDiente(dAux);
+                                    create(tratamiento);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    FacesMessage msg = new FacesMessage("Debe marcar el paladar superior o inferior");
+                    FacesContext.getCurrentInstance().addMessage(null, msg);
+                }
+            }
+            FacesMessage msg = new FacesMessage(log1);
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            salida = "/pages/depSalud/odontologia/odont.xhtml?faces-redirect=true"
+                    + "&fichaMedicaId=" + getFichaMedicaId()
+                    + "&consultaOdontId=" + getConsultaOdontId()
+                    + "&odontogramaId=" + getInstance().getId()
+                    + "&backView=" + getBackView()
+                    + "&tipo=" + getTipo();
+            //fin for
+
             c1 = c2 = c3 = c4 = c5 = false;
         } else {
             FacesMessage msg = new FacesMessage("Debe seleccionar un diente ");
@@ -313,7 +396,10 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         //save(consultaOdont);
         //System.out.println("_______: guardo con exito ");
         tratamiento = new Tratamiento();
-        this.setProcedimiento(null);
+
+        this.setProcedimiento(
+                null);
+
         this.setListaTratamient(consultaOdontServ.getTratamientosPorConsulta(consultaOdontId, getOdontogramaId()));
         //this.actualizarDientes(getInstance().getDientes());
         //return null;
@@ -946,103 +1032,137 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     public void cargarDientesSeleccionados() {
         listaDientes = new ArrayList<Diente>();
+        listaDientesSup = new ArrayList<Diente>();
+        listaDientesInf = new ArrayList<Diente>();
         //System.out.println("Dientes seleccionados ___________________________");
         if (diente18.isSelect()) {
             listaDientes.add(diente18);
+            listaDientesSup.add(diente18);
         }
         if (diente17.isSelect()) {
             listaDientes.add(diente17);
+            listaDientesSup.add(diente17);
         }
         if (diente16.isSelect()) {
             listaDientes.add(diente16);
+            listaDientesSup.add(diente16);
         }
         if (diente15.isSelect()) {
             listaDientes.add(diente15);
+            listaDientesSup.add(diente15);
         }
         if (diente14.isSelect()) {
             listaDientes.add(diente14);
+            listaDientesSup.add(diente14);
         }
         if (diente13.isSelect()) {
             listaDientes.add(diente13);
+            listaDientesSup.add(diente13);
         }
         if (diente12.isSelect()) {
             listaDientes.add(diente12);
+            listaDientesSup.add(diente12);
         }
         if (diente11.isSelect()) {
             listaDientes.add(diente11);
+            listaDientesSup.add(diente11);
         }
         if (diente21.isSelect()) {
             listaDientes.add(diente21);
+            listaDientesSup.add(diente21);
         }
         if (diente22.isSelect()) {
             listaDientes.add(diente22);
+            listaDientesSup.add(diente22);
         }
         if (diente23.isSelect()) {
             listaDientes.add(diente23);
+            listaDientesSup.add(diente23);
         }
         if (diente24.isSelect()) {
             listaDientes.add(diente24);
+            listaDientesSup.add(diente24);
         }
         if (diente25.isSelect()) {
             listaDientes.add(diente25);
+            listaDientesSup.add(diente25);
         }
         if (diente26.isSelect()) {
             listaDientes.add(diente26);
+            listaDientesSup.add(diente26);
         }
         if (diente27.isSelect()) {
             listaDientes.add(diente27);
+            listaDientesSup.add(diente27);
         }
         if (diente28.isSelect()) {
             listaDientes.add(diente28);
+            listaDientesSup.add(diente28);
         }
         //Dientes inferiores
         if (diente48.isSelect()) {
             listaDientes.add(diente48);
+            listaDientesInf.add(diente48);
         }
         if (diente47.isSelect()) {
             listaDientes.add(diente47);
+            listaDientesInf.add(diente47);
         }
         if (diente46.isSelect()) {
             listaDientes.add(diente46);
+            listaDientesInf.add(diente46);
         }
         if (diente45.isSelect()) {
             listaDientes.add(diente45);
+            listaDientesInf.add(diente45);
         }
         if (diente44.isSelect()) {
             listaDientes.add(diente44);
+            listaDientesInf.add(diente44);
         }
         if (diente43.isSelect()) {
             listaDientes.add(diente43);
+            listaDientesInf.add(diente43);
         }
         if (diente42.isSelect()) {
             listaDientes.add(diente42);
+            listaDientesInf.add(diente42);
         }
         if (diente41.isSelect()) {
             listaDientes.add(diente41);
+            listaDientesInf.add(diente41);
         }
         if (diente31.isSelect()) {
             listaDientes.add(diente31);
+            listaDientesInf.add(diente31);
         }
         if (diente32.isSelect()) {
             listaDientes.add(diente32);
+            listaDientesInf.add(diente32);
         }
         if (diente33.isSelect()) {
             listaDientes.add(diente33);
+            listaDientesInf.add(diente33);
         }
         if (diente34.isSelect()) {
             listaDientes.add(diente34);
+            listaDientesInf.add(diente34);
         }
         if (diente35.isSelect()) {
             listaDientes.add(diente35);
+            listaDientesInf.add(diente35);
         }
         if (diente36.isSelect()) {
             listaDientes.add(diente36);
+            listaDientesInf.add(diente36);
         }
         if (diente37.isSelect()) {
             listaDientes.add(diente37);
+            listaDientesInf.add(diente37);
         }
         if (diente38.isSelect()) {
             listaDientes.add(diente38);
+            listaDientesInf.add(diente38);
         }
     }
 
@@ -1060,6 +1180,22 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
 
     public void setListaDientesInf(List<Diente> listaDientesInf) {
         this.listaDientesInf = listaDientesInf;
+    }
+
+    public boolean isProtesisTS() {
+        return protesisTS;
+    }
+
+    public void setProtesisTS(boolean protesisTS) {
+        this.protesisTS = protesisTS;
+    }
+
+    public boolean isProtesisTI() {
+        return protesisTI;
+    }
+
+    public void setProtesisTI(boolean protesisTI) {
+        this.protesisTI = protesisTI;
     }
 
     public Diente extraerDiente(int posicion) {
@@ -1090,16 +1226,71 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         return t.isPersistent();
     }
 
-    public void cargarOdontogramaInicial(){
-        System.out.println("INGRESO "+fichaOdont.getOdontogramaInicial().getDientes().size());
+    public void cargarOdontogramaInicial() {
+        System.out.println("INGRESO " + fichaOdont.getOdontogramaInicial().getDientes().size());
         for (Diente diente : fichaOdont.getOdontogramaInicial().getDientes()) {
-            if(diente.getCuadrante() == 1 || diente.getCuadrante() == 2){
+            if (diente.getCuadrante() == 1 || diente.getCuadrante() == 2) {
                 System.out.println("AGREGO DIENTE S");
                 listaDientesSup.add(diente);
-            }else{
+            } else {
                 System.out.println("AGREGO DIENTE I");
                 listaDientesInf.add(diente);
             }
         }
-    } 
+    }
+
+    public void cargarListaDientes(List<Diente> dientesSelect) {
+        listaDientesInf = new ArrayList<Diente>();
+        Diente dienteS = dientesSelect.get(0);
+        Diente dienteI = dientesSelect.get(dientesSelect.size() - 1);
+        listaDientesSup = buscarPorPos(dienteS, dienteI);
+
+        for (Diente dSelect : dientesSelect) {
+            if (!dienteI.getId().equals(dSelect.getId()) && !dienteS.getId().equals(dSelect.getId())) {
+                System.out.println("INGRESO a enlistar dientes");
+                for (Diente dInter : listaDientesSup) {
+                    if (!dInter.getId().equals(dSelect.getId())) {
+                        listaDientesInf.add(dInter);
+                    }
+                }
+            }
+        }
+        System.out.println("INGRESO a dientes sin select " + listaDientesInf.size());
+
+    }
+
+    public List<Diente> buscarPorPos(Diente dS, Diente dI) {
+        List<Diente> ld = new ArrayList<Diente>();
+        for (Diente diente : getInstance().getDientes()) {
+            if ((dS.getCuadrante() == 1 && dI.getCuadrante() == 1)
+                    || (dS.getCuadrante() == 2 && dI.getCuadrante() == 2)
+                    || (dS.getCuadrante() == 3 && dI.getCuadrante() == 3)
+                    || (dS.getCuadrante() == 4 && dI.getCuadrante() == 4)) {
+                if (diente.getPosicion() < dS.getPosicion() && diente.getPosicion() > dI.getPosicion()) {
+                    ld.add(diente);
+                }
+            } else if (dS.getCuadrante() == 1 && dI.getCuadrante() == 2) {
+                if ((diente.getPosicion() <= 18 && diente.getPosicion() >= 11)) {
+                    if (diente.getPosicion() < dS.getPosicion()) {
+                        ld.add(diente);
+                    }
+                } else if (diente.getPosicion() <= 28 && diente.getPosicion() >= 21) {
+                    if (diente.getPosicion() < dI.getPosicion()) {
+                        ld.add(diente);
+                    }
+                }
+            } else if (dS.getCuadrante() == 4 && dI.getCuadrante() == 3) {
+                if ((diente.getPosicion() <= 48 && diente.getPosicion() >= 41)) {
+                    if (diente.getPosicion() < dS.getPosicion()) {
+                        ld.add(diente);
+                    }
+                } else if (diente.getPosicion() <= 38 && diente.getPosicion() >= 31) {
+                    if (diente.getPosicion() < dI.getPosicion()) {
+                        ld.add(diente);
+                    }
+                }
+            }
+        }
+        return ld;
+    }
 }

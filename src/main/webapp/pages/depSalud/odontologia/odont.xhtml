@@ -417,7 +417,18 @@
                                     <p:panel id="panel3" rendered="#{odontogramaHome.panel3}" header="#{odontogramaHome.nombreTratamiento}" >
 
                                         <p:graphicImage value="#{odontogramaHome.ruta}" width="50" height="30"/>
-                                        <br/> 
+                                        <div class="span4">
+                                            <p:selectBooleanCheckbox value="#{odontogramaHome.protesisTS}"  itemLabel="Dientes Superiores" style="margin-left: 5px;">
+                                                <f:ajax execute="@this" render="saveTratamiento"  />
+                                            </p:selectBooleanCheckbox> 
+                                        </div>
+                                        <br/>
+                                        <div class="span4">
+                                            <p:selectBooleanCheckbox value="#{odontogramaHome.protesisTI}" itemLabel="Dientes Inferior" style="margin-left: 5px;">
+                                                <f:ajax execute="@this" render="saveTratamiento"  />
+                                            </p:selectBooleanCheckbox> 
+                                        </div>
+
                                     </p:panel> 
 
                                     <h:panelGroup class="span4" layout="block" rendered="#{odontogramaHome.tipo ne 0}">

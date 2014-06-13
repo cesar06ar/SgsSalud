@@ -103,19 +103,27 @@ limitations under the License.
                         <p:graphicImage value="/resources/tratamientoDentales/superior/ausenciaPiezaDentalS.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
                                         rendered="#{messages['tratamiento.ausenciaPiezaDental'] == t.nombre}"/>
 
-                        <!--Imagenes de tratamiento a muchos dientes-->
-                        <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
-                                        rendered="#{messages['tratamiento.protesisFija.centro'] == t.nombreAux}"/>
+                        <!--Imagenes de tratamiento a muchos dientes-->                        
                         <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaInicio.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
                                         rendered="#{messages['tratamiento.protesisFija.inicio'] == t.nombreAux}"/>
                         <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaFin.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
-                                        rendered="#{messages['tratamiento.protesisFija.fin'] == t.nombreAux}"/>
+                                        rendered="#{messages['tratamiento.protesisFija.fin'] == t.nombreAux}"/>                        
+                        
+                        <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisParcialRemovible.f'] == t.nombreAux}"/>                                                                                
                         <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleInicio.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
                                         rendered="#{messages['tratamiento.protesisParcialRemovible.i'] == t.nombreAux}"/>
-                        <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleFin.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
-                                        rendered="#{messages['tratamiento.protesisParcialRemovible.f'] == t.nombreAux}"/>
+                        
+                        <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleI.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisFija.InternoI'] == t.nombreAux}"/>
+                        
+                        <p:graphicImage value="/resources/tratamientoDentales/superior/protesisParcialRemovibleD.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisFija.InternoD'] == t.nombreAux}"/>
+                        
                         <p:graphicImage value="/resources/tratamientoDentales/superior/protesisTotal.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
-                                        rendered="#{messages['tratamiento.protesisTotal'] == t.nombre}"/>
+                                        rendered="#{messages['tratamiento.protesisTotal'] == t.nombre}"/> 
+                        <p:graphicImage value="/resources/tratamientoDentales/superior/protesisFijaCentro.gif" width="55" height="65" style="margin: 0 0 0 -59px;"
+                                        rendered="#{messages['tratamiento.protesisFija.centro'] == t.nombreAux}"/>                        
                     </h:panelGroup>
                 </ui:repeat>
             </span>
