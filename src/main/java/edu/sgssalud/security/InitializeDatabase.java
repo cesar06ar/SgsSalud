@@ -1351,15 +1351,15 @@ public class InitializeDatabase {
                 //entityManager.flush();
             }
         } else {
-            List<ExamenLabClinico> examenes = query.getResultList();
-            for (ExamenLabClinico exam : examenes) {
-                if (!exam.getParametros().isEmpty()) {
-                    for (Parametros p : exam.getParametros()) {
-                        p.setPosicion(0);
-                        entityManager.merge(p);
-                    }
-                }
-            }
+//            List<ExamenLabClinico> examenes = query.getResultList();
+//            for (ExamenLabClinico exam : examenes) {
+//                if (!exam.getParametros().isEmpty()) {
+//                    for (Parametros p : exam.getParametros()) {
+//                        p.setPosicion(0);
+//                        entityManager.merge(p);
+//                    }
+//                }
+//            }
         }
     }
 

@@ -276,11 +276,11 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
                                 if (listaDientes.size() >= 2) {
                                     if (!dienteI.getId().equals(listaDientes.get(i)) && !dienteS.getId().equals(listaDientes.get(i))) {
                                         //System.out.println("INGRESO a enlistar dientes");
-                                        for (Diente dInter : listaDientesSup) {
-                                            if (dInter.getId().equals(listaDientes.get(i).getId())) {
-                                                listaDientesInf.add(dInter);
-                                            }
-                                        }
+//                                        for (Diente dInter : listaDientesSup) {
+//                                            if (dInter.getId().equals(listaDientes.get(i).getId())) {
+//                                                listaDientesInf.add(dInter);
+//                                            }
+//                                        }
                                     }
                                     if (i == 0) {
                                         tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.inicio"));

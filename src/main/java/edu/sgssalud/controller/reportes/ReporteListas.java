@@ -422,9 +422,9 @@ public class ReporteListas {
             //List<String> categorias = Arrays.asList(resultadoExamen.getExamenLab().getCategorias().split(","));
 
             Map<String, Object> _values = new HashMap<String, Object>();
-            String nombres = resultadoExamen.getPedidoExamenLab().getPaciente().getCedula() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getNombres() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getApellidos();
+            String nombres = resultadoExamen.getPedidoExamenLab().getPaciente().getNombres() + " " + resultadoExamen.getPedidoExamenLab().getPaciente().getApellidos();
 
-            System.out.println("RESULTADO " + resultadoExamen.toString() + " " + nombres);
+            //System.out.println("RESULTADO " + resultadoExamen.toString() + " " + nombres);
             _values.put("nombres", nombres);
             _values.put("nombreExamen", resultadoExamen.getExamenLab().getName());
             _values.put("logo", logo);
@@ -442,11 +442,9 @@ public class ReporteListas {
              } else if (categorias.size() == 3) {
              _values.put("cat1", categorias.get(0));
              _values.put("cat2", categorias.get(1));
-             _values.put("cat3", categorias.get(2));
+             _values.put("cat3", categorias.get(2));String Rnombre = "";
              }*/
-           
-            
-            
+
             List<ResultadoParametro> listaP = resultadoEService.getResultadoParametros(resultadoExamen);
 //            List<String> categorias = new ArrayList<String>();
 //            if (resultadoExamen.getExamenLab().getCategorias() != null) {
@@ -456,17 +454,24 @@ public class ReporteListas {
 //                    
 //                }
 //            }
-//            String s = "";
-//            for (ResultadoParametro r : listaP) {
-//                s += r.getNombre() +":      "+r.getValor()+"        "+r.getUnidadMedida()+"\n";
-//            }
-            Collections.sort(listaP);    
-            _values.put("resultado", "");
+            String Rnombre = "";
+            String Rvalor = "";
+            String Rum = "";
+
+            for (ResultadoParametro r : listaP) {
+                Rnombre += r.getNombre() + ":      " + "\n\n";
+                Rvalor += r.getValor() + "      " + "\n\n";
+                Rum += r.getUnidadMedida() + "      " + "\n\n";
+            }
+            Collections.sort(listaP);
+            _values.put("Rnombre", Rnombre);
+            _values.put("Rvalor", Rvalor);
+            _values.put("RunidadMedida", Rum);
             //System.out.println("RESULTADO PARAMETROS" + listaP.toString());
             //FALTA ORGANIZAR EL REPORT
             //_values.put("usd", "$");
             //Exportar a pdf 
-            JasperReportAction.exportToPdf(REPORTE_RESULTADO_EXAMEN, listaP, _values, attachFileName);
+            JasperReportAction.exportToPdf(REPORTE_RESULTADO_EXAMEN, _values, attachFileName);
         }
 
     }
