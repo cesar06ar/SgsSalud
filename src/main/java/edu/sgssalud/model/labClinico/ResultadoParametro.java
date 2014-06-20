@@ -17,6 +17,7 @@ package edu.sgssalud.model.labClinico;
 
 import java.io.Serializable;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,6 +37,7 @@ public class ResultadoParametro implements Serializable, Comparable<ResultadoPar
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nombre;
+    @Column(length = 1500)
     private String valor;
     private String unidadMedida;
     private String categoria;

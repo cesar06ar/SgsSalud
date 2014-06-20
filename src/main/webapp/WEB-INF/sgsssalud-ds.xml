@@ -2,6 +2,7 @@
 <datasources>
   <datasource jndi-name="java:/datasources/sgssalud-ds" enabled="true" use-java-context="true" 
         pool-name="sgssalud-ds-pool">
+    <!--<connection-url>jdbc:postgresql:sgssalud</connection-url>-->
     <connection-url>jdbc:postgresql:sgssalud</connection-url>
     <driver>postgresql-driver</driver>
     <security>

@@ -21,8 +21,9 @@
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container-header" >
-                    <div class="row lf" style="margin-top: 0.05%; margin-left: 2%" >
-                        <h2>#{signosVitalesHome.managed? '' : messages['common.add']} #{'Singos Vitales'}</h2>   
+                    <div class="row lf row-title"  >                        
+                        <h3>#{signosVitalesHome.managed? messages['common.add'] : messages['common.add']} #{'Singos Vitales para: '}
+                            #{signosVitalesHome.historiaClinica.fichaMedica.paciente.nombres} #{signosVitalesHome.historiaClinica.fichaMedica.paciente.apellidos}</h3>
                     </div>
                 </div>
             </div>
@@ -74,21 +75,21 @@
                                     <label for="peso" class="span3">#{messages['signosVitales.peso']} </label>
                                     <div class="input"> 
                                         <pe:inputNumber id="peso" value="#{signosVitalesHome.instance.peso}" required="false" style="width: 190px;" 
-                                                        maxValue="500" maxlength="500" dir="lrt" symbol="  kilogramos" symbolPosition="left" decimalPlaces="2">
+                                                        maxValue="500" maxlength="500" dir="lrt" symbol="  kg." symbolPosition="left" decimalPlaces="2">
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                                                                                                                  
                                     </div>
                                     <label for="presionArtDiag" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.diastolica']} </label>
                                     <div class="input">                                                                                
                                         <pe:inputNumber  id="presionArtDiag" value="#{signosVitalesHome.instance.presionArterialDiastolica}" required="false" style="width: 190px;" 
-                                                         rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >
+                                                         rendered="true" symbol="  mmHg" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </div>
                                     <label for="presionArtSis" class="span3">#{messages['signosVitales.presionArt']} #{messages['signosVitales.presionArt.sistolica']} </label>
                                     <div class="input"> 
                                         <pe:inputNumber  id="presionArtSis" value="#{signosVitalesHome.instance.presionArterialSistolica}" required="false" style="width: 190px;" 
-                                                         rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >                                            
+                                                         rendered="true" symbol="  mmHg" symbolPosition="rigth" maxValue="200" decimalPlaces="2" >                                            
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                                                                                                 
                                     </div>             
@@ -104,20 +105,20 @@
                                     <label for="frecuenciaResp" class="span3">#{messages['signosVitales.frecuenciaResp']} </label>
                                     <div class="input">                                                                                
                                         <pe:inputNumber  id="frecuenciaResp" value="#{signosVitalesHome.instance.frecuenciaRespiratoria}" required="false" style="width: 190px;" 
-                                                         rendered="true" symbol="  respiraciones/minuto" symbolPosition="rigth" maxValue="90" decimalPlaces="0" >
+                                                         rendered="true" symbol="  rpm" symbolPosition="rigth" maxValue="90" decimalPlaces="0" >
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>  
                                     </div>
                                     <label for="talla" class="span3">#{messages['signosVitales.talla']} </label>
                                     <div class="input">                                                                                
                                         <pe:inputNumber id="talla" value="#{signosVitalesHome.instance.talla}" required="false" style="width: 190px;" 
-                                                        rendered="true" symbol="        centimetros" symbolPosition="rigth" maxValue="230" decimalPlaces="0" >
+                                                        rendered="true" symbol="     cm" symbolPosition="rigth" maxValue="230" decimalPlaces="0" >
                                             <p:ajax event="blur" update="@parent" process="@this"/>  
                                         </pe:inputNumber>                                        
                                     </div>
                                     <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} </label>
                                     <pe:inputNumber  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" required="false" style="width: 190px;" 
-                                                     rendered="true" symbol=" milimetros/mercurio" symbolPosition="rigth" maxValue="90" decimalPlaces="2" >
+                                                     rendered="true" symbol=" °C" symbolPosition="rigth" maxValue="90" decimalPlaces="2" >
                                         <p:ajax event="blur" update="@parent" process="@this"/>  
                                     </pe:inputNumber>                                        
                                 </p:panelGrid>                                

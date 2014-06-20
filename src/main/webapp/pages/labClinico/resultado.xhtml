@@ -36,9 +36,9 @@
                     <div class="container-fluid">
                         <div class="row-fluid">
                             <div class="span7">    
-                                <glue:output id="cedula" name="cedula" type="text" label="#{messages['profile.dni']}" value="#{resultadoHome.pedidoExam.paciente.cedula}" required="false" execute="@this save" render="cedula" styleClass="xLarge" disabled="true"/>
-                                <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{resultadoHome.pedidoExam.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true"/>
-                                <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{resultadoHome.pedidoExam.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true"/>
+                                <glue:output id="cedula" name="cedula" type="text" label="#{messages['profile.dni']}" value="#{resultadoHome.pedidoExam.paciente.cedula}" required="false" execute="@this save" render="cedula" styleClass="xLarge" disabled="true" validateLength="false"/>
+                                <glue:output id="nombres" name="nombres" type="text" label="#{messages['common.firstname']}" value="#{resultadoHome.pedidoExam.paciente.nombres}" required="false" execute="@this save" render="nombres" styleClass="xLarge" disabled="true" validateLength="false"/>
+                                <glue:output id="apellidos" name="apellidos" type="text" label="#{messages['common.surname']}" value="#{resultadoHome.pedidoExam.paciente.apellidos}" required="false" execute="@this save" render="apellidos" styleClass="xLarge" disabled="true" validateLength="false"/>
 
                             </div>
                             <div class="span7" align="left">
@@ -97,7 +97,7 @@
                                                         <f:ajax execute="@this :form:save" render=":form:save"  />
                                                     </h:inputTextarea>
                                                 </h:panelGroup>
-                                                <h:panelGroup rendered="#{rp_.parametro.tipoDato eq 'Casilla' or rp_.parametro.tipoDato eq null}">
+                                                <h:panelGroup rendered="#{rp_.parametro.tipoDato ne 'AreaTexto'}">
                                                     <p:inputText  value="#{rp_.valor}" styleClass="span3" label="#{rp_.nombre}" 
                                                                   rendered="true" >
                                                         <!--<p:ajax event="keyup" update="@parent :form:save" rendered="save"/>-->
