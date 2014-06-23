@@ -478,7 +478,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         list.add("Colegio");
         list.add("Escuela");
         list.add("Administrativos");
-        list.add("Trabajadores");
+        list.add("Docentes");
+        list.add("Trabajadores");        
         return list;
     }
 

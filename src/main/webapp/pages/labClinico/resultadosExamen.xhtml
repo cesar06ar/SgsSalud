@@ -70,6 +70,9 @@
                             </div>
                         </div>
                     </div>
+                    <glue:input id="observ" name="observ" type="textarea" label="#{messages['consultaMedica.observacion']}" value="#{resultadosExamenHome.pedidoExamen.observacion}" 
+                                helpinline="#{messages['consultaMedica.observacion']}"  
+                                required="false" execute="@this" render="observ" styleClass="xLarge" disabled="true"/>
                 </p:panel>                
                 <p:panel id="paneltitle1" header="EXAMENES SOLICITADOS" styleClass="clearfix">
 

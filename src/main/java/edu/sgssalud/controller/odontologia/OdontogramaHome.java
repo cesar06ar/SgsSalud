@@ -329,8 +329,8 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
                 if (!listaDientesSup.isEmpty()) {
                     listaDientesSup.removeAll(listaDientesInf);
                     for (Diente dAux : listaDientesSup) {
-                        if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisParcialRemovible")) ||
-                                nombreTratamiento.equals(UI.getMessages("tratamiento.protesisFija"))) {
+                        if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisParcialRemovible"))
+                                || nombreTratamiento.equals(UI.getMessages("tratamiento.protesisFija"))) {
                             tratamiento = new Tratamiento();
                             tratamiento.setFechaRealizacion(now);
                             tratamiento.setNombre(getNombreTratamiento());
@@ -1263,21 +1263,26 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
         List<Diente> ld = new ArrayList<Diente>();
         for (Diente diente : getInstance().getDientes()) {
             if ((dS.getCuadrante() == 1 && dI.getCuadrante() == 1)
-                    || (dS.getCuadrante() == 2 && dI.getCuadrante() == 2)
-                    || (dS.getCuadrante() == 3 && dI.getCuadrante() == 3)
                     || (dS.getCuadrante() == 4 && dI.getCuadrante() == 4)) {
                 if (diente.getPosicion() < dS.getPosicion() && diente.getPosicion() > dI.getPosicion()) {
                     ld.add(diente);
                 }
+            } else if ((dS.getCuadrante() == 2 && dI.getCuadrante() == 2)
+                    || (dS.getCuadrante() == 3 && dI.getCuadrante() == 3)) {
+                if (diente.getPosicion() > dS.getPosicion() && diente.getPosicion() < dI.getPosicion()) {
+                    ld.add(diente);
+                }
             } else if (dS.getCuadrante() == 1 && dI.getCuadrante() == 2) {
-                if ((diente.getPosicion() <= 18 && diente.getPosicion() >= 11)) {
+                if (diente.getPosicion() <= 18 && diente.getPosicion() >= 11) {
                     if (diente.getPosicion() < dS.getPosicion()) {
                         ld.add(diente);
                     }
                 } else if (diente.getPosicion() <= 28 && diente.getPosicion() >= 21) {
+
                     if (diente.getPosicion() < dI.getPosicion()) {
                         ld.add(diente);
                     }
+
                 }
             } else if (dS.getCuadrante() == 4 && dI.getCuadrante() == 3) {
                 if ((diente.getPosicion() <= 48 && diente.getPosicion() >= 41)) {
