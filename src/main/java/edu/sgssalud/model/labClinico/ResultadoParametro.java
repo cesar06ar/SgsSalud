@@ -37,7 +37,7 @@ public class ResultadoParametro implements Serializable, Comparable<ResultadoPar
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nombre;
-    @Column(length = 1500)
+    @Column(length = 2000)
     private String valor;
     private String unidadMedida;
     private String categoria;

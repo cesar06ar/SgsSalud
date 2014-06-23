@@ -18,7 +18,6 @@
             <!-- <f:viewParam name="backView" value="# {pacienteHome.backView}" />-->
         </f:metadata>
 
-
         <ui:define name="header-replace">
             <div class="header-replace">
                 <div class="container-header" >
@@ -78,13 +77,13 @@
                     <p:commandButton id="button-add" value="#{messages['common.add']} Parametros" styleClass="btn primary"
                                      onclick="#{'editDlg.show();'}"
                                      ajax="true">
-                        
+
                         <f:setPropertyActionListener value="#{0}" target="#{examenHome.parametro.posicion}"/>
                         <p:ajax process="@this" update=":edit-dialog"/>
                     </p:commandButton> 
                     <br/>
                     <p:dataTable id="parametros1" value="#{examenHome.parametros}"
-                                 resizableColumns="true" liveResize="true"
+                                 resizableColumns="true"
                                  var="_p" >
                         <f:facet name="header">
                             <h:outputText value="Total de Parametros #{examenHome.parametros.size}"/>
@@ -186,61 +185,68 @@
                 </p:panel>                
             </h:form>            
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.add']} o editar Parametro de examen " 
-                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="70%" height="400">
+                      widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="80%" height="300">
                 <h:form id="form-dialog">
-                    <!--<glue:input id="cate" name="cate" type="text" label="# {messages['comun.categoria']}" value="# {examenHome.parametro.categoria}" 
-                                required="false" inlinehelp="# {'categoria del parametro'}" execute="@this save1" render="cate"/>-->
-                    <h:panelGroup id="catep" layout="block" class="clearfix" >
-                        <label for="cate" >#{messages['comun.categoria']}</label>
-                        <div class="input" >
-                            <p:selectOneMenu id="cate" value="#{examenHome.parametro.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
-                                             effect="fade" var="m" styleClass="xLarge" required="#{not empty examenHome.instance.categorias}">  
-                                <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
-                                <f:selectItems value="#{examenHome.categorias}" var="c"/>    
-                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                            </p:selectOneMenu>        
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.categoria != null}"
-                                            styleClass="validation-status" />
-                            <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="cate" /></span>
-                        </div>
-                    </h:panelGroup>  
+                    <div class="container-fluid">   
+                        <div class="row-fluid">
+                            <div class="span7" style="width: 50%">
+                                <h:panelGroup id="catep" layout="block" class="clearfix" >
+                                    <label for="cate" >#{messages['comun.categoria']}</label>
+                                    <div class="input" >
+                                        <p:selectOneMenu id="cate" value="#{examenHome.parametro.categoria}" converter="#{omnifaces.SelectItemsConverter}" 
+                                                         effect="fade" var="m" styleClass="xLarge" required="#{not empty examenHome.instance.categorias}">  
+                                            <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />  
+                                            <f:selectItems value="#{examenHome.categorias}" var="c"/>    
+                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                        </p:selectOneMenu>        
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.categoria != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="cate" /></span>
+                                    </div>
+                                </h:panelGroup>  
 
-                    <glue:input id="nomb" name="nomb" type="text" label="#{messages['common.name']}" value="#{examenHome.parametro.nombre}" 
-                                required="false" inlinehelp="#{'Nombre del parametro'}" execute="@this save1" render="nomb"/>
-                    <glue:input id="val1" name="val1" type="text" label="Valor" value="#{examenHome.parametro.valor}" 
-                                required="false" inlinehelp="#{'valor inicial del parametro'}" execute="@this save1" render="val1"/>
-                    <glue:input id="uniMed" name="uniMed" type="text" label="Unidad de Medida" value="#{examenHome.parametro.unidadMedida}" 
-                                required="false" inlinehelp="#{'una unidad de medida en caso la tiene'}" execute="@this save1" render="uniMed"/>
-                    <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.parametro.valorReferenciaInf}"
-                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save1" render="valorRefInf" styleClass="xLarge"/>
-                    <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.parametro.valorReferenciaSup}"
-                                inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save1" render="valorRefSup" styleClass="xLarge"/>
-                    <h:panelGroup id="tipoDP" layout="block" class="clearfix" >
-                        <label for="cate" >#{'Tipo Casilla'}</label>
-                        <div class="input" >
-                            <p:selectOneMenu id="tipoDato" value="#{examenHome.parametro.tipoDato}" converter="#{omnifaces.SelectItemsConverter}"
-                                             effect="fade" var="m" styleClass="xLarge" >
-                                <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
-                                <f:selectItem itemLabel="Casilla" itemValue="Casilla" />
-                                <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />
-                                <p:ajax event="change" update="@parent " partialSubmit="true"/>
-                            </p:selectOneMenu>
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.tipoDato != null}"
-                                            styleClass="validation-status" />
-                            <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="tipoDato" /></span>
-                        </div>                                                
-                    </h:panelGroup> 
-                   <h:panelGroup id="posicionp" layout="block" class="clearfix" >
-                        <label for="posicion" >#{'Posición'}</label>
-                        <div class="input" >
-                            <pe:inputNumber id="posicion" value="#{examenHome.parametro.posicion}" >
-                                <p:ajax event="blur" update="@parent " rendered="save1"/>
-                            </pe:inputNumber>                                
-                            <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.posicion != null}"
-                                            styleClass="validation-status" />
-                            <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="posicion" /></span>
-                        </div>                                                
-                    </h:panelGroup>                     
+                                <glue:input id="nomb" name="nomb" type="text" label="#{messages['common.name']}" value="#{examenHome.parametro.nombre}" 
+                                            required="false" inlinehelp="#{'Nombre del parametro'}" execute="@this save1" render="nomb"/>
+                                <glue:input id="val1" name="val1" type="text" label="Valor" value="#{examenHome.parametro.valor}" 
+                                            required="false" inlinehelp="#{'valor inicial del parametro'}" execute="@this save1" render="val1"/>
+                                <glue:input id="uniMed" name="uniMed" type="text" label="Unidad de Medida" value="#{examenHome.parametro.unidadMedida}" 
+                                            required="false" inlinehelp="#{'una unidad de medida en caso la tiene'}" execute="@this save1" render="uniMed"/>
+                            </div>
+                            <div class="span7" style="width: 50%">
+                                <glue:input id="valorRefInf" name="valorRefInf" type="decimal" label="#{messages['Examen.ValorRefInf']}" value="#{examenHome.parametro.valorReferenciaInf}"
+                                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save1" render="valorRefInf" styleClass="xLarge"/>
+                                <glue:input id="valorRefSup" name="valorRefSup" type="decimal" label="#{messages['Examen.ValorRefSup']}" value="#{examenHome.parametro.valorReferenciaSup}"
+                                            inlinehelp="#{messages['Examen.ValorReferencial.lineaAyuda']}" required="false" execute="@this save1" render="valorRefSup" styleClass="xLarge"/>
+                                <h:panelGroup id="tipoDP" layout="block" class="clearfix" >
+                                    <label for="cate" >#{'Tipo Casilla'}</label>
+                                    <div class="input" >
+                                        <p:selectOneMenu id="tipoDato" value="#{examenHome.parametro.tipoDato}" converter="#{omnifaces.SelectItemsConverter}"
+                                                         effect="fade" var="m" styleClass="xLarge" >
+                                            <f:selectItem itemLabel="#{messages['common.choice']}" itemValue="" />
+                                            <f:selectItem itemLabel="Casilla" itemValue="Casilla" />
+                                            <f:selectItem itemLabel="AreaTexto" itemValue="AreaTexto" />
+                                            <p:ajax event="change" update="@parent " partialSubmit="true"/>
+                                        </p:selectOneMenu>
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.tipoDato != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="tipoDato" /></span>
+                                    </div>                                                
+                                </h:panelGroup> 
+                                <h:panelGroup id="posicionp" layout="block" class="clearfix" >
+                                    <label for="posicion" >#{'Posición'}</label>
+                                    <div class="input" >
+                                        <pe:inputNumber id="posicion" value="#{examenHome.parametro.posicion}" >
+                                            <p:ajax event="blur" update="@parent " rendered="save1"/>
+                                        </pe:inputNumber>                                
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{examenHome.parametro.posicion != null}"
+                                                        styleClass="validation-status" />
+                                        <span class="help-inline"><br/>#{'Categoria del parametro'}<ocp:message forId="posicion" /></span>
+                                    </div>                                                                                
+                                </h:panelGroup>
+                            </div>
+                        </div>
+                    </div>                   
+
                     <div class="admin-actions">
                         <p:commandButton id="save1" value="#{messages['common.add']}" oncomplete="editDlg.hide();"                                           
                                          action="#{examenHome.agregarParametro()}" update="@form :form:parametros1 :edit-dialog"

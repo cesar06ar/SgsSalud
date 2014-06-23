@@ -459,9 +459,22 @@ public class ReporteListas {
             String Rum = "";
 
             for (ResultadoParametro r : listaP) {
-                Rnombre += r.getNombre() + ":      " + "\n\n";
-                Rvalor += r.getValor() + "      " + "\n\n";
-                Rum += r.getUnidadMedida() + "      " + "\n\n";
+                if ("AreaTexto".equals(r.getParametro().getTipoDato())) {
+                    String s,c = "";
+                    s = r.getValor();
+                    for (int i = 0; i < s.length(); i++) {
+                        if (s.charAt(i) == '\n') {
+                            c += "\n";
+                        }
+                    }
+                    Rnombre += r.getNombre() + ":      " + c +"\n\n";
+                    Rum += r.getUnidadMedida() + "      " + c +"\n\n";
+                } else {
+                    Rnombre += r.getNombre() + ":      " + "\n\n";
+                    Rum += r.getUnidadMedida() + "      " + "\n\n";
+                }
+                Rvalor += r.getValor() + "      " + "\n\n   ";
+
             }
             Collections.sort(listaP);
             _values.put("Rnombre", Rnombre);

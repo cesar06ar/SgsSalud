@@ -186,7 +186,9 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
         System.out.println("Actualizado correctamente :________________ ");
         Date now = Calendar.getInstance().getTime();
         if (PedidoExamenSeleccionado.isPersistent()) {
-            PedidoExamenSeleccionado.setEstado("Pendiente");
+            if(PedidoExamenSeleccionado.getEstado().equals("Nuevo")){
+                PedidoExamenSeleccionado.setEstado("Pendiente");
+            }               
             em.merge(PedidoExamenSeleccionado);
             System.out.println("Actualizado correcta  :________________ ");
         }
