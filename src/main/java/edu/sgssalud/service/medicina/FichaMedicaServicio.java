@@ -113,20 +113,30 @@ public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements
         }
         return consulFichas;
     }
-    
+
     public List<Receta_Medicamento> obtenerPorMedicamentoYFechas(final Date fechaI, final Date fechaF, final Medicamento medicamento) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Receta_Medicamento> query = builder.createQuery(Receta_Medicamento.class);
         Root<Receta_Medicamento> entity = query.from(Receta_Medicamento.class);
         query.where(builder.equal(entity.get(Receta_Medicamento_.medicamento), medicamento), builder.between(entity.get(Receta_Medicamento_.fecha), fechaI, fechaF));
         return getResultList(query);
-    } 
-    
-     public List<FichaMedica> getFichaMedicaPorFechas(final Date fechaI, final Date fechaF) {
+    }
+
+    public List<FichaMedica> getFichaMedicaPorFechas(final Date fechaI, final Date fechaF) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<FichaMedica> query = builder.createQuery(FichaMedica.class);
         Root<FichaMedica> entity = query.from(FichaMedica.class);
         query.where(builder.between(entity.get(FichaMedica_.fechaApertura), fechaI, fechaF));
         return getResultList(query);
+    }
+
+    public List<FichaMedica> getFichaMedicaPorFechas(final Date fechaI, final Date fechaF, String genero) {
+        TypedQuery<FichaMedica> query = em.createNamedQuery("FichaMedica.buscarPorRagnoFechasYsexo", FichaMedica.class);
+        query.setParameter("fInicio", fechaI);
+        query.setParameter("fFin", fechaF);
+        query.setParameter("genero", genero);              
+        return query.getResultList();
+        
+        
     }
 }

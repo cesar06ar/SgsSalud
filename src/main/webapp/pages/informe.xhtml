@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"      
+      xmlns:f="http://java.sun.com/jsf/core"            
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:glue="http://eqaula.org/jsf/facelets"
+      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">                
+        <ui:define name="header-replace">
+            <div class="header-replace">
+                <div class="container-header" >
+                    <div class="row lf row-title" >
+                        <h3>#{'Informe de Enfermeria '}</h3>   
+                    </div>
+                </div>
+            </div>             
+        </ui:define>        
+        <ui:define name="content">
+            <h:form id="form" acceptcharset="UTF-8">
+                <h:panelGroup style="margin-top: -15px;">
+                    <label ><b>#{'Ingrese Fechas de busqueda:'}</b></label>&nbsp;
+                    <p:calendar value="#{galleryController.fecha}" pattern="yyyy-MM-dd" title="fecha Inicio" required="true">
+                        <p:ajax event="dateSelect"  process="@this"/>
+                    </p:calendar>
+                    <p:calendar value="#{galleryController.fechaFin}" pattern="yyyy-MM-dd" title="fecha fin" style="width: 20%" required="true">
+                        <p:ajax event="dateSelect"  process="@this"/>
+                    </p:calendar>                   
+                </h:panelGroup>
+                <br/>
+                <h:panelGrid columns="2">             
+                    <h:outputText value="Imprimir reporte" />                      
+                    <h:commandLink action="#{reporteListas.renderInformeEnfermeria()}" >                    
+                        <p:graphicImage value="/resources/images/pdf.png" />                          
+                        <f:setPropertyActionListener value="#{galleryController.fecha}" target="#{reporteListas.fechaInf}"/>
+                        <f:setPropertyActionListener value="#{galleryController.fechaFin}" target="#{reporteListas.fechaSup}"/>
+                    </h:commandLink>
+                    &nbsp;
+                    <h:link value="Regresar" outcome="home" styleClass="btn"/>
+
+                </h:panelGrid>
+            </h:form>           
+        </ui:define>             
+    </ui:composition>
+</html>
+

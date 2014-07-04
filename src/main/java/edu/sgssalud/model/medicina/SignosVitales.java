@@ -15,12 +15,16 @@
  */
 package edu.sgssalud.model.medicina;
 
+import edu.sgssalud.model.profile.Profile;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 
 /**
@@ -28,6 +32,7 @@ import javax.persistence.Temporal;
  * @author cesar
  */
 @Entity
+
 public class SignosVitales implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -42,8 +47,14 @@ public class SignosVitales implements Serializable {
     private int pulso;
     private Double frecuenciaRespiratoria;
     private Double talla ;
-    private Double temperatura;
-    //FALTA: mas signos vitales
+    private Double temperatura;    
+    
+    @ManyToOne
+    private Profile responsable;
+    //FALTA: mas signos vitales   
+    
+    
+    
     
     public Long getId() {
         return id;
@@ -120,6 +131,15 @@ public class SignosVitales implements Serializable {
     public boolean isPersistent() {
         return getId() != null;
     }
+
+    public Profile getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(Profile responsable) {
+        this.responsable = responsable;
+    }   
+    
     
     @Override
     public int hashCode() {

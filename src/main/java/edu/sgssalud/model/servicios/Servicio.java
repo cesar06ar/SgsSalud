@@ -26,6 +26,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -35,15 +37,21 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Servicio")
-public class Servicio extends PersistentObject<Servicio> implements Serializable{
+@NamedQueries(value = {
+    @NamedQuery(name = "ServiciosEnfermeria.buscarPorRagnoFechasYsexo",
+            query = "select fm from Servicio fm where"
+            + " fm.createdOn between :fInicio and :fFin "
+            + " and fm.name = :servicio"
+            + " and fm.paciente.genero = :genero")})
+public class Servicio extends PersistentObject<Servicio> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    private Long id;
-    
+
     private String categoria;
-    
+
 //    private String descripcion;
 //    //private String rutaImg;
 //    @Temporal(javax.persistence.TemporalType.DATE)
@@ -56,7 +64,7 @@ public class Servicio extends PersistentObject<Servicio> implements Serializable
     @ManyToOne
     @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
     private Paciente paciente;
-    
+
 //    public Long getId() {
 //        return id;
 //    }
@@ -79,8 +87,8 @@ public class Servicio extends PersistentObject<Servicio> implements Serializable
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
-    }    
-    
+    }
+
     public Profile getResponsable() {
         return responsable;
     }
@@ -88,7 +96,7 @@ public class Servicio extends PersistentObject<Servicio> implements Serializable
     public void setResponsable(Profile responsable) {
         this.responsable = responsable;
     }
-  
+
     @Override
     public String toString() {
         return "edu.sgssalud.model.servicios.Servicio[ "

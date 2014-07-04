@@ -24,6 +24,7 @@ import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.model.servicios.Turno;
+import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
@@ -41,6 +42,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
+import org.jboss.seam.security.Identity;
 
 /**
  *
@@ -64,6 +66,11 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
     private ConsultaMedicaServicio consultaMedSer;
     @Inject
     private ConsultaOdontologicaServicio consultaOdontSer;
+    @Inject
+    private Identity identity;
+    @Inject
+    private ProfileService profileS;
+
     private Long fichaMedicaId;
     private HistoriaClinica historiaClinica;
     private FichaOdontologica fichaOdontologica;
@@ -196,6 +203,13 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
         consultaMedSer.setEntityManager(em);
         consultaOdontSer.setEntityManager(em);
         turnoS.setEntityManager(em);
+        
+        profileS.setEntityManager(em);
+        if (!getInstance().isPersistent()) {
+            if (getInstance().getResponsable() == null && identity.isLoggedIn()) {
+                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+            }
+        }
     }
 
     @Override

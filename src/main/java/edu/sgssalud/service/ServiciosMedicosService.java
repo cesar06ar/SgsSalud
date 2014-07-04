@@ -16,6 +16,7 @@
 package edu.sgssalud.service;
 
 //import edu.sgssalud.model.medicina.ConsultaMedica;
+import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.FichaMedica_;
 import edu.sgssalud.service.medicina.*;
@@ -27,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -56,18 +58,18 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
     public List<Servicio> todosServicios() {
         return findAll(Servicio.class);
     }
-    
+
     public Servicio getSignosVitalesPorId(final Long id) {
         return (Servicio) findById(Servicio.class, id);
     }
-    
+
     public List<Servicio> todosServicios(String categoria) {
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Servicio> query = builder.createQuery(Servicio.class);
         Root<Servicio> entity = query.from(Servicio.class);
         query.where(builder.equal(entity.get(Servicio_.categoria), categoria));
         return getResultList(query);
-    }   
+    }
 
     public Servicio buscarPorNombre(final String nombre) {
         CriteriaBuilder builder = getCriteriaBuilder();
@@ -84,8 +86,34 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
         query.where(builder.between(entity.get(Servicio_.createdOn), fechaI, fechaF));
         return getResultList(query);
     }
+
+    public List<Servicio> getServicioPorFechas(final Date fechaI, final Date fechaF, String genero) {
+        TypedQuery<Servicio> query = em.createNamedQuery("ServiciosEnfermeria.buscarPorRagnoFechasYsexo", Servicio.class);
+        query.setParameter("fInicio", fechaI);
+        query.setParameter("fFin", fechaF);
+        query.setParameter("genero", genero);
+        return query.getResultList();
+    }
+
+    public List<Servicio> getServicioPorFechas(final Date fechaI, final Date fechaF, String genero, String servicio) {
+        TypedQuery<Servicio> query = em.createNamedQuery("ServiciosEnfermeria.buscarPorRagnoFechasYsexo", Servicio.class);
+        query.setParameter("fInicio", fechaI);
+        query.setParameter("fFin", fechaF);
+        query.setParameter("servicio", servicio);
+        query.setParameter("genero", genero);
+        return query.getResultList();
+    }
     
-    public boolean borrarEntidad(Long servicioId) {        
+    public List<ConsultaMedica> getConsultaPor(final Date fechaI, final Date fechaF, String genero, Long responsableId) {
+        TypedQuery<ConsultaMedica> query = em.createNamedQuery("ConsultaMedica.buscarSignosVitalesPorRagnoFechasYsexo", ConsultaMedica.class);
+        query.setParameter("fInicio", fechaI);
+        query.setParameter("fFin", fechaF);
+        query.setParameter("responsableId", responsableId);
+        query.setParameter("genero", genero);
+        return query.getResultList();
+    }
+
+    public boolean borrarEntidad(Long servicioId) {
         try {
             String borrarServicio = "DELETE FROM servicio s WHERE s.id = " + servicioId;
             int deleted1 = em.createNativeQuery(borrarServicio).executeUpdate();
@@ -95,7 +123,7 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
             return false;
         }
     }
-    
+
 //    public List<Tratamiento> buscarPorServicio(Servicio serv) {
 //        CriteriaBuilder builder = getCriteriaBuilder();
 //        CriteriaQuery<Tratamiento> query = builder.createQuery(Tratamiento.class);

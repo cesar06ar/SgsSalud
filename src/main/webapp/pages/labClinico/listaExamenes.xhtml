@@ -71,10 +71,10 @@
                             update=":form:button-edit :form:messages :form:tablaExamenes :form:button-delete"/>
                     <!--Columnas para mostrar en la tabla -->
 
-                    <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.code}" 
-                               headerText="#{messages['common.code']}" >
-                        <h:outputText value="#{examenLab_.code}" />                        
-                    </p:column>
+                    <!--<p:column  style="width: 15%; text-align: center;" sortBy="# {examenLab_.code}" 
+                               headerText="# {messages['common.code']}" >
+                        <h:outputText value="# {examenLab_.code}" />                        
+                    </p:column>-->
                     <p:column  style="width: 15%; text-align: center;" sortBy="#{examenLab_.name}"
                                headerText="#{messages['Examen.Nombre1']}">                        
                         <h:outputText value="#{examenLab_.name}" />                        
@@ -86,13 +86,13 @@
                         </f:facet> 
                         <h:outputText value="#{examenLab_.tipo}" />
                     </p:column>                    
-                    <p:column sortBy="#{examenLab_.costo}" style="width: 10%; text-align: center;" 
+                    <!--<p:column sortBy="# {examenLab_.costo}" style="width: 10%; text-align: center;" 
                               filterMatchMode="startsWith">
                         <f:facet name="header">  
                             <h:outputText value="Costo" />  
                         </f:facet> 
-                        <h:outputText value="#{examenLab_.costo}" />
-                    </p:column>
+                        <h:outputText value="# {examenLab_.costo}" />
+                    </p:column>-->
                 </p:dataTable>
 
             </h:form>

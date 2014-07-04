@@ -49,7 +49,12 @@ import javax.persistence.Temporal;
     @NamedQuery(name = "ConsultaMedica.buscarPorFechas",
             query = "select e from ConsultaMedica e where"
             + " e.fechaConsulta BETWEEN :inicio AND :fin"            
-            + " ORDER BY e.id")
+            + " ORDER BY e.id"),
+    @NamedQuery(name = "ConsultaMedica.buscarSignosVitalesPorRagnoFechasYsexo",
+            query = "select c from ConsultaMedica c where"
+            + " c.createdOn between :fInicio and :fFin "
+            + " and c.signosVitales.responsable.id = :responsableId"
+            + " and c.historiaClinica.fichaMedica.paciente.genero = :genero")
     })
 public class ConsultaMedica extends BussinesEntity implements Serializable, Comparable<ConsultaMedica> {
 

@@ -260,6 +260,17 @@
                                 </center>
                             </div>
                         </div>
+                        <div class="span3" >
+                            <div class="styleHome">
+                                <center>
+                                    <h:link rendered="#{true}" title="#{messages['modulo.admin.enfermeria']}"
+                                            outcome="/pages/informe.xhtml" >                                                   
+                                        <p:graphicImage value="/resources/img/print.gif" width="65" height="65" />
+                                        <h:outputText value="Informe de actividades" style="float: left"/>
+                                    </h:link>                                                                                          
+                                </center>
+                            </div>
+                        </div>
                     </h:panelGroup>
                     <h:panelGroup  rendered="#{account.tienePermiso('LABORATORISTAS')}">
                         <div class="span3" >

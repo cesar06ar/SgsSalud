@@ -59,8 +59,8 @@
                 <h:outputText value="TOTAL MEDICAMENTOS: #{medicamentoListaServicio.resultList.size()}" />                                    
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             scrollable="true" scrollWidth="97%" scrollHeight="80%"       
-                             lazy="true" 
+                             scrollable="true" scrollWidth="97%" scrollHeight="1000"                                                          
+                             rows="20"                             
                              rowKey="#{medicamento_.id}"
                              selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
                              rendered="true" 

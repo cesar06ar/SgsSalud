@@ -81,6 +81,8 @@ public class ReporteListas {
     private static final String REPORTE_RESULTADO_EXAMEN = "resultadoExamen";
     private static final String REPORTE_SERVICIOS_MEDICOS = "listaServiciosEnfermeria";
     private static final String REPORTE_TURNOS = "listaTurnos";
+    private static final String REPORTE_ENFERMERIA = "informeEnfermeria";
+    
     @Inject
     @Web
     private EntityManager em;
@@ -460,15 +462,15 @@ public class ReporteListas {
 
             for (ResultadoParametro r : listaP) {
                 if ("AreaTexto".equals(r.getParametro().getTipoDato())) {
-                    String s,c = "";
+                    String s, c = "";
                     s = r.getValor();
                     for (int i = 0; i < s.length(); i++) {
                         if (s.charAt(i) == '\n') {
                             c += "\n";
                         }
                     }
-                    Rnombre += r.getNombre() + ":      " + c +"\n\n";
-                    Rum += r.getUnidadMedida() + "      " + c +"\n\n";
+                    Rnombre += r.getNombre() + ":      " + c + "\n\n";
+                    Rum += r.getUnidadMedida() + "      " + c + "\n\n";
                 } else {
                     Rnombre += r.getNombre() + ":      " + "\n\n";
                     Rum += r.getUnidadMedida() + "      " + "\n\n";
@@ -512,6 +514,45 @@ public class ReporteListas {
         if (log.isDebugEnabled()) {
             log.debug("export as pdf");
         }
+    }
+
+    public void renderInformeEnfermeria() {
+
+        final String attachFileName = "reporteEnfermeria.pdf";
+        Map<String, Object> _values = new HashMap<String, Object>();
+        if (fechaInf != null && fechaSup != null) {
+//            List<Servicio> listaServiciosHom = servicioMedS.getServicioPorFechas(fechaInf, fechaSup, "masculino");
+//            List<Servicio> listaServiciosMuj = servicioMedS.getServicioPorFechas(fechaInf, fechaSup, "femenino");
+//            List<FichaMedica> listaFichasMedHom = fichaMedicaServicio.getFichaMedicaPorFechas(fechaInf, fechaSup, "masculino");
+//            List<FichaMedica> listaFichasMedMuj = fichaMedicaServicio.getFichaMedicaPorFechas(fechaInf, fechaSup, "femenino");
+            String logo = getRealPath("/reportes/unl.png");
+            //parametros 
+            int nFichasH = fichaMedicaServicio.getFichaMedicaPorFechas(fechaInf, fechaSup, "masculino").size();
+            int nFichasM = fichaMedicaServicio.getFichaMedicaPorFechas(fechaInf, fechaSup, "femenino").size();
+            int nCuracionesH = servicioMedS.getServicioPorFechas(fechaInf, fechaSup, "masculino", "CURACIÓN").size();
+            int nCuracionesM = servicioMedS.getServicioPorFechas(fechaInf, fechaSup, "femenino", "CURACIÓN").size();
+            int nInyeccionesH = servicioMedS.getServicioPorFechas(fechaInf, fechaSup, "masculino", "INYECIÓN").size();
+            int nInyeccionesM = servicioMedS.getServicioPorFechas(fechaInf, fechaSup, "femenino", "INYECIÓN").size();
+            int nsigvitalesH = servicioMedS.getConsultaPor(fechaInf, fechaSup, "masculino", pLoggeado.getId()).size();
+            int nsigvitalesM = servicioMedS.getConsultaPor(fechaInf, fechaSup, "femenino", pLoggeado.getId()).size();
+            int total = (nFichasH + nFichasM + nCuracionesH + nCuracionesM + nInyeccionesH + nInyeccionesM + nsigvitalesH+nsigvitalesM);
+            _values.put("nFichasH", nFichasH);
+            _values.put("nFichasM", nFichasM);
+            _values.put("nInyeccionesH", nInyeccionesH);
+            _values.put("nInyeccionesM", nInyeccionesM);
+            _values.put("nCuracionesH", nCuracionesH);
+            _values.put("nCuracionesM", nCuracionesM);
+            _values.put("nsignosVitalesH", nsigvitalesH);
+            _values.put("nsignosVitalesM", nsigvitalesM);            
+            _values.put("total", total);
+            _values.put("fechaDesde", fechaInf);
+            _values.put("fechaHasta", fechaSup);
+            _values.put("usd", "$");
+
+            //Exportar a pdf 
+            JasperReportAction.exportToPdf(REPORTE_ENFERMERIA, _values, attachFileName);
+        }
+
     }
 
     public void renderCitasMedicas() {

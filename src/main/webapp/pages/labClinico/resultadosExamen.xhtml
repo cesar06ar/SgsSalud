@@ -56,17 +56,17 @@
                                     </div>
                                 </h:panelGroup>
 
-                                <h:panelGroup layout="block" class="clearfix">
+                                <!--<h:panelGroup layout="block" class="clearfix">
                                     <label for="costo" class="control-label">Precio Total</label>
                                     <div class="input">
-                                        <pe:inputNumber id="costo" value="#{resultadosExamenHome.costo}" required="false" 
+                                        <pe:inputNumber id="costo" value="# {resultadosExamenHome.costo}" required="false" 
                                                         dir="lrt" symbol="  $" symbolPosition="rigth" disabled="true">
 
                                         </pe:inputNumber>
-                                        <h:graphicImage value="#{resource['success.gif']}" rendered="#{resultadosExamenHome.costo != null}"
+                                        <h:graphicImage value="#{resource['success.gif']}" rendered="# {resultadosExamenHome.costo != null}"
                                                         styleClass="validation-status" />                                        
                                     </div>
-                                </h:panelGroup>
+                                </h:panelGroup>-->
                             </div>
                         </div>
                     </div>
@@ -87,10 +87,10 @@
                         <!--<p:ajax event="rowEdit" listener="# {resultadosExamenHome.onEdit}" update=":form:messages" />  
                         <p:ajax event="rowEditCancel" listener="# {resultadosExamenHome.onCancel}" update=":form:messages" />  
                         <p:ajax event="cellEdit" listener="# {resultadosExamenHome.onCellEdit}" update=":form:messages" />-->  
-
-                        <p:column headerText="#{messages['common.code']}" style="width:30%">  
-                            <h:outputText value="#{Object_.examenLab.code}" />  
-                        </p:column>  
+                        <!--
+                        <p:column headerText="# {messages['common.code']}" style="width:30%">  
+                            <h:outputText value="# {Object_.examenLab.code}" />  
+                        </p:column>  -->
                         <p:column headerText="#{messages['Examen.Nombre1']}" style="width:30%">                             
                             <h:outputText value="#{Object_.examenLab.name}" />  
                         </p:column>                                           

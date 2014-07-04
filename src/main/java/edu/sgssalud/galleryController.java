@@ -39,6 +39,7 @@ public class galleryController implements Serializable {
     private double real;
     private String cadena;
     private Date fecha;
+    private Date fechaFin;
     private Long enteroL;
     private boolean boleano;
     private Set<String> cuadrante = new HashSet<String>();
@@ -131,4 +132,13 @@ public class galleryController implements Serializable {
         setEntero(1);
         setCadena("valor");
     }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }    
+    
 }

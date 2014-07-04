@@ -37,50 +37,54 @@ import javax.persistence.Temporal;
 @Table(name = "FichaMedica")
 @DiscriminatorValue(value = "FM")
 @PrimaryKeyJoinColumn(name = "id")
-@NamedQueries(value = {  
+@NamedQueries(value = {
     @NamedQuery(name = "FichaMedica.buscarPorNumero",
             query = "select fm from FichaMedica fm where"
             + " fm.numeroFicha = :clave"),
-     @NamedQuery(name = "FichaMedica.buscarPorFecha",
-            query = "select fm from FichaMedica fm where"           
-            +" fm.fechaApertura=:clave")})
-public class FichaMedica extends BussinesEntity implements Serializable, Comparable<FichaMedica> {    
+    @NamedQuery(name = "FichaMedica.buscarPorFecha",
+            query = "select fm from FichaMedica fm where"
+            + " fm.fechaApertura=:clave"),
+    @NamedQuery(name = "FichaMedica.buscarPorRagnoFechasYsexo",
+            query = "select fm from FichaMedica fm where"
+            + " fm.fechaApertura between :fInicio and :fFin "
+            + " and fm.paciente.genero = :genero")})
+public class FichaMedica extends BussinesEntity implements Serializable, Comparable<FichaMedica> {
 
-    private static final long serialVersionUID = 1L;   
+    private static final long serialVersionUID = 1L;
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.AUTO)
 //    private Long id;
-    
+
     private Long numeroFicha;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaApertura;
 // la fecha de apertura de la historiaClinica se guarda en (createOn)
 // registrar Tipos de entidad de Negocio antecedentes familiares y personales    
-    
+
     private String observacionAntecedentesPersonales;
     private String observacionAntecedentesFamiliares;
-    
+
 //    @Enumerated(EnumType.STRING) 
 //    @Column(nullable = false)  
     private String grupoSangineo;
-    
+
     @OneToOne
     @JoinColumn(name = "paciente_id")  //nombre de la columna en la BD
     private Paciente paciente;
 //    @Transient
 //    private int numFicha;
-    
-    public FichaMedica(){
+
+    public FichaMedica() {
         fechaApertura = new Date();
     }
-    
+
     public Long getNumeroFicha() {
         return numeroFicha;
     }
 
     public void setNumeroFicha(Long numeroFicha) {
         this.numeroFicha = numeroFicha;
-    }      
+    }
 
     public Paciente getPaciente() {
         return paciente;
@@ -88,7 +92,7 @@ public class FichaMedica extends BussinesEntity implements Serializable, Compara
 
     public void setPaciente(Paciente paciente) {
         this.paciente = paciente;
-    }       
+    }
 
     public String getObservacionAntecedentesPersonales() {
         return observacionAntecedentesPersonales;
@@ -104,7 +108,7 @@ public class FichaMedica extends BussinesEntity implements Serializable, Compara
 
     public void setObservacionAntecedentesFamiliares(String observacionAntecedentesFamiliares) {
         this.observacionAntecedentesFamiliares = observacionAntecedentesFamiliares;
-    } 
+    }
 
     public String getGrupoSangineo() {
         return grupoSangineo;
@@ -112,7 +116,7 @@ public class FichaMedica extends BussinesEntity implements Serializable, Compara
 
     public void setGrupoSangineo(String grupoSangineo) {
         this.grupoSangineo = grupoSangineo;
-    }  
+    }
 
     public Date getFechaApertura() {
         return fechaApertura;
@@ -120,45 +124,44 @@ public class FichaMedica extends BussinesEntity implements Serializable, Compara
 
     public void setFechaApertura(Date fechaApertura) {
         this.fechaApertura = fechaApertura;
-    }  
+    }
 
     public int getNumFicha() {
-        if(numeroFicha != null){             
+        if (numeroFicha != null) {
             return numeroFicha.intValue();
-        }else{
+        } else {
             return 0;
-        }        
+        }
     }
 
 //    public void setNumFicha(int numFicha) {
 //        this.numFicha = numFicha;
 //    }  
     /*	         
-    public enum GrupoSangineo {
+     public enum GrupoSangineo {
 
-        A_POSITIVO(0), 
-        A_NEGATIVO(1),
-        B_POSITIVO(2), 
-        B_NEGATIVO(3),
-        AB_POSITIVO(4), 
-        AB_NEGATIVO(5),
-        O_POSITIVO(6), 
-        O_NEGATIVO(7);
+     A_POSITIVO(0), 
+     A_NEGATIVO(1),
+     B_POSITIVO(2), 
+     B_NEGATIVO(3),
+     AB_POSITIVO(4), 
+     AB_NEGATIVO(5),
+     O_POSITIVO(6), 
+     O_NEGATIVO(7);
         
-        private int grupoSangineo;
+     private int grupoSangineo;
 
-        private GrupoSangineo(int grupoSangineo) {
-            this.grupoSangineo = grupoSangineo;
-        }
+     private GrupoSangineo(int grupoSangineo) {
+     this.grupoSangineo = grupoSangineo;
+     }
 
-        public int getGrupoSangineo() {
-            return grupoSangineo;
-        }
+     public int getGrupoSangineo() {
+     return grupoSangineo;
+     }
         
-    }*/
-
+     }*/
     @Override
     public int compareTo(FichaMedica o) {
-        return (int)(o.getNumFicha() - this.numeroFicha);
+        return (int) (o.getNumFicha() - this.numeroFicha);
     }
 }

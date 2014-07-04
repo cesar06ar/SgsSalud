@@ -92,6 +92,9 @@ public class ReporteReceta {
             _values.put("logo", logo);
             _values.put("medico", receta.getResponsableEmision().getFullName());
             _values.put("cedula", receta.getPaciente().getCedula());
+            _values.put("area", receta.getPaciente().getArea());
+            _values.put("carrera", receta.getPaciente().getCarrera());
+            _values.put("modulo", receta.getPaciente().getModulo());
             _values.put("usd", "$");
 
             //Exportar a pdf 
