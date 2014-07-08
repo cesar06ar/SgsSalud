@@ -186,9 +186,9 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
         System.out.println("Actualizado correctamente :________________ ");
         Date now = Calendar.getInstance().getTime();
         if (PedidoExamenSeleccionado.isPersistent()) {
-            if(PedidoExamenSeleccionado.getEstado().equals("Nuevo")){
+            if (PedidoExamenSeleccionado.getEstado().equals("Nuevo")) {
                 PedidoExamenSeleccionado.setEstado("Pendiente");
-            }               
+            }
             em.merge(PedidoExamenSeleccionado);
             System.out.println("Actualizado correcta  :________________ ");
         }
@@ -197,7 +197,7 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
         resultList = pedidosExamenLabService.getPedidosExamenesLab();
 //        }
         System.out.println("Actualizado correcta 3 :________________ ");
-        FacesMessage msg = new FacesMessage("Los Códigos de muestra han sido agregados" + " ", "");
+        FacesMessage msg = new FacesMessage("El Código de muestra: " + PedidoExamenSeleccionado.getCodigoMuestra() + " ha sido agregado", "");
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 

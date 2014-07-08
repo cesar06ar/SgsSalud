@@ -59,10 +59,9 @@
                 <h:outputText value="TOTAL MEDICAMENTOS: #{medicamentoListaServicio.resultList.size()}" />                                    
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             scrollable="true" scrollWidth="97%" scrollHeight="1000"                                                          
-                             rows="20"                             
-                             rowKey="#{medicamento_.id}"
-                             selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
+                             scrollable="true" scrollWidth="100%" scrollHeight="600" 
+                             
+                             rowKey="#{medicamento_.id}" selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
                              rendered="true" 
                              selectionMode="single">                    
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->

@@ -166,7 +166,7 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
             if (getInstance().isPersistent()) {
                 getInstance().setParametros(parametros);
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se actualizo el nombre del Examen: " + getInstance().getId() + " con éxito");
+                FacesMessage msg = new FacesMessage("Se actualizo el examen: " + getInstance().getName() + " con éxito", "");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 //salida = "/pages/labClinico/listaExamenes.xhtml?faces-redirect=true";
                 salida = null;
@@ -174,7 +174,7 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
                 //getInstance().setParametros(parametros);
                 create(getInstance());
                 save(getInstance());
-                FacesMessage msg = new FacesMessage("Se creo nueva Examen: " + getInstance().getId() + " con éxito");
+                FacesMessage msg = new FacesMessage("Se agrego el examen: " + getInstance().getName() + " con éxito");
                 FacesContext.getCurrentInstance().addMessage("", msg);
                 salida = "/pages/labClinico/examenes.xhtml?faces-redirect=true"
                         + "&examenLabId=" + getInstance().getId();
@@ -223,18 +223,20 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
                 save(parametro);
                 parametros = examenLabService.getParametrosPorExamen(getInstance());
                 Collections.sort(parametros);
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se modificó el parámetro: " + parametro.getNombre() + " con éxito", ""));
                 parametro = new Parametros();
                 evento.fire(parametro);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Modifico parametro con éxito", ""));
             } else {
                 parametro.setExamenLabClinico(getInstance());
                 create(parametro);
                 save(parametro);
                 parametros = examenLabService.getParametrosPorExamen(getInstance());
                 Collections.sort(parametros);
+
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se agregó parametro de examen con éxito", ""));
                 parametro = new Parametros();
                 evento.fire(parametro);
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agrego parametro con éxito", ""));
             }
             //getInstance().agregarParametro(parametro);
 
@@ -266,7 +268,6 @@ public class ExamenHome extends BussinesEntityHome<ExamenLabClinico> implements 
 //        FacesMessage msg = new FacesMessage("Cancelar Edición de Parametro", "" + ((Parametros) event.getObject()).getId());
 //        FacesContext.getCurrentInstance().addMessage(null, msg);
 //    }
-
 //    public void onCellEdit(CellEditEvent event) {
 //        Object oldValue = event.getOldValue();
 //        Object newValue = event.getNewValue();

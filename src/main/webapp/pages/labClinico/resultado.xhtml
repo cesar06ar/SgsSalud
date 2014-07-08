@@ -66,7 +66,7 @@
                         <label for="fechaIngreso">#{messages['comun.fecha']}</label>
                         <div class="input" >
                             <p:calendar  id="fechaIngreso" value="#{resultadoHome.instance.fechaRealizacion}" styleClass="xLarge" required="true" label="#{messages['comun.fecha']}" 
-                                         rendered="true" disabled="false" locale="es" pattern="dd-MMM-yyyy">   
+                                         rendered="true" disabled="true" locale="es" pattern="dd-MMM-yyyy">   
                                 <p:ajax event="dateSelect" rendered="save fechaIngreso" update="@this save" />  
                             </p:calendar>                        
                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{resultadoHome.instance.fechaRealizacion != null}"

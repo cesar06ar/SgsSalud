@@ -144,10 +144,10 @@ public class SecurityHome implements Serializable {
                     security.getRelationshipManager().associateUser(group, user);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Autorización realizada con exito! ", "Se añadio " + getUser().getKey() + " en " + getGroup().getName() ));
                 } else {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Authorization exists!", "User " + getUser().getKey() + " was assig into " + getGroup().getName() ));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El usuario " + getUser().getKey() + " ya ha sido asignado al grupo " + getGroup().getName() ,""));
                 }
             } else {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cann't assign authorization for ", getGroup().getName() + " and " + getUser().getKey()));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se puede asignar  ", getGroup().getName() + " para " + getUser().getKey()));
             }
 
         } catch (IdentityException ex) {

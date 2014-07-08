@@ -77,6 +77,8 @@ public class ResultadoHome extends BussinesEntityHome<ResultadoExamenLabClinico>
         if (r != null) {
             setInstance(r);
             pedidoExam = getInstance().getPedidoExamenLab();
+            Date ahora = Calendar.getInstance().getTime();
+            getInstance().setFechaRealizacion(ahora);
             this.listarCategorias();
         }
     }
@@ -143,8 +145,7 @@ public class ResultadoHome extends BussinesEntityHome<ResultadoExamenLabClinico>
         if (getInstance().isPersistent()) {
             this.listarCategorias();
         }
-        Date ahora = Calendar.getInstance().getTime();
-        getInstance().setFechaRealizacion(ahora);
+
     }
 
     @Override

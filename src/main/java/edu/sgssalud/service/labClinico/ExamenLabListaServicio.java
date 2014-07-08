@@ -184,7 +184,7 @@ public class ExamenLabListaServicio extends LazyDataModel<ExamenLabClinico> {
             if (ban) {
                 System.out.println("Ingreso a borrar 1");
 //                List<Parametros> lp = examenLabService.getParametrosPorExamen(ExamenSeleccionado);
-                ExamenLabClinico exam = ExamenSeleccionado;                
+                ExamenLabClinico exam = ExamenSeleccionado;
 //                Parametros paux = null;
 //                for (Parametros p : lp) {
 //                    System.out.println("valor " + p.toString());
@@ -192,13 +192,13 @@ public class ExamenLabListaServicio extends LazyDataModel<ExamenLabClinico> {
 //                    em.remove(paux);
 //                }
                 em.remove(em.merge(exam));
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  ", "El parametro seleccionado"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El examen: " + exam.getName() + " se borró exitosamente", ""));
                 ExamenSeleccionado = null;
                 setResultList(examenLabService.getExamenesLab());
                 System.out.println("Ingreso a borrar exito");
             } else {
                 System.out.println("Ingreso a borrar 2");
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El Examen contiene datos asociados ", "no se puede borrar"));
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "El examen contiene datos asociados ", "No se puede borrar"));
             }
 //            return "/pages/labClinico/examenes.xhtml?faces-redirect=true"
 //                    + "&examenLabId=" + getInstance().getId();
