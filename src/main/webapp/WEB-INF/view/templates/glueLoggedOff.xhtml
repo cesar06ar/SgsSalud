@@ -115,11 +115,13 @@
             <ocp:messages id="messages" />
         </ui:define>        
 
-        <ui:define name="footer">
-            <h:link value="#{messages['common.privacy']}" outcome="/pages/privacy"/> |
-            <a href="#{applicationConfig.blogUrl}"> blog</a> | 
+        <ui:define name="footer">            
+            SGSSALUD, Copyright &copy; <a href="cesar06ar@gmail.com">César Abad</a>  y <a href="taniavalarezo.2708@gmail.com">Tania Valarezo</a> <br/>
+            Proyecto de tesis, Software de gestión de servicios de salud, 
+            bajo licencia GPL. <a  href="http://www.gnu.org/licenses/">ver mas detalles</a><br/>
             <h:link value="#{messages['common.about']}" outcome="/pages/about"/> | 
-            <h:link value="#{messages['common.terms']}" outcome="/pages/terms"/>             
+            <h:link value="#{messages['common.terms']}" outcome="/pages/terms"/> |
+            <a href="#{applicationConfig.blogUrl}"> UNL</a>
         </ui:define>
 
     </ui:composition>

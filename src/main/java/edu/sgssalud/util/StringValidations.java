@@ -31,11 +31,7 @@
  */
 package edu.sgssalud.util;
 
-import edu.sgssalud.model.odontologia.Diente;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import javax.sound.midi.Soundbank;
 
 public class StringValidations {
 
@@ -219,7 +215,7 @@ public class StringValidations {
     }
 
     public static void main(String args[]) {
-        String field = "*Luis,";
+        //String field = "*Luis,";
         /*
          if (field.contains("*")) {
          field = field.replace("*", "");

@@ -41,8 +41,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.TimeZone;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Dates {
 
@@ -1799,7 +1797,7 @@ public class Dates {
         }
         // -------------------------------------------------------------------------
         // Deprecated int constants
-        // TODO: Remove in 3.0
+
         /**
          * Number of milliseconds in a standard second.
          *

@@ -3152,7 +3152,7 @@ jQuery.event = {
 		// Handle a global trigger
 		if ( !elem ) {
 
-			// TODO: Stop taunting the data cache; remove global events and always attach to document
+
 			cache = jQuery.cache;
 			for ( i in cache ) {
 				if ( cache[ i ].events && cache[ i ].events[ type ] ) {
@@ -4483,7 +4483,6 @@ var Expr = Sizzle.selectors = {
 				Sizzle.error( match[0] );
 			}
 
-			// TODO: Move to normal caching system
 			match[0] = done++;
 
 			return match;
@@ -8054,7 +8053,7 @@ jQuery.ajaxTransport( "script", function(s) {
 
 var // #5280: Internet Explorer will keep connections alive if we don't abort on unload
 	xhrOnUnloadAbort = window.ActiveXObject ? function() {
-		// Abort all pending requests
+
 		for ( var key in xhrCallbacks ) {
 			xhrCallbacks[ key ]( 0, 1 );
 		}
@@ -8402,8 +8401,7 @@ jQuery.fn.extend({
 		prop = jQuery.extend( {}, prop );
 
 		function doAnimation() {
-			// XXX 'this' does not always have a nodeName when running the
-			// test suite
+
 
 			if ( optall.queue === false ) {
 				jQuery._mark( this );

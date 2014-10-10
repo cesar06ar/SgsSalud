@@ -17,8 +17,6 @@ package edu.sgssalud.model.medicina;
 
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.farmacia.Receta;
-import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.util.FechasUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;

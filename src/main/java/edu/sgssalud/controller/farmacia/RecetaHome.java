@@ -32,7 +32,6 @@ import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.util.Lists;
-import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -345,7 +344,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     for (Receta_Medicamento rm : getInstance().getListaRecetaMedicamento()) {
                         if (m.equals(rm.getMedicamento())) {
                             int c = m.getUnidades();
-                            m.setUnidades(c - rm.getCantidad());
+                            m.setUnidades(c - rm.getCantidad());                            
                             save(m);
                         }
                     }
@@ -373,6 +372,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                         Medicamento medicament = recetaMed.getMedicamento();
                         medicament.setUnidades(cantidad);
                         recetaMed.setSaldo(cantidad);
+                        recetaMed.setDetalle("Receta Emidita por: "+getInstance().getResponsableEmision().getFullName());
                         recetaMed.setFecha(now);
                         save(medicament);
                     }

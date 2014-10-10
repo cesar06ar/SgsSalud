@@ -17,7 +17,6 @@ package edu.sgssalud.controller.labClinico;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
-import edu.sgssalud.controller.odontologia.TratamientoDataModel;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
@@ -34,7 +33,6 @@ import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
-import edu.sgssalud.util.Lists;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,8 +48,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.event.TransferEvent;
-import org.primefaces.model.DualListModel;
 
 /**
  *

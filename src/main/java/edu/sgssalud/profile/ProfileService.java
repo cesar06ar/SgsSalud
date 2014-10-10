@@ -46,9 +46,7 @@ import javax.persistence.criteria.Root;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.model.profile.Profile_;
-import edu.sgssalud.model.security.IdentityObject;
 import edu.sgssalud.model.security.IdentityObjectAttribute;
-import edu.sgssalud.model.security.IdentityObjectAttribute_;
 import edu.sgssalud.model.security.IdentityObjectCredential;
 
 import edu.sgssalud.service.BussinesEntityService;
@@ -63,7 +61,6 @@ import org.picketlink.idm.common.exception.IdentityException;
 public class ProfileService extends PersistenceUtil<Profile> implements Serializable {
 
     private static final long serialVersionUID = -4022772083704382039L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileService.class);
     @Inject
     private BussinesEntityService bussinesEntityService;
 

@@ -15,7 +15,6 @@
  */
 package edu.sgssalud.model.odontologia;
 
-import edu.sgssalud.model.farmacia.Receta;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -100,15 +99,12 @@ public class Odontograma implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof Odontograma)) {
             return false;
         }
         Odontograma other = (Odontograma) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

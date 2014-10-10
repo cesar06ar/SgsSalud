@@ -16,7 +16,6 @@
 package edu.sgssalud.controller.security;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -27,11 +26,8 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Web;
 import org.jboss.seam.security.Identity;
-import org.jboss.seam.transaction.Transactional;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.api.Role;
-import org.picketlink.idm.api.RoleType;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.model.SimpleGroup;
 
@@ -44,7 +40,7 @@ import org.picketlink.idm.impl.api.model.SimpleGroup;
 public class SecurityGroupHome implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SecurityGroupHome.class);
+    private static final org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SecurityGroupHome.class);
     @Inject
     @Web
     private EntityManager entityManager;
@@ -97,7 +93,7 @@ public class SecurityGroupHome implements Serializable {
     public String saveGroup() {
         log.info("Save instance for " + getInstance().getKey() + " with name " + getGroupName());
         if (isManaged()) {
-            //TODO implementar actualización de nombre de grupo, evaluar si es necesario
+            //implementar actualización de nombre de grupo, evaluar si es necesario
         } else {
             try {
                 security.getPersistenceManager().createGroup(getGroupName(), "GROUP");

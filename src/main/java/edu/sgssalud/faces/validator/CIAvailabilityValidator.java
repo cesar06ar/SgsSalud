@@ -25,7 +25,6 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Current;
-import edu.sgssalud.cdi.LoggedIn;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;

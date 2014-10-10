@@ -17,27 +17,12 @@ package edu.sgssalud.controller.medicina;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
-import edu.sgssalud.model.BussinesEntityType;
-import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
-import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.EnfermedadCIE10;
-import edu.sgssalud.model.medicina.HistoriaClinica;
-import edu.sgssalud.model.medicina.SignosVitales;
-import edu.sgssalud.model.odontologia.ConsultaOdontologica;
-import edu.sgssalud.model.odontologia.FichaOdontologica;
-import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.EnfermedadesCie10Servicio;
-import edu.sgssalud.service.medicina.FichaMedicaServicio;
-import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
-import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
-import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -124,7 +109,7 @@ public class EnfermedadesCieHome extends BussinesEntityHome<EnfermedadCIE10> imp
     @TransactionAttribute
     public String guardar() {
         String salida = null;
-        Date now = Calendar.getInstance().getTime();
+        
         try {
             if (getInstance().isPersistent()) {
                 save(getInstance());

@@ -25,8 +25,8 @@
             <div class="header-replace" >
                 <div class="container-header" >
                     <div class="row lf row-title" >
-                        <h2>#{recetaHome.recetaId == null? 'Nueva Receta para:': 'Editar Receta para:'}
-                            #{recetaHome.paciente.nombres}</h2>
+                        <h2>#{recetaHome.recetaId == null? 'Nueva receta para:': 'Editar receta para:'}
+                            #{recetaHome.paciente.nombres} #{recetaHome.paciente.apellidos}</h2>
                     </div>
                 </div>
             </div>
@@ -83,7 +83,7 @@
                                             <p:ajax process="@this" update=":form:medicamentoDisponible :form:Indicacion save" rendered="save"/>
                                         </p:commandLink>                                           
                                     </div>
-                                    <p:overlayPanel id="medPanel" for="cargarMedicamento" hideEffect="fade" dynamic="false" widgetVar="dialogMedicamet" style="width: 600px; margin-left:  6%;" >
+                                    <p:overlayPanel id="medPanel" for="cargarMedicamento" hideEffect="fade" dynamic="false" widgetVar="dialogMedicamet" style="width: 650px; margin-left:  6%;" >
                                         <p:dataTable id="tablaMedicamentos" var="medicamento_" value="#{recetaHome.listaMedicamentosStock}" emptyMessage="No hay medicamentos cargados"
                                                      rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single"                                                      
                                                      scrollable="true" scrollHeight="140">                                            
@@ -97,7 +97,7 @@
                                             <p:column headerText="Nombre Genérico" style="width:18%; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreGenerico}">  
                                                 <h:outputText value="#{medicamento_.nombreGenerico}" />  
                                             </p:column>
-                                            <p:column headerText="Cant" style="width:4%; font-size:12px" >  
+                                            <p:column headerText="Cant" style="width:18px; font-size:12px" >  
                                                 <h:outputText value="#{medicamento_.unidades}" />  
                                             </p:column>
                                             <p:column headerText="Presentación" style="width:12%; font-size:12px" >  
@@ -180,7 +180,7 @@
                     <p:commandLink id="enviar" type="button" value="#{messages['common.save']}" 
                                    oncomplete="#{'saveDlg.show()'}"  immediate="true" styleClass="btn success offset4" 
                                    disabled="#{empty recetaHome.listaIndicaciones}">                         
-                        <p:ajax process="@this" update=":save-dialog" />
+                        <p:ajax process="@this" update=":save-dialog" />                        
                     </p:commandLink>
                     &nbsp;
 

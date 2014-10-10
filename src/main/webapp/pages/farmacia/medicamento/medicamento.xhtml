@@ -126,11 +126,11 @@
                             </h:panelGroup>  
                             <s:validateForm id="validadorFechas" validatorId="validadorFechasMedicamento" />
                             <glue:input id="casaComercial" name="casaComercial" type="text" label="#{messages['common.casaComercialProveedora']}" value="#{medicamentoHome.instance.casaComercialProveedora}" required="true" inlinehelp="#{messages['common.casacaomercial.inlinehelp']}" execute="@this save" render="casaComercial"/>
-                            <glue:input id="dirCasaComercial" name="dirCasaComercial" type="text" label="#{messages['common.dircasacomercial']}" value="#{medicamentoHome.instance.dirCasaComercial}" required="false" inlinehelp="#{messages['common.dircasacomercial']}" execute="@this save" render="dirCasaComercial"/>                            
-                            <glue:input id="referencia" name="referencia" type="textarea" label="#{messages['common.referenciaMedicamento']}" value="#{medicamentoHome.instance.referencia}" 
-                                        required="false" inlinehelp="#{messages['common.referenciaMedicamento']}" execute="@this save" render="referencia"/>                            
+                            <glue:input id="dirCasaComercial" name="dirCasaComercial" type="text" label="#{messages['common.dircasacomercial']}" value="#{medicamentoHome.instance.dirCasaComercial}" required="false" inlinehelp="#{messages['common.dircasacomercial']}" execute="@this save" render="dirCasaComercial"/>                                                        
                             <glue:input id="dosificacion" name="dosificacion" type="textarea" label="Dosifición" value="#{medicamentoHome.instance.dosificacion}" 
                                         required="false" inlinehelp="Ingrese la dosificación del medicamento" execute="@this save" render="dosificacion"/> 
+                            <glue:input id="referencia" name="referencia" type="textarea" label="#{messages['common.referenciaMedicamento']}" value="#{medicamentoHome.instance.referencia}" 
+                                        required="false" inlinehelp="#{messages['common.referenciaMedicamento']}" execute="@this save" render="referencia"/>                            
                             <h:panelGroup id="devp" layout="block" class="clearfix" rendered="#{medicamentoHome.instance.unidades ne 0}">
                                 <label for="devolucion">Habilitar devolución</label>
                                 <div class="input" >

@@ -15,15 +15,10 @@
  */
 package edu.sgssalud.service.labClinico;
 
-import edu.sgssalud.model.PersistentObject_;
-import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.ExamenLabClinico_;
 import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.labClinico.Parametros_;
-import edu.sgssalud.model.odontologia.Diente;
-import edu.sgssalud.model.odontologia.Diente_;
-import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.util.PersistenceUtil;
 import java.util.List;
 import javax.persistence.EntityManager;

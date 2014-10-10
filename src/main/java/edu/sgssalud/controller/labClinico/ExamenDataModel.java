@@ -16,7 +16,6 @@
 package edu.sgssalud.controller.labClinico;
 
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
-import edu.sgssalud.model.odontologia.Tratamiento;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.model.ListDataModel;

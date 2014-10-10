@@ -17,17 +17,9 @@ package edu.sgssalud.service.farmacia;
 
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Medicamento_;
-import edu.sgssalud.model.farmacia.Receta;
-import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.model.paciente.Paciente_;
 import edu.sgssalud.service.BussinesEntityService;
-import edu.sgssalud.util.PersistenceUtil;
-import edu.sgssalud.util.Strings;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Random;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;

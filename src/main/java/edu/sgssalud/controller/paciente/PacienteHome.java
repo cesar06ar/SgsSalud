@@ -27,24 +27,16 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.Dates;
-import edu.sgssalud.util.Strings;
-import edu.sgssalud.util.UI;
 import edu.sgssalud.web.service.WebServiceSGAClientConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import org.jasypt.util.password.BasicPasswordEncryptor;
-import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.management.IdmAuthenticator;
@@ -85,8 +77,6 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     private Credentials credentials;
     @Inject
     private IdentitySession security;
-    @Inject
-    private IdmAuthenticator idmAuth;
 //    @Inject
 //    SettingService settingService;
 
@@ -187,7 +177,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
 
     /*<==....*/
-    /*<== Método para  cargar una instancia de paciente */
+    /*<== Cargar una instancia de paciente */
     @Produces
     @Named("paciente")
     @Current
@@ -238,7 +228,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
     /*....==>*/
 
-    /*<== Método que me permite crear una intancia (un nuevo Paciente)==>*/
+    /*<== funcion que me permite crear una intancia (un nuevo Paciente)==>*/
     @Override
     protected Paciente createInstance() {
         //prellenado estable para cualquier clase 
@@ -262,7 +252,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     }
     /*....==>*/
 
-    /*<== Método que me permite guardar o actualizar un paciente este método
+    /*<== Permite guardar o actualizar un paciente,
      * interactua con la vista en el boton guardar...==>*/
     @TransactionAttribute
     public String guardarPaciente() {
@@ -328,7 +318,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
                     }
                 } else {
                     setInstance(createInstance());
-                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Estudiante ya ha sido", " ");
+                    FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El Estudiante no existe", " ");
                     FacesContext.getCurrentInstance().addMessage(null, msg);
                 }
 
@@ -393,7 +383,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         System.out.println("Ingreso register________1");
         /*
          * Try twice to work around some state bug in Seam Security
-         * TODO file issue in seam security
+
          */
         //String result = identity.login();
 //        if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
@@ -405,7 +395,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @TransactionAttribute
     private void createUser() throws IdentityException {
         System.out.println("Ingreso crear User________");
-        // TODO validate username, email address, and user existence
+        
         getInstance().setNombreUsuario(getInstance().getCedula());
         getInstance().setClave(getInstance().getCedula());
         PersistenceManager identityManager = security.getPersistenceManager();
@@ -417,7 +407,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         attributesManager.addAttribute(user, "estado", "ACTIVO");
         em.flush();
         System.out.println("Ingreso crear User________1");
-        // TODO figure out a good pattern for this...
+
         getInstance().getIdentityKeys().add(user.getKey());
         getInstance().setShowBootcamp(true);
         create(getInstance());
@@ -462,7 +452,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 //        }
         return "/pages/home.xhtml?faces-redirect=true";
     }
-    /*<== método que retorna la lista de tipos de datos enumerados ...*/
+    
+    /*<==  retorna la lista de tipos de datos enumerados ...*/
 
     public List<String> getListaGeneros() {
         List<String> generos = new ArrayList<String>();

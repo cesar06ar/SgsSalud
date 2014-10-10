@@ -26,13 +26,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.inject.Inject;
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.CXFBusFactory;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.jaxws.endpoint.dynamic.JaxWsDynamicClientFactory;
 import org.apache.cxf.transport.http.HTTPConduitConfigurer;
-import org.jboss.seam.international.status.Messages;
 
 /**
  *
@@ -40,9 +38,7 @@ import org.jboss.seam.international.status.Messages;
  */
 public class WebServiceSGAClientConnection {
 
-    @Inject
-    private Messages messages;
-
+  
     public Paciente validarPaciente(String cedula) {
         System.out.println("Ingreso a coneccion________");
         Paciente p = new Paciente();
@@ -77,9 +73,7 @@ public class WebServiceSGAClientConnection {
 //            } else {
 //                messages.warn("El número de cedula no consta como estudiante matriculado");
 //            }
-        } else {
-            //System.out.println("CEDULA VACIA___");
-        }
+        } 
         return null;
     }
 
@@ -91,9 +85,7 @@ public class WebServiceSGAClientConnection {
             System.out.println("RESULTADO____" + resultado);
             if (!resultado.isEmpty()) {
                 return convertirJsonArrayAString1(resultado);
-            } else {
-//                messages.warn("No se pudo conectar al web service");
-            }
+            } 
         } catch (Exception ex) {
             Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -109,8 +101,6 @@ public class WebServiceSGAClientConnection {
             //System.out.println("RESULTADO____" + resultado);
             if (!resultado.isEmpty()) {
                 return convertirJsonArrayAString1(resultado);
-            } else {
-//                messages.warn("No se pudo conectar al web service");
             }
         } catch (Exception ex) {
             Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,14 +121,10 @@ public class WebServiceSGAClientConnection {
                 if (!resultado.isEmpty()) {
                     List<String> result = convertirJsonArrayAString(resultado);
                     System.out.println("Resultado " + result.toString());
-                    return ("EstadoMatriculaMatriculada".equals(result.get(result.size() - 1))) ? true : false;
+                    return ("EstadoMatriculaMatriculada".equals(result.get(result.size() - 1)));
                     //return 
-                } else {
-//                    messages.warn("No se pudo conectar al web service");
-                }
-            } else {
-//                messages.warn("Los parametros no pueden ser vacios");
-            }
+                } 
+            } 
         } catch (Exception ex) {
             Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -156,9 +142,7 @@ public class WebServiceSGAClientConnection {
                 if ("true".equals(resultado)) {
                     return true;
                 } 
-            } else {
-//                messages.warn("Los parametros no pueden ser vacios");
-            }
+            } 
         } catch (Exception ex) {
             //Logger.getLogger(WebServiceSGAClientConnection.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("error__ ");

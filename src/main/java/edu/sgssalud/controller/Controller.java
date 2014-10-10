@@ -17,9 +17,7 @@ package edu.sgssalud.controller;
 
 import java.io.Serializable;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import edu.sgssalud.util.Interpolator;
-import org.jboss.seam.international.status.builder.BundleTemplateMessage;
 import org.jboss.solder.logging.Logger;
 
 /**

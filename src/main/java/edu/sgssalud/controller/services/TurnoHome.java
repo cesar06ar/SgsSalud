@@ -141,7 +141,6 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     public String guardar() {
         System.out.println("INGRESO GUARDAR_____-");
         String salida = "";
-        Date now = Calendar.getInstance().getTime();
         int hora;
         int min;
         try {
@@ -191,8 +190,7 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     @TransactionAttribute
     public String postergar() {
         System.out.println("INGRESO postergar_____-");
-        String salida = null;
-        Date now = Calendar.getInstance().getTime();
+        String salida = null;        
         int hora;
         int min;
         try {
@@ -307,7 +305,6 @@ public class TurnoHome extends BussinesEntityHome<Turno> implements Serializable
     public List<String> agregarHoras() {
         //listaHoras = new ArrayList<String>();
         List<String> horas = new ArrayList<String>();
-        Date f; //= Calendar.getInstance().getTime();
         int hora = 8;
         int min = 00;
         String horaS = "";

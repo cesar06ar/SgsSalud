@@ -53,7 +53,7 @@ public class SecurityGroupListService extends LazyDataModel<Group> {
 
     private static final long serialVersionUID = 4819808125494695197L;
     private static final int MAX_RESULTS = 5;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SecurityGroupListService.class);
+
     @Inject
     @Web
     private EntityManager entityManager;

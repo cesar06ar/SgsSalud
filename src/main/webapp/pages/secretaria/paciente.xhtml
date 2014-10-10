@@ -21,14 +21,14 @@
             <div class="header-replace">
                 <div class="container-header" >
                     <div class="row lf row-title" >  
-                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} #{pacienteHome.instance.nombres}</h2>   
+                        <h2>#{pacienteHome.managed? messages['common.edit'] : messages['common.add']} Paciente: #{pacienteHome.instance.nombres} #{pacienteHome.instance.apellidos}</h2>   
                     </div>
                 </div>
             </div>
         </ui:define>
         <ui:define name="content" >                    
             <h:form id="form" >
-                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />  
+                <p:messages id="messages"  autoUpdate="true" closable="true" />  
                 <p:panel id="datapersonal" header="#{messages['module.profile.data.personal']}">                    
                     <div class="container-fluid">   
                         <div class="row-fluid">
@@ -72,7 +72,7 @@
                                         <div class="input" >
                                             <p:calendar  id="fnacim" value="#{pacienteHome.instance.fechaNacimiento}" styleClass="xLarge" required="false" label="edad" 
                                                          rendered="true" pattern="dd-MM-yyyy" navigator="true" showButtonPanel="true" > 
-                                                <p:ajax event="dateSelect" process="validadorFechas fnacim" rendered="save fnp edadp:edad" update="@parent fnp edadp" />                                                  
+                                                <p:ajax event="dateSelect" process="fnacim" rendered="save fnp edadp:edad" update="@parent fnp edadp" />                                                  
                                             </p:calendar>                             
                                             <h:graphicImage value="#{resource['success.gif']}" rendered="#{pacienteHome.instance.fechaNacimiento != null}"
                                                             styleClass="validation-status" />

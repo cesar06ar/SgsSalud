@@ -28,17 +28,16 @@
         <ui:define name="content" class="span20">
             <h:form id="form">
                 <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />   
-                
+
                 <p:dataTable id="tablaEnf" value="#{enfermedadesCieHome.listaEnfermedades}" var="enfcie10" 
                              rows="20" paginator="true" 
-                              resizableColumns="true" liveResize="true"
+                             resizableColumns="true" liveResize="true"
                              paginatorPosition="top" emptyMessage="No hay ningun Servicio" 
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} {CurrentPageReport}"  
                              rowsPerPageTemplate="10,20,30,50,100" >
-                    <!--
-                    <p:ajax event="rowSelect" listener="# {enfermedadesCieHome.onRowSelect}" 
-                            update=":form:messages" />  
-                    <p:ajax event="rowUnselect" listener="# {enfermedadesCieHome.onRowUnselect}" update=":form:messages "/>-->
+                    <f:facet name="header">
+                        <h:outputText value="Listado total de enfermedades del cie 10: #{enfermedadesCieHome.listaEnfermedades.size()}"/>
+                    </f:facet>
                     <p:column headerText="#{messages['common.code']}" filterBy="#{enfcie10.codigo}" filterMatchMode="contains" style="width: 15%">
                         <h:outputText value="#{enfcie10.codigo}"/>
                     </p:column>                       

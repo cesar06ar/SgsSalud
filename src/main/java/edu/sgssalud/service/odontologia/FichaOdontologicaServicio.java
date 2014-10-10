@@ -20,11 +20,8 @@ import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica_;
 import edu.sgssalud.service.BussinesEntityService;
-import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -38,7 +35,6 @@ import javax.persistence.criteria.Root;
  */
 public class FichaOdontologicaServicio extends PersistenceUtil<FichaOdontologica> implements Serializable{
     private static final long serialVersionUID = 234L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(FichaOdontologicaServicio.class);
     @Inject
     private BussinesEntityService bussinesEntityService;
 

@@ -41,7 +41,7 @@ limitations under the License.
     <c:set var="min" value="#{not empty min ? min : null}" />    
     <c:set var="stepFactor" value="#{not empty stepFactor ? stepFactor : 1}" />    
     <c:set var="prefix" value="#{not empty prefix ? prefix : 1}" />    
-    <!-- TODO habilitar o deshabilitar ajax validation -->
+
     <h:panelGroup id="panel-group-#{id}" layout="block" class="#{styleClass}">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label} #{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">

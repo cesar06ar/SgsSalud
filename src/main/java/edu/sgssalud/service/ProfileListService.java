@@ -22,16 +22,13 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.security.SecurityGroupService;
-import edu.sgssalud.model.DeletableObject_;
 import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.model.profile.Profile_;
 import edu.sgssalud.model.security.IdentityObjectAttribute;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.util.QueryData;
@@ -39,11 +36,7 @@ import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.util.logging.Level;
 import javax.ejb.TransactionAttribute;
-import org.jboss.seam.transaction.Transactional;
-import org.jboss.solder.logging.Logger;
 import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.api.PersistenceManager;
-import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -58,7 +51,6 @@ import org.primefaces.model.SortOrder;
 @RequestScoped
 public class ProfileListService extends LazyDataModel<Profile> {
 
-    private static Logger log = Logger.getLogger(ProfileListService.class);
     private static final int MAX_RESULTS = 5;
     @Inject
     @Web

@@ -69,17 +69,14 @@
                          selection="#{servicioMedListS.selectedServicio}"
                          rendered="true" rowKey="#{servicio_.id}"
                          selectionMode="single">
-
+                <f:facet name="header">
+                    <h:outputText value="Total de servicios de enfermeria: #{servicioMedListS.resultList.size()}"/>
+                </f:facet>
                 <p:ajax event="rowSelect" listener="#{servicioMedListS.onRowSelect}"   
                         update=":form:button-edit :form:messages :form:delete" rendered=":form:button-edit"/>                 
                 <p:ajax event="rowUnselect" listener="#{servicioMedListS.onRowUnselect}" 
                         update=":form:button-edit :form:messages :form:delete" rendered=":form:button-edit"/>
-                <!--<p:column sortBy="# {servicio_.paciente.cedula}" style="text-align: center; width: 15%" >
-                    <f:facet name="header">  
-                        <h:outputText value="# {messages['profile.dni']}" />  
-                    </f:facet> 
-                    <h:outputText value="# {servicio_.paciente.cedula}" />
-                </p:column>-->
+                
                 <p:column sortBy="#{servicio_.paciente.nombres}" style="text-align: center; width: 15%">
                     <f:facet name="header">  
                         <h:outputText value="#{messages['common.firstname']}" />  

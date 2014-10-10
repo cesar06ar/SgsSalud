@@ -17,6 +17,7 @@ package edu.sgssalud.service.paciente;
 
 import edu.sgssalud.model.Photos;
 import edu.sgssalud.model.paciente.Paciente;
+import edu.sgssalud.model.paciente.PacienteSimple;
 import edu.sgssalud.model.paciente.Paciente_;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.Dates;
@@ -24,7 +25,6 @@ import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.StringValidations;
 import edu.sgssalud.util.Strings;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.ejb.TransactionAttribute;
@@ -156,7 +156,7 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         return query.getResultList();
     }
 
-    /*Método para validar cedula o pasaporte*/
+    /*validar cedula o pasaporte*/
     public boolean isDniDisponible(String cedula) {
         try {
             Paciente p = buscarPorCedula(cedula);
@@ -217,14 +217,14 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         //return  null;
     }
 
-    public List<Paciente> BuscarPacientePorParametroCorto(String parametro) {
+    public List<Paciente> buscarPacientePorParametroCorto(String parametro) {
         TypedQuery<Paciente> query = null;
         query = em.createNamedQuery("Paciente.buscarPorParametro", Paciente.class);
         query.setParameter("clave", parametro);
         return query.getResultList();
     }
 
-    public Paciente BuscarPacientePorParametro1(String parametro) {
+    public Paciente buscarPacientePorParametro1(String parametro) {
         try {
             TypedQuery<Paciente> query = null;
             query = em.createNamedQuery("Paciente.buscarPorParametro", Paciente.class);
@@ -233,17 +233,23 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         } catch (Exception e) {
             return null;
         }
-
     }
 
-    public List<Paciente> BuscarPacientePorParametro(String parametro) {
+    public List<Paciente> buscarPacientePorParametro(String parametro) {
         TypedQuery<Paciente> query = null;
         query = em.createNamedQuery("Paciente.buscarPorParametrosTodos", Paciente.class);
         query.setParameter("clave", parametro);
         return query.getResultList();
     }
 
-    public List<Paciente> BuscarPacientePorTodosParametros(String parametro) {
+    public List<Paciente> buscarPacienteSimplePorParametro(String parametro) {
+        TypedQuery<Paciente> query = null;
+        query = em.createNamedQuery("PacienteSimple.BuscarPorCriterio", Paciente.class);
+        query.setParameter("clave", parametro);
+        return query.getResultList();
+    }
+
+    public List<Paciente> buscarPacientePorTodosParametros(String parametro) {
         TypedQuery<Paciente> query = null;
         if (Dates.getFormatoFecha(parametro) != null) {
             query = em.createNamedQuery("Paciente.buscarPorFechaNacimiento", Paciente.class);
@@ -257,6 +263,6 @@ public class PacienteServicio extends PersistenceUtil<Paciente> implements Seria
         }
         return query.getResultList();
 
-    }    
+    }
 
 }

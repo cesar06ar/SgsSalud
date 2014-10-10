@@ -77,13 +77,16 @@
             </div>
             <!--tabla de datos-->
             <p:dataTable id="tablaFichasMedicas"  var="fichaMedica_" value="#{fichaMedicaListaServicio.resultList}"
-                         paginator="true" rows="10" emptyMessage="No se a realizado ninguna apertura de ficha medica hoy"
+                         paginator="true" rows="20" emptyMessage="No se a realizado ninguna apertura de ficha medica hoy"
                          paginatorPosition="top"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                          rowsPerPageTemplate="10,20,30,50,100"
                          lazy="true" rowKey="#{fichaMedica_.id}" selectionMode="single"
                          selection="#{fichaMedicaListaServicio.fichaMedicSeleccionada}"
                          rendered="true">
+                <f:facet name="header">
+                    <h:outputText value="Listado total de fichas médicas: #{fichaMedicaListaServicio.resultList.size()}"/>
+                </f:facet>
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Ficha Medica :form:agregar-consulta -->
                 <p:ajax event="rowSelect" listener="#{fichaMedicaListaServicio.onRowSelect}"   
                         update=":form:button-edit :form:button-print :form:messages :form:agregar-consulta"/> 

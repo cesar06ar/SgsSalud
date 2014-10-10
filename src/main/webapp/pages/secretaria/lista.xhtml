@@ -86,7 +86,7 @@
                         <label for="criterioBuscar" >#{'Ingrese Criterio de Búsqueda'}</label>
                         <div class="input" >                             
                             <p:inputText id="criterioBuscar" size ="25" value="#{pacienteListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda"
-                                         style="width: 300px;">
+                                         style="width: 300px;" >
                                 <p:ajax event="keyup" update=":form:tablaPacientes"/>
                             </p:inputText>                    
                             <span class="help-inline1"><br/>#{'Ingrese cédula o nombres o apellidos o edad o correo electrónico'}<ocp:message forId="criterioBuscar" /></span>
@@ -105,13 +105,13 @@
                              paginatorPosition="top"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="10,20,30,50,100"
-                             lazy="true" resizableColumns="true" liveResize="true"
+                             lazy="false" resizableColumns="true" liveResize="true"
                              rowKey="#{paciente_.id}"
                              selection="#{pacienteListaServicio.pacienteSelecionado}"
                              rendered="true"
                              selectionMode="single">
                     <f:facet name="header">
-                        <h:outputText value="Total Pacientes #{pacienteListaServicio.resultList.size}"/>
+                        <h:outputText value="Total de Pacientes: #{pacienteListaServicio.resultList.size}"/>
                     </f:facet>
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{pacienteListaServicio.onRowSelect}"   

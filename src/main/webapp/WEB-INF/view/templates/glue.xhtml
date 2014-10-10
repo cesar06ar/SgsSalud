@@ -1,17 +1,11 @@
-<!--
 
-  
-  To purchase a License, contact OcpSoft (http://ocpsoft.com)
-
--->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <ui:composition template="template.xhtml">
 
@@ -119,10 +113,12 @@
         </ui:define>
 
         <ui:define name="footer" >
-            <h:link value="#{messages['common.privacy']}" outcome="/pages/privacy"/> |
-            <a href="#{applicationConfig.blogUrl}"> blog</a> | 
+            SGSSALUD, Copyright &copy; <a href="cesar06ar@gmail.com">César Abad</a>  y <a href="taniavalarezo.2708@gmail.com">Tania Valarezo</a> <br/>
+            Proyecto de tesis, Software de gestión de servicios de salud, 
+            bajo licencia GPL. <a  href="http://www.gnu.org/licenses/">ver mas detalles</a><br/>
             <h:link value="#{messages['common.about']}" outcome="/pages/about"/> | 
-            <h:link value="#{messages['common.terms']}" outcome="/pages/terms"/>             
+            <h:link value="#{messages['common.terms']}" outcome="/pages/terms"/> |
+            <a href="#{applicationConfig.blogUrl}"> UNL</a>      
         </ui:define>
 
     </ui:composition>

@@ -177,20 +177,20 @@
                                                     </div>
                                                 </h:panelGroup>  
                                             </c:when>      
-                                            <c:when test="${f.name eq 'antecedentesGineco-obstetrico'}">
-                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" style="padding-left: 5px; float: left" >
-                                                    <label for="#{a.name}" style="float: left" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                                    <div class="span6" >     
+                                            <c:when test="${f.name eq 'antecedentesGineco-obstetrico'}" >
+                                                <h:panelGroup rendered="#{not a.property.survey}" layout="block" style="padding-left: -10%; margin-left: -60px; " >
+                                                    <label for="#{a.name}" style="float: left" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>
+                                                    <div class="span2" >     
                                                         <p:calendar value="#{a.value}" navigator="true" label="#{a.property.label}"
-                                                                    rendered="#{a.property.type eq 'java.util.Date'}">
+                                                                    rendered="#{a.property.type eq 'java.util.Date'}" style="width: 20%" size="15">
                                                             <p:ajax event="dateSelect" update="@parent" partialSubmit="true"/>
                                                         </p:calendar>                                                 
                                                         <p:inputText  value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
-                                                                      rendered="#{a.property.type eq 'java.lang.String'}">
+                                                                      rendered="#{a.property.type eq 'java.lang.String'}" style="width: 120px">
                                                             <f:validator validatorId="#{not empty a.property.validator ?  a.property.validator : 'safeTextUTF8Validator'}"/>
                                                         </p:inputText>                                                                                                     
                                                         <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
-                                                                        rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  
+                                                                        rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}" style="width: 120px">  
                                                             <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                                         </pe:inputNumber>  
                                                         <p:selectOneMenu value="#{a.value}" effect="fade"  converter="#{omnifaces.SelectItemsConverter}" required="#{a.property.required}" requiredMessage="#{a.property.requiredMessage}" label="#{a.property.label}"
@@ -208,8 +208,8 @@
                                             </c:when>
                                             <c:otherwise>
                                                 <h:panelGroup rendered="#{not a.property.survey and f.name ne 'antecedentesGineco-obstetrico'}" layout="block" >
-                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>                                            
-                                                    <div class="span1" style="padding-left: 5px; padding-top: 5px;">                                                         
+                                                    <label for="#{a.name}" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>
+                                                    <div class="span1" style="padding-left: 5px; padding-top: 5px; ">
 
                                                         <pe:inputNumber value="#{a.value}" styleClass="xLarge span4" required="#{a.property.required}" label="#{a.property.label}" title="#{a.property.helpInline}"
                                                                         rendered="#{a.property.type eq 'java.lang.Long' or type eq 'java.lang.Double' or type eq 'java.lang.Float'}">  

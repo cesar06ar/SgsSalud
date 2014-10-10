@@ -17,10 +17,7 @@ package edu.sgssalud.controller.medicina;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
-import edu.sgssalud.controller.paciente.PacienteHome;
-import edu.sgssalud.model.BussinesEntityAttribute;
 import edu.sgssalud.model.BussinesEntityType;
-import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.FichaMedica;
 import edu.sgssalud.model.medicina.HistoriaClinica;
@@ -38,8 +35,6 @@ import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
-import edu.sgssalud.util.StringValidations;
-import edu.sgssalud.util.UI;
 import edu.sgssalud.util.UtilRoot;
 import edu.sgssalud.web.service.WebServiceSGAClientConnection;
 import java.io.Serializable;
@@ -54,9 +49,6 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 
 /**
  *
@@ -196,7 +188,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        //this.setListaPacietes(pacienteS.BuscarPacientePorParametro(parametroBusqueda));
+        //this.setListaPacietes(pacienteS.buscarPacientePorParametro(parametroBusqueda));
     }
 
     public FichaOdontologica getFichaOdontologica() {
@@ -435,7 +427,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                 this.setPaciente(getInstance().getPaciente());
                 salida += "&fichaMedicaId=" + getInstance().getId();
             } else {
-                Paciente p = pacienteS.BuscarPacientePorParametro1(parametroBusqueda);
+                Paciente p = pacienteS.buscarPacientePorParametro1(parametroBusqueda);
                 if (p.isPersistent()) {
                     this.setPaciente(p);
                     this.setInstance(fichaMedicaService.getFichaMedicaPorPaciente(p));
@@ -446,7 +438,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
                     FacesContext.getCurrentInstance().addMessage("", msg);
                 }
                 //salida = null;
-                //this.setListaPacietes(pacienteS.BuscarPacientePorParametroCorto(salida));
+                //this.setListaPacietes(pacienteS.buscarPacientePorParametroCorto(salida));
             }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "El parametro de busqueda es incorrecto", " "));
@@ -455,7 +447,6 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
         return salida;
     }
 
-    /*<== método que retorna la lista de tipos de datos enumerados ...*/
     public List<String> getListaGruposSangineos() {
 	       wire();
         List<String> list = new ArrayList<String>();
@@ -473,7 +464,7 @@ public class FichaMedicaHome extends BussinesEntityHome<FichaMedica> implements 
 
     public Long getGenerarNumeroFicha() {
         List<FichaMedica> listaF = fichaMedicaService.getFichasMedicas();
-        Long num = new Long(001);
+        Long num = (long) 001;
         if (!listaF.isEmpty()) {
             for (FichaMedica fm : listaF) {
                 if (fm.getNumeroFicha() >= num) {

@@ -18,7 +18,6 @@ package edu.sgssalud.controller;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
@@ -28,10 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import org.apache.commons.lang.SerializationUtils;
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.profile.ProfileHome;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.model.Structure;
 import edu.sgssalud.service.BussinesEntityService;
@@ -175,6 +171,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 s.addProperty(this.getInstance());
             } catch (Exception ex) {
                 //log.info("eqaula --> error saving new" + getInstance().getName());
+                return null;
             }
         }
         return "/pages/admin/bussinesentitytype/bussinesentitytype?faces-redirect=true&bussinesEntityTypeId=" + getBussinesEntityTypeId();
@@ -191,7 +188,6 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             if (getInstance().isPersistent()) {
                 if (hasValuesBussinesEntity()) {
                     Structure s = bussinesEntityTypeService.getStructure(getStructureId());
-                    boolean mensaje = s.removeProperty(getInstance());
                     delete(getInstance());
                     save(s);
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Se borró exitosamente:  " + getInstance().getName(), ""));
@@ -245,7 +241,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
                 try {
                     fecha = sdf.parse(value);
                 } catch (ParseException pe) {
-                    //log.info("eqaula --> error converter date:"+pe.getMessage());
+                    return null;
                 }
                 o = fecha;
             } else if ("java.lang.Double".equals(getInstance().getType())) {
@@ -255,6 +251,7 @@ public class PropertyHome extends BussinesEntityHome<Property> implements Serial
             }
         } catch (Exception e) {
             //log.info("eqaula --> error converter: " + value);
+            return null;
         }
         return (Serializable) o;
     }

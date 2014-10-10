@@ -37,13 +37,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import edu.sgssalud.model.BussinesEntity;
-import edu.sgssalud.model.BussinesEntityType;
-import edu.sgssalud.model.Property;
-import edu.sgssalud.model.Structure;
 
 import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.BussinesEntityService;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;

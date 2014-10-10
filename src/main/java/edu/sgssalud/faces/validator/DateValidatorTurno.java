@@ -2,8 +2,6 @@
  */
 package edu.sgssalud.faces.validator;
 
-import edu.sgssalud.util.Dates;
-import edu.sgssalud.util.FechasUtil;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -12,7 +10,6 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import edu.sgssalud.util.UI;
-import java.util.Calendar;
 import java.util.Date;
 import javax.inject.Inject;
 import org.jboss.seam.faces.validation.InputElement;

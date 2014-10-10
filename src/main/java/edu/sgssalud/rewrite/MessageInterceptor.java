@@ -64,9 +64,6 @@ public class MessageInterceptor extends HttpConfigurationProvider
    {
       return ConfigurationBuilder.begin()
 
-               // TODO support empty {path} parameters
-               // TODO encode and strip these messages
-
                .defineRule()
                .when(
                         QueryString.parameterExists("info")
@@ -103,7 +100,6 @@ public class MessageInterceptor extends HttpConfigurationProvider
                   }
                });
 
-      // TODO remove the parameter once it has been added to messages
    }
 
    @Override

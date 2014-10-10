@@ -42,7 +42,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Current;
 import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.paciente.PacienteServicio;
 import edu.sgssalud.util.UI;
 

@@ -15,15 +15,11 @@
  */
 package edu.sgssalud.faces.validator;
 
-import edu.sgssalud.cdi.Current;
-import edu.sgssalud.model.farmacia.Medicamento;
-import edu.sgssalud.util.FechasUtil;
 import edu.sgssalud.util.UI;
 import java.util.Date;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
@@ -39,7 +35,7 @@ import org.jboss.seam.faces.validation.InputElement;
 @FacesValidator("validadorFechasMed")
 public class validadorFechasMedicamento1 implements Validator {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(validadorFechasMedicamento1.class);
+
 //    @Inject
 //    private InputElement<Date> fechaIngreso;
     @Inject

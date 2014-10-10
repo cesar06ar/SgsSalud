@@ -18,32 +18,19 @@ package edu.sgssalud.controller.security;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import edu.sgssalud.util.PersistenceUtil;
-import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import org.picketlink.idm.api.Group;
-import org.picketlink.idm.api.IdentitySearchCriteriumType;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.SortOrder;
 import org.picketlink.idm.api.UnsupportedCriterium;
 import org.picketlink.idm.api.User;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.IdentitySearchCriteriaImpl;
-import org.picketlink.idm.impl.api.model.SimpleGroup;
 
 /**
  *

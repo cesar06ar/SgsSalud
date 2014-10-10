@@ -46,7 +46,7 @@ import org.ocpsoft.rewrite.servlet.config.HttpConfigurationProvider;
  */
 public class ProjectRewriteConfiguration extends HttpConfigurationProvider implements NonEnriching
 {
-   private static final String PROJECT = "[a-zA-Z0-9-]+";
+//   private static final String PROJECT = "[a-zA-Z0-9-]+";
 
    @Override
    public Configuration getConfiguration(final ServletContext context)
@@ -54,7 +54,7 @@ public class ProjectRewriteConfiguration extends HttpConfigurationProvider imple
       return ConfigurationBuilder
                .begin().defineRule();
 
-               // Canonicalize project name TODO support outbound
+
 //               .defineRule()
 //               .when(Direction.isInbound().andNot(Path.matches(".*xhtml")).and(
 //                        Path.matches("/{profile}/{project}")
@@ -62,7 +62,7 @@ public class ProjectRewriteConfiguration extends HttpConfigurationProvider imple
 //                                 .where("profile")
 //                                 .constrainedBy(new RegexConstraint("(?=.*[A-Z]+.*).*"))
 //                                 .transformedBy(new ToLowerCase())
-//                                 // TODO this creates an implicit AND operator... probably need an alternative
+
 //                                 .where("project")
 //                                 .constrainedBy(new RegexConstraint("(?=.*[A-Z]+.*).*"))
 //                                 .transformedBy(new ToLowerCase())))
@@ -99,7 +99,7 @@ public class ProjectRewriteConfiguration extends HttpConfigurationProvider imple
 //               })
 //               /**
 //                * <p/>
-//                * TODO we need a better way to figure out if a profile does not exist, then to show something else
+
 //                * perhaps a database validation or constraint? on the above profile property injection?
 //                */
 //               .addRule(Join.path("/{profile}").to("/pages/profile.xhtml")

@@ -21,7 +21,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -82,15 +81,12 @@ public class Structure extends DeletableObject<Structure> implements Serializabl
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof Structure)) {
             return false;
         }
         Structure other = (Structure) object;
-        if ((this.getId() == null && other.getId() != null) || (this.getId() != null && !this.getId().equals(other.getId()))) {
-            return false;
-        }
-        return true;
+        return (this.getId() != null || other.getId() == null) && (this.getId() == null || this.getId().equals(other.getId()));
     }
 
     @Override

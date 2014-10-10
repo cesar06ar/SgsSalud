@@ -31,9 +31,6 @@ import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.util.UI;
-import org.jboss.seam.international.status.Messages;
-import org.jboss.seam.security.Credentials;
-import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.api.IdentitySession;
@@ -56,18 +53,13 @@ public class SecurityHome implements Serializable {
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(SecurityHome.class);
     @Inject
     @Web
-    private EntityManager em;
-    @Inject
-    private Identity identity;
-    @Inject
-    private Credentials credentials;
+    private EntityManager em; 
     @Inject
     private IdentitySession security;
     @Inject
     private ProfileService ps;
     @Inject
     private SecurityGroupService securityGroupService;
-    private Messages msg;
     private String username;
     private String groupname;
     private Group group;
@@ -185,8 +177,7 @@ public class SecurityHome implements Serializable {
      */
     public List<SelectItem> getGroupsAsSelectItem() {
         List<SelectItem> items = new ArrayList<SelectItem>();
-        SelectItem item = null;
-        item = new SelectItem(null, UI.getMessages("common.choice"));
+        SelectItem item = new SelectItem(null, UI.getMessages("common.choice"));
         items.add(item);
         try {
             for (org.picketlink.idm.api.Group g : security.getPersistenceManager().findGroup("GROUP")) {

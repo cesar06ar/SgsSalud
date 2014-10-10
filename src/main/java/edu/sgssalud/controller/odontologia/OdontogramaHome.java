@@ -41,7 +41,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.seam.transaction.Transactional;
 
 /**
  * @author cesar
@@ -49,8 +48,7 @@ import org.jboss.seam.transaction.Transactional;
 @Named
 @ViewScoped
 public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements Serializable {
-
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(OdontogramaHome.class);
+    
     @Inject
     @Web
     private EntityManager em;
@@ -139,8 +137,6 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     @Override
     protected Odontograma createInstance() {
         //prellenado estable para cualquier clase 
-
-        Date now = Calendar.getInstance().getTime();
         Odontograma odontograma = new Odontograma();
 
         //fichaMedic.setResponsable(null);    //cambiar atributo a         
@@ -161,7 +157,6 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
     @TransactionAttribute
     public String guardar() {
         String salida = null;
-        Date now = Calendar.getInstance().getTime();
         try {
             if (getInstance().isPersistent()) {
                 save(getInstance());
@@ -218,10 +213,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
             ban = true;
 ////            listaDientes = getInstance().getDientes();
         }
-        //TODO.. falta agregar responsable       
-        //System.out.println("Dientes Seleccionados :__________________" + getListaDientes().size() + " " + listaDientes.toString());
-        //System.out.println("Tratamientos:__________________" + tratamiento.toString());        
-        //System.out.println("Persistir dientes 0:__________________");
+
         String log1 = "";
         if (ban) {
             if (!panel3) {
@@ -274,14 +266,7 @@ public class OdontogramaHome extends BussinesEntityHome<Odontograma> implements 
                                 }
                             } else if (nombreTratamiento.equals(UI.getMessages("tratamiento.protesisFija"))) {
                                 if (listaDientes.size() >= 2) {
-                                    if (!dienteI.getId().equals(listaDientes.get(i)) && !dienteS.getId().equals(listaDientes.get(i))) {
-                                        //System.out.println("INGRESO a enlistar dientes");
-//                                        for (Diente dInter : listaDientesSup) {
-//                                            if (dInter.getId().equals(listaDientes.get(i).getId())) {
-//                                                listaDientesInf.add(dInter);
-//                                            }
-//                                        }
-                                    }
+                                    
                                     if (i == 0) {
                                         tratamiento.setNombreAux(UI.getMessages("tratamiento.protesisFija.inicio"));
                                     } else if (i == (listaDientes.size() - 1)) {

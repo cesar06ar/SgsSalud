@@ -15,28 +15,21 @@
  */
 package edu.sgssalud.service.farmacia;
 
-import com.smartics.common.action.report.JasperReportAction;
 import com.smartics.common.action.report.JasperReportAction1;
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.reportes.ReporteListas;
 import edu.sgssalud.controller.reportes.ReporteReceta;
 import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.util.Lists;
-import edu.sgssalud.util.QueryData;
-import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -47,8 +40,6 @@ import javax.servlet.ServletContext;
 import org.jboss.seam.security.Identity;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -59,9 +50,8 @@ import org.primefaces.model.SortOrder;
 public class RecetaListaServicio implements Serializable { //extends LazyDataModel<Receta>
 
     private static final long serialVersionUID = 13L;
-    private static final int MAX_RESULTS = 13;
     private static final String REPORTE_RECETA = "recetaMedica1";
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(RecetaListaServicio.class);
+
     @Inject
     @Web
     private EntityManager em;
@@ -265,8 +255,6 @@ public class RecetaListaServicio implements Serializable { //extends LazyDataMod
             FacesMessage msg = new FacesMessage(UI.getMessages("El Medicamento") + " ha sido entregado", "");
             FacesContext.getCurrentInstance().addMessage("", msg);
             this.renderReceta();
-        } else {
-            
         }
 
 //        reportes.init();

@@ -109,7 +109,7 @@ body * {
 	display: inline;
 	float: left;
 	z-index: 5;
-	font: Regular 12px tahoma;
+//	font: Regular 12px tahoma;
 }
 
 .logo {
@@ -539,7 +539,7 @@ div.pagination span.disabled {
 	padding: 0px;
 	text-align: left;
 	/*background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;*/
-	font: Regular 12px myriad, roman;
+	//font: Regular 12px myriad, roman;
 	color: #828E99;
 }
 
@@ -565,7 +565,7 @@ div.pagination span.disabled {
 	bottom: -72px;
 	padding: 18px;
 	color: #F49016;
-	font: Regular 10px myriad, roman;
+//	font: Regular 10px myriad, roman;
 }
 
 .slot-02 {
@@ -575,7 +575,7 @@ div.pagination span.disabled {
 	padding: 0px 0px 0px;
 	text-align: left;
 	/*background: url(#{request.contextPath}/resources/images/cursos.jpg) bottom left no-repeat;*/
-	font: Regular 12px myriad, roman;
+//	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
 
@@ -601,7 +601,7 @@ div.pagination span.disabled {
 	bottom: -72px;
 	padding: 18px;
 	color: #87C009;
-	font: Regular 10px myriad, roman;
+	//font: Regular 10px myriad, roman;
 }
 
 .slot-03 {
@@ -611,7 +611,7 @@ div.pagination span.disabled {
 	padding: 0px 0px 0px;
 	text-align: left;
 	/*background: url(#{request.contextPath}/resources/images/aulas.jpg) bottom left no-repeat;*/
-	font: Regular 12px myriad, roman;
+//	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
 
@@ -637,7 +637,7 @@ div.pagination span.disabled {
 	bottom: -72px;
 	padding: 18px;
 	color: #1C6CA0;
-	font: Regular 10px myriad, roman;
+//	font: Regular 10px myriad, roman;
 }
 
 .slot-04 {
@@ -647,7 +647,7 @@ div.pagination span.disabled {
 	padding: 0px 0px 0px;
 	text-align: left;
 	/*background: url(#{request.contextPath}/resources/images/redes.jpg) bottom left no-repeat;*/
-	font: Regular 12px myriad, roman;
+//	font: Regular 12px myriad, roman;
 	color: #828E99;
 }
 
@@ -674,7 +674,7 @@ div.pagination span.disabled {
 	bottom: -72px;
 	padding: 18px;
 	color: #1F5C80;
-	font: Regular 10px myriad, roman;
+//	font: Regular 10px myriad, roman;
 }
 
 .eqaulers {
@@ -793,21 +793,21 @@ div.pagination span.disabled {
 
 .eqaula-id {
 	color: #476373;
-	font: Regular 12px tahoma;
+//	font: Regular 12px tahoma;
 	float: right;
 	padding-bottom: 10px;
 }
 
 .password {
 	color: #476373;
-	font: Regular 12px tahoma;
+//	font: Regular 12px tahoma;
 	float: right;
 	padding-bottom: 10px;
 }
 
 .submit-button {
 	color: #476373;
-	font: Regular 12px tahoma;
+//	font: Regular 12px tahoma;
 	float: right;
 	padding-bottom: 10px;
 }

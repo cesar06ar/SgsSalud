@@ -4,12 +4,7 @@
        xmlns:plidm="urn:java:org.jboss.seam.security.management.picketlink"
        xmlns:mail="urn:java:org.jboss.seam.mail.core"
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://jboss.org/schema/cdi/beans_1_0.xsd">
-
-    <!-- em:EntityManager>
-        <s:Produces />
-        <em:PersistenceContext unitName="primary" />
-    </em:EntityManager -->
-
+         
     <plidm:JpaIdentityStoreConfiguration>
         <s:replaces />
         <plidm:identityClass>edu.sgssalud.model.security.IdentityObject</plidm:identityClass>
@@ -20,8 +15,7 @@
         <plidm:relationshipClass>edu.sgssalud.model.security.IdentityObjectRelationship</plidm:relationshipClass>
         <plidm:relationshipClass>edu.sgssalud.model.security.IdentityObjectRelationshipType</plidm:relationshipClass>
         <plidm:roleTypeClass>edu.sgssalud.model.security.IdentityRoleName</plidm:roleTypeClass>
-        
-        
+                
     </plidm:JpaIdentityStoreConfiguration>
     
     <mail:MailConfig

@@ -25,8 +25,6 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Current;
-import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.config.SettingHome;
 import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.service.SettingService;
 import edu.sgssalud.util.UI;

@@ -45,7 +45,6 @@ import javax.persistence.NoResultException;
 import javax.servlet.ServletContext;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
-import org.jboss.seam.security.Authenticator.AuthenticationStatus;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.events.DeferredAuthenticationEvent;
 import org.jboss.seam.security.external.api.ResponseHolder;

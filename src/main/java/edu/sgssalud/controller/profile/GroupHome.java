@@ -24,7 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -107,10 +106,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             wire();
             loadProfileHome(); //Cargar el objeto GroupHome relacionado al grupo
             makeColumnsTemplate(); //Establecer las columnas a mostrar en la tabla
-        } else {
-            //TODO ver forma de cargas con profileId y groupName
-            //Group g = bussinesEntityService.findByName(name)
-        }
+        } 
         log.info("eqaula --> Loaded instance" + getInstance());
     }
 
@@ -164,11 +160,10 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
     
     private BussinesEntity makeBussinessEntity(Group g){
         Date now = Calendar.getInstance().getTime();
-            //TODO internacionalizar cadenas estáticas
             String name = "Nuevo " + (g.getProperty() != null ? g.getProperty().getLabel() : "elemento") + " " + (g.findOtherMembers(getProfile()).size() + 1);
             BussinesEntity entity = new BussinesEntity();
             entity.setName(name);
-            //TODO implementar generador de códigos para entidad de negocio
+
             entity.setCode("" + now.getTime());
             entity.setCreatedOn(now);
             entity.setLastUpdate(now);
@@ -201,7 +196,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
                 }
                 //overwrite defaults attributes
                 //if (!getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
-                    //TODO idear mecanismo para que sea configurable
+
                     //getInstance().setName(getInstance().getBussinessEntityAttribute("nombres").getValue().toString() + getInstance().getBussinessEntityAttribute("apellidos").getValue().toString());
                     //getInstance().setCode(getInstance().getBussinessEntityAttribute("cedula").getValue().toString());
                 //}
@@ -284,7 +279,7 @@ public class GroupHome extends BussinesEntityHome<Group> implements Serializable
             }
         }
         if (this.columns.isEmpty() || getInstance().getProperty().isShowDefaultBussinesEntityProperties()){
-            //TODO aplicar internacionalización
+            
             this.columns.add(new ColumnModel("name", "name"));
             this.columns.add(new ColumnModel("code", "code"));
         }

@@ -41,7 +41,7 @@
                     </h:link>   
                     #{' '}
                     <p:commandLink id="button-delete" type="button" value="#{messages['common.delete']}" ajax="true"
-                                   onclick="#{'deletedDlg.show();'}" immediate="true" styleClass="btn success" 
+                                   onclick="#{'deletedDlg.show();'}" immediate="true" styleClass="btn" 
                                    disabled="#{empty examenLabListaServicio.examenSeleccionado}">                          
                         <p:ajax process="@this" update=":cancel-dialog" />
                     </p:commandLink>
@@ -56,14 +56,9 @@
                              lazy="true" selectionMode="single"   
                              resizableColumns="true" liveResize="true"
                              rowKey="#{examenLab_.id}" selection="#{examenLabListaServicio.examenSeleccionado}">
-                    <!--widgetVar="medTable" filteredValue="# {examenLabListaServicio.resultList}"
-                    
-           <f:facet name="header">  
-               <p:outputPanel>  
-                   <h:outputText value="Buscar Examen" />  
-                   <p:inputText id="globalFilter" onkeyup="medTable.filter();" style="width:150px" />  
-               </p:outputPanel>  
-           </f:facet>-->
+                    <f:facet name="header">
+                        <h:outputText value="Listado total de examen: #{examenLabListaServicio.resultList.size()}"/>
+                    </f:facet>
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente-->
                     <p:ajax event="rowSelect" listener="#{examenLabListaServicio.onRowSelect}"
                             update=":form:button-edit :form:messages :form:tablaExamenes :form:button-delete"/>   
@@ -97,19 +92,19 @@
 
             </h:form>
             <p:dialog id="cancel-dialog" header="#{messages['common.delete.confirm']}" widgetVar="deletedDlg" resizable="false" modal="true">  
-            <h:form id="form-dialog-confirm-delete">
-                <h:panelGroup layout="block" style="padding:5px;">  
-                    <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
-                </h:panelGroup>  
-                <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
-                                 action="#{examenLabListaServicio.borrarExamen()}"
-                                 ajax="true" process="@this"  update="@form :form:tablaExamenes"
-                                 style="margin-top:10px;">  
-                </p:commandButton>  
-                <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
-                                 style="margin-top:10px;"/>  
-            </h:form>
-        </p:dialog>
+                <h:form id="form-dialog-confirm-delete">
+                    <h:panelGroup layout="block" style="padding:5px;">  
+                        <h:outputText value="#{messages['common.delete.confirm.message']}"/>  
+                    </h:panelGroup>  
+                    <p:commandButton value="#{messages['common.yes']}" oncomplete="deletedDlg.hide();"  
+                                     action="#{examenLabListaServicio.borrarExamen()}"
+                                     ajax="true" process="@this"  update="@form :form:tablaExamenes"
+                                     style="margin-top:10px;">  
+                    </p:commandButton>  
+                    <p:commandButton value="#{messages['common.no']}" type="button" onclick="deletedDlg.hide();"  
+                                     style="margin-top:10px;"/>  
+                </h:form>
+            </p:dialog>
         </ui:define>        
     </ui:composition>
 </html>

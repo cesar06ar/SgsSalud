@@ -19,12 +19,8 @@ package edu.sgssalud.service.medicina;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 
 /**
  *
@@ -32,7 +28,7 @@ import javax.persistence.criteria.Root;
  */
 public class SignosVitalesServicio extends PersistenceUtil<SignosVitales> implements Serializable{
     private static final long serialVersionUID = 234L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaMedicaServicio.class);
+
     
     
     public SignosVitalesServicio(){

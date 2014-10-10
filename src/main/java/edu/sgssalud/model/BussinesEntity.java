@@ -70,7 +70,7 @@ import edu.sgssalud.util.Lists;
 public class BussinesEntity extends DeletableObject<BussinesEntity> {
     
     private static final long serialVersionUID = -3282665873474370357L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntity.class);
+
     @ManyToOne(optional = true)
     @JoinColumn(name = "author", nullable = true)
     private Profile responsable;
@@ -112,7 +112,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
     }
     
     public void setGroups(List<Group> groups) {
-        //TODO this.groups = groups;
+
     }
     
     public List<Group> getGroups() {
@@ -327,7 +327,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
         for (Structure s : _type.getStructures()) {
             for (Property a : s.getProperties()) {
                 if (a.getType().equals(Group.class.getName())) {
-                    //TODO support for groups into groups
+
                 } else if (a.getType().equals(Structure.class.getName())) {
                     loadStructure(a, bes);
                 } else {
@@ -359,7 +359,7 @@ public class BussinesEntity extends DeletableObject<BussinesEntity> {
             g.setLastUpdate(now);
             g.setActivationTime(now);
             g.setExpirationTime(Dates.addDays(now, 364));
-            g.setResponsable(null); //TODO Establecer al usuario actual
+            g.setResponsable(null); //Establecer al usuario actual
             g.setProperty(attr); //almacenar en memoria para dibujar GUI
             g.buildAttributes(bes);
             this.add(g);

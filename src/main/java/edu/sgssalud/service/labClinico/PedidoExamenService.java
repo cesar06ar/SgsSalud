@@ -15,16 +15,11 @@
  */
 package edu.sgssalud.service.labClinico;
 
-import edu.sgssalud.model.farmacia.Medicamento;
-import edu.sgssalud.model.farmacia.Receta_Medicamento;
-import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio_;
 import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
-import edu.sgssalud.util.Dates;
 import edu.sgssalud.util.PersistenceUtil;
-import edu.sgssalud.util.StringValidations;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

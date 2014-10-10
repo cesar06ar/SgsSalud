@@ -45,7 +45,6 @@ import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.hibernate.validator.constraints.Email;
 
 import org.hibernate.annotations.Index;
-import org.jboss.solder.logging.Logger;
 
 @Entity
 @Table(name = "Profile", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
@@ -64,7 +63,6 @@ import org.jboss.solder.logging.Logger;
 })
 public class Profile extends BussinesEntity implements Serializable {
 
-    private static Logger log = Logger.getLogger(Profile.class);
     private static final long serialVersionUID = 274770881776410973L;
     @Column(nullable = true)
     private String firstname;

@@ -34,7 +34,7 @@ import edu.sgssalud.util.PersistenceUtil;
 public class BussinesEntityTypeService extends PersistenceUtil<BussinesEntityType> {
 
     private static final long serialVersionUID = 6569835981443699931L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityTypeService.class);
+
 
     public BussinesEntityTypeService() {
         super(BussinesEntityType.class);

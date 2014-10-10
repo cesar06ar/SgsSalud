@@ -37,6 +37,7 @@ public class Expressions implements Serializable
    
    /**
     * Get the JBoss EL ExpressionFactory
+     * @return 
     */
    public ExpressionFactory getExpressionFactory()
    {
@@ -46,6 +47,7 @@ public class Expressions implements Serializable
    /**
     * Get an appropriate ELContext. If there is an active JSF request,
     * use JSF's ELContext. Otherwise, use one that we created.
+     * @return 
     */
    public ELContext getELContext()
    {
@@ -57,6 +59,7 @@ public class Expressions implements Serializable
     * Create a value expression.
     * 
     * @param expression a JBoss EL value expression
+     * @return 
     */
    public ValueExpression<Object> createValueExpression(String expression)
    {
@@ -67,6 +70,7 @@ public class Expressions implements Serializable
     * Create a method expression.
     * 
     * @param expression a JBoss EL method expression
+     * @return 
     */
    public MethodExpression<Object> createMethodExpression(String expression)
    {
@@ -76,8 +80,10 @@ public class Expressions implements Serializable
    /**
     * Create a value expression.
     * 
+     * @param <T>
     * @param expression a JBoss EL value expression
     * @param type the type of the value 
+     * @return  
     */
    public <T> ValueExpression<T> createValueExpression(final String expression, final Class<T> type)
    {
@@ -87,6 +93,7 @@ public class Expressions implements Serializable
          private javax.el.ValueExpression facesValueExpression;
          private javax.el.ValueExpression seamValueExpression;
          
+         @Override
          public javax.el.ValueExpression toUnifiedValueExpression()
          {
             if ( isFacesContextActive() )
@@ -112,21 +119,25 @@ public class Expressions implements Serializable
             return getExpressionFactory().createValueExpression( getELContext(), expression, type );
          }
          
+         @Override
          public T getValue()
          {
             return (T) toUnifiedValueExpression().getValue( getELContext() );
          }
          
+         @Override
          public void setValue(T value)
          {
             toUnifiedValueExpression().setValue( getELContext(), value );
          }
          
+         @Override
          public String getExpressionString()
          {
             return expression;
          }
          
+         @Override
          public Class<T> getType()
          {
             return (Class<T>) toUnifiedValueExpression().getType( getELContext() );
@@ -138,9 +149,11 @@ public class Expressions implements Serializable
    /**
     * Create a method expression.
     * 
+     * @param <T>
     * @param expression a JBoss EL method expression
     * @param type the method return type
     * @param argTypes the method parameter types
+     * @return 
     */
    public <T> MethodExpression<T> createMethodExpression(final String expression, final Class<T> type, final Class... argTypes)
    {
@@ -149,6 +162,7 @@ public class Expressions implements Serializable
          private javax.el.MethodExpression facesMethodExpression;
          private javax.el.MethodExpression seamMethodExpression;
          
+         @Override
          public javax.el.MethodExpression toUnifiedMethodExpression()
          {
             if ( isFacesContextActive() )
@@ -174,11 +188,13 @@ public class Expressions implements Serializable
             return getExpressionFactory().createMethodExpression( getELContext(), expression, type, argTypes );
          }
          
+         @Override
          public T invoke(Object... args)
          {
             return (T) toUnifiedMethodExpression().invoke( getELContext(), args );
          }
          
+         @Override
          public String getExpressionString()
          {
             return expression;

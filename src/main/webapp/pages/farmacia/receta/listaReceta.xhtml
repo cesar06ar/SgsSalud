@@ -71,6 +71,9 @@
                              rowKey="#{receta_.id}"
                              selection="#{recetaListaServicio.recetaSeleccionada}"                             
                              selectionMode="single">
+                    <f:facet name="header">
+                        <h:outputText value="Listado total de recetas medicas: #{recetaListaServicio.resultList.size()}"/>
+                    </f:facet>
                     <!--Acciones Ajax, que me permiten seleccionar y desseleccionar un paciente
                     <p:ajax event="colResize" />-->
                     <p:ajax event="rowSelect" listener="#{recetaListaServicio.onRowSelect}"

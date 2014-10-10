@@ -15,13 +15,9 @@
  */
 package edu.sgssalud.service.medicina;
 
-import edu.sgssalud.Sgssalud;
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.medicina.FichaMedica;
-import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.security.authorization.SecurityRules;
-import edu.sgssalud.service.SettingService;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
@@ -41,7 +37,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -58,7 +53,6 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica> {
 
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
-    private static Logger log = Logger.getLogger(FichaMedicaListaServicio.class);
 
     @Inject
     @Web
@@ -76,7 +70,7 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica> {
     private Date fechaF;
     private WebServiceSGAClientConnection coneccionSGA = new WebServiceSGAClientConnection();
 
-    /*Método para inicializar tabla*/
+    
     public FichaMedicaListaServicio() {
         setPageSize(MAX_RESULTS);
         resultList = new ArrayList<FichaMedica>();
@@ -115,7 +109,7 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica> {
 
         return qData.getResult();
     }
-    /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
+
 
     /*Métodos que me permiten seleccionar un objeto de la tabla*/
     @Override
@@ -130,12 +124,12 @@ public class FichaMedicaListaServicio extends LazyDataModel<FichaMedica> {
 
     public void onRowSelect(SelectEvent event) {
         fichaMedicSeleccionada = (FichaMedica) event.getObject();
-        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.selected"), ((FichaMedica) event.getObject()).getNumeroFicha().toString());
+        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " seleccionada", ((FichaMedica) event.getObject()).getNumeroFicha().toString());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " " + UI.getMessages("common.unselected"), ((FichaMedica) event.getObject()).getNumeroFicha().toString());
+        FacesMessage msg = new FacesMessage(UI.getMessages("FichaMedica") + " no seleccionada", ((FichaMedica) event.getObject()).getNumeroFicha().toString());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setFichaMedicSeleccionada(null);
     }

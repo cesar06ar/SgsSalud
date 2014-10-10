@@ -15,21 +15,11 @@
  */
 package edu.sgssalud.model.odontologia;
 
-import edu.sgssalud.model.medicina.ConsultaMedica;
-import edu.sgssalud.model.servicios.Servicio;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,11 +27,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import javax.persistence.Transient;
 
 /**
  *
@@ -90,7 +77,7 @@ public class Tratamiento implements Serializable {
     public Tratamiento() {
     }
 
-    public Tratamiento(String nombre, String ruta) {
+    public Tratamiento(String nombre) {
         this.nombre = nombre;        
     }
 
@@ -202,15 +189,12 @@ public class Tratamiento implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof Tratamiento)) {
             return false;
         }
         Tratamiento other = (Tratamiento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

@@ -16,31 +16,22 @@
 package edu.sgssalud.service.labClinico;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.farmacia.Receta;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
-import edu.sgssalud.model.labClinico.Parametros;
-import edu.sgssalud.profile.ProfileService;
-import edu.sgssalud.service.farmacia.RecetaListaServicio;
-import edu.sgssalud.service.farmacia.RecetaServicio;
-import edu.sgssalud.util.Lists;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.ejb.TransactionAttribute;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -56,7 +47,6 @@ import org.primefaces.model.SortOrder;
 public class ExamenLabListaServicio extends LazyDataModel<ExamenLabClinico> {
 
     private static final long serialVersionUID = 1L;
-    private static final int MAX_RESULTS = 10;
 
     @Inject
     @Web

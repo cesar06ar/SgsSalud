@@ -15,19 +15,10 @@
  */
 package edu.sgssalud.util;
 
-import com.google.common.io.Files;
-import edu.sgssalud.model.medicina.HistoriaClinica;
-import java.io.File;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,7 +31,7 @@ public class Lists {
     /**
      * Convierte una lista de objetos en una cadena separada por comas, con los
      * elementos de la lista. Los objetos de la lista deben implementar el
-     * método toString
+
      *
      * @param list la lista sobre la cual se construye la cadena de elementos
      * seperadas por comas
@@ -66,7 +57,7 @@ public class Lists {
     /**
      * Convierte una lista de objetos en una cadena separada por comas, con los
      * elementos de la lista. Los objetos de la lista deben implementar el
-     * método toString
+
      *
      * @param list la lista sobre la cual se construye la cadena de elementos
      * seperadas por comas
@@ -93,7 +84,7 @@ public class Lists {
     /**
      * Convierte una lista de objetos en una cadena separada por separador, con
      * los elementos de la lista. Los objetos de la lista deben implementar el
-     * método toString
+     
      *
      * @param list la lista sobre la cual se construye la cadena de elementos
      * seperadas por comas
@@ -120,7 +111,7 @@ public class Lists {
     /**
      * Convierte una lista de objetos en una cadena separada por separador, con
      * los elementos de la lista. Los objetos de la lista deben implementar el
-     * método toString
+     *
      *
      * @param list la lista sobre la cual se construye la cadena de elementos
      * seperadas por comas
@@ -161,7 +152,7 @@ public class Lists {
      * @return Truncated text
      */
     public static String truncateAtWhitespace(String text, int length) {
-        int desired, lowerBound, upperBound;
+        int lowerBound, upperBound;
         /*
          * Make sure we have a reasonable length to work with
          */
@@ -232,10 +223,10 @@ public class Lists {
     final static Charset ENCODING = StandardCharsets.UTF_8;
 
     public static void main(String args[]) {
-        String aFileName = "/home/jlgranda/iaenvirtual/selenium/CrearCurso";
-        int MAX = 114;
-        Date now = Calendar.getInstance().getTime();
-        Date caduca = new Date("22/01/2014");
+//        String aFileName = "/home/jlgranda/iaenvirtual/selenium/CrearCurso";
+//        int MAX = 114;
+//        Date now = Calendar.getInstance().getTime();
+//        Date caduca = new Date("22/01/2014");
 //        caduca.setDate(22);
 //        caduca.setMonth(01);
 //        caduca.setYear(2014);

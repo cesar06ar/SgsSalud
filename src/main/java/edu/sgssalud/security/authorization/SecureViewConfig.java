@@ -55,7 +55,7 @@ public interface SecureViewConfig {
         ADMIN,
         @ViewPattern("/pages/secretaria/*")                        
         @Secretaria
-        SECRETARIA,
+        SECRETARIA,                  
         @ViewPattern("/pages/farmacia/*")
         @Farmaceutica   
         FARMACEUTICOS,        

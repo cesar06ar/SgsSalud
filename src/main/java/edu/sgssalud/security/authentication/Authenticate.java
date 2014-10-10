@@ -4,8 +4,6 @@
 package edu.sgssalud.security.authentication;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
 import java.io.IOException;
 import javax.enterprise.context.RequestScoped;
@@ -16,34 +14,26 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import edu.sgssalud.util.UI;
 import javax.persistence.EntityManager;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator.AuthenticationStatus;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
-import org.jboss.seam.security.events.DeferredAuthenticationEvent;
 import org.jboss.seam.security.events.LoggedInEvent;
 import org.jboss.seam.security.events.LoginFailedEvent;
-import org.jboss.seam.security.external.openid.OpenIdAuthenticator;
 import org.jboss.seam.security.management.IdmAuthenticator;
 import org.ocpsoft.logging.Logger;
 import org.ocpsoft.rewrite.servlet.http.event.HttpInboundServletRewrite;
 import org.ocpsoft.rewrite.servlet.impl.HttpInboundRewriteImpl;
-import org.picketlink.idm.api.Credential;
 import org.picketlink.idm.api.User;
 import edu.sgssalud.service.paciente.PacienteServicio;
-import java.util.logging.Level;
 import javax.annotation.PostConstruct;
-import org.jasypt.util.password.BasicPasswordEncryptor;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.BaseAuthenticator;
-import org.picketlink.idm.api.AttributesManager;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.api.PasswordCredential;
-import org.picketlink.idm.impl.api.model.SimpleUser;
 
 /**
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
@@ -54,8 +44,8 @@ public class Authenticate extends BaseAuthenticator implements Authenticator {
 
     //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(Authenticate.class);
     Logger logger = Logger.getLogger(Authenticate.class);
-    @Inject
-    private HttpSession session;
+//    @Inject
+//    private HttpSession session;
     @Inject
     private FacesContext context;
     @Inject
@@ -74,8 +64,8 @@ public class Authenticate extends BaseAuthenticator implements Authenticator {
     private ProfileService profileService;
     @Inject
     private PacienteServicio pacienteServic;
-    @Inject
-    private OpenIdAuthenticator openAuth;
+//    @Inject
+//    private OpenIdAuthenticator openAuth;
 
     @PostConstruct
     public void init() {
@@ -144,7 +134,7 @@ public class Authenticate extends BaseAuthenticator implements Authenticator {
         if (exception != null) {
             logger.error("Login failed due to exception" + identity.getAuthenticatorName() + ", "
                     + identity.getAuthenticatorClass() + ", " + identity);
-            // TODO , exception );
+
             //messages.warn("Whoops! Something went wrong with your login. Care to try again? We'll try to figure out what went wrong.");
             messages.warn(UI.getMessages("common.login.fail"));
 

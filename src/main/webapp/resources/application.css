@@ -100,8 +100,8 @@ section>.row {
     background-image: -webkit-linear-gradient(#377179, #222222);
     background-image: -moz-linear-gradient(#377179, #222222);
     background-image: -o-linear-gradient(top, #377179, #222222);
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#377179),
-        to(#222222) );
+//    background-image: -khtml-gradient(linear, left top, left bottom, from(#377179),
+ //       to(#222222) );
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#377179',
         endColorstr='#222222', GradientType=0 ); /* IE8 and down */
 }

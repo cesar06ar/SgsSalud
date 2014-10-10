@@ -33,7 +33,6 @@ import edu.sgssalud.util.PersistenceUtil;
  */
 public class SettingService extends PersistenceUtil<Setting> {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityService.class);
     private static final long serialVersionUID = -2654253198159918622L;
 
     public SettingService() {

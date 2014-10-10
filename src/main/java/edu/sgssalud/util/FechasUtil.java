@@ -4,13 +4,17 @@
  */
 package edu.sgssalud.util;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.Years;
 
 /**
  *
@@ -22,13 +26,21 @@ public class FechasUtil {
      * @param args the command line arguments
      */
 //    public static void main(String[] args) {
-//        // TODO code aplication logic here     
 //
 //        Date fnat = new Date();
 //
 //        System.out.println("fecha en String " + FechasUtil.getFecha(fnat));
 //        System.out.println(" es:  " + FechasUtil.calcularEdad(fnat));
-//    }
+//    }  
+    public static int getEdad(Date fecNac) {
+        if (fecNac != null) {
+            DateMidnight birthdate = new DateMidnight(fecNac.getTime());
+            Years y = Years.yearsBetween(birthdate, new DateTime());
+            return y.getYears();
+        }
+        return 0;
+    }
+
     public static Integer calcularEdad(Date fecha) {
         SimpleDateFormat formateador = new SimpleDateFormat("dd-mm-yyyy");
         String fechaS = formateador.format(fecha);
@@ -158,7 +170,7 @@ public class FechasUtil {
     public static boolean editable(Date fecha, Date hora, int horas) {
         Calendar now = Calendar.getInstance();
         Calendar cal = Calendar.getInstance();
-        Calendar horaCon = Calendar.getInstance();
+//        Calendar horaCon = Calendar.getInstance();
         List<String> horasLis = Arrays.asList(FechasUtil.getHoraActual(hora).split(":"));
         int horaC = Integer.parseInt(horasLis.get(0));
         int minute = Integer.parseInt(horasLis.get(1));
@@ -171,14 +183,14 @@ public class FechasUtil {
         int horaActual = now.get(Calendar.HOUR);
         int horaConsulta = cal.get(Calendar.HOUR);
         System.out.println("HORA Actual _____  " + horaActual + " hora fecha _________ " + horaConsulta);
-        System.out.println("HORA Actual 1 _____  " +now.toString() + " hora fecha 1_________ " + cal.toString());
+        System.out.println("HORA Actual 1 _____  " + now.toString() + " hora fecha 1_________ " + cal.toString());
 //        if (horaActual > horaConsulta) {
 //            return true;
 //        }
-        if(now.after(cal)){
+        if (now.after(cal)) {
             System.out.println("YA NO SE PUEDE EDITAR");
             return true;
-        }        
+        }
         return false;
     }
 

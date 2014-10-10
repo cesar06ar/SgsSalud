@@ -16,7 +16,6 @@
 package edu.sgssalud.controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,19 +27,12 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.BussinesEntityHome;
-import edu.sgssalud.controller.profile.ProfileHome;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.BussinesEntityType;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.model.Structure;
-import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.security.InitializeDatabase;
 import edu.sgssalud.service.BussinesEntityService;
-import edu.sgssalud.service.BussinesEntityTypeListService;
 import edu.sgssalud.service.BussinesEntityTypeService;
 import org.jboss.seam.transaction.Transactional;
 
@@ -56,9 +48,7 @@ public class BussinesEntityTypeHome extends BussinesEntityHome<BussinesEntityTyp
     private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(BussinesEntityHome.class);
     @Inject
     @Web
-    private EntityManager em;
-    @Inject
-    private BussinesEntityTypeListService bussinesEntityTypeListService;
+    private EntityManager em;    
     @Inject
     private BussinesEntityTypeService bussinesEntityTypeService;
     @Inject

@@ -128,7 +128,7 @@ public class Registration
 
       /*
        * Try twice to work around some state bug in Seam Security
-       * TODO file issue in seam security
+
        */
       String result = identity.login();
       if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
@@ -141,7 +141,7 @@ public class Registration
    @TransactionAttribute
    private void createUser() throws IdentityException
    {
-      // TODO validate username, email address, and user existence
+
       PersistenceManager identityManager = security.getPersistenceManager();
       User user = identityManager.createUser(username);
 
@@ -151,7 +151,7 @@ public class Registration
 
       em.flush();
 
-      // TODO figure out a good pattern for this...
+
       Profile p = new Profile();
       p.setEmail(email);
       p.setUsername(username);
@@ -168,7 +168,7 @@ public class Registration
 
       /*
        * Try twice to work around some state bug in Seam Security
-       * TODO file issue in seam security
+
        */
       String result = identity.login();
       if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {

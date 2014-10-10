@@ -20,7 +20,6 @@ import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.Parametros;
-import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.labClinico.ExamenLabService;
 import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import java.io.Serializable;
@@ -30,7 +29,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.enterprise.event.Event;
@@ -42,8 +40,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.transaction.Transactional;
-import org.primefaces.event.CellEditEvent;
-import org.primefaces.event.RowEditEvent;
 
 /**
  *

@@ -1,15 +1,10 @@
 package edu.sgssalud.service.farmacia;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.farmacia.Medicamento;
-import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.service.BussinesEntityService;
-import edu.sgssalud.service.SettingListService;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,7 +17,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -38,7 +32,7 @@ public class MedicamentoListaServicio extends LazyDataModel<Medicamento> {
 
     private static final long serialVersionUID = 5L;
     private static final int MAX_RESULTS = 5;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(MedicamentoListaServicio.class);
+
     @Inject
     @Web
     private EntityManager em;

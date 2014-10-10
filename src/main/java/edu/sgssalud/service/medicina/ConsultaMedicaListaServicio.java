@@ -17,31 +17,21 @@ package edu.sgssalud.service.medicina;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.medicina.ConsultaMedica;
-import edu.sgssalud.service.farmacia.MedicamentoListaServicio;
-import edu.sgssalud.util.QueryData;
-import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ConversationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -52,8 +42,6 @@ import org.primefaces.model.SortOrder;
 public class ConsultaMedicaListaServicio implements Serializable { //extends LazyDataModel<ConsultaMedica>
 
     private static final long serialVersionUID = 5L;
-    private static final int MAX_RESULTS = 5;
-    //private static Logger log = Logger.getLogger(ConsultaMedicaListaServicio.class);
 
     @Inject
     @Web
@@ -62,12 +50,12 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
     private ConsultaMedicaServicio cms;
     private List<ConsultaMedica> resultList = new ArrayList<ConsultaMedica>();
     private int primerResult = 0;
-    private ConsultaMedica[] consulMedicSeleccionadas;
+
     private ConsultaMedica consulMedicSeleccionada;
     private String parametroBusqueda;
     private Date inicio;// = new Date();
     private Date fin; //= new Date();
-    /*Método para inicializar tabla*/
+    
 
     public ConsultaMedicaListaServicio() {
         //setPageSize(MAX_RESULTS);
@@ -86,7 +74,7 @@ public class ConsultaMedicaListaServicio implements Serializable { //extends Laz
 
     }
 
-    /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
+
     /*@Override
      public List<ConsultaMedica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
      int end = first + pageSize;

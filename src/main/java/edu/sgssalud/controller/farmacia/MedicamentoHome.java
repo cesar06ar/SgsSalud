@@ -26,7 +26,6 @@ import edu.sgssalud.service.farmacia.RecetaServicio;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -120,11 +119,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
     public void setDevolucion(boolean devolucion) {
         this.devolucion = devolucion;
     }
-
-    /*Método para  cargar una instancia de medicamento==>*/
-//    @Produces
-//    //@Named("med")
-//    @Current    
+    
     @TransactionAttribute   //    
     public Medicamento load() {
         if (isIdDefined()) {
@@ -208,8 +203,8 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                         Receta_Medicamento cardex = new Receta_Medicamento();
                         cardex.setIngreso(getCantidad());
                         cardex.setMedicamento(getInstance());
-                        int saldo = cantidad + this.saldoCardexAnterior();
-                        //System.out.println("Guardar Medicamento_______--" + saldo);
+                        int saldo = cantidad + this.saldoCardexAnterior();                        
+                        cardex.setDetalle("Ingreso de medicamento por: " + getInstance().getReferencia());
                         cardex.setSaldo(saldo);
                         cardex.setFecha(now);
                         save(cardex);
@@ -220,7 +215,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                     Receta_Medicamento cardex = new Receta_Medicamento();
                     cardex.setCantidad(getInstance().getUnidades());
                     cardex.setMedicamento(getInstance());
-                    //int saldo = this.saldoCardexAnterior() - getInstance().getUnidades();                    
+                    cardex.setDetalle("Devolución de Medicamento por: " + getInstance().getReferencia());
                     cardex.setSaldo(0);
                     cardex.setFecha(now);
                     save(cardex);
@@ -237,6 +232,7 @@ public class MedicamentoHome extends BussinesEntityHome<Medicamento> implements 
                         cardex.setIngreso(med.getCantidadIngreso());
                         cardex.setMedicamento(med);
                         cardex.setSaldo(med.getCantidadIngreso());
+                        cardex.setDetalle("Ingreso de nuevo medicamento por: " + getInstance().getReferencia());
                         cardex.setFecha(now);
                         save(cardex);
                     }

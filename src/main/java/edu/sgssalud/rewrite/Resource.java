@@ -48,9 +48,9 @@ import org.ocpsoft.rewrite.servlet.util.ParameterStore;
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
  */
 public class Resource extends HttpCondition {
-    // TODO move to rewrite proper
 
-     // TODO move to rewrite proper
+
+
    private static final Logger log = Logger.getLogger(Resource.class);
 
    private ParameterizedPattern resource = new ParameterizedPattern("/pages/{page}.xhtml");

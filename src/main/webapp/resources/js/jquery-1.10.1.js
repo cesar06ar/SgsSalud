@@ -411,7 +411,7 @@ jQuery.extend({
 	// Handle when the DOM is ready
 	ready: function( wait ) {
 
-		// Abort if there are pending holds or we're already ready
+
 		if ( wait === true ? --jQuery.readyWait : jQuery.isReady ) {
 			return;
 		}
@@ -8626,7 +8626,7 @@ var xhrCallbacks, xhrSupported,
 	xhrId = 0,
 	// #5280: Internet Explorer will keep connections alive if we don't abort on unload
 	xhrOnUnloadAbort = window.ActiveXObject && function() {
-		// Abort all pending requests
+
 		var key;
 		for ( key in xhrCallbacks ) {
 			xhrCallbacks[ key ]( undefined, true );

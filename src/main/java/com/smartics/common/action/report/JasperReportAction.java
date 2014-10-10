@@ -9,7 +9,6 @@ package com.smartics.common.action.report;
 //import com.smartics.common.jsf.JsfUtil;
 import com.smartics.common.report.JasperReportService;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;

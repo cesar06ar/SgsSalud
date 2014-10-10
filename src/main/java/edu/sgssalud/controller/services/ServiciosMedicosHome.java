@@ -36,7 +36,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import org.jboss.seam.security.Identity;
-import org.jboss.seam.transaction.Transactional;
 
 /**
  *
@@ -46,7 +45,7 @@ import org.jboss.seam.transaction.Transactional;
 @ViewScoped
 public class ServiciosMedicosHome extends BussinesEntityHome<Servicio> implements Serializable {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ServiciosMedicosHome.class);
+
     @Inject
     @Web
     private EntityManager em;

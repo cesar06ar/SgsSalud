@@ -25,13 +25,9 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import edu.sgssalud.cdi.Current;
-import edu.sgssalud.cdi.LoggedIn;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
-import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.labClinico.ExamenLabService;
-import edu.sgssalud.service.paciente.PacienteServicio;
-import edu.sgssalud.util.UI;
 
 /**
  *
@@ -44,8 +40,8 @@ public class validadorCodigoExamen implements Validator {
     @Inject
     @Web
     private EntityManager em;
-    @Inject
-    private PacienteServicio ps;
+//    @Inject
+//    private PacienteServicio ps;
     @Inject
     private ExamenLabService examemServicio;
     @Inject

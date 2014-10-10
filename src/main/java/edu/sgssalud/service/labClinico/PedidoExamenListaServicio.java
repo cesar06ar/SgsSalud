@@ -16,14 +16,12 @@
 package edu.sgssalud.service.labClinico;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.security.SecurityGroupService;
 import edu.sgssalud.model.labClinico.PedidoExamenLaboratorio;
 import edu.sgssalud.model.labClinico.ResultadoExamenLabClinico;
 import edu.sgssalud.util.QueryData;
 import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -184,7 +182,6 @@ public class PedidoExamenListaServicio extends LazyDataModel<PedidoExamenLaborat
 
     public void agregarMuestra() {
         System.out.println("Actualizado correctamente :________________ ");
-        Date now = Calendar.getInstance().getTime();
         if (PedidoExamenSeleccionado.isPersistent()) {
             if (PedidoExamenSeleccionado.getEstado().equals("Nuevo")) {
                 PedidoExamenSeleccionado.setEstado("Pendiente");

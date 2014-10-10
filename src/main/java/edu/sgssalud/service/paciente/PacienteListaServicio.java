@@ -16,45 +16,35 @@
 package edu.sgssalud.service.paciente;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.model.config.Setting;
-import org.primefaces.model.LazyDataModel;
 import edu.sgssalud.model.paciente.Paciente;
-import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.security.authorization.SecurityRules;
-import edu.sgssalud.service.SettingService;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
-import edu.sgssalud.util.QueryData;
-import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import edu.sgssalud.web.service.WebServiceSGAClientConnection;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.SortOrder;
 
 /**
  *
  * @author cesar: Esta clase hereda de LazyDataModel de Primefaces, para hacer
  * una carga ligera de datos...
  */
-@Named("pacienteListaServicio")
+@Named
+//@ManagedBean(name = "pacienteListaServicio")
 @ViewScoped
-public class PacienteListaServicio extends LazyDataModel<Paciente> {
+public class PacienteListaServicio implements Serializable { //extends LazyDataModel<Paciente> {
 
-    private static Logger log = Logger.getLogger(PacienteListaServicio.class);
     private static final int MAX_RESULTS = 5;
     /*Inyeción de Dependencias importantes para cargar los datos*/
     @Inject
@@ -64,20 +54,15 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
     private PacienteServicio pacienteServicio;
     @Inject
     private FichaMedicaServicio fichaMedServicio;
-    private List<Paciente> resultList;
+    private List<Paciente> resultList = new ArrayList<Paciente>();
     private int firstResult = 0;
-    private Paciente[] pacientesSeleccionados;
+    //private Paciente[] pacientesSeleccionados;
     private Paciente pacienteSelecionado;
     private String parametroBusqueda;
     private WebServiceSGAClientConnection coneccionSGA = new WebServiceSGAClientConnection();
-//    @Inject
-//    SettingService settingService;
-//    //private Setting setting;
-//    private List<Setting> settingList;
-    /*Método para inicializar tabla*/
 
     public PacienteListaServicio() {
-        setPageSize(MAX_RESULTS);
+        //setPageSize(MAX_RESULTS);
         resultList = new ArrayList<Paciente>();
     }
 
@@ -87,63 +72,64 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
         fichaMedServicio.setEntityManager(em);
 //        settingService.setEntityManager(em);
 //        settingList = settingService.getSettingByName("id_oferta");
-        if (resultList.isEmpty()) {
-            resultList = pacienteServicio.getPacientes(getPageSize(), firstResult);
-        }
+//        if (resultList.isEmpty()) {
+//            //resultList = pacienteServicio.getPacientes(getPageSize(), firstResult);
+//        }
     }
 
     /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
-    @Override
-    public List<Paciente> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
-        int end = first + pageSize;
+    /*@Override
+     public List<Paciente> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
+     int end = first + pageSize;
 
-        QuerySortOrder order = QuerySortOrder.ASC;
-        if (sortOrder == SortOrder.DESCENDING) {
-            order = QuerySortOrder.DESC;
-        }
-        Map<String, Object> _filters = new HashMap<String, Object>();
-        /*_filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
-         _filters.putAll(filters);*/
+     QuerySortOrder order = QuerySortOrder.ASC;
+     if (sortOrder == SortOrder.DESCENDING) {
+     order = QuerySortOrder.DESC;
+     }
+     Map<String, Object> _filters = new HashMap<String, Object>();
+     _filters.put(BussinesEntity_.type.getName(), getType()); //Filtro por defecto
+     _filters.putAll(filters);
 
-        QueryData<Paciente> qData = pacienteServicio.find(first, end, sortField, order, _filters);
-        this.setRowCount(qData.getTotalResultCount().intValue());
-        this.setResultList(qData.getResult());
-        Collections.sort(resultList);
-        return qData.getResult();
-    }
+     QueryData<Paciente> qData = pacienteServicio.find(first, end, sortField, order, _filters);
+     this.setRowCount(qData.getTotalResultCount().intValue());
+     this.setResultList(qData.getResult());
+     Collections.sort(resultList);
+     return qData.getResult();
+     }*/
 
     /*Métodos que me permiten seleccionar un objeto de la tabla*/
-    @Override
+//    @Override
     public Paciente getRowData(String rowKey) {
         return pacienteServicio.buscarPorNombres(rowKey);
     }
 
-    @Override
+    //  @Override
     public Object getRowKey(Paciente entity) {
         return entity.getName();
     }
 
     public void onRowSelect(SelectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("Paciente") + " " + UI.getMessages("common.selected"), ((Paciente) event.getObject()).getNombres());
+        Paciente p = (Paciente) event.getObject();
+        FacesMessage msg = new FacesMessage(UI.getMessages("Paciente") + " " + UI.getMessages("common.selected"), p.getNombres() + " "+ p.getApellidos());
         FacesContext.getCurrentInstance().addMessage("", msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage(UI.getMessages("Paciente") + " " + UI.getMessages("common.unselected"), ((Paciente) event.getObject()).getNombres());
+        Paciente p = (Paciente) event.getObject();
+        FacesMessage msg = new FacesMessage(UI.getMessages("Paciente") + " " + UI.getMessages("common.unselected"), p.getNombres() + " "+ p.getApellidos());
         FacesContext.getCurrentInstance().addMessage("", msg);
         this.setPacienteSelecionado(null);
     }
     /*.............*/
 
     /*Métodos GET y SET de los Atributos*/
-    public int getNextFirstResult() {
-        return firstResult + this.getPageSize();
-    }
-
-    public int getPreviousFirstResult() {
-        return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
-    }
-
+//    public int getNextFirstResult() {
+//        return firstResult + this.getPageSize();
+//    }
+//
+//    public int getPreviousFirstResult() {
+//        return this.getPageSize() >= firstResult ? 0 : firstResult - this.getPageSize();
+//    }
     public int getFirstResult() {
         return firstResult;
     }
@@ -157,7 +143,7 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 //        if (resultList.isEmpty() /*&& getSelectedBussinesEntityType() != null*/) {
 //            resultList = pacienteServicio.getPacientes(firstResult, firstResult);
 //        }
-        Collections.sort(resultList);
+//        Collections.sort(resultList);
         return resultList;
     }
 
@@ -179,18 +165,18 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 
     public void setParametroBusqueda(String parametroBusqueda) {
         this.parametroBusqueda = parametroBusqueda;
-        setResultList(pacienteServicio.BuscarPacientePorParametro(parametroBusqueda));
+        if (parametroBusqueda.length() >= 3) {
+            String criterio = parametroBusqueda.replace(" ", "%");
+            setResultList(pacienteServicio.buscarPacientePorParametro(criterio));
+        }
     }
+
 
     /*..
      * Busca de la base de datos pacientes segun el parametro ingresado
      */
-    public void buscarPorParametroAutoComplete() {
-        //this.setResulList(medicamentoService.BuscarMedicamentosPorParametro(parametroBusqueda));
-    }
-
     public void buscarPorParametro() {
-        this.setResultList(pacienteServicio.BuscarPacientePorTodosParametros(parametroBusqueda));
+        this.setResultList(pacienteServicio.buscarPacientePorTodosParametros(parametroBusqueda));
     }
 
 //    public boolean tieneFicha(){
@@ -201,7 +187,7 @@ public class PacienteListaServicio extends LazyDataModel<Paciente> {
 //    }
     public String renderizarVistaMatriculado(String ruta, String backView) {
         //SecurityRules sr = new SecurityRules();
-        if (pacienteSelecionado.isPersistent()) {
+        if (pacienteSelecionado.getId() != null) {
             if ("Universitario".equals(pacienteSelecionado.getTipoEstudiante())) {
                 boolean matriculado = coneccionSGA.getEstudianteMatriculado_WS_SGA(pacienteSelecionado.getCedula());
                 if (matriculado) {

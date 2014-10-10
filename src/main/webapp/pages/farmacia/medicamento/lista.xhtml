@@ -47,19 +47,18 @@
                         <f:param name="medicamentoId" value="#{medicamentoListaServicio.medicamentoSeleccionado.id}"></f:param>
                         <f:param name="backView" value="lista"></f:param>
                     </h:link>
-                    <h:panelGroup  styleClass="offset2" >
+                    <h:panelGroup  style="float:  right;" >
+                        <h:outputLabel for="criterioBuscar" value="Buscar medicamento: "/>
                         <p:inputText id="criterioBuscar" size ="25" value="#{medicamentoListaServicio.parametroBusqueda}" title="Ingrese un criterio de busqueda">
                             <p:ajax event="keyup" update="tablaMedicamentos"/>
-                        </p:inputText>
-                        &nbsp;
-                        <p:commandButton value="Buscar" action="#{medicamentoListaServicio.buscarPorParametro()}" update="tablaMedicamentos" styleClass="btn info"/>                    
+                        </p:inputText>                        
                     </h:panelGroup>
                 </div>
                 <br/>
-                <h:outputText value="TOTAL MEDICAMENTOS: #{medicamentoListaServicio.resultList.size()}" />                                    
+                <h:outputText value="TOTAL DE MEDICAMENTOS: #{medicamentoListaServicio.resultList.size()}" />                                    
 
                 <p:dataTable id="tablaMedicamentos"  var="medicamento_" value="#{medicamentoListaServicio.resultList}"
-                             scrollable="true" scrollWidth="100%" scrollHeight="600" 
+                             scrollable="true" scrollWidth="100%" scrollHeight="460" 
                              
                              rowKey="#{medicamento_.id}" selection="#{medicamentoListaServicio.medicamentoSeleccionado}"
                              rendered="true" 
@@ -100,13 +99,7 @@
                         <h:outputText value="#{medicamento_.fechaCaducidad}" >
                             <f:convertDateTime locale="es" pattern="dd-MMM-yyyy"/>
                         </h:outputText>  
-                    </p:column> 
-                    <p:column style="width: 150px; text-align: center;">
-                        <f:facet name="header">  
-                            <h:outputText value="Casa Comercial" title="Nombre casa comercial"/>  
-                        </f:facet> 
-                        <h:outputText value="#{medicamento_.casaComercialProveedora}" />
-                    </p:column>
+                    </p:column>                    
                     <p:column style="width: 100px; text-align: center;">
                         <f:facet name="header">                               
                             <h:outputText value="ALERTAS" />  
@@ -116,6 +109,12 @@
                     </p:column>
                     <p:column headerText="Presentación" style="width: 90px; text-align: center;">                        
                         <h:outputText value="#{medicamento_.presentacion}" />
+                    </p:column>
+                     <p:column style="width: 150px; text-align: center;">
+                        <f:facet name="header">  
+                            <h:outputText value="Casa Comercial" title="Nombre casa comercial"/>  
+                        </f:facet> 
+                        <h:outputText value="#{medicamento_.casaComercialProveedora}" />
                     </p:column>
                     <p:column headerText="Genérico" style="width: 50px; text-align: center;">                        
                         <p:selectBooleanCheckbox value="#{medicamento_.generico}" disabled="true" />

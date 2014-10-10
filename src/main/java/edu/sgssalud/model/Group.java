@@ -39,8 +39,6 @@ import java.util.List;
 import javax.persistence.*;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.Dates;
 
 /**
@@ -89,7 +87,7 @@ public class Group extends BussinesEntity implements Serializable {
 
     public void setMembers(List<BussinesEntity> members) {
         // this.members = members;
-        //TODO
+
     }
 
     public List<BussinesEntity> findOtherMembers(BussinesEntity me) {

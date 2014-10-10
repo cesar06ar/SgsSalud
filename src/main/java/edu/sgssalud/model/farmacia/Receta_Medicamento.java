@@ -38,11 +38,11 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date fecha;
-    
+    private Date fecha;    
     private int ingreso;
     private int cantidad;
     private int saldo;
+    private String detalle;
     
     @ManyToOne()
     private Receta receta;    
@@ -105,7 +105,15 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
     public void setSaldo(int saldo) {
         this.saldo = saldo;
     }  
-        
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }  
+            
     public boolean isPersistent(){
         return getId() != null;
     }
@@ -119,15 +127,12 @@ public class Receta_Medicamento implements Serializable, Comparable<Receta_Medic
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof Receta_Medicamento)) {
             return false;
         }
         Receta_Medicamento other = (Receta_Medicamento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

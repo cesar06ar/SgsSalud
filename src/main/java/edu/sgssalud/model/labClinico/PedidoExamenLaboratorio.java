@@ -15,9 +15,7 @@
  */
 package edu.sgssalud.model.labClinico;
 
-import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.HistoriaClinica;
-import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
@@ -166,15 +164,12 @@ public class PedidoExamenLaboratorio implements Serializable, Comparable<PedidoE
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof PedidoExamenLaboratorio)) {
             return false;
         }
         PedidoExamenLaboratorio other = (PedidoExamenLaboratorio) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

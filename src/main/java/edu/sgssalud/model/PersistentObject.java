@@ -51,7 +51,7 @@ public abstract class PersistentObject<E extends PersistentObject<E>> implements
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", updatable = false, nullable = false)
-    private Long id = null;
+    public Long id = null;
     @Column(nullable = true)
     private String code;
     @Column(nullable = true)
@@ -69,7 +69,7 @@ public abstract class PersistentObject<E extends PersistentObject<E>> implements
     private Date createdOn;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable=true)
-    private Date activationTime;
+    public Date activationTime;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable=true)
     private Date expirationTime;

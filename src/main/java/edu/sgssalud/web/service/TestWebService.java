@@ -15,7 +15,6 @@
  */
 package edu.sgssalud.web.service;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -85,7 +84,7 @@ public class TestWebService {
      requestContext.put(BindingProvider.USERNAME_PROPERTY, "sgssalud");
      requestContext.put(BindingProvider.PASSWORD_PROPERTY, "catv3856");
      } catch (Exception e) {
-     // TODO: handle exception
+
      System.out.print(e);
      }
      }*/

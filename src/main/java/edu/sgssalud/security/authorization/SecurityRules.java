@@ -36,7 +36,6 @@ import edu.sgssalud.model.profile.Profile;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.security.annotations.Secures;
 import org.jboss.solder.logging.Logger;
-import org.picketlink.idm.api.Role;
 
 public class SecurityRules {
 

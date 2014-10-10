@@ -42,7 +42,7 @@ limitations under the License.
                     </div>
                     <div class="span4 columns offset3">
                         <h:form id="control">  
-                            <!--TODO realizar accion para que los botones de add y edit se abran el panel de dialogo-->                            
+
                             <p:commandButton value="#{messages['common.edit']}" type="button"
                                              onclick="editDlg.show();" update=":edit-dialog"                                             
                                              icon="ui-icon-plus" styleClass="btn primary"
@@ -65,7 +65,7 @@ limitations under the License.
             <p:dialog id="edit-dialog" appendToBody="true" header="#{messages['common.edit']} #{bussinesEntityTypeHome.instance.name}" widgetVar="editDlg" modal="true" resizable="true" dynamic="true" width="550">
                 <h:form id="form-dialog">                    
                     <h:panelGroup layout="block" class="clearfix" rendered="true">
-                        <!--TODO: revisar <ui:include >-->
+
                         <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
                         <div class="input">
                             <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 
@@ -108,7 +108,7 @@ limitations under the License.
         <h:form id="form">
             <h:panelGroup layout="block" class="clearfix" rendered="#{bussinesEntityTypeHome.bussinesEntityTypeId == null}">  
 
-                <!--TODO: revisar <ui:include >-->
+
                 <h:outputLabel value="#{messages['module.BussinesEntityType.typeName']}" />
                 <div class="input">
                     <p:inputText  value="#{bussinesEntityTypeHome.instance.name}" styleClass="xLarge span4" required="true" label="#{messages['module.BussinesEntityType.typeName']}" 

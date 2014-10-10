@@ -26,10 +26,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.BussinesEntityAttribute;
-import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
-import edu.sgssalud.model.Structure;
-import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.service.BussinesEntityService;
 import org.jboss.seam.transaction.Transactional;
 

@@ -414,7 +414,7 @@ public class FacesMessages implements Serializable
          throw new IllegalStateException("No active conversation context");
       }
       /*return (FacesMessages) Component.getInstance(FacesMessages.class, ScopeType.CONVERSATION)*/;
-      //TODO recuperar objeto actual
+
       return (FacesMessages) new FacesMessages();
    }
       

@@ -30,7 +30,6 @@ import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.Diente;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
-import edu.sgssalud.model.odontologia.Odontograma;
 import edu.sgssalud.model.odontologia.Tratamiento;
 import edu.sgssalud.model.servicios.Turno;
 import edu.sgssalud.profile.ProfileService;

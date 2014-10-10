@@ -30,7 +30,7 @@ import org.jboss.solder.el.Resolver;
 import org.jboss.solder.reflection.Reflections;
 
 /**
- * TODO Remove this when upgrading to next SEAM version: https://issues.jboss.org/browse/SEAMFACES-234
+ * Remove this when upgrading to next SEAM version: https://issues.jboss.org/browse/SEAMFACES-234
  * 
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
  */
@@ -116,7 +116,7 @@ public class CollectionsELResolver extends ELResolver {
          }
       }
       catch (Exception e) {
-         // swallowed: we aren't resolving anything if this happens
+         return null;
       }
 
       return null;

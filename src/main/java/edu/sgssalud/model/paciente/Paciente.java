@@ -22,18 +22,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -42,12 +40,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-import org.hibernate.annotations.Index;
+import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jasypt.util.password.BasicPasswordEncryptor;
-import org.jboss.solder.logging.Logger;
 
 /**
  *
@@ -65,14 +61,10 @@ import org.jboss.solder.logging.Logger;
             + " LOWER(p.cedula) like lower(concat('%',:clave,'%'))"
             + " ORDER BY p.apellidos"),
     @NamedQuery(name = "Paciente.buscarPorParametrosTodos",
-            query = "select p from Paciente p where"
+            query = "select new edu.sgssalud.model.paciente.Paciente(p.id, p.cedula, p.apellidos, p.nombres, p.edad, p.email, p.tipoEstudiante) from Paciente p where "
             + " LOWER(p.cedula) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.nombres) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.apellidos) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.email) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.genero) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.nacionalidad) like lower(concat('%',:clave,'%')) OR"
-            + " LOWER(p.direccion) like lower(concat('%',:clave,'%'))"            
+            + " loWER(concat(p.nombres, ' ',p.apellidos)) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.email) like lower(concat('%',:clave,'%'))"
             + " ORDER BY p.apellidos"),
     @NamedQuery(name = "Paciente.buscarPorCedula",
             query = "select p from Paciente p where"
@@ -83,11 +75,37 @@ import org.jboss.solder.logging.Logger;
     @NamedQuery(name = "Paciente.buscarPorFechaNacimiento",
             query = "select p from Paciente p where"
             + " p.fechaNacimiento = :clave")})
+/*
+ @SqlResultSetMapping(name = "PacienteSimple", 
+ columns = {@ColumnResult(
+        
+ )}
+ //        entities = {
+ //    @EntityResult(entityClass = PacienteSimple.class, fields = {
+ //        @FieldResult(name = "id", column = "id"),
+ //        @FieldResult(name = "cedula", column = "cedula"),
+ //        @FieldResult(name = "apellidos", column = "apellidos"),
+ //        @FieldResult(name = "nombres", column = "nombres"),
+ //        @FieldResult(name = "edad", column = "edad"),
+ //        @FieldResult(name = "email", column = "email"),
+ //        @FieldResult(name = "tipoEstudiante", column = "tipoEstudiante"),}) }
+ )*/
+@NamedNativeQueries(value = {
+    @NamedNativeQuery(name = "PacienteSimple.BuscarPorCriterio",
+            query = "select p.id, p.cedula, p.apellidos, p.nombres, p.edad, p.email, p.tipoEstudiante, be.activationTime "
+            + " from Paciente p "
+            + " join bussinesentity  be on be.id = p.id where"
+            + " LOWER(p.cedula) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.nombres) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.apellidos) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.email) like lower(concat('%',:clave,'%')) OR"
+            + " LOWER(p.genero) like lower(concat('%',:clave,'%')) "
+            + " ORDER BY p.apellidos", resultClass = Paciente.class)
+})
+
 public class Paciente extends BussinesEntity implements Serializable, Comparable<Paciente> {
 
-    private static Logger log = Logger.getLogger(Paciente.class);
     private static final long serialVersionUID = 1L;
-
 
     @NotEmpty
     @Column(nullable = false, unique = true)
@@ -108,6 +126,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "foto_id")
     private Photos foto;
+    @Past
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fechaNacimiento;
     @Column(length = 25)
@@ -115,7 +134,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     private String direccion;
     private String telefono;
     private String celular;
-    @Email(message = "#{messages['MailBadFormat']}")
+    @Email(message = "")
     //@Index(name = "userEmailIndex1")   //investigar
     @Column(nullable = false, length = 128, unique = false)
     private String email;
@@ -150,6 +169,27 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     private String rutaFoto;
 
     public Paciente() {
+    }
+
+    public Paciente(Long id, String cedula, String apellidos, String nombres, Integer edad, String email, String tipoEstudiante) {
+        this.id = id;
+        this.cedula = cedula;
+        this.apellidos = apellidos;
+        this.nombres = nombres;
+        this.edad = edad;
+        this.email = email;
+        this.tipoEstudiante = tipoEstudiante;
+    }
+
+    public Paciente(Long id, String cedula, String apellidos, String nombres, Integer edad, String email, String tipoEstudiante, Date activationTime) {
+        this.id = id;
+        this.cedula = cedula;
+        this.apellidos = apellidos;
+        this.nombres = nombres;
+        this.edad = edad;
+        this.email = email;
+        this.tipoEstudiante = tipoEstudiante;
+        this.activationTime = activationTime;
     }
 
     public String getNombreUsuario() {
@@ -198,7 +238,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
 
     public void setFoto(Photos foto) {
         this.foto = foto;
-    }   
+    }
 
     public Date getFechaNacimiento() {
         return fechaNacimiento;
@@ -207,7 +247,7 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
     public void setFechaNacimiento(Date fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
         if (this.fechaNacimiento != null) {
-            this.setEdad(FechasUtil.calcularEdad(fechaNacimiento));
+            this.setEdad(FechasUtil.getEdad(fechaNacimiento));
         }
     }
 
@@ -257,8 +297,8 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
 
     public void setGenero(String genero) {
         this.genero = genero;
-    }    
-    
+    }
+
     public String getNacionalidad() {
         return nacionalidad;
     }
@@ -375,12 +415,12 @@ public class Paciente extends BussinesEntity implements Serializable, Comparable
 //                + "nombres=" + getNombres() + ","
 //                + "IdentityKeys=" + getIdentityKeys() + ","
 //                + " ]";
-        return this.getNombres()+" "+this.getApellidos();
+        return this.getNombres() + " " + this.getApellidos();
     }
 
     @Override
     public int compareTo(Paciente o) {
-        return (int) (o.getId() - this.getId() );
+        return (int) (o.getId() - this.getId());
     }
 //    public void vacio(){
 //        //log.info("Verifica si ingresa a metodo...");

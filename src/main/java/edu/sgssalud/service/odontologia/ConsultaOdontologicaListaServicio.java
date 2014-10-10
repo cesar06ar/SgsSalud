@@ -17,16 +17,12 @@ package edu.sgssalud.service.odontologia;
 
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
-import edu.sgssalud.util.QueryData;
-import edu.sgssalud.util.QuerySortOrder;
 import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
@@ -34,11 +30,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.solder.logging.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
 
 /**
  *
@@ -49,8 +42,6 @@ import org.primefaces.model.SortOrder;
 public class ConsultaOdontologicaListaServicio implements Serializable {
 
     private static final long serialVersionUID = 5L;
-    private static final int MAX_RESULTS = 5;
-    private static Logger log = Logger.getLogger(ConsultaOdontologicaListaServicio.class);
 
     @Inject
     @Web
@@ -60,13 +51,13 @@ public class ConsultaOdontologicaListaServicio implements Serializable {
     private List<ConsultaOdontologica> resultList = new ArrayList<ConsultaOdontologica>();
     ;
     private int primerResult = 0;
-    private ConsultaOdontologica[] consulOdontSeleccionadas;
+//    private ConsultaOdontologica[] consulOdontSeleccionadas;
     private ConsultaOdontologica consulOdontSeleccionada;
     private String parametroBusqueda;
     private Date fecha;
     private Date fechaI;// = new Date();
     private Date fechaF;// = new Date();
-    /*Método para inicializar tabla*/
+    
 
     public ConsultaOdontologicaListaServicio() {
 //        setPageSize(MAX_RESULTS);
@@ -82,7 +73,7 @@ public class ConsultaOdontologicaListaServicio implements Serializable {
         }
     }
 
-    /*Método sobreescrito para cargar los datos desde la base de datos hacia la tabla*/
+    
     /*@Override
      public List<ConsultaOdontologica> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {
      int end = first + pageSize;

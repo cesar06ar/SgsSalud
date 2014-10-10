@@ -102,6 +102,7 @@
 
         <!-- Import the CDI API, we use provided scope as the API is included 
         in JBoss AS 7 -->
+     
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>

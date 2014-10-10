@@ -52,7 +52,7 @@ public class DefaultDateTimeConverter extends DateTimeConverter
    public DefaultDateTimeConverter()
    {
       super();
-      // TODO this should reflect the current logged-in user's timezone
+
       setTimeZone(TimeZone.getDefault());
       setPattern("EEE, d MMM yyyy HH:mm:ss Z");
    }

@@ -44,7 +44,6 @@ import javax.persistence.criteria.Root;
 public class FichaMedicaServicio extends PersistenceUtil<FichaMedica> implements Serializable {
 
     private static final long serialVersionUID = 234L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(FichaMedicaServicio.class);
     @Inject
     private BussinesEntityService bussinesEntityService;
     @Inject

@@ -17,8 +17,6 @@ package edu.sgssalud.service;
 
 //import edu.sgssalud.model.medicina.ConsultaMedica;
 import edu.sgssalud.model.medicina.ConsultaMedica;
-import edu.sgssalud.model.medicina.FichaMedica;
-import edu.sgssalud.model.medicina.FichaMedica_;
 import edu.sgssalud.service.medicina.*;
 import edu.sgssalud.model.servicios.Servicio;
 import edu.sgssalud.model.servicios.Servicio_;
@@ -27,7 +25,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -40,7 +37,7 @@ import javax.persistence.criteria.Root;
 public class ServiciosMedicosService extends PersistenceUtil<Servicio> implements Serializable {
 
     private static final long serialVersionUID = 234L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaMedicaServicio.class);
+    //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaMedicaServicio.class);
 
     public ServiciosMedicosService() {
         super(Servicio.class);
@@ -119,7 +116,6 @@ public class ServiciosMedicosService extends PersistenceUtil<Servicio> implement
             int deleted1 = em.createNativeQuery(borrarServicio).executeUpdate();
             return (deleted1 == 1);
         } catch (Exception e) {
-            log.info(" --> error al borrar : " + servicioId);
             return false;
         }
     }

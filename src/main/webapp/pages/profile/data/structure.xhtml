@@ -4,12 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:s="http://jboss.org/seam/faces"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:glue="http://eqaula.org/jsf/facelets"
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
 
     <ui:composition  template="/WEB-INF/view/templates/glue.xhtml">
@@ -84,7 +80,7 @@
                                                      rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                         <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                     </p:inputTextarea>
-                                    <!-- TODO add support for boolean
+
                                     <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
                                         <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
                                                                  rendered="#{a.property.type eq 'java.lang.Boolean'}">
@@ -126,7 +122,7 @@
                                                  rendered="#{a.property.type eq 'java.lang.MultiLineString'}">
                                     <p:ajax event="blur" update="@parent" partialSubmit="true"/>
                                 </p:inputTextarea>
-                                <!-- TODO add support for boolean
+
                                 <p:panel rendered="#{a.property.type eq 'java.lang.Boolean'}">
                                     <p:selectBooleanCheckbox value="#{a.value}" styleClass="xLarge" required="#{a.property.required}" label="#{a.property.label}"
                                                              rendered="#{a.property.type eq 'java.lang.Boolean'}">

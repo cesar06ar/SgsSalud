@@ -37,12 +37,10 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
@@ -90,7 +88,7 @@ public class Profiles implements Serializable
             current = ps.getProfileByUsername(params.getProfileUsername());
          }
          catch (NoResultException e) {
-            // not an error
+            return null;
          }
       }
       return current;

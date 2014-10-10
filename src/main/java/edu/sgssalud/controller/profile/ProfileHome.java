@@ -32,20 +32,13 @@ import edu.sgssalud.controller.security.SecurityGroupService;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.Group;
 import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.model.security.IdentityObject;
 import edu.sgssalud.model.security.IdentityObjectAttribute;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.security.authorization.SecurityRules;
-import edu.sgssalud.service.ProfileListService;
 import edu.sgssalud.util.Dates;
-import edu.sgssalud.web.ParamsBean;
-import java.util.List;
-import java.util.Map;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.jboss.seam.international.status.Messages;
-import org.jboss.seam.security.Attribute;
 import org.jboss.seam.security.Authenticator;
 import org.jboss.seam.security.Credentials;
 import org.jboss.seam.security.Identity;
@@ -72,32 +65,26 @@ import org.primefaces.component.commandbutton.CommandButton;
 public class ProfileHome extends BussinesEntityHome<Profile> implements Serializable {
 
     private static final long serialVersionUID = 7632987414391869389L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ProfileHome.class);
     @Inject
     @Web
     private EntityManager em;
-    private Messages msg;
     @Inject
     private Identity identity;
     @Inject
     private Credentials credentials;
     @Inject
-    private IdentitySession security;
+    IdentitySession security;
     @Inject
     private OpenIdAuthenticator oidAuth;
-    @Inject
-    private IdmAuthenticator idmAuth;
     @Inject
     private SecurityGroupService securityRol;
     private String password;
     private String passwordConfirm;
     private String structureName;
     @Inject
-    private ParamsBean params;
-    @Inject
     private ProfileService ps;
     @Inject
-    private IdentitySessionFactory identitySessionFactory;
+    IdentitySessionFactory identitySessionFactory;
 
     public Long getProfileId() {
         return (Long) getId();
@@ -201,7 +188,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 
         /*
          * Try twice to work around some state bug in Seam Security
-         * TODO file issue in seam security
+
          */
         String result = identity.login();
         if (Identity.RESPONSE_LOGIN_EXCEPTION.equals(result)) {
@@ -223,7 +210,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         }
         String mailTO = "sgssalud@gmail.com";
         String mailFrom = getInstance().getEmail();
-        String host = "localhost";
         Properties props = new Properties();
         //props = System.getProperties();
         props.setProperty("mail.smtp.host", "587");
@@ -283,7 +269,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 //
 //    }
 
-    //TODO- Revisar implementación de envío de mensaje para cambio de contraseña
+
     public void activateButtonByEmail() {
         FacesContext fc = FacesContext.getCurrentInstance();
         UIViewRoot uiViewRoot = fc.getViewRoot();
@@ -326,20 +312,21 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
 
     @TransactionAttribute
     private void createUser() throws IdentityException {
-        // TODO validate username, email address, and user existence
+
         PersistenceManager identityManager = security.getPersistenceManager();
         User user = identityManager.createUser(getInstance().getUsername());
 
         AttributesManager attributesManager = security.getAttributesManager();
         PasswordCredential p = new PasswordCredential(getPassword());
         attributesManager.updatePassword(user, p.getValue());
+        
         attributesManager.addAttribute(user, "email", getInstance().getEmail());  //me permite agregar un atributo de cualquier tipo a un usuario 
         attributesManager.addAttribute(user, "estado", "ACTIVO");
-//Attribute att = attributesManager.
+        //Attribute att = attributesManager.
 
         em.flush();
 
-        // TODO figure out a good pattern for this...
+
         //setInstance(createInstance());
         //getInstance().setEmail(email);
         getInstance().setPassword(getPassword());
@@ -444,7 +431,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         String name = "Nuevo " + (group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(this.getInstance()).size() + 1);
         BussinesEntity entity = new BussinesEntity();
         entity.setName(name);
-        //TODO implementar generador de códigos para entidad de negocio
+
         entity.setCode((group.getProperty() != null ? group.getProperty().getLabel() : "elemento") + " " + (group.findOtherMembers(this.getInstance()).size() + 1));
         entity.setCreatedOn(now);
         entity.setLastUpdate(now);
@@ -453,7 +440,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         entity.setResponsable(null); //Establecer al usuario actual
         entity.buildAttributes(bussinesEntityService);
         //Set default values into dinamycs properties
-        //TODO idear un mecanismo generico de inicialización de variables dinamicas
+
         //entity.getBussinessEntityAttribute("title").setValue(name);
 
         group.add(entity);
@@ -487,7 +474,6 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
         String salida = null;
         try {
             PersistenceManager identityManager = security.getPersistenceManager();
-            AttributesManager attributesManager = security.getAttributesManager();
             User user = identityManager.findUser(getInstance().getUsername());
             //System.out.println("PROFILE_________" + getSelectedProfile().getName());
             //SecurityRules s = new SecurityRules();
@@ -509,7 +495,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             }
 
         } catch (IdentityException ex) {
-
+            return null;
         }
         return salida;
     }
@@ -529,7 +515,7 @@ public class ProfileHome extends BussinesEntityHome<Profile> implements Serializ
             FacesContext.getCurrentInstance().addMessage("", msg);
             System.out.println("PROFILE_________2");
         } catch (IdentityException ex) {
-
+            return null;
         }
         return "/pages" + getBackView() + "?faces-redirect=true";
     }

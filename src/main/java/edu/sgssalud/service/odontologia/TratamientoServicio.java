@@ -22,7 +22,6 @@ import edu.sgssalud.model.odontologia.Diente_;
 import edu.sgssalud.model.odontologia.Odontograma;
 import edu.sgssalud.model.odontologia.Tratamiento;
 import edu.sgssalud.model.odontologia.Tratamiento_;
-import edu.sgssalud.model.servicios.Servicio;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
 import java.util.List;
@@ -38,8 +37,7 @@ import javax.persistence.criteria.Root;
 public class TratamientoServicio extends PersistenceUtil<Tratamiento> implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(TratamientoServicio.class);
-    
+   
     
     public TratamientoServicio() {
         super(Tratamiento.class);

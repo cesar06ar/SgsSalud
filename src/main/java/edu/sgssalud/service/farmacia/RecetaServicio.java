@@ -144,7 +144,7 @@ public class RecetaServicio extends PersistenceUtil<Receta> implements Serializa
 
     public Long getGenerarNumeroFicha() {
         List<Receta> listaF = getRecetas();
-        Long num = new Long(001);
+        Long num = (long) 001;
         if (!listaF.isEmpty()) {
             for (Receta rm : listaF) {
                 if (rm.getNumero() >= num) {

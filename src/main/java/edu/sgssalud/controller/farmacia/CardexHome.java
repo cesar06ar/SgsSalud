@@ -17,7 +17,6 @@
 package edu.sgssalud.controller.farmacia;
 
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta_Medicamento;
 import edu.sgssalud.service.farmacia.MedicamentoService;
@@ -25,19 +24,15 @@ import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.seam.transaction.Transactional;
 
 /**
  *
@@ -83,7 +78,7 @@ public class CardexHome implements Serializable {
         recetaMedService.setEntityManager(em);
         recetaServicio.setEntityManager(em);
         medicamentoService.setEntityManager(em);        
-        listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
+        //listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
     }    
 
     @TransactionAttribute
@@ -100,7 +95,7 @@ public class CardexHome implements Serializable {
         this.medicamentoId = medicamentoId;
         if(medicamentoId != null){
             medicamento = medicamentoService.buscarMedicamentosPorId(medicamentoId);
-            listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
+            //listaRecetasMedicamentos = recetaMedService.obtenerPorMedicamento(medicamento);
         }
     }  
 

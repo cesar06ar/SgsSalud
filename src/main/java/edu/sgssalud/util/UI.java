@@ -48,18 +48,12 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import edu.sgssalud.cdi.Web;
-import edu.sgssalud.controller.medicina.FichaMedicaHome;
 import edu.sgssalud.controller.profile.GroupHome;
 import edu.sgssalud.model.BussinesEntity;
 import edu.sgssalud.model.BussinesEntityAttribute;
 import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.service.BussinesEntityService;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 @Named("ui")
 @RequestScoped
@@ -111,7 +105,7 @@ public class UI {
             }
         }
         if (columns.isEmpty() || g.getProperty().isShowDefaultBussinesEntityProperties()) {
-            //TODO aplicar internacionalización
+
             columns.add(new GroupHome.ColumnModel("name", "name"));
             columns.add(new GroupHome.ColumnModel("code", "code"));
         }
@@ -121,11 +115,11 @@ public class UI {
   
     public BussinesEntity makeBussinessEntity(Group g) {
         Date now = Calendar.getInstance().getTime();
-        //TODO internacionalizar cadenas estáticas
+
         String name = "New instance";
         BussinesEntity entity = new BussinesEntity();
         entity.setName(name);
-        //TODO implementar generador de códigos para entidad de negocio
+        
         entity.setCode("NewCode");
         entity.setCreatedOn(now);
         entity.setLastUpdate(now);

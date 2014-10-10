@@ -32,7 +32,6 @@
 package edu.sgssalud.security;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,33 +50,22 @@ import edu.sgssalud.model.Group;
 import edu.sgssalud.model.Property;
 import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.config.Setting;
-import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.labClinico.ExamenLabClinico;
 import edu.sgssalud.model.labClinico.Parametros;
 import edu.sgssalud.model.medicina.*;
 import edu.sgssalud.model.odontologia.*;
 import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.model.security.IdentityObjectAttribute;
 import edu.sgssalud.model.security.IdentityObjectCredentialType;
 import edu.sgssalud.model.security.IdentityObjectRelationshipType;
 import edu.sgssalud.model.security.IdentityObjectType;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.Dates;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import javax.faces.context.FacesContext;
-import javax.persistence.Query;
-import javax.servlet.ServletContext;
 import org.jboss.seam.security.management.picketlink.IdentitySessionProducer;
 import org.jboss.seam.transaction.TransactionPropagation;
 import org.jboss.seam.transaction.Transactional;
 import org.jboss.solder.servlet.WebApplication;
 import org.jboss.solder.servlet.event.Initialized;
-import org.picketlink.idm.api.Attribute;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.User;
@@ -176,12 +164,12 @@ public class InitializeDatabase {
          * Create our test user (me!)
          */
         Date now = Calendar.getInstance().getTime();
-        BussinesEntityType bussinesEntityType = null;
+        BussinesEntityType bussinesEntityType ;
         TypedQuery<BussinesEntityType> query = entityManager.createQuery("from BussinesEntityType b where b.name=:name",
                 BussinesEntityType.class);
         query.setParameter("name", Profile.class.getName());
-        Profile p = null;
-        Profile admin = null;
+        Profile p;
+        Profile admin ;
         //List<User> members = new ArrayList<User>();
         org.picketlink.idm.api.Group g = session.getPersistenceManager().findGroup("ADMIN", "GROUP");
         //session.getAttributesManager().
@@ -203,7 +191,7 @@ public class InitializeDatabase {
             session.getAttributesManager().addAttribute(u, "email", "sgssalud@unl.edu");
             session.getAttributesManager().addAttribute(u, "estado", "ACTIVO");
             //members.add(u);
-            //TODO revisar error al implementar la relacion entre un grupo y usuario.... 
+
             session.getRelationshipManager().associateUser(g, u);
 
             p = new Profile();
@@ -280,8 +268,7 @@ public class InitializeDatabase {
             Date now = Calendar.getInstance().getTime();
             Calendar ago = Calendar.getInstance();
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
+            Structure structure = new Structure();
             structure.setName(Profile.class.getName());
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
@@ -320,8 +307,7 @@ public class InitializeDatabase {
             Date now = Calendar.getInstance().getTime();
             Calendar ago = Calendar.getInstance();
             ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
-            Structure structure = null;
-            structure = new Structure();
+            Structure structure = new Structure();
             structure.setName(name);
             structure.setCreatedOn(now);
             structure.setLastUpdate(now);
@@ -1130,47 +1116,9 @@ public class InitializeDatabase {
     }
 
     public void validarDatosEnfermedadesCIE10() {
-        TypedQuery<EnfermedadCIE10> query = entityManager.createQuery("from EnfermedadCIE10 b",
-                EnfermedadCIE10.class);
-        if (query.getResultList().isEmpty()) {
-            try {
-                /*
-                 ServletContext context = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-
-                 //String CSV = "/home/cesar/NetBeansProjects/SgsSalud/src/main/webapp/resources/otros/XLS_Cie10.csv";
-                 String rutaCsv = context.getRealPath("/resources/otros/XLS_Cie10.csv");
-                 FileInputStream fstream = new FileInputStream(rutaCsv);
-                 DataInputStream entrada = new DataInputStream(fstream);
-                 BufferedReader buffer = new BufferedReader(new InputStreamReader(entrada));
-                 String strLinea;
-                 EnfermedadCIE10 enf;
-                 List<String> ls1;//= new ArrayList<String>();
-                 //int id = 0;
-                 while ((strLinea = buffer.readLine()) != null) {
-                 String[] v = strLinea.split(";");
-                 ls1 = Arrays.asList(v);
-                 enf = new EnfermedadCIE10();
-                 enf.setId(Long.parseLong(ls1.get(0)));
-                 enf.setCodigo(ls1.get(1));
-                 enf.setNombre(ls1.get(2));
-                 entityManager.persist(enf);
-                 //entityManager.flush();
-                 //id++;
-                 }
-                 // Cerramos el archivo
-                 entrada.close();
-                 */
-                //String cargarDatos = " COPY EnfermedadCIE10 (id, codigo, nombre) FROM '" + CSV + "' USING DELIMITERS ';' csv ";
-                //int cargar = entityManager.createNativeQuery(cargarDatos).executeUpdate();
-                //Query q = entityManager.createNativeQuery(cargarDatos);
-                //q.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(" --> error cargar enfermedades cie10: " + e.getMessage());
-
-            }
-        }
-
+//        TypedQuery<EnfermedadCIE10> query = entityManager.createQuery("from EnfermedadCIE10 b",
+//                EnfermedadCIE10.class);
+       
     }
 
     public void validarDatosExamenLabCLinico() {
@@ -1178,8 +1126,6 @@ public class InitializeDatabase {
                 ExamenLabClinico.class);
         if (query.getResultList().isEmpty()) {
             Date now = Calendar.getInstance().getTime();
-            Calendar ago = Calendar.getInstance();
-            //ago.add(Calendar.DAY_OF_YEAR, (-1 * 364 * 18)); //18 años atras
             ExamenLabClinico exam = null;
             List<ExamenLabClinico> enfs = new ArrayList<ExamenLabClinico>();
             List<Parametros> listaP = new ArrayList<Parametros>();

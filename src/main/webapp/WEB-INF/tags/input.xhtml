@@ -38,7 +38,7 @@ limitations under the License.
     <c:set var="disabled" value="#{not empty disabled ? disabled : 'false'}" />    
     <c:set var="numDecimales" value="#{not empty numDecimales ? numDecimales : '2'}" />
     <c:set var="validateLength" value="#{not empty required and required}" />
-    <!-- TODO habilitar o deshabilitar ajax validation -->
+
     <h:panelGroup id="panel-group-#{id}" layout="block" class="clearfix">
         <label for="#{name}" class="#{(not empty required and required) ? 'required' : ''}">#{label}#{(not empty required and required) ? '*&#160;' : ''}</label>
         <div class="input">

@@ -5,11 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       template="/WEB-INF/view/templates/glue.xhtml"
       xmlns:f="http://java.sun.com/jsf/core"      
-      xmlns:p="http://primefaces.org/ui"      
-      xmlns:pe="http://primefaces.org/ui/extensions"
-      xmlns:glue="http://eqaula.org/jsf/facelets"
-      xmlns:s="http://jboss.org/seam/faces"
-      xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
+      xmlns:p="http://primefaces.org/ui"      >
 
     <ui:composition template="/WEB-INF/view/templates/glue.xhtml">
         <f:metadata>
@@ -50,20 +46,20 @@
                                 </div>
                                 <div class="span5 clearfix" style="width: 80%">
                                     <label ><b>#{'Ingrese fechas de busqueda:'}</b></label>&nbsp;
-                                    
-                                        <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha" 
-                                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
-                                            <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
-                                        </p:calendar>                                 
-                                        <p:calendar id="criterioBuscarF" size ="15" value="#{turnoHome.fechaBuscFin}" title="Ingrese una fecha" 
-                                                    locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
-                                            <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
-                                        </p:calendar>                                
-                                        <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPor()}"  styleClass="btn info" update="@form :form:tablaTurnos">
-                                            <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
-                                        </p:commandButton>                                        
-                                        <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.buscarTodos()}"  styleClass="btn info" update="@form :form:tablaTurnos"/>
-                                    
+
+                                    <p:calendar id="criterioBuscar" size ="15" value="#{turnoHome.fechaBusc}" title="Ingrese una fecha" 
+                                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
+                                        <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
+                                    </p:calendar>                                 
+                                    <p:calendar id="criterioBuscarF" size ="15" value="#{turnoHome.fechaBuscFin}" title="Ingrese una fecha" 
+                                                locale="es" navigator="true" showButtonPanel="true" disabledWeekends="true"  pattern="dd-MMM-yyyy">
+                                        <p:ajax event="dateSelect" update=":form:buscar :form:buscarTodos"/>
+                                    </p:calendar>                                
+                                    <p:commandButton id="buscar" value="Buscar" action="#{turnoHome.buscarPor()}"  styleClass="btn info" update="@form :form:tablaTurnos">
+                                        <!--<p:ajax process="@this" update=":form:tablaTurnos" rendered=":form:tablaTurnos"/>-->
+                                    </p:commandButton>                                        
+                                    <p:commandButton id="buscarTodos" value="Buscar Todos" action="#{turnoHome.buscarTodos()}"  styleClass="btn info" update="@form :form:tablaTurnos"/>
+
                                 </div>
                             </div>
                         </div>
@@ -76,7 +72,9 @@
                              rows="20" paginatorPosition="top" selection="single"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {RowsPerPageDropdown} {NextPageLink} {LastPageLink} "
                              rowsPerPageTemplate="10,20,30,50,100">
-
+                    <f:facet name="header">
+                        <h:outputText value="Lista total de citas médicas: #{turnoHome.listaTurnos.size()}"/>
+                    </f:facet>
                     <p:column headerText="#{messages['paciente.nombre']}" style="width: 30%">
                         <h:outputText value="#{turno_.paciente.nombres}"/>
                         &nbsp;&nbsp;

@@ -18,7 +18,6 @@ package edu.sgssalud.service.odontologia;
 import edu.sgssalud.model.medicina.SignosVitales;
 import edu.sgssalud.model.medicina.SignosVitales_;
 import edu.sgssalud.model.odontologia.*;
-import edu.sgssalud.model.paciente.Paciente;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import java.io.Serializable;
@@ -39,7 +38,6 @@ import javax.persistence.criteria.Root;
 public class ConsultaOdontologicaServicio extends PersistenceUtil<ConsultaOdontologica> implements Serializable {
 
     private static final long serialVersionUID = 234L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaOdontologicaServicio.class);
     @Inject
     private BussinesEntityService bussinesEntityService;
 

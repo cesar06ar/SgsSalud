@@ -17,7 +17,6 @@ import edu.sgssalud.model.profile.Profile;
 import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.Dates;
-import org.jboss.solder.logging.Logger;
 
 // The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
 // EL name
@@ -26,7 +25,7 @@ import org.jboss.solder.logging.Logger;
 @Model
 public class ProfileController {
 
-    private static Logger log = Logger.getLogger(ProfileController.class);
+
     Long profileId;
     @Inject
     private EntityManager em;

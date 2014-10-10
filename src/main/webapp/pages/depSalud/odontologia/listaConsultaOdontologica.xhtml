@@ -72,14 +72,14 @@
                          rowKey="#{consultaOdontologica_.id}" 
                          selection="#{consultaOdontListaS.consulOdontSeleccionada}"
                          rendered="true" resizableColumns="true" liveResize="true"
-                         selectionMode="single">
+                         selectionMode="single">                
                 <!--Acciones Ajax, que me permiten seleccionar y desseleccionar una Consulta Odontologica-->
                 <p:ajax event="rowSelect" listener="#{consultaOdontListaS.onRowSelect}"   
                         update=":form:button-edit :form:messages :form:button-view"/> 
                 <p:ajax event="rowUnselect" listener="#{consultaOdontListaS.onRowUnselect}" 
                         update=":form:button-edit :form:messages :form:button-view"/>
                 <f:facet name="header">  
-                    <h:outputText value="Total consultas odontológicas #{consultaOdontListaS.resultList.size()}" />                    
+                    <h:outputText value="Lista total de consultas odontológicas: #{consultaOdontListaS.resultList.size()}" />                    
                 </f:facet>  
                 <!--Columnas para mostrar en la tabla-->
                 <p:column sortBy="#{consultaOdontologica_.id}" style="width: 15%; text-align: center;"

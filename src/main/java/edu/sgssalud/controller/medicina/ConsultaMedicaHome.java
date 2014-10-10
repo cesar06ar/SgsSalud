@@ -15,11 +15,9 @@
  */
 package edu.sgssalud.controller.medicina;
 
-import com.lowagie.text.pdf.ArabicLigaturizer;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.BussinesEntityType;
-import edu.sgssalud.model.Structure;
 import edu.sgssalud.model.config.Setting;
 import edu.sgssalud.model.farmacia.Medicamento;
 import edu.sgssalud.model.farmacia.Receta;
@@ -41,7 +39,6 @@ import edu.sgssalud.service.SettingService;
 import edu.sgssalud.service.farmacia.RecetaMedicamentoService;
 import edu.sgssalud.service.farmacia.RecetaServicio;
 import edu.sgssalud.service.labClinico.ExamenLabService;
-import edu.sgssalud.service.labClinico.PedidoExamenListaServicio;
 import edu.sgssalud.service.labClinico.PedidoExamenService;
 import edu.sgssalud.service.labClinico.ResultadoExamenLCService;
 import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
@@ -49,10 +46,6 @@ import edu.sgssalud.service.medicina.EnfermedadesCie10Servicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.medicina.TurnoService;
-import edu.sgssalud.service.paciente.PacienteServicio;
-import edu.sgssalud.util.FechasUtil;
-import edu.sgssalud.util.Lists;
-import edu.sgssalud.util.UI;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,12 +60,9 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.hibernate.Session;
 import org.jboss.seam.security.Identity;
 import org.jboss.seam.transaction.Transactional;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.TransferEvent;
-import org.primefaces.model.DualListModel;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
@@ -84,7 +74,6 @@ import org.primefaces.model.chart.ChartSeries;
 @ViewScoped
 public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> implements Serializable {
 
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(ConsultaMedicaHome.class);
     @Inject
     @Web
     private EntityManager em;
@@ -307,8 +296,10 @@ public class ConsultaMedicaHome extends BussinesEntityHome<ConsultaMedica> imple
         settingService.setEntityManager(em);
         setting = settingService.findByName("consultaActiva");
         if (getInstance().isPersistent()) {
-            if (getInstance().getResponsable() == null && identity.isLoggedIn()) {
-                getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+            if (getInstance().getResponsable() == null) {
+                if (identity.isLoggedIn()) {
+                    getInstance().setResponsable(profileS.getProfileByIdentityKey(identity.getUser().getKey()));
+                }
             }
         }
 //        getInstance().setTiempoConsulta(FechasUtil.sumarRestaMinutosFecha(getInstance().getHoraConsulta(), 30));

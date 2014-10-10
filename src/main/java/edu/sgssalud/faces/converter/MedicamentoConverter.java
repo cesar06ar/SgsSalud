@@ -44,8 +44,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.model.farmacia.Medicamento;
-import edu.sgssalud.model.profile.Profile;
-import edu.sgssalud.profile.ProfileService;
 import edu.sgssalud.service.farmacia.MedicamentoService;
 
 

@@ -40,9 +40,7 @@ import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.odontologia.ConsultaOdontologicaServicio;
 import edu.sgssalud.service.paciente.PacienteServicio;
-import edu.sgssalud.util.FechasUtil;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,7 +49,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -340,7 +337,7 @@ public class ReporteListas {
 
     public void renderMedicamentos() {
 
-        try {
+   
             final String attachFileName = "medicamentos.pdf";
             List<Medicamento> medicamentos = medService.buscarTodos();
             //parametros 
@@ -352,11 +349,7 @@ public class ReporteListas {
             _values.put("usd", "$");
             //Exportar a pdf 
             JasperReportAction.exportToPdf(REPORTE_MEDICAMENTOS, medicamentos, _values, attachFileName);
-        } catch (Exception e) {
-//            System.out.println("Error:____________________________________");
-//            e.printStackTrace();
-        }
-
+ 
     }
 
     public void renderExamenes() {
@@ -548,6 +541,7 @@ public class ReporteListas {
             _values.put("fechaDesde", fechaInf);
             _values.put("fechaHasta", fechaSup);
             _values.put("usd", "$");
+            _values.put("logo", logo);
 
             //Exportar a pdf 
             JasperReportAction.exportToPdf(REPORTE_ENFERMERIA, _values, attachFileName);

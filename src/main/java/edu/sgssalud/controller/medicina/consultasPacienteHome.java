@@ -21,7 +21,6 @@ import edu.sgssalud.model.medicina.HistoriaClinica;
 import edu.sgssalud.model.odontologia.ConsultaOdontologica;
 import edu.sgssalud.model.odontologia.FichaOdontologica;
 import edu.sgssalud.model.odontologia.Tratamiento;
-import edu.sgssalud.service.medicina.ConsultaMedicaServicio;
 import edu.sgssalud.service.medicina.FichaMedicaServicio;
 import edu.sgssalud.service.medicina.HistoriaClinicaServicio;
 import edu.sgssalud.service.odontologia.FichaOdontologicaServicio;
@@ -35,7 +34,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
-import org.jboss.seam.security.Identity;
 
 /**
  *

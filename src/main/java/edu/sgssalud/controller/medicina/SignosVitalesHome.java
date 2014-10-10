@@ -252,8 +252,7 @@ public class SignosVitalesHome extends BussinesEntityHome<SignosVitales> impleme
 
     @TransactionAttribute
     public String guardar() {
-        String salida = null;
-        Date now = Calendar.getInstance().getTime();
+        String salida = null;        
         try {
             if (getInstance().isPersistent()) {
                 save(getInstance());
