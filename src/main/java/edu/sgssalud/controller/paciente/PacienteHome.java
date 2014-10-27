@@ -260,14 +260,14 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         Date now = Calendar.getInstance().getTime();
         String salida = null;
         getInstance().setLastUpdate(now);
-        if("secretaria/paciente".equals(getBackView())){
+        if ("secretaria/paciente".equals(getBackView())) {
             salida = "/pages/" + getBackView() + "?faces-redirect=true";
-        }else{
+        } else {
             salida = "/pages/secretaria/lista?faces-redirect=true";
         }
-        
+
         if (getInstance().isPersistent()) {
-            save(getInstance());            
+            save(getInstance());
         } else {
             try {
                 System.out.println("ingreso a guardar ");
@@ -309,7 +309,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
                         getInstance().setEmail(p.getEmail());
                         getInstance().setGenero(p.getGenero());
                         getInstance().setTipoEstudiante("Universitario");
-                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se consulto el Estudiante: " + getInstance().getNombres() + " con éxito", " ");
+                        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Se consultó el Estudiante: " + getInstance().getNombres() + getInstance().getApellidos() + " con éxito", " ");
                         FacesContext.getCurrentInstance().addMessage(null, msg);
                     } else {
                         setInstance(createInstance());
@@ -323,9 +323,10 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
                 }
 
             } else {
-                setInstance(createInstance());
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El número de cedula no consta como estudiante matriculado en el SGA", " ");
+
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "El estudiante con número de cédula: " + getInstance().getCedula() + ", no está matriculado en el SGA", " ");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
+                setInstance(createInstance());
 
             }
 
@@ -395,7 +396,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
     @TransactionAttribute
     private void createUser() throws IdentityException {
         System.out.println("Ingreso crear User________");
-        
+
         getInstance().setNombreUsuario(getInstance().getCedula());
         getInstance().setClave(getInstance().getCedula());
         PersistenceManager identityManager = security.getPersistenceManager();
@@ -452,9 +453,8 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
 //        }
         return "/pages/home.xhtml?faces-redirect=true";
     }
-    
-    /*<==  retorna la lista de tipos de datos enumerados ...*/
 
+    /*<==  retorna la lista de tipos de datos enumerados ...*/
     public List<String> getListaGeneros() {
         List<String> generos = new ArrayList<String>();
         generos.add("femenino");
@@ -470,7 +470,7 @@ public class PacienteHome extends BussinesEntityHome<Paciente> implements Serial
         list.add("Escuela");
         list.add("Administrativos");
         list.add("Docentes");
-        list.add("Trabajadores");        
+        list.add("Trabajadores");
         return list;
     }
 

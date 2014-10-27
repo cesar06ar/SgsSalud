@@ -177,7 +177,7 @@
                                                     </div>
                                                 </h:panelGroup>  
                                             </c:when>      
-                                            <c:when test="${f.name eq 'antecedentesGineco-obstetrico'}" >
+                                            <c:when test="${(fichaMedicaHome.paciente.genero eq 'femenino') and f.name eq 'antecedentesGineco-obstetrico'}" >
                                                 <h:panelGroup rendered="#{not a.property.survey}" layout="block" style="padding-left: -10%; margin-left: -60px; " >
                                                     <label for="#{a.name}" style="float: left" class="#{(not empty a.property.required and a.property.required) ? 'required' : ''}"><strong>#{a.property.label}#{(not empty a.property.required and a.property.required) ? '*&#160;' : '&nbsp;'}</strong></label>
                                                     <div class="span2" >     

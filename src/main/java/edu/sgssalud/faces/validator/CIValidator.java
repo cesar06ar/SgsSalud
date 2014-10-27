@@ -172,47 +172,47 @@ public class CIValidator implements Validator {
         if (nid.length() < 13) {
             throw new ValidatorException(new FacesMessage(message));
         }
-//        String spatron = "[0-9]{13}";// \\d{10}
-//        if (!Pattern.matches(spatron, nid)) {
-//            message = Interpolator.interpolate(
-//                    UI.getMessages("validation.wrongIdentificationNumberLegalEntity"),
-//                    new Object[0]);
-//            throw new ValidatorException(new FacesMessage(message));
-//        }
+        String spatron = "[0-9]{13}";// \\d{10}
+        if (!Pattern.matches(spatron, nid)) {
+            message = Interpolator.interpolate(
+                    UI.getMessages("validation.wrongIdentificationNumberLegalEntity"),
+                    new Object[0]);
+            throw new ValidatorException(new FacesMessage(message));
+        }
 
         /**
          * Extraer tercer digito para saber si es: 9 para sociedades privadas y
          * extranjeros 6 para sociedades publicas menor que 6 (0,1,2,3,4,5) para
          * personas naturales //
          */
-//        nid = nid.trim();
-//        char typeRucChar = nid.charAt(2);
-//        int typeRuc = Integer.parseInt(typeRucChar + "");
-//        if (typeRuc < 6) {
-//            this.verifyNationalIdentityDocument(nid);
-//            String _main = nid.substring(10, nid.length());
-//            if (!_main.matches("[0-9]{2}[0-9&&[^0]]")) {
-//                message = Interpolator.interpolate(
-//                        UI.getMessages("validation.invalidIdentificationNumberFinished"),
-//                        new Object[0]);
-//                throw new ValidatorException(new FacesMessage(message));
-//            }
-//        } else if (typeRuc == 6) {
-//            verifyTaxPayerPublic(nid);
-//        } else if (typeRuc == 9) {
-//            this.verifyTaxPayerPrivate(nid);
-//        } else {
-//            message = Interpolator.interpolate(
-//                    UI.getMessages("validation.wrongTypeIdentificationNumberLegalEntity"),
-//                    new Object[0]);
-//            throw new ValidatorException(new FacesMessage(message));
-//        }
-//        String _main = nid.substring(9, nid.length());
-//        if (!_main.matches("[0-9]{3}[1-9]")) {
-//            message = Interpolator.interpolate(
-//                    UI.getMessages("validation.invalidIdentificationNumberFinished"),
-//                    new Object[0]);
-//            throw new ValidatorException(new FacesMessage(message));
-//        }
+        nid = nid.trim();
+        char typeRucChar = nid.charAt(2);
+        int typeRuc = Integer.parseInt(typeRucChar + "");
+        if (typeRuc < 6) {
+            this.verifyNationalIdentityDocument(nid);
+            String _main = nid.substring(10, nid.length());
+            if (!_main.matches("[0-9]{2}[0-9&&[^0]]")) {
+                message = Interpolator.interpolate(
+                        UI.getMessages("validation.invalidIdentificationNumberFinished"),
+                        new Object[0]);
+                throw new ValidatorException(new FacesMessage(message));
+            }
+        } else if (typeRuc == 6) {
+            verifyTaxPayerPublic(nid);
+        } else if (typeRuc == 9) {
+            this.verifyTaxPayerPrivate(nid);
+        } else {
+            message = Interpolator.interpolate(
+                    UI.getMessages("validation.wrongTypeIdentificationNumberLegalEntity"),
+                    new Object[0]);
+            throw new ValidatorException(new FacesMessage(message));
+        }
+        String _main = nid.substring(9, nid.length());
+        if (!_main.matches("[0-9]{3}[1-9]")) {
+            message = Interpolator.interpolate(
+                    UI.getMessages("validation.invalidIdentificationNumberFinished"),
+                    new Object[0]);
+            throw new ValidatorException(new FacesMessage(message));
+        }
     }
 }
