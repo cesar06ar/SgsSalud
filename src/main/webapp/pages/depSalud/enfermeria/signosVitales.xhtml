@@ -118,7 +118,7 @@
                                     </div>
                                     <label for="temperatura" class="span3">#{messages['signosVitales.temperatura']} </label>
                                     <pe:inputNumber  id="temperatura" value="#{signosVitalesHome.instance.temperatura}" required="false" style="width: 190px;" 
-                                                     rendered="true" symbol=" °C" symbolPosition="rigth" maxValue="90" decimalPlaces="2" >
+                                                     rendered="true" symbol=" °C" symbolPosition="rigth" maxValue="90" decimalPlaces="0" >
                                         <p:ajax event="blur" update="@parent" process="@this"/>  
                                     </pe:inputNumber>                                        
                                 </p:panelGrid>                                

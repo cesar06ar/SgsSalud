@@ -40,7 +40,8 @@ public class ProfileController {
 
     @Produces
     @Named("newProfile")
-    public Profile getProfile() {
+    public Profile getProfile() {       
+        
         return profile;
     }
 
@@ -60,7 +61,6 @@ public class ProfileController {
         profile.setActivationTime(now);
         profile.setExpirationTime(Dates.addDays(now, 364));
         profile.setResponsable(null); //Establecer al usuario actual
-
         profileService.create(profile);
         facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration profile successful"));
         em.flush();

@@ -15,6 +15,7 @@
  */
 package edu.sgssalud.controller.farmacia;
 
+import edu.sgssalud.cdi.Current;
 import edu.sgssalud.cdi.Web;
 import edu.sgssalud.controller.BussinesEntityHome;
 import edu.sgssalud.model.farmacia.Medicamento;
@@ -37,8 +38,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -58,7 +61,8 @@ import org.primefaces.event.UnselectEvent;
 public class RecetaHome extends BussinesEntityHome<Receta> implements Serializable {
 
     private static final long serialVersionUID = 10L;
-    private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(RecetaHome.class);
+    //private static org.jboss.solder.logging.Logger log = org.jboss.solder.logging.Logger.getLogger(RecetaHome.class);
+    static final Logger logger = Logger.getLogger(RecetaHome.class.getSimpleName());
     /*Atributos importantes para acceso a la BD ==>*/
     @Inject
     @Web
@@ -84,7 +88,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     private Long consultaOdontId;
     private Long recetaId;
     private Long pacienteId;
-    private int unidadesMedicacion;
+    private Integer unidadesMedicacion ;
     private String nombreMedic;
     private String indicacion;
     private Paciente paciente;
@@ -93,6 +97,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
     private ConsultaMedica consultaMed;
     private ConsultaOdontologica consultaOdont;
     private Medicamento medicamentoSeleccionado;
+    private Medicamento medicamentoBean;
     private List<Medicamento> listaMedicamentosStock = new ArrayList<Medicamento>();
     private List<Medicamento> listaMedicamentosFiltrados = new ArrayList<Medicamento>();
     private List<Receta_Medicamento> listaRecetaMed = new ArrayList<Receta_Medicamento>();
@@ -229,11 +234,11 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         this.listaIndicaciones = listaIndicaciones;
     }
 
-    public int getUnidadesMedicacion() {
+    public Integer getUnidadesMedicacion() {
         return unidadesMedicacion;
     }
 
-    public void setUnidadesMedicacion(int unidadesMedicacion) {
+    public void setUnidadesMedicacion(Integer unidadesMedicacion) {
         this.unidadesMedicacion = unidadesMedicacion;
     }
 
@@ -251,6 +256,15 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
     public void setIndicacion(String indicacion) {
         this.indicacion = indicacion;
+    }
+
+    
+    public Medicamento getMedicamentoBean() {
+        return medicamentoBean;
+    }
+
+    public void setMedicamentoBean(Medicamento medicamentoBean) {
+        this.medicamentoBean = medicamentoBean;
     }
 
     public List<String> getListaMedicaciones() {
@@ -295,10 +309,11 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 
         this.nombreMedic = null;
         this.indicacion = null;
+        unidadesMedicacion = 0;
         this.numReceta();
     }
 
-    @TransactionAttribute   //    
+    @TransactionAttribute
     public Receta load() {
         if (isIdDefined()) {
             wire();
@@ -344,13 +359,13 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     for (Receta_Medicamento rm : getInstance().getListaRecetaMedicamento()) {
                         if (m.equals(rm.getMedicamento())) {
                             int c = m.getUnidades();
-                            m.setUnidades(c - rm.getCantidad());                            
+                            m.setUnidades(c - rm.getCantidad());
                             save(m);
                         }
                     }
                 }
                 save(getInstance());
-            } else {                
+            } else {
                 if (consultaMed.isPersistent()) {
                     getInstance().setConsultaMedica(consultaMed);
 
@@ -358,7 +373,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     getInstance().setConsultaOdontologica(consultaOdont);
                 }
                 System.out.println("Guardar _____");
-                if ( paciente.isPersistent()) {
+                if (paciente.isPersistent()) {
 
                     getInstance().setFechaEmision(now);
                     getInstance().setEstado("Emitida");
@@ -372,7 +387,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                         Medicamento medicament = recetaMed.getMedicamento();
                         medicament.setUnidades(cantidad);
                         recetaMed.setSaldo(cantidad);
-                        recetaMed.setDetalle("Receta Emidita por: "+getInstance().getResponsableEmision().getFullName());
+                        recetaMed.setDetalle("Receta Emidita por: " + getInstance().getResponsableEmision().getFullName());
                         recetaMed.setFecha(now);
                         save(medicament);
                     }
@@ -387,7 +402,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                             + "&fichaMedicaId=" + getFichaMedica().getId()
                             + "&consultaOdontId=" + consultaOdontId
                             + "&backView=" + this.getPrevious();
-                            
+
                 } else {
                     FacesMessage msg = new FacesMessage("Debe cargar una consulta Primero");
                     FacesContext.getCurrentInstance().addMessage("", msg);
@@ -407,6 +422,20 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         String name = med.getNombreComercial() + " (" + med.getUnidades() + " " + med.getPresentacion() + ") ";
         this.setNombreMedic(name);
         System.out.println("cargar Medicamento____:" + nombreMedic);
+    }
+
+    public void cantidadIncorrecta() {
+        log.log(org.jboss.solder.logging.Logger.Level.WARN, "unidades " + unidadesMedicacion);
+
+        if (unidadesMedicacion == 0) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser mayor a 0", "");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+            //throw new ValidatorException(msg);
+        } else if (unidadesMedicacion >= this.getMedicamentoSeleccionado().getUnidades()) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser menor a la cantidad disponible", "");
+            FacesContext.getCurrentInstance().addMessage("", msg);
+            //throw new ValidatorException(msg);
+        }
     }
 
     public void cargarMedicamentoAReceta() {
@@ -436,7 +465,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
                     }
                 }
             } else {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser mayor a 0", "<br/> o menor a la cantidad disponible");
+                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "La cantidad debe ser mayor a 0", "o menor a la cantidad disponible");
                 FacesContext.getCurrentInstance().addMessage("", msg);
             }
             //TODO____renderizar para verificar si tiene o no medicamentos en la farmacia            
@@ -451,7 +480,7 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
         this.setMedicamento(null);
         this.setNombreMedic(null);
         this.setUnidadesMedicacion(0);
-        
+
         this.setIndicacion(null);
     }
 
@@ -460,10 +489,13 @@ public class RecetaHome extends BussinesEntityHome<Receta> implements Serializab
 //        FacesContext.getCurrentInstance().addMessage(null, msg);    " /*" + med.getNombreGenerico() +
         this.setNombreMedic(null);
         Medicamento med = getMedicamentoSeleccionado();
+        medicamentoBean = getMedicamentoSeleccionado();
+        log.info("cargar Medicamento______________________________________:" + nombreMedic);
         String name = "(" + med.getNombreComercial() + ", " + med.getNombreGenerico() + " ) " + med.getPresentacion();
         this.setNombreMedic(name);
         this.setIndicacion(med.getNombreComercial().toUpperCase() + ": ");
-        System.out.println("cargar Medicamento____:" + nombreMedic);
+
+        log.info("cargar Medicamento__________________________________________________:" + nombreMedic);
     }
 
     public void onRowUnselect(UnselectEvent event) {

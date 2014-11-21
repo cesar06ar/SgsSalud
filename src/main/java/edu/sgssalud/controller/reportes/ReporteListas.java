@@ -542,6 +542,7 @@ public class ReporteListas {
             _values.put("fechaHasta", fechaSup);
             _values.put("usd", "$");
             _values.put("logo", logo);
+            _values.put("usuarioR", pLoggeado.getFullName());
 
             //Exportar a pdf 
             JasperReportAction.exportToPdf(REPORTE_ENFERMERIA, _values, attachFileName);

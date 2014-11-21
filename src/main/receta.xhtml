@@ -5,9 +5,9 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       template="/WEB-INF/view/templates/glue.xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:s="http://jboss.org/seam/faces"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:s="http://jboss.org/seam/faces"
       xmlns:pe="http://primefaces.org/ui/extensions"
       xmlns:glue="http://eqaula.org/jsf/facelets"      
       xmlns:ocp="http://java.sun.com/jsf/composite/ocpcommon">
@@ -46,7 +46,8 @@
                             </div>
                             <div class="span7" align="left">
                                 <glue:output id="numr" name="numr" type="text" label="#{messages['receta.numero']}" value="#{recetaHome.instance.numvalue}" 
-                                             required="true" execute="@this save" render="numr" styleClass="xLarge" disabled="true"/>
+                                             required="true" execute="@this save" render="numr" styleClass="xLarge" disabled="true"/>                              
+
                                 <h:panelGroup layout="block" class="clearfix" >                                    
                                     <label for="fafm" >#{messages['fechaReceta.fechaEmision']}"</label>
                                     <div class="input">
@@ -76,6 +77,7 @@
                                         <!--<h:graphicImage value="# {resource['success.gif']}" rendered="# {recetaHome.unidadesMedicacion != null}"
                                                         styleClass="validation-status" />-->
                                     </div>
+                                    <!--<ui:param id="medicamentoSelect" name="medSelect_" value="# {recetaHome.medicamentoSeleccionado}"/>-->
                                     <div id="btnBuscarMed" style="margin: -30px -5px 0 170px;"> 
                                         <p:commandLink id="cargarMedicamento" styleClass="btn" title="Buscar Medicamento Disponible" actionListener="#{recetaHome.reiniciar()}"
                                                        style="margin-left: 195px; height: 17px" ajax="true"> 
@@ -87,9 +89,12 @@
                                         <p:dataTable id="tablaMedicamentos" var="medicamento_" value="#{recetaHome.listaMedicamentosStock}" emptyMessage="No hay medicamentos cargados"
                                                      rowKey="#{medicamento_.id}" selection="#{recetaHome.medicamentoSeleccionado}" selectionMode="single"                                                      
                                                      scrollable="true" scrollHeight="140">                                            
-                                            <p:ajax event="rowSelect" listener="#{recetaHome.onRowSelect}"   
-                                                    update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos" oncomplete="dialogMedicamet.hide();" />  
-                                            <p:ajax event="rowUnselect" listener="#{recetaHome.onRowUnselect}" update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos"/>
+
+                                            <p:ajax event="rowSelect" listener="#{recetaHome.onRowSelect}"                                                     
+                                                    update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos :form:unidadesMedicacion  :form:cantidadDisponible"
+                                                    oncomplete="dialogMedicamet.hide();" 
+                                                    partialSubmit="true"/>  
+                                            <p:ajax event="rowUnselect" listener="#{recetaHome.onRowUnselect}" update=":form:medicamentoDisponible :form:Indicacion :form:tablaMedicamentos " />
 
                                             <p:column headerText="Nombre Comercial" style="width:18%; font-size:12px" filterMatchMode="contains" filterBy="#{medicamento_.nombreComercial}">  
                                                 <h:outputText value="#{medicamento_.nombreComercial}" />  
@@ -113,18 +118,27 @@
                                         </p:dataTable>                                       
                                     </p:overlayPanel>                                    
                                 </h:panelGroup>
+                                <p:inputText id="cantidadDisponible" value="#{recetaHome.medicamentoBean.unidades}" style="visibility: hidden"/>
                                 <br/>
-                                <h:panelGroup layout="block" >
+                                <h:panelGroup id="umPanel" layout="block" >
                                     <label for="unidadesMedicacion" style="width: 35px; margin-left: -1px;">#{messages['receta.unidadesMedicacion']}*</label>
-                                    <div class="input" style="margin-left: 100px;">
-                                        <pe:inputNumber  id="unidadesMedicacion" style="width: 70px;" required="false" value="#{recetaHome.unidadesMedicacion}"
-                                                         rendered="true" decimalPlaces="0" >
-                                            <p:ajax event="blur" process="@this" listener="#{recetaHome.cantidadIncorrecta()}" update=":form:messages"/>
-                                        </pe:inputNumber>
+                                    <div class="input" style="margin-left: 100px;">                                       
+
+                                        <p:inputText id="unidadesMedicacion" style="width: 70px;" required="false" value="#{recetaHome.unidadesMedicacion}">
+                                            <!--<f:convertNumber integerOnly="true"/>-->
+
+                                            <!--<f:validator validatorId="cantidadRecetaValidador" />-->
+                                            <p:ajax event="blur" process="cantidadDisponible unidadesMedicacion validate message " update="messages :form:message :form:umPanel :form:unidadesMedicacion" />
+                                        </p:inputText>
                                         <h:graphicImage value="#{resource['success.gif']}" rendered="#{recetaHome.unidadesMedicacion != null}"
                                                         styleClass="validation-status" />
+                                        <span class="help-inline"> <ocp:message id="message" forId="unidadesMedicacion" /></span>
+
+                                        <!--listener="# {recetaHome.cantidadIncorrecta(recetaHome.unidadesMedicacion)}"-->
                                     </div>
                                 </h:panelGroup>
+
+                                <s:validateForm validatorId="cantidadRecetaValidador" id="validate"/>
                             </div>
                             <div class="span7">
                                 <h:panelGroup layout="block" >
@@ -144,10 +158,14 @@
                     </div>
                 </p:panel>
                 <div class="admin-actions" >
-                    <p:commandButton id="save" action="#{recetaHome.cargarMedicamentoAReceta()}" value="#{messages['receta.cargar.medicamento']}"  ajax="true"
-                                     styleClass="btn primary offset5" update="@form"  immediate="true" rendered="#{!recetaHome.instance.persistent}">
-                        <p:ajax process="@this" update=":form:unidadesMedicacion :form:messages :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
-                                rendered=":form:messages :form:medicamentoDisponible :form:Indicacion :form:recetasId"/>
+                    <p:commandButton id="save" 
+                                     action="#{recetaHome.cargarMedicamentoAReceta()}" 
+                                     value="#{messages['receta.cargar.medicamento']}"  
+                                     process="@this"                                 
+                                     ajax="true" styleClass="btn primary offset5" 
+                                     update=":form:unidadesMedicacion :form:messages
+                                     :form:medicamentoDisponible :form:unidadesMedicacion :form:Indicacion :form:recetasId" 
+                                     >   
                     </p:commandButton>  
                 </div>
                 <p:panel id="recetasId" header="Receta">

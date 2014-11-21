@@ -52,6 +52,7 @@ import edu.sgssalud.model.security.IdentityObjectCredential;
 import edu.sgssalud.service.BussinesEntityService;
 import edu.sgssalud.util.PersistenceUtil;
 import edu.sgssalud.util.Strings;
+import javax.persistence.Query;
 import org.picketlink.idm.common.exception.IdentityException;
 
 /**
@@ -154,6 +155,13 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
         return (Profile) findById(Profile.class, id);
     }
 
+    public Integer getUsuarios(String nombre) {
+        Query query = em.createNamedQuery("IdentityObject.buscarUsuariosPorNombre");
+        query.setParameter("name", nombre);
+        Long cantidad = (Long) query.getSingleResult();
+        return cantidad.intValue();
+    }
+
     public boolean isUsernameAvailable(String username) {
         try {
             getProfileByUsername(username);
@@ -228,7 +236,7 @@ public class ProfileService extends PersistenceUtil<Profile> implements Serializ
         try {
             TypedQuery<IdentityObjectCredential> query = em.createQuery(
                     "SELECT a FROM IdentityObjectCredential a WHERE a.identityObject.name = :userName ", IdentityObjectCredential.class);
-            query.setParameter("userName", userName);            
+            query.setParameter("userName", userName);
             return query.getResultList().isEmpty() ? null : query.getResultList();
         } catch (Exception e) {
             return null;

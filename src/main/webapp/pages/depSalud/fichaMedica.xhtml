@@ -263,19 +263,21 @@
                 <div class="admin-actions" style="padding-right: 40px;">
                     <br/>
                     <p:commandButton id="save" action="#{fichaMedicaHome.guardar()}" value="#{messages['common.save']}" styleClass="btn primary offset4"
-                                     immediate="true" update=":form:growl" onclick="imgDlg.show();"/> <!--disabled="# {!fichaMedicaHome.estudientaMatriculado()}"-->
+                                     immediate="true" update=":form:growl" /> <!--disabled="# {!fichaMedicaHome.estudientaMatriculado()}"-->
                     &nbsp;&nbsp;                    
                     <p:commandButton id="cancel" type="button" value="#{messages['common.cancel']}" immediate="true" styleClass="btn" 
                                      onclick="#{'opDlg.show();'}" ajax="true" />                                    
+                    <!--
                     <p:panel id="img_p" widgetVar="imgDlg" style="display:none; width: 30px;" >
                         <h:graphicImage id="img-spinner" value="/resources/js/loader.gif" style="margin-left: -5px"/>
-                    </p:panel> 
+                    </p:panel> -->
 
                 </div>
                 <p:panel id="signosVitalesP" header="#{messages['signosVitales.toma']} #{messages['signosVitales.Nombre']}" toggleable="true" toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('ENFERMEROS') }">
                     <h:link outcome="/pages/depSalud/enfermeria/signosVitales" styleClass="btn btn-img" 
-                            disabled="#{!fichaMedicaHome.estudientaMatriculado()}" title="#{fichaMedicaHome.titleNuevaConsulta}">
+                             title="#{fichaMedicaHome.titleNuevaConsulta}">
+                        <!--disabled="# {!fichaMedicaHome.estudientaMatriculado()}"-->
                         <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>                        
                         <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                         <f:param name="backView" value="fichaMedica"></f:param>
@@ -285,27 +287,32 @@
                     <p:dataTable id="tablaSigVit" value="#{fichaMedicaHome.listaSignosVitales}" var="signosVit_" >
 
                         <p:column headerText="Id" style="width: 15%">
-                            <p:outputLabel value="#{signosVit_.id}" >
-                                <f:convertDateTime pattern="dd-MMM-yyyy"/>
-                            </p:outputLabel>
+                            <h:outputText value="#{signosVit_.id}" />                              
                         </p:column>
                         <p:column headerText="#{messages['consultaMedica.fechaConsulta']}" style="width: 15%">
-                            <p:outputLabel value="#{signosVit_.fechaActual}" >
+                            <p:outputLabel value="#{signosVit_.fechaActual}" style="margin-top: -5px">
                                 <f:convertDateTime pattern="dd-MMM-yyyy"/>
                             </p:outputLabel>
                         </p:column>
                         <p:column headerText="#{messages['signosVitales.presionArt']}" style="width: 20%">
-                            <h:outputText value="#{signosVit_.presionArterialSistolica}" />&nbsp;&nbsp;&nbsp;&nbsp;
-                            <h:outputText value="#{signosVit_.presionArterialDiastolica}" />
+                            (<h:outputText value=" #{signosVit_.presionArterialSistolica}" />&nbsp;&nbsp;--&nbsp;&nbsp;
+                            <h:outputText value="#{signosVit_.presionArterialDiastolica} " />)
+                            <h:outputText value=" mmHg" title="Milímetros de mercurio"/>
+                            
                         </p:column>
                         <p:column headerText="#{messages['signosVitales.pulso']}" style="width: 20%">
                             <h:outputText value="#{signosVit_.pulso}" />                                                          
+                            <h:outputText value=" ppm" title="pulsaciones/minuto"/>
                         </p:column>
                         <p:column headerText="#{messages['signosVitales.talla']}" style="width: 20%">
                             <h:outputText value="#{signosVit_.talla}" />                                                          
+                            <h:outputText value=" cm" title="Centímetros"/>
                         </p:column>
                         <p:column headerText="#{messages['signosVitales.temperatura']}" style="width: 20%">
-                            <h:outputText value="#{signosVit_.temperatura}" />                                                          
+                            <h:outputText value="#{signosVit_.temperatura}" >
+                                <f:convertNumber integerOnly="true"/>
+                            </h:outputText>
+                            <h:outputText value=" C°" title="Centímetros"/>
                         </p:column>
                         <p:column headerText="#{'Opción'}" style="width: 20%">
                             <h:link value="#{messages['common.edit']}" outcome="/pages/depSalud/enfermeria/signosVitales" >                                
@@ -320,8 +327,9 @@
                 <p:panel id="consultasM" header="#{'CONSULTAS MÉDICAS'}" toggleable="true"  toggleSpeed="100" closeSpeed="0" 
                          rendered="#{fichaMedicaHome.instance.persistent and account.tienePermiso('MEDICOS')}">                    
                     <div class="admin-actions">
-                        <h:link outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn btn-img" disabled="#{!fichaMedicaHome.estudientaMatriculado()}"
+                        <h:link outcome="/pages/depSalud/medicina/consultaMedica" styleClass="btn btn-img" 
                                 title="#{fichaMedicaHome.titleNuevaConsulta}">
+                            <!--disabled="# {!fichaMedicaHome.estudientaMatriculado()}"-->
                             <p:graphicImage value="/resources/img/new2.png" width="30" height="30"/>
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="/fichaMedica"></f:param>
@@ -393,7 +401,8 @@
                     <br/>
                     <div class="admin-actions">
                         <h:link value="#{messages['common.add']}" outcome="/pages/depSalud/odontologia/consultaOdontologica" styleClass="btn success"
-                                disabled="#{!fichaMedicaHome.estudientaMatriculado()}" title="#{fichaMedicaHome.titleNuevaConsulta}">
+                                title="#{fichaMedicaHome.titleNuevaConsulta}">
+                            <!--disabled="# {!fichaMedicaHome.estudientaMatriculado()}"-->
                             <f:param name="fichaMedicaId" value="#{fichaMedicaHome.instance.id}"></f:param>                                
                             <f:param name="backView" value="/fichaMedica"></f:param>
                         </h:link>
